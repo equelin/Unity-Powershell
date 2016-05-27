@@ -1,0 +1,14 @@
+PSTOPIC
+    about_Unity-Powershell
+
+SHORT DESCRIPTION
+    Unity-Powershell is a Powershell's module for working with EMC Unity array
+
+LONG DESCRIPTION
+    Unity-Powershell is a Powershell's module for working with EMC Unity array
+
+    Source of the module is available at:
+        https://github.com/equelin/Unity-Powershell
+
+DETAILED DESCRIPTION
+    Unity-Powershell is a Powershell's module for working with EMC Unity array
