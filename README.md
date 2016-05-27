@@ -120,9 +120,9 @@ For testing purpose you can query all the items of the array if you know the URI
 
 # Special Thanks
 
-- David Muegge for is [blog post](http://muegge.com/blog/emc-unity-rest-api-powershell/) about using EMC Unity API with powershell
-- Warren F. for is [blog post](http://ramblingcookiemonster.github.io/Building-A-PowerShell-Module/) 'Building a Powershell module'
-- [Chris Wahl](http://wahlnetwork.com) for is blog posts about powershell and REST API.
+- David Muegge for his [blog post](http://muegge.com/blog/emc-unity-rest-api-powershell/) about using EMC Unity API with powershell
+- Warren F. for his [blog post](http://ramblingcookiemonster.github.io/Building-A-PowerShell-Module/) 'Building a Powershell module'
+- [Chris Wahl](http://wahlnetwork.com) for his blog posts about powershell and REST API.
 
 # License
 
