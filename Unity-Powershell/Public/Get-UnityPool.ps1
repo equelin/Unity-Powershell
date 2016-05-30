@@ -1,4 +1,25 @@
 Function Get-UnityPool {
+
+  <#
+      .SYNOPSIS
+      Queries the EMC Unity array to retrieve informations about pool.
+      .DESCRIPTION
+      Querries the EMC Unity array to retrieve informations about pool.
+      You need to have an active session with the array.
+      .NOTES
+      Written by Erwan Quelin under Apache licence
+      .LINK
+      https://github.com/equelin/Unity-Powershell
+      .EXAMPLE
+      Get-UnityPool
+
+      Retrieve information about pool
+      .EXAMPLE
+      Get-UnityLUN -Name 'POOL01'
+
+      Retrieves information about pool named POOL01
+  #>
+
   [CmdletBinding(DefaultParameterSetName="ByName")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
@@ -12,8 +33,10 @@ Function Get-UnityPool {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    #Initialazing arrays
+    #Initialazing variables
     $ResultCollection = @()
+    $URI = '/api/types/pool/instances' #URI
+    $TypeName = 'UnityPool'
 
     Foreach ($sess in $session) {
 
@@ -21,27 +44,19 @@ Function Get-UnityPool {
 
       If (Test-UnityConnection -Session $Sess) {
 
-        #Initialazing Websession variable
-        $Websession = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+        #Building the URL from Object Type.
+        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
 
-        #Add session's cookies to Websession
-        Foreach ($cookie in $sess.Cookies) {
-          Write-Verbose "Ajout cookie: $($cookie.Name)"
-          $Websession.Cookies.Add($cookie);
-        }
-
-        #Building the URI
-        $URI = 'https://'+$sess.Server+'/api/types/pool/instances?compact=true&fields=id,health,name'
-        Write-Verbose "URI: $URI"
+        Write-Verbose "URL: $URL"
 
         #Sending the request
-        $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'GET'
+        $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
 
         #Formating the result. Converting it from JSON to a Powershell object
         $results = ($request.content | ConvertFrom-Json).entries.content
 
-        #Building the result collection (Add type)
-        $ResultCollection += Add-UnityObjectType -Data $results -TypeName 'UnityPool'
+        #Building the result collection (Add ressource type)
+        $ResultCollection += Add-UnityObjectType -Data $results -TypeName $TypeName
 
       } else {
         Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
@@ -56,21 +71,18 @@ Function Get-UnityPool {
         'ByName' {
           Foreach ($N in $Name) {
             Write-Verbose "Return result(s) with the filter: $($N)"
-            $ResultCollectionFiltered += $ResultCollection | Where-Object {$_.Name -like $N}
+            Write-Output $ResultCollection | Where-Object {$_.Name -like $N}
           }
         }
         'ByID' {
           Foreach ($I in $ID) {
             Write-Verbose "Return result(s) with the filter: $($I)"
-            $ResultCollectionFiltered += $ResultCollection | Where-Object {$_.Id -like $I}
+            Write-Output $ResultCollection | Where-Object {$_.Id -like $I}
           }
         }
       }
     }
   }
 
-  End {
-    return $ResultCollectionFiltered
-  }
-
+  End {}
 }

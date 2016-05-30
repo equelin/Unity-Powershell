@@ -20,7 +20,7 @@ Function Remove-UnityUser {
       Delete the user named 'user'. The user's information are provided by the Get-UnityUser through the pipeline.
   #>
 
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
@@ -57,8 +57,10 @@ Function Remove-UnityUser {
           $URI = 'https://'+$sess.Server+'/api/instances/user/'+$id
           Write-Verbose "URI: $URI"
 
-          #Sending the request
-          $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
+          if ($pscmdlet.ShouldProcess($id,"Delete user")) {
+            #Sending the request
+            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
+          }
 
           If ($request.StatusCode -eq '204') {
 

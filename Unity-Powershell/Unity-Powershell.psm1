@@ -41,8 +41,8 @@ Class UnitySession {
 Class UnitySystem {
   [string]$id
   $health
-  [string]$Name
-  [string]$Model
+  [string]$name
+  [string]$model
   [string]$serialNumber
   [string]$internalModel
   [string]$platform
@@ -51,8 +51,8 @@ Class UnitySystem {
 
 Class UnityUser {
   [string]$id
-  [string]$Name
-  $Role
+  [string]$name
+  $role
 }
 
 Enum LUNTypeEnum {
@@ -74,7 +74,7 @@ Enum TieringPolicyEnum {
 Class UnityLUN {
   [string]$id
   $health
-  [string]$Name
+  [string]$name
   [string]$description
   [LUNTypeEnum]$type
   [long]$sizeTotal
@@ -99,4 +99,64 @@ Class UnityLUN {
   [long]$snapsSizeAllocated
   $hostAccess
   [int]$snapCount
+}
+
+Enum StorageResourceTypeEnum {
+  Database_Storage = 1
+  Backup_Storage  = 2
+  VM_Storage = 3
+  Generic = 4
+  Exchange_2007 = 5
+  Exchange_2010 = 6
+}
+
+Enum RaidTypeEnum {
+  None = 0
+  RAID5 = 1
+  RAID0 = 2
+  RAID1 = 3
+  RAID3 = 4
+  RAID10 = 7
+  RAID6 = 10
+  Mixed = 12
+  Automatic = 48879
+}
+
+Enum UsageHarvestStateEnum {
+  Idle = 0
+  Running = 1
+  Could_Not_Reach_LWM = 2
+  Paused_Could_Not_Reach_HWM = 3
+  Failed = 4
+}
+
+Class UnityPool {
+  [string]$id
+  $health
+  [string]$name
+  [string]$description
+  [StorageResourceTypeEnum]$storageResourceType
+  [RaidTypeEnum]$raidType
+  [long]$sizeFree
+  [long]$sizeTotal
+  [long]$sizeUsed
+  [long]$sizeSubscribed
+  [long]$alertThreshold
+  [bool]$isFASTCacheEnabled
+  $tiers
+  [DateTime]$creationTime
+  [bool]$isEmpty
+  $poolFastVP
+  [bool]$isHarvestEnabled
+  [UsageHarvestStateEnum]$harvestState
+  [bool]$isSnapHarvestEnabled
+  [long]$poolSpaceHarvestHighThreshold
+  [long]$poolSpaceHarvestLowThreshold
+  [long]$snapSpaceHarvestHighThreshold
+  [long]$snapSpaceHarvestLowThreshold
+  [long]$metadataSizeSubscribed
+  [long]$snapSizeSubscribed
+  [long]$metadataSizeUsed
+  [long]$snapSizeUsed
+  [long]$rebalanceProgress
 }

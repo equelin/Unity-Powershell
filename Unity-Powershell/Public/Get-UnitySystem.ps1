@@ -34,8 +34,10 @@ Function Get-UnitySystem {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    #Initialazing arrays
+    #Initialazing variables
     $ResultCollection = @()
+    $URI = '/api/types/system/instances' #URI for the ressource (example: /api/types/lun/instances)
+    $TypeName = 'UnitySystem'
 
     Foreach ($sess in $session) {
 
@@ -43,18 +45,19 @@ Function Get-UnitySystem {
 
       If (Test-UnityConnection -Session $Sess) {
 
-        #Building the URI
-        $URI = 'https://'+$sess.Server+'/api/types/system/instances?compact=true&fields=id,health,name,model,serialNumber,internalModel,platform,macAddress'
-        Write-Verbose "URI: $URI"
+        #Building the URL from Object Type.
+        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName
+
+        Write-Verbose "URL: $URL"
 
         #Sending the request
-        $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'GET'
+        $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
 
         #Formating the result. Converting it from JSON to a Powershell object
         $results = ($request.content | ConvertFrom-Json).entries.content
 
-        #Building the result collection (Add type)
-        $ResultCollection += Add-UnityObjectType -Data $results -TypeName 'UnitySystem'
+        #Building the result collection (Add ressource type)
+        $ResultCollection += Add-UnityObjectType -Data $results -TypeName $TypeName
 
       } else {
         Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
