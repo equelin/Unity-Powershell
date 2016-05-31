@@ -55,22 +55,6 @@ Class UnityUser {
   $role
 }
 
-Enum LUNTypeEnum {
-  GenericStorage = 1
-  Standalone = 2
-  VMwareISCSI = 3
-}
-
-Enum TieringPolicyEnum {
-  Autotier_High = 0
-  Autotier = 1
-  Highest = 2
-  Lowest = 3
-  No_Data_Movement = 4
-  Mixed = 0xffff
-
-}
-
 Class UnityLUN {
   [string]$id
   $health
@@ -99,35 +83,6 @@ Class UnityLUN {
   [long]$snapsSizeAllocated
   $hostAccess
   [int]$snapCount
-}
-
-Enum StorageResourceTypeEnum {
-  Database_Storage = 1
-  Backup_Storage  = 2
-  VM_Storage = 3
-  Generic = 4
-  Exchange_2007 = 5
-  Exchange_2010 = 6
-}
-
-Enum RaidTypeEnum {
-  None = 0
-  RAID5 = 1
-  RAID0 = 2
-  RAID1 = 3
-  RAID3 = 4
-  RAID10 = 7
-  RAID6 = 10
-  Mixed = 12
-  Automatic = 48879
-}
-
-Enum UsageHarvestStateEnum {
-  Idle = 0
-  Running = 1
-  Could_Not_Reach_LWM = 2
-  Paused_Could_Not_Reach_HWM = 3
-  Failed = 4
 }
 
 Class UnityPool {
@@ -159,4 +114,170 @@ Class UnityPool {
   [long]$metadataSizeUsed
   [long]$snapSizeUsed
   [long]$rebalanceProgress
+}
+
+Class UnityBasicSystemInfo {
+  [string]$id
+  [string]$model
+  [string]$name
+  [string]$softwareVersion
+  [string]$apiVersion
+  [string]$earliestApiVersion
+}
+
+Class UnityFeature {
+  [string]$id
+  [string]$name
+  [FeatureStateEnum]$state
+  [FeatureReasonEnum]$reason
+  $license
+}
+
+Class UnityLicense {
+  [string]$id
+  [string]$name
+  [bool]$isInstalled
+  [string]$version
+  [bool]$isValid
+  [DateTime]$issued
+  [DateTime]$expires
+  [bool]$isPermanent
+  $feature
+}
+
+Class UnityStorageResource {
+  [string]$id
+  $health
+  [string]$name
+  [string]$description
+  [StorageResourceTypeEnum]$type
+  [bool]$isReplicationDestination
+  [ReplicationTypeEnum]$replicationType
+  [long]$sizeTotal
+  [long]$sizeUsed
+  [long]$sizeAllocated
+  [ThinStatusEnum]$thinStatus
+  [ESXFilesystemMajorVersionEnum]$esxFilesystemMajorVersion
+  [ESXFilesystemBlockSizeEnum]$esxFilesystemBlockSize
+  $snapSchedule
+  [bool]$isSnapSchedulePaused
+  $relocationPolicy
+  $perTierSizeUsed
+  $blockHostAccess
+  [long]$metadataSize
+  [long]$metadataSizeAllocated
+  [long]$snapsSizeTotal
+  [long]$snapsSizeAllocated
+  [Int]$snapCount
+  [string]$vmwareUUID
+  $pools
+  $datastores
+  $filesystem
+  $hostVVolDatastore
+  $luns
+  $virtualVolumes
+}
+
+Class UnityHealth {
+  [HealthEnum]$value
+  $descriptionIds
+  $descriptions
+  $resolutionIds
+  $resolutions
+}
+
+
+#Custom Enum
+
+Enum HealthEnum{
+  UNKNOWN = 0
+  OK = 5
+  OK_BUT = 7
+  DEGRADED = 10
+  MINOR = 15
+  MAJOR = 20
+  CRITICAL = 25
+  NON_RECOVERABLE = 30
+}
+
+Enum LUNTypeEnum {
+  GenericStorage = 1
+  Standalone = 2
+  VMwareISCSI = 3
+}
+
+Enum ESXFilesystemMajorVersionEnum {
+   VMFS_3 = 3
+   VMFS_5 = 5
+}
+
+Enum ESXFilesystemBlockSizeEnum {
+    _1MB = 1
+    _2MB = 2
+    _4MB = 4
+    _8MB = 8
+}
+
+Enum ReplicationTypeEnum {
+  None = 0
+  Local = 1
+  Remote = 2
+}
+
+Enum TieringPolicyEnum {
+  Autotier_High = 0
+  Autotier = 1
+  Highest = 2
+  Lowest = 3
+  No_Data_Movement = 4
+  Mixed = 0xffff
+}
+
+Enum ThinStatusEnum {
+  False = 0
+  True = 1
+  Mixed = 0xffff
+}
+
+Enum StorageResourceTypeEnum {
+  filesystem = 1
+  consistencyGroup  = 2
+  vmwarefs = 3
+  vmwareiscsi = 4
+  lun = 8
+  VVolDatastoreFS = 9
+  VVolDatastoreISCSI = 10
+}
+
+Enum RaidTypeEnum {
+  None = 0
+  RAID5 = 1
+  RAID0 = 2
+  RAID1 = 3
+  RAID3 = 4
+  RAID10 = 7
+  RAID6 = 10
+  Mixed = 12
+  Automatic = 48879
+}
+
+Enum UsageHarvestStateEnum {
+  Idle = 0
+  Running = 1
+  Could_Not_Reach_LWM = 2
+  Paused_Could_Not_Reach_HWM = 3
+  Failed = 4
+}
+
+Enum FeatureStateEnum {
+  FeatureStateDisabled = 1
+  FeatureStateEnabled = 2
+  FeatureStateHidden = 3
+}
+
+Enum FeatureReasonEnum {
+  FeatureReasonUnlicensed = 1
+  FeatureReasonExpiredLicense = 2
+  FeatureReasonPlatformRestriction = 3
+  FeatureReasonExcluded = 4
 }

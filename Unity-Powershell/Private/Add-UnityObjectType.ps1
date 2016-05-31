@@ -12,7 +12,11 @@ function Add-UnityObjectType {
   #Building the result collection (Add type)
   Foreach ($D in $Data) {
     $object = New-Object $TypeName
-    $Data | get-member -type NoteProperty | foreach-object { $object."$($_.Name)" = $D."$($_.Name)"}
+    $Data | get-member -type NoteProperty | foreach-object {
+                                              If ($D."$($_.Name)") {
+                                                $object."$($_.Name)" = $D."$($_.Name)"
+                                              }
+                                            }
 
     #Adding the request result object to the result's collection array
     Write-Output  $object

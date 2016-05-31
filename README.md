@@ -31,16 +31,18 @@ You will need to have Powershell 5 to use this module.
 # Examples
 ### Connection to the Unity array
 
-The first thing to do is to connect to an array:
+The first thing to do is to connect to an EMC Unity array with the command `Connect-Unity`:
 
 ```PowerShell
 # Connect to the Unity array
-    Connect-Unity -Server 192.168.0.1
+    Connect-Unity -Server 192.168.0.1 -TrustAllCerts
 
     Server       User  Name     Model    SerialNumber
     ------       ----  ----     -----    ------------
     192.168.0.1 admin UnityDemo UnityVSA VIRT1919K58MXM
 ```
+
+The parameter `-TrustAllCerts` allow to accept untrusted certificates.  
 
 ### LUN management
 
@@ -55,6 +57,8 @@ The first thing to do is to connect to an array:
 ```
 
 ### Users management
+
+This is the first complete set of command available in this module. You can add a new user `New-UnityUser`, modify his properties `Set-UnityUSer` or delete it `Remove-UnityUser`.
 
 ```PowerShell
 # Retrieve informations about a specific user
@@ -75,9 +79,9 @@ The first thing to do is to connect to an array:
     Remove-UnityUser -Name 'demo'
 ```
 
-### Testing queries
+### Query ressources
 
-For testing purpose you can query all the items of the array if you know the URI associated. It will return a powershell object or a JSON item without any formatting.
+For testing purpose you can query all the ressources of the array with the command `Get-UnityItem`. You have to provide the URI of the ressource with the parameter `-URI`. It will returns a powershell object or a JSON item (with the parameter `-JSON`)without any formatting.
 
 ```PowerShell
 # Retrieve informations about ntp servers. Result is a powershell object
@@ -105,6 +109,7 @@ For testing purpose you can query all the items of the array if you know the URI
 - Disconnect-Unity
 - Get-UnityItem
 - Get-UnityLUN
+- Get-UnityPool
 - Get-UnitySession
 - Get-UnitySystem
 - Get-UnityUser

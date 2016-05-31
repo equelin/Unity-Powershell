@@ -2,9 +2,9 @@
 <Configuration>
   <ViewDefinitions>
     <View>
-      <Name>UnityPoolTable</Name>
+      <Name>UnityFeatureTable</Name>
       <ViewSelectedBy>
-        <TypeName>UnityPool</TypeName>
+        <TypeName>UnityFeature</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -19,32 +19,17 @@
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>sizeFree</Label>
+            <Label>state</Label>
             <!--<AutoSize/>-->
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>sizeTotal</Label>
+            <Label>reason</Label>
             <!--<AutoSize/>-->
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>sizeUsed</Label>
-            <!--<AutoSize/>-->
-            <Alignment>Left</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>sizeSubscribed</Label>
-            <!--<AutoSize/>-->
-            <Alignment>Left</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>isFASTCacheEnabled</Label>
-            <!--<AutoSize/>-->
-            <Alignment>Left</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>raidType</Label>
+            <Label>license</Label>
             <!--<AutoSize/>-->
             <Alignment>Left</Alignment>
           </TableColumnHeader>
@@ -59,22 +44,13 @@
                 <PropertyName>id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>sizeFree</PropertyName>
+                <PropertyName>state</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>sizeTotal</PropertyName>
+                <PropertyName>reason</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>sizeUsed</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>sizeSubscribed</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>isFASTCacheEnabled</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>raidType</PropertyName>
+                <PropertyName>license</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

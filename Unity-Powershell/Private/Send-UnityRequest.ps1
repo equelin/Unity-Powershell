@@ -43,6 +43,7 @@ function Send-UnityRequest {
       }
       Catch
       {
+        Show-RequestException -Exception $_
         throw
       }
     }

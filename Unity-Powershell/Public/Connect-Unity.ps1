@@ -13,9 +13,9 @@ Function Connect-Unity {
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      Connect-Unity -Server 192.168.0.1
+      Connect-Unity -Server 192.168.0.1 -TrustAllCerts
 
-      Connects to the array with the IP 192.168.0.1
+      Connects to the array with the IP 192.168.0.1 and accept unknown certificates.
       .EXAMPLE
       Connect-Unity -Server 192.168.0.1,192.168.0.2
 

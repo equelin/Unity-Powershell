@@ -32,12 +32,11 @@ Function Get-UnityAuth {
 
   Try {
     $NewResponse = $Request.GetResponse()
-    $NewResponse.Close() 
+    $NewResponse.Close()
   }
   Catch {
-    Write-Error "Error while Sending authentication request"
-    Write-Error $_.Exception.Message
-    Break
+    Show-RequestException -Exception $_
+    throw
   }
 
   Write-Verbose "Processing cookies"
