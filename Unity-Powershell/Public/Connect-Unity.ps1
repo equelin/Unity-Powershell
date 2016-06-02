@@ -35,12 +35,12 @@ Function Connect-Unity {
       [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity credentials')]
       [System.Management.Automation.CredentialAttribute()]$Credentials,
       [Parameter(Mandatory = $false,HelpMessage = 'Trust all certs ?')]
-      [Switch]$TrustAllCerts
+      [Bool]$TrustAllCerts = $True
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
-    if ($TrustAllCerts.IsPresent) {
+    if ($TrustAllCerts) {
       Unblock-UnityCerts
     }
   }

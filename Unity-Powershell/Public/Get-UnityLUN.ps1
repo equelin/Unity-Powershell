@@ -2,9 +2,9 @@ Function Get-UnityLUN {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about LUN.
+      Queries the EMC Unity array to retrieve informations about block LUN.
       .DESCRIPTION
-      Querries the EMC Unity array to retrieve informations about LUN.
+      Querries the EMC Unity array to retrieve informations about block LUN.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
@@ -13,11 +13,11 @@ Function Get-UnityLUN {
       .EXAMPLE
       Get-UnityLUN
 
-      Retrieve information about LUN
+      Retrieve information about all block LUN
       .EXAMPLE
       Get-UnityLUN -Name 'LUN01'
 
-      Retrieves information about LUN named LUN01
+      Retrieves information about block LUN named LUN01
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
@@ -35,8 +35,6 @@ Function Get-UnityLUN {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/lun/instances' #URI for the ressource (example: /api/types/lun/instances)
-    $TypeName = 'UnityLUN'
 
     Foreach ($sess in $session) {
 
@@ -44,19 +42,9 @@ Function Get-UnityLUN {
 
       If (Test-UnityConnection -Session $Sess) {
 
-        #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName
+        $StorageResource = Get-UnityStorageResource -Session $Sess -Type 'lun'
 
-        Write-Verbose "URL: $URL"
-
-        #Sending the request
-        $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
-
-        #Formating the result. Converting it from JSON to a Powershell object
-        $results = ($request.content | ConvertFrom-Json).entries.content
-
-        #Building the result collection (Add ressource type)
-        $ResultCollection += Add-UnityObjectType -Data $results -TypeName $TypeName
+        $ResultCollection += Get-UnityLUNResource -Session $Sess -ID $StorageResource.luns.id
 
       } else {
         Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"

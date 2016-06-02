@@ -1,30 +1,30 @@
-Function Remove-UnityUser {
+Function Remove-UnityLUNResource {
 
   <#
       .SYNOPSIS
-      Delete a local user.
+      Delete a LUN.
       .DESCRIPTION
-      Delete a local user.
+      Delete a LUN ressource (LUN, VMWare VMFS LUN, VMware NFS LUN).
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      Remove-UnityUser -Name 'User'
+      Remove-UnityLUNResource -Name 'LUN01'
 
-      Delete the user named 'user'
+      Delete the LUN named 'LUN01'
       .EXAMPLE
-      Get-UnityUSer -Name 'User' | Remove-UnityUser
+      Get-UnityLUNResource -Name 'LUN01' | Remove-UnityLUNResource
 
-      Delete the user named 'user'. The user's information are provided by the Get-UnityUser through the pipeline.
+      Delete the LUN named 'LUN01'. The LUN's informations are provided by the Get-UnityLUNResource through the pipeline.
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'User Name or User Object')]
+    [Parameter(Mandatory = $false,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name or LUN Object')]
     $Name
   )
 
@@ -42,41 +42,43 @@ Function Remove-UnityUser {
 
         Foreach ($n in $Name) {
 
-          # Determine input and convert to UnityUser object
+          # Determine input and convert to UnityLUN object
           Switch ($n.GetType().Name)
           {
             "String" {
-              $User = get-UnityUser -Session $Sess -Name $n
-              $UserID = $User.id
-              $UserName = $n
+              $LUN = get-UnityLUN -Session $Sess -Name $n
+              $LUNID = $LUN.id
+              $LUNName = $n
             }
-            "UnityUser" {
+            "UnityLUN" {
               Write-Verbose "Input object type is $($n.GetType().Name)"
-              $UserName = $n.Name
-              If ($User = Get-UnityUser -Session $Sess -Name $UserName) {
-                        $UserID = $User.id
+              $LUNName = $n.Name
+              If (Get-UnityLUN -Session $Sess -Name $n.Name) {
+                        $LUNID = $n.id
               }
             }
           }
 
-          If ($UserID) {
+          If ($LUNID) {
+
+            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $LUNName) -and ($_.luns.id -like $LUNID)}
 
             #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/user/'+$UserID
+            $URI = 'https://'+$sess.Server+'/api/instances/storageResource/' + $UnityStorageRessource.id
             Write-Verbose "URI: $URI"
 
-            if ($pscmdlet.ShouldProcess($UserName,"Delete user")) {
+            if ($pscmdlet.ShouldProcess($LUNName,"Delete LUN")) {
               #Sending the request
               $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
             }
 
             If ($request.StatusCode -eq '204') {
 
-              Write-Verbose "User with ID: $id as been deleted"
+              Write-Verbose "LUN with ID: $LUNID as been deleted"
 
             }
           } else {
-            Write-Host "User $UserName does not exist on the array $($sess.Name)"
+            Write-Verbose "LUN $LUNName does not exist on the array $($sess.Name)"
           }
         }
       } else {
@@ -85,6 +87,5 @@ Function Remove-UnityUser {
     }
   }
 
-  End {
-  }
+  End {}
 }

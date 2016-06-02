@@ -20,7 +20,7 @@ Function New-UnityUser {
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'User Name')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'User Name')]
     [String[]]$Name,
     [Parameter(Mandatory = $true,HelpMessage = 'User role. It mights be administrator, storageadmin, vmadmin or operator')]
     [String]$Role,
@@ -30,29 +30,26 @@ Function New-UnityUser {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
-
-    #Initialazing arrays
-    $ResultCollection = @()
   }
 
   Process {
-    Foreach ($n in $Name) {
+    Foreach ($sess in $session) {
 
-      # Creation of the body hash
-      $body = @{}
+      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      # Name parameter
-      $body["name"] = "$($n)"
+      Foreach ($n in $Name) {
 
-      # Role parameter
-      $body["role"] = "$($Role)"
+        # Creation of the body hash
+        $body = @{}
 
-      # Password parameter
-      $body["password"] = "$($Password)"
+        # Name parameter
+        $body["name"] = "$($n)"
 
-      Foreach ($sess in $session) {
+        # Role parameter
+        $body["role"] = "$($Role)"
 
-        Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+        # Password parameter
+        $body["password"] = "$($Password)"
 
         If (Test-UnityConnection -Session $Sess) {
 
@@ -71,7 +68,7 @@ Function New-UnityUser {
             Write-Verbose "User created with the ID: $($results.id) "
 
             #Executing Get-UnityUser with the ID of the new user
-            Get-UnityUser -ID $results.id
+            Get-UnityUser -Session $Sess -ID $results.id
           }
         } else {
           Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
@@ -80,6 +77,5 @@ Function New-UnityUser {
     }
   }
 
-  End {
-  }
+  End {}
 }

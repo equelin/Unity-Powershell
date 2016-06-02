@@ -35,30 +35,53 @@ The first thing to do is to connect to an EMC Unity array with the command `Conn
 
 ```PowerShell
 # Connect to the Unity array
-    Connect-Unity -Server 192.168.0.1 -TrustAllCerts
+    Connect-Unity -Server 192.168.0.1
 
     Server       User  Name     Model    SerialNumber
     ------       ----  ----     -----    ------------
     192.168.0.1 admin UnityDemo UnityVSA VIRT1919K58MXM
 ```
 
-The parameter `-TrustAllCerts` allow to accept untrusted certificates.  
+The parameter `-TrustAllCerts` allow to accept or not untrusted certificates. It is set to `$True` by default.
+
+```PowerShell
+# Connect to the Unity array without allowing untrusted certificates
+    Connect-Unity -Server 192.168.0.1 -TrustAllCerts $false
+
+    Server       User  Name     Model    SerialNumber
+    ------       ----  ----     -----    ------------
+    192.168.0.1 admin UnityDemo UnityVSA VIRT1919K58MXM
+```
 
 ### LUN management
 
+You can create a new LUN `New-UnityLUN`, retrieves informations `Get-UnityLUN`, modify his properties `Set-UnityLUN` or delete it `Remove-UnityLUN`
+
 ```PowerShell
-# Connect to the Unity array
+# Create a block LUN
+    New-UnityLUN -Name 'LUN01' -Pool 'pool_1' -Size 1024000
+
+    Name  id    pool   isThinEnabled tieringPolicy sizeTotal sizeUsed sizeAllocated
+    ----  --    ----   ------------- ------------- --------- -------- -------------
+    LUN01 sv_69 pool_1 True          Autotier_High 1024000   0        0
+
+
+# Retrieve informations about block LUN
     Get-UnityLUN
 
     Name  ID   pool   isThinEnabled tieringPolicy sizeTotal  sizeUsed sizeAllocated
     ----  --   ----   ------------- ------------- ---------  -------- -------------
     LUN01 sv_1 pool_1 True          Autotier_High 1073741824 0        0
     LUN02 sv_2 pool_1 True          Autotier_High 1073741824 0        0
+
+
+# Delete a LUN
+    Remove-UnityLUN -Name 'LUN01'
 ```
 
 ### Users management
 
-This is the first complete set of command available in this module. You can add a new user `New-UnityUser`, modify his properties `Set-UnityUSer` or delete it `Remove-UnityUser`.
+You can add a new user `New-UnityUser`, modify his properties `Set-UnityUSer` or delete it `Remove-UnityUser`.
 
 ```PowerShell
 # Retrieve informations about a specific user

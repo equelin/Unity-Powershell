@@ -31,6 +31,7 @@ function Send-UnityRequest {
       }
       Catch
       {
+        Show-RequestException -Exception $_
         throw
       }
     }
@@ -55,6 +56,7 @@ function Send-UnityRequest {
       }
       Catch
       {
+        Show-RequestException -Exception $_
         throw
       }
     }

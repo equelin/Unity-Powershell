@@ -14,7 +14,7 @@
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>id</Label>
+            <Label>ID</Label>
             <!--<AutoSize/>-->
             <Alignment>Left</Alignment>
           </TableColumnHeader>

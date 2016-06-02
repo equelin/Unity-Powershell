@@ -20,11 +20,11 @@ Function Set-UnityUser {
       Gives the role 'operator' to the user 'User'. The user's information are provided by the Get-UnityUser through the pipeline.
   #>
 
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'User Name or User Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'User Name or User Object')]
     $Name,
     [Parameter(Mandatory = $false,HelpMessage = 'User role. It mights be administrator, storageadmin, vmadmin or operator')]
     [String]$Role,
@@ -39,60 +39,72 @@ Function Set-UnityUser {
   }
 
   Process {
-    Foreach ($n in $Name) {
 
-      Write-Verbose "Data type is $($n.GetType().Name)"
+    Foreach ($sess in $session) {
 
-      If ($n.GetType().Name -eq 'UnityUser') {
-        Write-Verbose "Name is $($n.Name)"
-        Write-Verbose "ID is $($n.id)"
+      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-        $id = $n.id
+      If (Test-UnityConnection -Session $Sess) {
 
-      } else {
-        $id = (get-UnityUser -Name $n).id
-      }
+        Foreach ($n in $Name) {
 
-      # Creation of the body hash
-      $body = @{}
-
-      # Role parameter
-      $body["id"] = "$($id)"
-
-      # role parameter
-      If ($Role) {
-        $body["role"] = "$($Role)"
-      }
-
-      # oldPassword parameter
-      If ($password -and $oldPassword) {
-        $body["oldPassword"] = "$($oldPassword)"
-        $body["password"] = "$($password)"
-      }
-
-      Foreach ($sess in $session) {
-
-        Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
-
-        If (Test-UnityConnection -Session $Sess) {
-
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/user/'+$id+'/action/modify'
-          Write-Verbose "URI: $URI"
-
-          #Sending the request
-          $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
-
-          If ($request.StatusCode -eq '204') {
-
-            Write-Verbose "User with ID: $id as been modified"
-
-            Get-UnityUser -id $id
-
+          # Determine input and convert to UnityUser object
+          Switch ($n.GetType().Name)
+          {
+            "String" {
+              $User = get-UnityUser -Session $Sess -Name $n
+              $UserID = $User.id
+              $UserName = $n
+            }
+            "UnityUser" {
+              Write-Verbose "Input object type is $($n.GetType().Name)"
+              $UserName = $n.Name
+              If (Get-UnityUser -Session $Sess -Name $n.Name) {
+                        $UserID = $n.id
+              }
+            }
           }
-        } else {
-          Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+
+          If ($UserID) {
+            # Creation of the body hash
+            $body = @{}
+
+            # Role parameter
+            $body["id"] = "$($UserID)"
+
+            # role parameter
+            If ($Role) {
+              $body["role"] = "$($Role)"
+            }
+
+            # oldPassword parameter
+            If ($password -and $oldPassword) {
+              $body["oldPassword"] = "$($oldPassword)"
+              $body["password"] = "$($password)"
+            }
+
+            #Building the URI
+            $URI = 'https://'+$sess.Server+'/api/instances/user/'+$UserID+'/action/modify'
+            Write-Verbose "URI: $URI"
+
+            #Sending the request
+            If ($pscmdlet.ShouldProcess($UserName,"Modify User")) {
+              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+            }
+
+            If ($request.StatusCode -eq '204') {
+
+              Write-Verbose "User with ID: $id as been modified"
+
+              Get-UnityUser -Session $Sess -id $UserID
+
+            }
+          } else {
+            Write-Host "User $UserName does not exist on the array $($sess.Name)"
+          }
         }
+      } else {
+        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }
     }
   }

@@ -7,6 +7,8 @@ function Get-URLFromObjectType {
       [string]$URI,
       [parameter(Mandatory = $true, HelpMessage = 'Type associated to the item')]
       [string]$TypeName,
+      [parameter(Mandatory = $false, HelpMessage = 'Ressource Filter')]
+      [string]$Filter,
       [parameter(Mandatory = $false, HelpMessage = 'Compact the response')]
       [switch]$Compact
   )
@@ -21,6 +23,10 @@ function Get-URLFromObjectType {
   $fields = $fields -replace '.$'
 
   $URL = 'https://'+$Server+$URI+'?fields='+$fields
+
+  If ($Filter) {
+    $URL = $URL + '&filter=' + $Filter
+  }
 
   If ($Compact) {
     $URL = $URL + '&compact=true'

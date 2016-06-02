@@ -1,23 +1,23 @@
-Function Get-UnitystorageResource {
+Function Get-UnityLUNResource {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about UnitystorageResource.
+      Queries the EMC Unity array to retrieve informations about LUN.
       .DESCRIPTION
-      Querries the EMC Unity array to retrieve informations about UnitystorageResource.
+      Querries the EMC Unity array to retrieve informations about LUN.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      Get-UnityLUN
+      Get-UnityLUNResource
 
       Retrieve information about LUN
       .EXAMPLE
-      Get-UnitystorageResource -Name 'LUN01'
+      Get-UnityLUNResource -Name 'LUN01'
 
-      Retrieves information about storage ressource named LUN01
+      Retrieves information about LUN named LUN01
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
@@ -27,8 +27,7 @@ Function Get-UnitystorageResource {
     [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
     [String[]]$Name='*',
     [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
-    [String[]]$ID='*',
-    [String]$Type
+    [String[]]$ID='*'
   )
 
   Begin {
@@ -36,39 +35,27 @@ Function Get-UnitystorageResource {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/storageResource/instances' #URI for the ressource (example: /api/types/lun/instances)
-    $TypeName = 'UnitystorageResource'
-
-    Switch ($Type) {
-      'lun' {$Filter = 'type eq 8'}
-      'vmwareiscsi' {$Filter = 'type eq 4'}
-      'vmwarefs' {$Filter = 'type eq 3'}
-    }
+    $URI = '/api/types/lun/instances' #URI for the ressource (example: /api/types/lun/instances)
+    $TypeName = 'UnityLUN'
 
     Foreach ($sess in $session) {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      If (Test-UnityConnection -Session $Sess) {
+      #Building the URL from Object Type.
+      $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
 
-        #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Filter $Filter
+      Write-Verbose "URL: $URL"
 
-        Write-Verbose "URL: $URL"
+      #Sending the request
+      $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
 
-        #Sending the request
-        $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
+      #Formating the result. Converting it from JSON to a Powershell object
+      $results = ($request.content | ConvertFrom-Json).entries.content
 
-        #Formating the result. Converting it from JSON to a Powershell object
-        $results = ($request.content | ConvertFrom-Json).entries.content
-
-        #Building the result collection (Add ressource type)
-        If ($results) {
-            $ResultCollection += Add-UnityObjectType -Data $results -TypeName $TypeName
-        }
-
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+      #Building the result collection (Add ressource type)
+      If ($results) {
+        $ResultCollection += Add-UnityObjectType -Data $results -TypeName $TypeName
       }
     }
   }

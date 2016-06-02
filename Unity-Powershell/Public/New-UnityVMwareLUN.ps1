@@ -1,19 +1,19 @@
-Function New-UnityLUN {
+Function New-UnityVMwareLUN {
 
   <#
       .SYNOPSIS
-      Creates a Unity block LUN.
+      Creates a Unity VMware block LUN.
       .DESCRIPTION
-      Creates a Unity block LUN.
+      Creates a Unity VMware block LUN.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      New-UnityLUN -Name 'LUN01' -Pool 'pool_1' -Size 1024000
+      New-UnityVMwareLUN -Name 'DATASTORE01' -Pool 'pool_1' -Size 10737418240
 
-      Create LUN named 'LUN01' on pool 'pool_1' and with a size of '1024000' bytes
+      Create LUN named 'LUN01' on pool 'pool_1' and with a size of '10737418240' bytes
   #>
 
   [CmdletBinding()]
@@ -29,7 +29,7 @@ Function New-UnityLUN {
     [Parameter(Mandatory = $true,HelpMessage = 'LUN Size in Bytes')]
     [String]$Size,
     [Parameter(Mandatory = $false,HelpMessage = 'Is Thin enabled on LUN ? (Default is true)')]
-    [String]$isThinEnabled = $true,
+    [bool]$isThinEnabled = $true,
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
     [String]$snapSchedule,
     [Parameter(Mandatory = $false,HelpMessage = 'Is assigned snapshot schedule is paused ? (Default is false)')]
@@ -38,9 +38,6 @@ Function New-UnityLUN {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
-
-    #Initialazing arrays
-    $ResultCollection = @()
   }
 
   Process {
@@ -65,9 +62,12 @@ Function New-UnityLUN {
         $body["lunParameters"] = @{}
         $lunParameters = @{}
         $poolParameters = @{}
+
         $poolParameters["id"] = "$($Pool)"
         $lunParameters["pool"] = $poolParameters
         $lunParameters["size"] = $($Size)
+
+        $body["lunParameters"] = $lunParameters
 
         #snapScheduleParameters
         If ($snapSchedule) {
@@ -85,12 +85,10 @@ Function New-UnityLUN {
           $lunParameters["isThinEnabled"] = $isThinEnabled
         }
 
-        $body["lunParameters"] = $lunParameters
-
         If (Test-UnityConnection -Session $Sess) {
 
           #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/types/storageResource/action/createLun'
+          $URI = 'https://'+$sess.Server+'/api/types/storageResource/action/createVmwareLun'
           Write-Verbose "URI: $URI"
 
           #Sending the request
@@ -103,10 +101,10 @@ Function New-UnityLUN {
             #Formating the result. Converting it from JSON to a Powershell object
             $results = ($request.content | ConvertFrom-Json).content.storageResource
 
-            Write-Verbose "LUN created with the ID: $($results.id) "
+            Write-Verbose "LUN created with the storage resource ID: $($results.id) "
 
-            #Executing Get-UnityUser with the ID of the new user
-            Get-UnityLUN -Session $Sess -ID $results.id
+            #Executing Get-UnityVMwareLUN with the ID of the new user
+            Get-UnityVMwareLUN -Session $Sess -Name $n
           }
         } else {
           Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
@@ -115,5 +113,6 @@ Function New-UnityLUN {
     }
   }
 
-  End {}
+  End {
+  }
 }
