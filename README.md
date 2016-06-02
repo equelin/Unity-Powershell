@@ -1,3 +1,5 @@
+[![GitHub version](https://badge.fury.io/gh/equelin%2FUnity-Powershell.svg)](https://badge.fury.io/gh/equelin%2FUnity-Powershell)
+
 # Unity-Powershell
 
 This is a PowerShell module for querying EMC Unity array's API. This is at an early stage of the development and it may be seen more like a proof of concept.
@@ -130,8 +132,17 @@ For testing purpose you can query all the ressources of the array with the comma
 
 - Connect-Unity
 - Disconnect-Unity
+- Get-UnityBasicSystemInfo
 - Get-UnityItem
+- New-UnityLUN
+- Set-UnityLUN
+- Remove-UnityLUN
 - Get-UnityLUN
+- New-UnityVMwareLUN
+- Set-UnityVMwareLUN
+- Remove-UnityVMwareLUN
+- Get-UnityVMwareLUN
+- Get-UnityStorageResource
 - Get-UnityPool
 - Get-UnitySession
 - Get-UnitySystem
@@ -139,6 +150,8 @@ For testing purpose you can query all the ressources of the array with the comma
 - New-UnityUser
 - Set-UnityUser
 - Remove-UnityUser
+- Get-UnityFeatures
+- Get-UnityLicnse
 
 # Author
 
