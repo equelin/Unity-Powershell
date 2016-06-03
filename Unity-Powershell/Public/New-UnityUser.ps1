@@ -71,7 +71,7 @@ Function New-UnityUser {
             Get-UnityUser -Session $Sess -ID $results.id
           }
         } else {
-          Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+          Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
         }
       }
     }

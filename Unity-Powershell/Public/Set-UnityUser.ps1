@@ -94,17 +94,17 @@ Function Set-UnityUser {
 
             If ($request.StatusCode -eq '204') {
 
-              Write-Verbose "User with ID: $id as been modified"
+              Write-Verbose "User with ID: $id has been modified"
 
               Get-UnityUser -Session $Sess -id $UserID
 
             }
           } else {
-            Write-Host "User $UserName does not exist on the array $($sess.Name)"
+            Write-Information -MessageData "User $UserName does not exist on the array $($sess.Name)"
           }
         }
       } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }
     }
   }

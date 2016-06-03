@@ -62,11 +62,11 @@ Function Remove-UnityLUN {
           If ($LUNID) {
             $LUN | Remove-UnityLUNResource -Session $Sess
           } else {
-            Write-Host "LUN $LUNName does not exist on the array $($sess.Name)"
+            Write-Information -MessageData "LUN $LUNName does not exist on the array $($sess.Name)"
           }
         }
       } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }
     }
   }

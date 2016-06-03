@@ -74,7 +74,7 @@ Function Remove-UnityLUNResource {
 
             If ($request.StatusCode -eq '204') {
 
-              Write-Verbose "LUN with ID: $LUNID as been deleted"
+              Write-Verbose "LUN with ID: $LUNID has been deleted"
 
             }
           } else {

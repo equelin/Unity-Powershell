@@ -56,10 +56,11 @@ Function Get-UnityUser {
         $results = ($request.content | ConvertFrom-Json).entries.content
 
         #Building the result collection (Add ressource type)
-        $ResultCollection += Add-UnityObjectType -Data $results -TypeName $TypeName
-
+        If ($results) {
+          $ResultCollection += Add-UnityObjectType -Data $results -TypeName $TypeName
+        }
       } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }
     }
   }

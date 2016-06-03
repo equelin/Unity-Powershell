@@ -81,7 +81,7 @@ Function New-UnityLUN {
         }
 
         # isThinEnabled
-        If ($isThinEnabled) {
+        If ($PSBoundParameters.ContainsKey('isThinEnabled')) {
           $lunParameters["isThinEnabled"] = $isThinEnabled
         }
 
@@ -109,7 +109,7 @@ Function New-UnityLUN {
             Get-UnityLUN -Session $Sess -ID $results.id
           }
         } else {
-          Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+          Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
         }
       }
     }

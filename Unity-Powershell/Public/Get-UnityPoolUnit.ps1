@@ -1,19 +1,23 @@
-Function Get-UnityBasicSystemInfo {
+Function Get-UnityPoolUnit {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve basic informations about arrays.
+      Queries the EMC Unity array to retrieve informations about poolUnit.
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve basic informations about arrays.
+      Querries the EMC Unity array to retrieve informations about poolUnit.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      Get-UnityBasicSystemInfo
+      Get-UnityPoolUnit
 
-      Retrieve basic information about arrays
+      Retrieve information about poolUnit
+      .EXAMPLE
+      Get-UnityPoolUnit -Name 'POOL01'
+
+      Retrieves information about poolUnit named POOL01
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
@@ -31,8 +35,8 @@ Function Get-UnityBasicSystemInfo {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/basicSystemInfo/instances' #URI for the ressource (example: /api/types/lun/instances)
-    $TypeName = 'UnityBasicSystemInfo'
+    $URI = '/api/types/poolUnit/instances' #URI
+    $TypeName = 'UnityPoolUnit'
 
     Foreach ($sess in $session) {
 
@@ -41,7 +45,7 @@ Function Get-UnityBasicSystemInfo {
       If (Test-UnityConnection -Session $Sess) {
 
         #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName
+        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
 
         Write-Verbose "URL: $URL"
 

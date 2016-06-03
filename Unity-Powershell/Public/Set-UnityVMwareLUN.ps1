@@ -116,7 +116,7 @@ Function Set-UnityVMwareLUN {
 
             If ($request.StatusCode -eq '204') {
 
-              Write-Verbose "LUN with ID: $LUNID as been modified"
+              Write-Verbose "LUN with ID: $LUNID has been modified"
 
               Get-UnityVMwareLUN -Session $Sess -id $LUNID
 
@@ -126,7 +126,7 @@ Function Set-UnityVMwareLUN {
           }
         }
       } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }
     }
   }

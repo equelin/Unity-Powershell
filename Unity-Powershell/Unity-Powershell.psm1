@@ -186,8 +186,44 @@ Class UnityHealth {
   $resolutions
 }
 
+Class UnityPoolUnit {
+  [string]$id
+  [PoolUnitTypeEnum]$type
+  $health
+  [string]$name
+  [string]$description
+  [string]$wwn
+  [long]$sizeTotal
+  [TierTypeEnum]$tierType
+  $pool
+}
+
+Class UnityDnsServer {
+  [string]$id
+  [string]$domain
+  [string[]]$addresses
+  [DNSServerOriginEnum]$origin
+}
 
 #Custom Enum
+
+Enum DNSServerOriginEnum {
+  Unknown = 0
+  Static = 1
+  DHCP = 2
+}
+
+Enum PoolUnitTypeEnum {
+   RAID_Group = 1
+   Virtual_Disk = 2
+}
+
+Enum TierTypeEnum{
+    None = 0
+    Extreme_Performance = 10
+    Performance = 20
+    Capacity = 30
+}
 
 Enum HealthEnum{
   UNKNOWN = 0
