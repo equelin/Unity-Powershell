@@ -1,29 +1,30 @@
-Function Get-UnityBasicSystemInfo {
+Function Get-UnityDNSServer {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve basic informations about arrays.
+      Information about DNS Servers.
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve basic informations about arrays.
+      Information about DNS Servers.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      Get-UnityBasicSystemInfo
+      Get-UnitySystem
 
-      Retrieve basic information about arrays
+      Retrieve informations about all the arrays with an active session.
+      .EXAMPLE
+      Get-UnitySystem -Name 'UnityVSA'
+
+
+      Retrieves informations about an array named 'UnityVSA'
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
-    $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
-    [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
-    [String[]]$ID='*'
+    $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
   )
 
   Begin {
@@ -31,8 +32,8 @@ Function Get-UnityBasicSystemInfo {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/basicSystemInfo/instances' #URI for the ressource (example: /api/types/lun/instances)
-    $TypeName = 'UnityBasicSystemInfo'
+    $URI = '/api/types/dnsServer/instances' #URI for the ressource (example: /api/types/lun/instances)
+    $TypeName = 'UnityDnsServer'
 
     Foreach ($sess in $session) {
 
@@ -61,25 +62,10 @@ Function Get-UnityBasicSystemInfo {
     }
   }
 
-  Process {
-    #Filter results
-    If ($ResultCollection) {
-      Switch ($PsCmdlet.ParameterSetName) {
-        'ByName' {
-          Foreach ($N in $Name) {
-            Write-Verbose "Return result(s) with the filter: $($N)"
-            Write-Output $ResultCollection | Where-Object {$_.Name -like $N}
-          }
-        }
-        'ByID' {
-          Foreach ($I in $ID) {
-            Write-Verbose "Return result(s) with the filter: $($I)"
-            Write-Output $ResultCollection | Where-Object {$_.Id -like $I}
-          }
-        }
-      }
-    }
+  Process {}
+
+  End {
+    return $ResultCollection
   }
 
-  End {}
 }

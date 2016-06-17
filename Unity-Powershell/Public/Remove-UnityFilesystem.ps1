@@ -1,30 +1,30 @@
-Function Remove-UnityLUNResource {
+Function Remove-UnityFilesystem {
 
   <#
       .SYNOPSIS
-      Delete a LUN.
+      Delete a filesystem.
       .DESCRIPTION
-      Delete a LUN ressource (LUN, VMWare VMFS LUN, VMware NFS LUN).
+      Delete a filesystem.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      Remove-UnityLUNResource -Name 'LUN01'
+      Remove-UnityFilesystem -Name 'FS01'
 
-      Delete the LUN named 'LUN01'
+      Delete the filesystem named 'FS01'
       .EXAMPLE
-      Get-UnityLUNResource -Name 'LUN01' | Remove-UnityLUNResource
+      Get-UnityFilesystem -Name 'FS01' | Remove-UnityFilesystem
 
-      Delete the LUN named 'LUN01'. The LUN's informations are provided by the Get-UnityLUNResource through the pipeline.
+      Delete the filesystem named 'FS01'. The filesystem's informations are provided by the Get-UnityFilesystem through the pipeline.
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name or LUN Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'filesystem Name or filesystem Object')]
     $Name
   )
 
@@ -42,43 +42,43 @@ Function Remove-UnityLUNResource {
 
         Foreach ($n in $Name) {
 
-          # Determine input and convert to UnityLUN object
+          # Determine input and convert to UnityFilesystem object
           Switch ($n.GetType().Name)
           {
             "String" {
-              $LUN = get-UnityLUN -Session $Sess -Name $n
-              $LUNID = $LUN.id
-              $LUNName = $n
+              $filesystem = get-UnityFilesystem -Session $Sess -Name $n
+              $filesystemID = $filesystem.id
+              $filesystemName = $n
             }
-            "UnityLUN" {
+            "UnityFilesystem" {
               Write-Verbose "Input object type is $($n.GetType().Name)"
-              $LUNName = $n.Name
-              If (Get-UnityLUN -Session $Sess -Name $n.Name) {
-                        $LUNID = $n.id
+              $filesystemName = $n.Name
+              If (Get-Unityfilesystem -Session $Sess -Name $n.Name) {
+                        $filesystemID = $n.id
               }
             }
           }
 
-          If ($LUNID) {
+          If ($filesystemID) {
 
-            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $LUNName) -and ($_.luns.id -like $LUNID)}
+            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $filesystemName) -and ($_.filesystem.id -like $filesystemID)}
 
             #Building the URI
             $URI = 'https://'+$sess.Server+'/api/instances/storageResource/' + $UnityStorageRessource.id
             Write-Verbose "URI: $URI"
 
-            if ($pscmdlet.ShouldProcess($LUNName,"Delete LUN")) {
+            if ($pscmdlet.ShouldProcess($filesystemName,"Delete Filesystem")) {
               #Sending the request
               $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
             }
 
             If ($request.StatusCode -eq '204') {
 
-              Write-Verbose "LUN with ID: $LUNID has been deleted"
+              Write-Verbose "Filesystem with ID: $filesystemID has been deleted"
 
             }
           } else {
-            Write-Verbose "LUN $LUNName does not exist on the array $($sess.Name)"
+            Write-Verbose "Filesystem $filesystemName does not exist on the array $($sess.Name)"
           }
         }
       } else {

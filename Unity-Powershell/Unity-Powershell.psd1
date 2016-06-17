@@ -62,7 +62,9 @@ PowerShellVersion = '5.0'
 # Format files (.ps1xml) to be loaded when importing this module
 FormatsToProcess = 'Unity-Powershell.UnityLUN.Format.ps1xml','Unity-Powershell.UnitySession.Format.ps1xml','Unity-Powershell.UnityUser.Format.ps1xml',
                   'Unity-Powershell.UnityPool.Format.ps1xml','Unity-Powershell.UnityBasicSystemInfo.Format.ps1xml','Unity-Powershell.UnityLicense.Format.ps1xml',
-                  'Unity-Powershell.UnityFeature.Format.ps1xml','Unity-Powershell.UnityStorageResource.Format.ps1xml'
+                  'Unity-Powershell.UnityFeature.Format.ps1xml','Unity-Powershell.UnityStorageResource.Format.ps1xml','Unity-Powershell.UnityPoolUnit.Format.ps1xml',
+                  'Unity-Powershell.UnityNasServer.Format.ps1xml','Unity-Powershell.UnityIpPort.Format.ps1xml','Unity-Powershell.UnityFilesystem.Format.ps1xml',
+                  'Unity-Powershell.UnityCIFSShare.Format.ps1xml'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 # NestedModules = @()

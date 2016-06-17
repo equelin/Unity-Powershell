@@ -1,30 +1,30 @@
-Function Remove-UnityUser {
+Function Remove-UnityPool {
 
   <#
       .SYNOPSIS
-      Delete a local user.
+      Delete a LUN.
       .DESCRIPTION
-      Delete a local user.
+      Delete a LUN.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      Remove-UnityUser -Name 'User'
+      Remove-UnityPool -Name 'POOL01'
 
-      Delete the user named 'user'
+      Delete the pool named 'POOL01'
       .EXAMPLE
-      Get-UnityUSer -Name 'User' | Remove-UnityUser
+      Get-UnityPool -Name 'POOL01' | Remove-UnityPool
 
-      Delete the user named 'user'. The user's information are provided by the Get-UnityUser through the pipeline.
+      Delete the pool named 'POOL01'. The pool's informations are provided by the Get-UnityPool through the pipeline.
   #>
 
-  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'User Name or User Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool Name or Pool Object')]
     $Name
   )
 
@@ -42,41 +42,40 @@ Function Remove-UnityUser {
 
         Foreach ($n in $Name) {
 
-          # Determine input and convert to UnityUser object
+          # Determine input and convert to UnityPool object
           Switch ($n.GetType().Name)
           {
             "String" {
-              $User = get-UnityUser -Session $Sess -Name $n
-              $UserID = $User.id
-              $UserName = $n
+              $Pool = get-UnityPool -Session $Sess -Name $n
+              $PoolID = $Pool.id
+              $PoolName = $Pool.Name
             }
-            "UnityUser" {
+            "UnityPool" {
               Write-Verbose "Input object type is $($n.GetType().Name)"
-              $UserName = $n.Name
-              If ($User = Get-UnityUser -Session $Sess -Name $UserName) {
-                        $UserID = $User.id
+              $PoolName = $n.Name
+              If ($Pool = Get-UnityPool -Session $Sess -Name $PoolName) {
+                        $PoolID = $n.id
               }
             }
           }
 
-          If ($UserID) {
-
+          If ($PoolID) {
             #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/user/'+$UserID
+            $URI = 'https://'+$sess.Server+'/api/instances/pool/'+$PoolID
             Write-Verbose "URI: $URI"
 
-            if ($pscmdlet.ShouldProcess($UserName,"Delete user")) {
+            if ($pscmdlet.ShouldProcess($PoolName,"Delete pool")) {
               #Sending the request
               $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
             }
 
             If ($request.StatusCode -eq '204') {
 
-              Write-Verbose "User with ID: $id has been deleted"
+              Write-Verbose "Pool with ID: $id has been deleted"
 
             }
           } else {
-            Write-Information -MessageData "User $UserName does not exist on the array $($sess.Name)"
+            Write-Information -MessageData "LUN $PoolName does not exist on the array $($sess.Name)"
           }
         }
       } else {
@@ -85,6 +84,5 @@ Function Remove-UnityUser {
     }
   }
 
-  End {
-  }
+  End {}
 }

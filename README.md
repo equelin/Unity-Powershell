@@ -2,25 +2,54 @@
 
 # Unity-Powershell
 
-This is a PowerShell module for querying EMC Unity array's API. This is at an early stage of the development and it may be seen more like a proof of concept.
+This is a PowerShell module for querying EMC Unity array's API.
+
+With this module (version 0.3.0) you can manage:
+
+- System (DNS,NTP...)
+- Pools (Only for UnityVSA with virtual disks)
+- LUN (block)
+- VMware LUN (block)
+- NASServer
+- Filesystem
+- CIFS Server
+- CIFS Shares
+
+More functionalities will be added later.
+
+# Usage
+
+This module try to mimic VMware PowerCLI usage. All resources management functions are available with the powershell's verbs GET, NEW, SET, REMOVE. 
+For example, you can manage Pools with the following commands:
+- Get-UnityPool
+- New-UnityPool
+- Set-UnityPool
+- Remove-UnityPool
+
+Some functions accept pipelining. If you want to delete all the existing LUNS you can do this:
+
+```powershell
+Get-UnityLUN | Remove-UnityLUN
+```
 
 # Requirements
 
-You will need to have Powershell 5 to use this module.
+- Powershell 5
+- An EMC Unity array ! 
 
 # Instructions
 ### Install the module
 ```powershell
-# One time setup
+#Automated installation (Powershell 5):
+    Install-Module Unity-Powershell
+
+# Or manual setup
     # Download the repository
     # Unblock the zip
     # Extract the Unity-Powershell folder to a module path (e.g. $env:USERPROFILE\Documents\WindowsPowerShell\Modules\)
 
-    #Simple alternative:
-        Install-Module Unity-Powershell
-
 # Import the module
-    Import-Module Unity-Powershell    #Alternatively, Import-Module \\Path\To\Unity-Powershell
+    Import-Module Unity-Powershell  #Alternatively, Import-Module \\Path\To\Unity-Powershell
 
 # Get commands in the module
     Get-Command -Module Unity-Powershell
@@ -55,7 +84,7 @@ The parameter `-TrustAllCerts` allow to accept or not untrusted certificates. It
     192.168.0.1 admin UnityDemo UnityVSA VIRT1919K58MXM
 ```
 
-### LUN management
+### LUN Management
 
 You can create a new LUN `New-UnityLUN`, retrieves informations `Get-UnityLUN`, modify his properties `Set-UnityLUN` or delete it `Remove-UnityLUN`
 
@@ -81,7 +110,7 @@ You can create a new LUN `New-UnityLUN`, retrieves informations `Get-UnityLUN`, 
     Remove-UnityLUN -Name 'LUN01'
 ```
 
-### Users management
+### Users ement
 
 You can add a new user `New-UnityUser`, modify his properties `Set-UnityUSer` or delete it `Remove-UnityUser`.
 
@@ -127,31 +156,6 @@ For testing purpose you can query all the ressources of the array with the comma
 # Disconnect from the EMC Unity Array
     Disconnect-Unity
 ```
-
-# Available functions
-
-- Connect-Unity
-- Disconnect-Unity
-- Get-UnityBasicSystemInfo
-- Get-UnityItem
-- New-UnityLUN
-- Set-UnityLUN
-- Remove-UnityLUN
-- Get-UnityLUN
-- New-UnityVMwareLUN
-- Set-UnityVMwareLUN
-- Remove-UnityVMwareLUN
-- Get-UnityVMwareLUN
-- Get-UnityStorageResource
-- Get-UnityPool
-- Get-UnitySession
-- Get-UnitySystem
-- Get-UnityUser
-- New-UnityUser
-- Set-UnityUser
-- Remove-UnityUser
-- Get-UnityFeatures
-- Get-UnityLicnse
 
 # Author
 

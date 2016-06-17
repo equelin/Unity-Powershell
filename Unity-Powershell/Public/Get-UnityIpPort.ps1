@@ -1,19 +1,19 @@
-Function Get-UnityBasicSystemInfo {
+Function Get-UnityIpPort {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve basic informations about arrays.
+      Queries the EMC Unity array to retrieve informations about IP Ports.
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve basic informations about arrays.
+      Queries the EMC Unity array to retrieve informations about IP Ports.
       You need to have an active session with the array.
       .NOTES
-      Written by Erwan Quelin under Apache licence
+      Written by Erwan Quelin under Apache license
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      Get-UnityBasicSystemInfo
+      Get-UnityIpPort
 
-      Retrieve basic information about arrays
+      Retrieve information about all IP Ports
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
@@ -31,8 +31,8 @@ Function Get-UnityBasicSystemInfo {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/basicSystemInfo/instances' #URI for the ressource (example: /api/types/lun/instances)
-    $TypeName = 'UnityBasicSystemInfo'
+    $URI = '/api/types/ipPort/instances' #URI for the ressource (example: /api/types/lun/instances)
+    $TypeName = 'UnityIpPort'
 
     Foreach ($sess in $session) {
 

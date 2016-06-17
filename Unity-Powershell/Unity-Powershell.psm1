@@ -161,7 +161,7 @@ Class UnityStorageResource {
   [ESXFilesystemBlockSizeEnum]$esxFilesystemBlockSize
   $snapSchedule
   [bool]$isSnapSchedulePaused
-  $relocationPolicy
+  [TieringPolicyEnum]$relocationPolicy
   $perTierSizeUsed
   $blockHostAccess
   [long]$metadataSize
@@ -186,8 +186,258 @@ Class UnityHealth {
   $resolutions
 }
 
+Class UnityPoolUnit {
+  [string]$id
+  [PoolUnitTypeEnum]$type
+  $health
+  [string]$name
+  [string]$description
+  [string]$wwn
+  [long]$sizeTotal
+  [TierTypeEnum]$tierType
+  $pool
+}
+
+Class UnityDnsServer {
+  [string]$id
+  [string]$domain
+  [string[]]$addresses
+  [DNSServerOriginEnum]$origin
+}
+
+Class UnityNasServer {
+  [string]$id
+  [string]$name
+  $health
+  $homeSP
+  $currentSP
+  $pool
+  [long]$sizeAllocated
+  [bool]$isReplicationEnabled
+  [bool]$isReplicationDestination
+  [ReplicationTypeEnum]$replicationType
+  [string]$defaultUnixUser
+  [string]$defaultWindowsUser
+  [NasServerUnixDirectoryServiceEnum]$currentUnixDirectoryService
+  [bool]$isMultiProtocolEnabled
+  [bool]$isWindowsToUnixUsernameMappingEnabled
+  [bool]$allowUnmappedUser
+  $cifsServer
+  $preferredInterfaceSettings
+  $fileDNSServer
+  $fileInterface
+  $virusChecker
+}
+
+Class UnityIpPort {
+  [string]$id
+  [string]$name
+  [string]$shortName
+  [string]$macAddress
+  [bool]$isLinkUp
+  $storageProcessor
+}
+
+Class UnityFileInterface {
+  [string]$id
+  $nasServer
+  $ipPort
+  $health
+  [string]$ipAddress
+  [IpProtocolVersionEnum]$ipProtocolVersion
+  [string]$netmask
+  [int]$v6PrefixLength
+  [string]$gateway
+  [int]$vlanId
+  [string]$macAddress
+  [string]$name
+  [FileInterfaceRoleEnum]$role
+  [bool]$isPreferred
+  [ReplicationPolicyEnum]$replicationPolicy
+  $sourceParameters
+  [bool]$isDisabled
+}
+
+Class UnityFileDnsServer {
+  [string]$id
+  $nasServer
+  [string[]]$addresses
+  [string]$domain
+  [ReplicationPolicyEnum]$replicationPolicy
+  $sourceParameters
+}
+
+Class UnityCifsServer {
+  [string]$id
+  [string]$name
+  [string]$description
+  [string]$netbiosName
+  [string]$domain
+  [string]$lastUsedOrganizationalUnit
+  [string]$workgroup
+  [bool]$isStandalone
+  $health
+  $nasServer
+  $fileInterfaces
+  [bool]$smbcaSupported
+  [bool]$smbMultiChannelSupported
+  [string[]]$smbProtocolVersions
+}
+
+Class UnityFilesystem {
+  [string]$id
+  $health
+  [string]$name
+  [string]$description
+  [FilesystemTypeEnum]$type
+  [long]$sizeTotal
+  [long]$sizeUsed
+  [long]$sizeAllocated
+  [bool]$isReadOnly
+  [bool]$isThinEnabled
+  $storageResource
+  [bool]$isCIFSSyncWritesEnabled
+  $pool
+  [bool]$isCIFSOpLocksEnabled
+  $nasServer
+  [bool]$isCIFSNotifyOnWriteEnabled
+  [bool]$isCIFSNotifyOnAccessEnabled
+  [int]$cifsNotifyOnChangeDirDepth
+  [TieringPolicyEnum]$tieringPolicy
+  [FSSupportedProtocolEnum]$supportedProtocols
+  [long]$metadataSize
+  [long]$metadataSizeAllocated
+  $perTierSizeUsed
+  [long]$snapsSize
+  [long]$snapsSizeAllocated
+  [int]$snapCount
+  [bool]$isSMBCA
+  [AccessPolicyEnum]$accessPolicy
+  [FSFormatEnum]$format
+  [HostIOSizeEnum]$hostIOSize
+  [ResourcePoolFullPolicyEnum]$poolFullPolicy
+  $cifsShare
+  $nfsShare
+}
+
+Class UnityCIFSShare {
+  [string]$id
+  [CIFSTypeEnum]$type
+  $filesystem
+  $snap
+  [bool]$isReadOnly
+  [string]$name
+  [string]$path
+  [string[]]$exportPaths
+  [string]$description
+  [DateTime]$creationTime
+  [DateTime]$modifiedTime
+  [bool]$isContinuousAvailabilityEnabled
+  [bool]$isEncryptionEnabled
+  [bool]$isACEEnabled
+  [bool]$isABEEnabled
+  [bool]$isBranchCacheEnabled
+  [bool]$isDFSEnabled
+  [CifsShareOfflineAvailabilityEnum]$offlineAvailability
+  [string]$umask
+}
 
 #Custom Enum
+
+Enum CifsShareOfflineAvailabilityEnum {
+  Manual = 0
+  Documents = 1
+  Programs = 2
+  None = 3
+  Invalid = 255
+}
+
+Enum CIFSTypeEnum {
+  Cifs_Share = 1
+  Cifs_Snapshot = 2
+}
+
+Enum ResourcePoolFullPolicyEnum {
+  Delete_All_Snaps = 0
+  Fail_Writes = 1
+}
+
+Enum HostIOSizeEnum {
+  General_8K = 0x2000
+  General_16K = 0x4000
+  General_32K = 0x8000
+  General_64K = 0x10000
+  Exchange2007 = 0x2001
+  Exchange2010 = 0x8001
+  Exchange2013 = 0x8002
+  Oracle = 0x2002
+  SQLServer = 0x2003
+  VMwareHorizon = 0x2004
+  SharePoint = 0x8003
+  SAP = 0x2005
+}
+
+Enum FSFormatEnum {
+  UFS32 = 0
+  UFS64 = 2
+}
+
+Enum AccessPolicyEnum {
+  Native = 0
+  Unix = 1
+  Windows = 2
+}
+
+Enum FilesystemTypeEnum {
+  FileSystem = 1
+  VMware = 2
+}
+
+Enum FSSupportedProtocolEnum {
+  NFS = 0
+  CIFS = 1
+  Multiprotocol = 2
+}
+
+Enum IpProtocolVersionEnum {
+  IPv4 = 4
+  IPv6 = 6
+}
+
+Enum ReplicationPolicyEnum {
+  Not_Replicated = 0
+  Replicated = 1
+  Overridden = 2
+}
+
+Enum FileInterfaceRoleEnum {
+  Production = 0
+  Backup = 1
+}
+
+Enum NasServerUnixDirectoryServiceEnum {
+  None = 0
+  NIS = 2
+  LDAP = 3
+}
+
+Enum DNSServerOriginEnum {
+  Unknown = 0
+  Static = 1
+  DHCP = 2
+}
+
+Enum PoolUnitTypeEnum {
+   RAID_Group = 1
+   Virtual_Disk = 2
+}
+
+Enum TierTypeEnum{
+    None = 0
+    Extreme_Performance = 10
+    Performance = 20
+    Capacity = 30
+}
 
 Enum HealthEnum{
   UNKNOWN = 0

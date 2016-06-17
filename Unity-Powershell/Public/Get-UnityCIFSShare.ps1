@@ -1,28 +1,32 @@
-Function Get-UnityBasicSystemInfo {
+Function Get-UnityCIFSShare {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve basic informations about arrays.
+      Queries the EMC Unity array to retrieve informations about CIFS Share.
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve basic informations about arrays.
+      Queries the EMC Unity array to retrieve informations about CIFS Share.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      Get-UnityBasicSystemInfo
+      Get-UnityCIFSShare
 
-      Retrieve basic information about arrays
+      Retrieve information about CIFS Share
+      .EXAMPLE
+      Get-UnityCIFSShare -Name 'SHARE01'
+
+      Retrieves information about CIFS Share named SHARE01
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'CIFS Share Name')]
     [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'CIFS Share ID')]
     [String[]]$ID='*'
   )
 
@@ -31,8 +35,8 @@ Function Get-UnityBasicSystemInfo {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/basicSystemInfo/instances' #URI for the ressource (example: /api/types/lun/instances)
-    $TypeName = 'UnityBasicSystemInfo'
+    $URI = '/api/types/cifsShare/instances' #URI
+    $TypeName = 'UnityCIFSShare'
 
     Foreach ($sess in $session) {
 
@@ -41,7 +45,7 @@ Function Get-UnityBasicSystemInfo {
       If (Test-UnityConnection -Session $Sess) {
 
         #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName
+        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
 
         Write-Verbose "URL: $URL"
 
