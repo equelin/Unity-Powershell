@@ -1,30 +1,27 @@
-Function Get-UnityDNSServer {
+Function Get-UnityFileDNSServer {
 
   <#
       .SYNOPSIS
-      Information about DNS Servers.
+      Information about File DNS Servers.
       .DESCRIPTION
-      Information about DNS Servers.
+      Information about File DNS Servers.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
-      Get-UnitySystem
+      Get-UnityFileDnsServer
 
-      Retrieve informations about all the arrays with an active session.
-      .EXAMPLE
-      Get-UnitySystem -Name 'UnityVSA'
-
-
-      Retrieves informations about an array named 'UnityVSA'
+      Retrieve informations about all file dns servers with an active session.
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByName")]
+  [CmdletBinding(DefaultParameterSetName="ByID")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
-    $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
+    $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
+    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'File DNS Server ID')]
+    [String[]]$ID='*'
   )
 
   Begin {
@@ -32,8 +29,8 @@ Function Get-UnityDNSServer {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/dnsServer/instances' #URI for the ressource (example: /api/types/lun/instances)
-    $TypeName = 'UnityDnsServer'
+    $URI = '/api/types/fileDNSServer/instances' #URI for the ressource (example: /api/types/lun/instances)
+    $TypeName = 'UnityFileDnsServer'
 
     Foreach ($sess in $session) {
 
@@ -62,10 +59,20 @@ Function Get-UnityDNSServer {
     }
   }
 
-  Process {}
-
-  End {
-    return $ResultCollection
+  Process {
+    #Filter results
+    If ($ResultCollection) {
+      Switch ($PsCmdlet.ParameterSetName) {
+        'ByID' {
+          Foreach ($I in $ID) {
+            Write-Verbose "Return result(s) with the filter: $($I)"
+            Write-Output $ResultCollection | Where-Object {$_.Id -like $I}
+          }
+        }
+      }
+    }
   }
+
+  End { }
 
 }

@@ -62,7 +62,7 @@ Function Remove-UnityLUN {
           If ($LUNID) {
             $LUN | Remove-UnityLUNResource -Session $Sess
           } else {
-            Write-Information -MessageData "LUN $LUNName does not exist on the array $($sess.Name)"
+            Write-Verbose "LUN $LUNName does not exist on the array $($sess.Name)"
           }
         }
       } else {

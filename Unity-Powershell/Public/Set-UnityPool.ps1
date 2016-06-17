@@ -14,6 +14,10 @@ Function Set-UnityPool {
       Set-UnityPool -Name 'Pool01' -Description 'Modified description'
 
       Change the description of the Pool named Pool01
+      .EXAMPLE
+      Set-UnityPool -Name 'Pool01' -AddVirtualDisk @{'id'='vdisk_1';'tier'='Performance'}
+
+      Add a virtual disk to the pool named 'Pool01'
   #>
 
     [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
@@ -105,7 +109,7 @@ Function Set-UnityPool {
               # addPoolUnitParameters parameter
               $body["addPoolUnitParameters"] = @()
 
-              Foreach ($vdisk in $virtualDisk) {
+              Foreach ($vdisk in $AddVirtualDisk) {
                 $addPoolUnitParameters = @{}
                 $addPoolUnitParameters["poolUnit"] = @{}
 

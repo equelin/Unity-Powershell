@@ -51,7 +51,12 @@ function Send-UnityRequest {
   If ($Method -eq 'DELETE') {
     Try
     {
-      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Websession -Headers $session.headers -Method $Method
+      If ($body) {
+        $json = $body | ConvertTo-Json -Depth 3
+        $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Websession -Headers $session.headers -Method $Method
+      } else {
+        $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Websession -Headers $session.headers -Method $Method
+      }
       return $data
     }
     Catch
