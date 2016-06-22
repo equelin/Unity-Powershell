@@ -1,19 +1,25 @@
-Function Get-UnityNasServer {
+Function Get-UnityNASServer {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about NAS Servers.
+      View details about configured NAS servers.
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve informations about NAS Servers.
+      View details about configured NAS servers. You can filter on ID or Name.
       You need to have an active session with the array.
-      .NOTES
+      .NOTES 
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specifies an UnitySession Object.
+      .PARAMETER Name
+      Specifies the NAS server name.
+      .PARAMETER ID
+      Specifies the NAS server ID.
       .EXAMPLE
       Get-UnityNasServer
 
-      Retrieve information about all block LUN
+      Retrieve information about all NAS Servers
       .EXAMPLE
       Get-UnityNasServer -Name 'NAS01'
 

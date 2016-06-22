@@ -5,11 +5,20 @@ Function Remove-UnityNASServer {
       Delete a Nas Server.
       .DESCRIPTION
       Delete a Nas Server.
+      Before you can delete a NAS server, you must first delete all storage resources associated with it.
+      Deleting a NAS server removes everything configured on the NAS server, but does not delete the storage resources that use it. 
+      You cannot delete a NAS server while it has any associated storage resources.
+      After the storage resources are deleted, the files and folders inside them cannot be restored from snapshots.
+      Back up the data from the storage resources before deleting them from the system.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specifies an UnitySession Object.
+      .PARAMETER Name
+      Specifies the NAS server name.
       .EXAMPLE
       Remove-UnityNasServer -Name 'NAS01'
 
@@ -22,8 +31,11 @@ Function Remove-UnityNASServer {
 
     [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
+    #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
+    
+    #NasServer
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool Name or Pool Object')]
     $Name
   )
