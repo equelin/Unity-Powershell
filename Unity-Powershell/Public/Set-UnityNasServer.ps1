@@ -81,12 +81,6 @@ Function Set-UnityNASServer {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
-
-    $NasServerUnixDirectoryService = @{
-      "None" = "0"
-      "NIS" = "2"
-      "LDAP" = "3"
-    }
   }
 
   Process {
