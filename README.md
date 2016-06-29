@@ -1,3 +1,5 @@
+[![GitHub version](https://badge.fury.io/gh/equelin%2FUnity-Powershell.svg)](https://badge.fury.io/gh/equelin%2FUnity-Powershell)
+
 # Unity-Powershell
 
 This is a PowerShell module for querying EMC Unity array's API.
