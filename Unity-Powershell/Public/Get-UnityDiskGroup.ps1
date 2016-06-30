@@ -1,12 +1,12 @@
-Function Get-UnityNASServer {
+Function Get-UnityDiskGroup {
 
   <#
       .SYNOPSIS
-      View details about configured NAS servers.
+      View details about disk groups on the system.
       .DESCRIPTION
-      View details about configured NAS servers. You can filter on ID or Name.
+      View details about disk groups on the system.
       You need to have an active session with the array.
-      .NOTES 
+      .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
@@ -17,13 +17,13 @@ Function Get-UnityNASServer {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityNasServer
+      Get-UnityDiskGroup
 
-      Retrieve information about all NAS Servers
+      Retrieve information about all disk groups
       .EXAMPLE
-      Get-UnityNasServer -Name 'NAS01'
+      Get-UnityDiskGroup -Name '200 GB SAS Flash 2'
 
-      Retrieves information about NAS server named NAS01
+      Retrieves information about disk groups names '200 GB SAS Flash 2'
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
@@ -41,8 +41,8 @@ Function Get-UnityNASServer {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/nasServer/instances' #URI
-    $TypeName = 'UnityNasServer'
+    $URI = '/api/types/diskGroup/instances' #URI
+    $TypeName = 'UnityDiskGroup'
 
     Foreach ($sess in $session) {
 

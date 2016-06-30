@@ -178,14 +178,6 @@ Class UnityStorageResource {
   $virtualVolumes
 }
 
-Class UnityHealth {
-  [HealthEnum]$value
-  $descriptionIds
-  $descriptions
-  $resolutionIds
-  $resolutions
-}
-
 Class UnityPoolUnit {
   [string]$id
   [PoolUnitTypeEnum]$type
@@ -347,7 +339,126 @@ Class UnityCIFSShare {
   [string]$umask
 }
 
+Class UnityDiskGroup {
+  [string]$id
+  [string]$name
+  [string]$emcPartNumber
+  [TierTypeEnum]$tierType
+  [DiskTechnologyEnum]$diskTechnology
+  [bool]$isFASTCacheAllowable
+  [long]$diskSize
+  [long]$advertisedSize
+  [int]$rpm
+  [long]$speed
+  [int]$totalDisks
+  [int]$minHotSpareCandidates
+  [HotSparePolicyStatusEnum]$hotSparePolicyStatus
+  [int]$unconfiguredDisks
+}
+
+Class UnityFastCache {
+  [string]$id
+  [UnityHealth]$health
+  [long]$sizeTotal
+  [long]$sizeFree
+  [int]$numberOfDisks
+  [RaidTypeEnum]$raidLevel
+  [UnityraidGroupCache[]]$raidGroups
+}
+
+Class UnityraidGroupCache {
+  [string]$id
+  [string]$name
+  [UnityDiskGroup]$diskGroup
+  [RaidTypeEnum]$raidLevel
+  [RaidStripeWidthEnum]$raidModulus
+  [int]$parityDisks
+  $disks
+}
+
+Class UnityDisk {
+  [string]$id
+  [UnityHealth]$health
+  [bool]$needsReplacement
+  $parent
+  [int]$slotNumber
+  [int]$busId
+  [string]$name
+  [string]$manufacturer
+  [string]$model
+  [string]$version
+  [string]$emcPartNumber
+  [string]$emcSerialNumber
+  [TierTypeEnum]$tierType
+  $diskGroup
+  [int]$rpm
+  [bool]$isSED
+  [long]$currentSpeed
+  [long]$maxSpeed
+  $pool
+  [bool]$isInUse
+  [bool]$isFastCacheInUse
+  [long]$size
+  [long]$rawSize
+  [long]$vendorSize
+  [string]$wwn
+  [DiskTechnologyEnum]$diskTechnology
+  $parentDae
+  $parentDpe
+  [string]$bank
+  [int]$bankSlotNumber
+  [string]$bankSlot
+}
+
+Class UnityHealth {
+  [HealthEnum]$value
+  [System.Array]$descriptionIds
+  [System.Array]$descriptions
+  [System.Array]$resolutionIds
+  [System.Array]$resolutions
+}
+
 #Custom Enum
+
+Enum HealthEnum {
+  UNKNOWN = 0
+  OK = 5
+  OK_BUT = 7
+  DEGRADED = 10
+  MINOR = 15
+  MAJOR = 20
+  CRITICAL = 25
+  NON_RECOVERABLE = 30
+}
+
+Enum RaidStripeWidthEnum {
+  BestFit = 0
+  _2 = 2
+  _4 = 4
+  _5 = 5
+  _6 = 6
+  _8 = 8
+  _9 = 9
+  _10 = 10
+  _12 = 12
+  _13 = 13
+  _14 = 14
+  _16 = 16
+}
+
+Enum HotSparePolicyStatusEnum {
+  OK = 0
+  Violated = 741
+}
+
+Enum DiskTechnologyEnum {
+  SAS = 1
+  NL_SAS = 2
+  SAS_FLASH_2 = 6 
+  SAS_FLASH_3 = 7
+  Mixed = 50
+  Virtual = 99
+}
 
 Enum RebootPrivilegeEnum {
   No_Reboot_Allowed = 0
@@ -448,17 +559,6 @@ Enum TierTypeEnum{
     Extreme_Performance = 10
     Performance = 20
     Capacity = 30
-}
-
-Enum HealthEnum{
-  UNKNOWN = 0
-  OK = 5
-  OK_BUT = 7
-  DEGRADED = 10
-  MINOR = 15
-  MAJOR = 20
-  CRITICAL = 25
-  NON_RECOVERABLE = 30
 }
 
 Enum LUNTypeEnum {

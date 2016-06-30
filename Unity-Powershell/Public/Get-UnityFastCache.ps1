@@ -1,37 +1,34 @@
-Function Get-UnityNASServer {
+Function Get-UnityFastCache {
 
   <#
       .SYNOPSIS
-      View details about configured NAS servers.
+      View the FAST Cache parameters.
       .DESCRIPTION
-      View details about configured NAS servers. You can filter on ID or Name.
+      View the FAST Cache parameters.
+      Physical deployments only.
       You need to have an active session with the array.
-      .NOTES 
+      .NOTES
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specifies an UnitySession Object.
-      .PARAMETER Name
-      Specifies the object name.
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityNasServer
+      Get-UnityFastCache
 
-      Retrieve information about all NAS Servers
+      Retrieve information about Fast Cache.
       .EXAMPLE
-      Get-UnityNasServer -Name 'NAS01'
+      Get-UnityFastCache -Name '200 GB SAS Flash 2'
 
-      Retrieves information about NAS server named NAS01
+      Retrieves information about disk groups names '200 GB SAS Flash 2'
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByName")]
+  [CmdletBinding(DefaultParameterSetName="ByID")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
-    [String[]]$Name='*',
     [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
     [String[]]$ID='*'
   )
@@ -41,8 +38,8 @@ Function Get-UnityNASServer {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/nasServer/instances' #URI
-    $TypeName = 'UnityNasServer'
+    $URI = '/api/types/fastCache/instances' #URI
+    $TypeName = 'UnityFastCache'
 
     Foreach ($sess in $session) {
 
@@ -75,12 +72,6 @@ Function Get-UnityNASServer {
     #Filter results
     If ($ResultCollection) {
       Switch ($PsCmdlet.ParameterSetName) {
-        'ByName' {
-          Foreach ($N in $Name) {
-            Write-Verbose "Return result(s) with the filter: $($N)"
-            Write-Output $ResultCollection | Where-Object {$_.Name -like $N}
-          }
-        }
         'ByID' {
           Foreach ($I in $ID) {
             Write-Verbose "Return result(s) with the filter: $($I)"

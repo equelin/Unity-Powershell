@@ -10,6 +10,8 @@ Function Get-UnityDNSServer {
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specifies an UnitySession Object.
       .EXAMPLE
       Get-UnitySystem
 
