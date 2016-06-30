@@ -24,7 +24,7 @@ Author = 'Erwan Quelin'
 #CompanyName = 'Unknown'
 
 # Copyright statement for this module
-Copyright = '(c) 2016 Erwan Quelin. All rights reserved.'
+Copyright = 'Licensed under the Apache License, Version 2.0. (c) 2016 Erwan Quelin. https://github.com/equelin/Unity-Powershell/blob/master/LICENSE'
 
 # Description of the functionality provided by this module
 Description = 'Powershell module for working with EMC Unity array'
