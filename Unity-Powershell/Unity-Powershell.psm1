@@ -205,6 +205,11 @@ Class UnityDnsServer {
   [DNSServerOriginEnum]$origin
 }
 
+Class UnityNTPServer {
+  [string]$id
+  [string[]]$addresses
+}
+
 Class UnityNasServer {
   [string]$id
   [string]$name
@@ -343,6 +348,12 @@ Class UnityCIFSShare {
 }
 
 #Custom Enum
+
+Enum RebootPrivilegeEnum {
+  No_Reboot_Allowed = 0
+  Reboot_Allowed = 1
+   DU_Allowed = 2
+}
 
 Enum CifsShareOfflineAvailabilityEnum {
   Manual = 0
