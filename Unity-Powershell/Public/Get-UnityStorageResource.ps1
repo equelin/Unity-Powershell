@@ -10,14 +10,25 @@ Function Get-UnitystorageResource {
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specifies an UnitySession Object.
+      .PARAMETER Name
+      Specifies the object name.
+      .PARAMETER ID
+      Specifies the object ID.
+      .PARAMETER Type
+      Specifies the storage ressource type. Might be:
+      - lun
+      - vmwareiscsi
+      - vmwarefs
       .EXAMPLE
-      Get-UnityLUN
+      Get-UnitystorageResource
 
-      Retrieve information about LUN
+      Retrieve informations about all the storage ressources
       .EXAMPLE
-      Get-UnitystorageResource -Name 'LUN01'
+      Get-UnitystorageResource -Name 'DATASTORE01'
 
-      Retrieves information about storage ressource named LUN01
+      Retrieves informations about storage ressource named DATASTORE01
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
@@ -28,6 +39,8 @@ Function Get-UnitystorageResource {
     [String[]]$Name='*',
     [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
     [String[]]$ID='*',
+    [Parameter(Mandatory = $false,HelpMessage = 'Storage ressource type')]
+    [ValidateSet('lun','vmwareiscsi','vmwarefs')]
     [String]$Type
   )
 

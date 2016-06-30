@@ -110,7 +110,7 @@ You can create a new LUN `New-UnityLUN`, retrieves informations `Get-UnityLUN`, 
     Remove-UnityLUN -Name 'LUN01'
 ```
 
-### Users ement
+### Users Management
 
 You can add a new user `New-UnityUser`, modify his properties `Set-UnityUSer` or delete it `Remove-UnityUser`.
 

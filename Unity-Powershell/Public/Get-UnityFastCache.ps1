@@ -8,7 +8,7 @@ Function Get-UnityFastCache {
       Physical deployments only.
       You need to have an active session with the array.
       .NOTES
-      Written by Erwan Quelin under Apache licence
+      Written by Erwan Quelin under Apache licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session

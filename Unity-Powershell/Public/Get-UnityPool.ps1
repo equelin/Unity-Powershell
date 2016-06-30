@@ -10,12 +10,18 @@ Function Get-UnityPool {
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specifies an UnitySession Object.
+      .PARAMETER Name
+      Specifies the object name.
+      .PARAMETER ID
+      Specifies the object ID.
       .EXAMPLE
       Get-UnityPool
 
       Retrieve information about pool
       .EXAMPLE
-      Get-UnityLUN -Name 'POOL01'
+      Get-UnityPool -Name 'POOL01'
 
       Retrieves information about pool named POOL01
   #>

@@ -7,7 +7,7 @@ Function Disable-UnityFastCache {
       Disable FAST Cache using specified disk group and number of disks and if specified, Disable FAST Cache on all existing pools. 
       You need to have an active session with the array.
       .NOTES
-      Written by Erwan Quelin under Apache licence
+      Written by Erwan Quelin under Apache licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session

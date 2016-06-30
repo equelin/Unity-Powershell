@@ -1,4 +1,4 @@
-Function Get-UnityIpPort {
+Function Get-UnityIPPort {
 
   <#
       .SYNOPSIS
@@ -7,9 +7,15 @@ Function Get-UnityIpPort {
       Queries the EMC Unity array to retrieve informations about IP Ports.
       You need to have an active session with the array.
       .NOTES
-      Written by Erwan Quelin under Apache license
+      Written by Erwan Quelin under Apache licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specifies an UnitySession Object.
+      .PARAMETER Name
+      Specifies the object name.
+      .PARAMETER ID
+      Specifies the object ID.
       .EXAMPLE
       Get-UnityIpPort
 

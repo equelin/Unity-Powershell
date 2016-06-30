@@ -10,6 +10,12 @@ Function Get-UnitySystem {
       Written by Erwan Quelin under Apache licence
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specifies an UnitySession Object.
+      .PARAMETER Name
+      Specifies the object name.
+      .PARAMETER ID
+      Specifies the object ID.
       .EXAMPLE
       Get-UnitySystem
 
