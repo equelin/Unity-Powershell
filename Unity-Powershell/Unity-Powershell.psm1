@@ -418,7 +418,73 @@ Class UnityHealth {
   [System.Array]$resolutions
 }
 
+Class UnityHost {
+  [string]$id
+  [UnityHealth]$health
+  [string]$name
+  [string]$description
+  [HostTypeEnum]$type
+  [string]$osType
+  [string]$hostUUID
+  [string]$hostPushedUUID
+  [string]$hostPolledUUID
+  [DateTime]$lastPollTime
+  [HostManageEnum]$autoManageType
+  [HostRegistrationTypeEnum]$registrationType
+  $hostContainer
+  [array]$fcHostInitiators
+  [array]$iscsiHostInitiators
+  [array]$hostIPPorts
+  [array]$storageResources
+  [array]$hostLUNs
+  [array]$datastores
+  [array]$nfsShareAccesses
+  [array]$hostVVolDatastore
+  [array]$vms
+}
+
+Class UnityHostContainer {
+  [string]$id
+  [DateTime]$lastPollTime
+  [int]$port
+  [string]$name
+  [HostContainerTypeEnum]$type
+  $address
+  [string]$description
+  [string]$productName
+  [string]$productVersion
+  [UnityHealth]$health
+  [array]$hosts
+}
+
 #Custom Enum
+
+Enum HostContainerTypeEnum {
+  UNKNOWN = 0
+  ESX = 1
+  VCENTER = 2
+}
+
+Enum HostRegistrationTypeEnum {
+  UNKNOWN = 0
+  MANUAL = 1
+  ESXAUTO = 2
+}
+
+Enum HostManageEnum {
+  UNKNOWN = 0
+  VMWARE = 1
+  OTHERS = 2
+}
+
+Enum HostTypeEnum {
+  Unknown = 0
+  HostManual = 1 
+  Subnet = 2 
+  NetGroup = 3 
+  RPA = 4
+  HostAuto = 5 
+}
 
 Enum HealthEnum {
   UNKNOWN = 0

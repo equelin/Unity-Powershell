@@ -39,7 +39,7 @@ function Send-UnityRequest {
     Try
     {
       $json = $body | ConvertTo-Json -Depth 3
-      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Websession -Headers $session.headers -Method $Method
+      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Websession -Headers $session.headers -Method $Method -TimeoutSec 600
       return $data
     }
     Catch

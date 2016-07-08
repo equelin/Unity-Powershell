@@ -1,10 +1,10 @@
-Function Get-UnityLUN {
+Function Get-UnityESXi {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about block LUN.
+      View details about ESXi configuration on the system.
       .DESCRIPTION
-      Querries the EMC Unity array to retrieve informations about block LUN.
+      View details about ESXi configuration on the system.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -17,13 +17,13 @@ Function Get-UnityLUN {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityLUN
+      Get-UnityESXi
 
-      Retrieve information about all block LUN
+      Retrieve information about all hosts
       .EXAMPLE
-      Get-UnityLUN -Name 'LUN01'
+      Get-UnityESXi -Name 'ESXi01'
 
-      Retrieves information about block LUN named LUN01
+      Retrieves information about ESXi named 'ESXi01'
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
@@ -41,6 +41,9 @@ Function Get-UnityLUN {
 
     #Initialazing variables
     $ResultCollection = @()
+    $URI = '/api/types/hostContainer/instances' #URI
+    $Filter = 'type eq 1'
+    $TypeName = 'UnityHostContainer'
 
     Foreach ($sess in $session) {
 
@@ -48,10 +51,21 @@ Function Get-UnityLUN {
 
       If (Test-UnityConnection -Session $Sess) {
 
-        $StorageResource = Get-UnityStorageResource -Session $Sess -Type 'lun'
+        #Building the URL from Object Type.
+        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact -Filter $Filter
 
-        $ResultCollection += Get-UnityLUNResource -Session $Sess -ID $StorageResource.luns.id
+        Write-Verbose "URL: $URL"
 
+        #Sending the request
+        $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
+
+        #Formating the result. Converting it from JSON to a Powershell object
+        $results = ($request.content | ConvertFrom-Json).entries.content
+
+        #Building the result collection (Add ressource type)
+        If ($results) {
+          $ResultCollection += Add-UnityObjectType -Data $results -TypeName $TypeName
+        }
       } else {
         Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }

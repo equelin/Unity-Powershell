@@ -48,9 +48,9 @@ Function Get-UnityVMwareLUN {
 
       If (Test-UnityConnection -Session $Sess) {
 
-        $StorageDesource = Get-UnitystorageResource -Type 'vmwareiscsi'
+        $StorageDesource = Get-UnitystorageResource -Session $Sess -Type 'vmwareiscsi'
 
-        $ResultCollection += Get-UnityLUNResource -ID $StorageDesource.luns.id
+        $ResultCollection += Get-UnityLUNResource -Session $Sess -ID $StorageDesource.luns.id
 
       } else {
         Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
