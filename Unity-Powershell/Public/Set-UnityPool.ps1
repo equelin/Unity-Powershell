@@ -52,11 +52,11 @@ Function Set-UnityPool {
       .EXAMPLE
       Set-UnityPool -Name 'Pool01' -AddVirtualDisk @{'id'='vdisk_1';'tier'='Performance'}
 
-      Add a virtual disk to the pool named 'Pool01'
+      Add a virtual disk 'vdisk_1' to the pool named 'Pool01'
       .EXAMPLE
       Set-UnityPool -Name 'Pool01' -AddraidGroup @{"id"='dg_8';"numDisks"= 8; 'raidType'='RAID6'; 'stripeWidth'='8'}
 
-      Add a raid group to the pool named 'Pool01'
+      Add a raid group 'dg_8' to the pool named 'Pool01'
   #>
 
     [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High',DefaultParameterSetName="RaidGroup")]

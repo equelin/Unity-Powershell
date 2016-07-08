@@ -4,10 +4,10 @@
 
 This is a PowerShell module for querying EMC Unity array's API.
 
-With this module (version 0.4.0) you can manage:
+With this module (version 0.5.0) you can manage:
 
 - System (DNS,NTP...)
-- Pools (Virtual deployment only)
+- Pools (Virtual and physical deployment)
 - Fast Cache (Physical deployment only)
 - LUN (block)
 - VMware LUN (block)
