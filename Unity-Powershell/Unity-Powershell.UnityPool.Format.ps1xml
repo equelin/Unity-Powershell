@@ -9,12 +9,12 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Label>Name</Label>
+            <Label>ID</Label>
             <!--<AutoSize/>-->
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>id</Label>
+            <Label>Name</Label>
             <!--<AutoSize/>-->
             <Alignment>Left</Alignment>
           </TableColumnHeader>
@@ -53,10 +53,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>name</PropertyName>
+                <PropertyName>id</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>id</PropertyName>
+                <PropertyName>name</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>sizeFree</PropertyName>

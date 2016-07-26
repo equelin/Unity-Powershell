@@ -4,7 +4,7 @@ Function Get-UnityPool {
       .SYNOPSIS
       Queries the EMC Unity array to retrieve informations about pool.
       .DESCRIPTION
-      Querries the EMC Unity array to retrieve informations about pool.
+      Queries the EMC Unity array to retrieve informations about pool.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -43,7 +43,9 @@ Function Get-UnityPool {
     $ResultCollection = @()
     $URI = '/api/types/pool/instances' #URI
     $TypeName = 'UnityPool'
+  }
 
+  Process {
     Foreach ($sess in $session) {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
@@ -59,37 +61,35 @@ Function Get-UnityPool {
         $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
 
         #Formating the result. Converting it from JSON to a Powershell object
-        $results = ($request.content | ConvertFrom-Json).entries.content
+        $Results = ($request.content | ConvertFrom-Json).entries.content
 
         #Building the result collection (Add ressource type)
-        If ($results) {
-          $ResultCollection += Add-UnityObjectType -Data $results -TypeName $TypeName
+        If ($Results) {
+
+          # Results filtering
+          Switch ($PsCmdlet.ParameterSetName) {
+            'ByName' {
+              $ResultsFiltered += Find-FromFilter -Parameter 'Name' -Filter $Name -Data $Results
+            }
+            'ByID' {
+              $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
+            }
+          }
+
+          If ($ResultsFiltered) {
+            
+            $ResultCollection = ConvertTo-Hashtable -Data $ResultsFiltered
+
+            Foreach ($Result in $ResultCollection) {
+
+              # Output results
+              [UnityPool]$Result
+            }
+          }
         }
       } else {
         Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }
     }
   }
-
-  Process {
-    #Filter results
-    If ($ResultCollection) {
-      Switch ($PsCmdlet.ParameterSetName) {
-        'ByName' {
-          Foreach ($N in $Name) {
-            Write-Verbose "Return result(s) with the filter: $($N)"
-            Write-Output $ResultCollection | Where-Object {$_.Name -like $N}
-          }
-        }
-        'ByID' {
-          Foreach ($I in $ID) {
-            Write-Verbose "Return result(s) with the filter: $($I)"
-            Write-Output $ResultCollection | Where-Object {$_.Id -like $I}
-          }
-        }
-      }
-    }
-  }
-
-  End {}
 }

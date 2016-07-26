@@ -8,7 +8,11 @@ function Send-UnityRequest {
       [parameter(Mandatory = $true, HelpMessage = "Enter request type (GET POST DELETE)")]
       [string]$Method,
       [parameter(Mandatory = $false, HelpMessage = "Body of the message")]
-      [array]$body
+      [array]$body,
+      [parameter(Mandatory = $false, HelpMessage = 'Ressource Filter')]
+      [string]$Filter,
+      [parameter(Mandatory = $false, HelpMessage = 'Compact the response')]
+      [switch]$Compact
   )
 
   Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
@@ -20,6 +24,14 @@ function Send-UnityRequest {
   Foreach ($cookie in $sess.Cookies) {
     Write-Verbose "Add cookie: $($cookie.Name) to WebSession"
     $Websession.Cookies.Add($cookie);
+  }
+
+  If ($Filter) {
+    $URI = $URI + '&filter=' + $Filter
+  }
+
+  If ($Compact) {
+    $URI = $URI + '&compact=true'
   }
 
   # Request
