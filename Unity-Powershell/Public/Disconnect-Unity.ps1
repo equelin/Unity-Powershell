@@ -42,14 +42,6 @@ Function Disconnect-Unity {
         $global:DefaultUnitySession = $global:DefaultUnitySession | where-object {$_.SessionId -notmatch $Sess.SessionId}
 
       } else {
-        #Initialazing Websession variable
-        $Websession = New-Object Microsoft.PowerShell.Commands.WebRequestSession
-
-        #Add cookies to Websession
-        Foreach ($cookie in $sess.Cookies) {
-          Write-Verbose "Ajout cookie: $($cookie.Name) to WebSession"
-          $Websession.Cookies.Add($cookie);
-        }
 
         #Building URI
         $uri = 'https://'+$sess.Server+'/api/types/loginSessionInfo/action/logout'
@@ -61,7 +53,7 @@ Function Disconnect-Unity {
         if ($pscmdlet.ShouldProcess($sess.Server,"Disconnecting from Unity Array")) {
 
           #Sending request
-          $request = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Websession -Headers $sess.headers -Method POST
+          $request = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $sess.headers -Headers $sess.headers -Method POST
 
           If ($request.StatusCode -eq 200) {
             Write-Verbose "Delete session from DefaultUnitySession"

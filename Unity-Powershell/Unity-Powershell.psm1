@@ -31,6 +31,7 @@ Class UnitySession {
   [string]$Server
   [System.Collections.Hashtable]$Headers
   [System.Net.CookieCollection]$Cookies
+  [Microsoft.PowerShell.Commands.WebRequestSession]$Websession
   [string]$SessionId
   [string]$User
   [string]$Name

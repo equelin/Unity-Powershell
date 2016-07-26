@@ -8,37 +8,16 @@ function Send-UnityRequest {
       [parameter(Mandatory = $true, HelpMessage = "Enter request type (GET POST DELETE)")]
       [string]$Method,
       [parameter(Mandatory = $false, HelpMessage = "Body of the message")]
-      [array]$body,
-      [parameter(Mandatory = $false, HelpMessage = 'Ressource Filter')]
-      [string]$Filter,
-      [parameter(Mandatory = $false, HelpMessage = 'Compact the response')]
-      [switch]$Compact
+      [array]$body
   )
 
   Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
-
-  #Initialazing Websession variable
-  $Websession = New-Object Microsoft.PowerShell.Commands.WebRequestSession
-
-  #Add session's cookies to Websession
-  Foreach ($cookie in $sess.Cookies) {
-    Write-Verbose "Add cookie: $($cookie.Name) to WebSession"
-    $Websession.Cookies.Add($cookie);
-  }
-
-  If ($Filter) {
-    $URI = $URI + '&filter=' + $Filter
-  }
-
-  If ($Compact) {
-    $URI = $URI + '&compact=true'
-  }
 
   # Request
   If (($Method -eq 'GET') -or ($type -eq 'DELETE')) {
     Try
     {
-      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Websession -Headers $session.headers -Method $Method
+      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Session.Websession -Headers $session.headers -Method $Method
       return $data
     }
     Catch
@@ -51,7 +30,7 @@ function Send-UnityRequest {
     Try
     {
       $json = $body | ConvertTo-Json -Depth 3
-      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Websession -Headers $session.headers -Method $Method -TimeoutSec 600
+      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Session.Websession -Headers $session.headers -Method $Method -TimeoutSec 600
       return $data
     }
     Catch
@@ -65,9 +44,9 @@ function Send-UnityRequest {
     {
       If ($body) {
         $json = $body | ConvertTo-Json -Depth 3
-        $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Websession -Headers $session.headers -Method $Method
+        $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Session.Websession -Headers $session.headers -Method $Method
       } else {
-        $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Websession -Headers $session.headers -Method $Method
+        $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Session.Websession -Headers $session.headers -Method $Method
       }
       return $data
     }

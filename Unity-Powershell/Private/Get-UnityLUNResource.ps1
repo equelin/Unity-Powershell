@@ -44,45 +44,39 @@ Function Get-UnityLUNResource {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      If (Test-UnityConnection -Session $Sess) {
+      #Building the URL from Object Type.
+      $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
 
-        #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
+      Write-Verbose "URL: $URL"
 
-        Write-Verbose "URL: $URL"
+      #Sending the request
+      $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
 
-        #Sending the request
-        $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
+      #Formating the result. Converting it from JSON to a Powershell object
+      $Results = ($request.content | ConvertFrom-Json).entries.content
 
-        #Formating the result. Converting it from JSON to a Powershell object
-        $Results = ($request.content | ConvertFrom-Json).entries.content
+      If ($Results) {
 
-        #Building the result collection (Add ressource type)
-        If ($Results) {
-
-          # Results filtering
-          Switch ($PsCmdlet.ParameterSetName) {
-            'ByName' {
-              $ResultsFiltered += Find-FromFilter -Parameter 'Name' -Filter $Name -Data $Results
-            }
-            'ByID' {
-              $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
-            }
+        # Results filtering
+        Switch ($PsCmdlet.ParameterSetName) {
+          'ByName' {
+            $ResultsFiltered += Find-FromFilter -Parameter 'Name' -Filter $Name -Data $Results
           }
-
-          If ($ResultsFiltered) {
-            
-            $ResultCollection = ConvertTo-Hashtable -Data $ResultsFiltered
-
-            Foreach ($Result in $ResultCollection) {
-
-              # Output results
-              [UnityLUN]$Result
-            }
+          'ByID' {
+            $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
           }
         }
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+
+        If ($ResultsFiltered) {
+          
+          $ResultCollection = ConvertTo-Hashtable -Data $ResultsFiltered
+
+          Foreach ($Result in $ResultCollection) {
+
+            # Output results
+            [UnityLUN]$Result
+          }
+        }
       }
     }
   }

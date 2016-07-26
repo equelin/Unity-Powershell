@@ -113,6 +113,18 @@ Function Connect-Unity {
       $Sess.SessionId = ([guid]::NewGuid())
       $Sess.User = $Credentials.username
 
+      #Initialazing Websession variable
+      $Websession = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+
+      #Add session's cookies to Websession
+      Foreach ($cookie in $sess.Cookies) {
+        Write-Verbose "Add cookie: $($cookie.Name) to WebSession"
+        $Websession.Cookies.Add($cookie);
+      }
+
+      $Sess.Websession = $Websession
+
+      # Get informations about the array
       $System = Get-UnitySystem -Session $Sess
 
       $Sess.Name = $System.Name
