@@ -132,7 +132,7 @@ Function New-UnityNASServer {
               $body["defaultWindowsUser"] = $defaultWindowsUser
         }
 
-        If (Test-UnityConnection -Session $Sess) {
+        If ($Sess.TestConnection()) {
 
           #Building the URI
           $URI = 'https://'+$sess.Server+'/api/types/nasServer/instances'

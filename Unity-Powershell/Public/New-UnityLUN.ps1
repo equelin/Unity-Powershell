@@ -87,7 +87,7 @@ Function New-UnityLUN {
 
         $body["lunParameters"] = $lunParameters
 
-        If (Test-UnityConnection -Session $Sess) {
+        If ($Sess.TestConnection()) {
 
           #Building the URI
           $URI = 'https://'+$sess.Server+'/api/types/storageResource/action/createLun'

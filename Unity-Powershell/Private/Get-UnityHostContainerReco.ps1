@@ -50,7 +50,7 @@ Function Get-UnityHostContainerReco {
         # password parameter
         $body["password"] = "$Password"
 
-        If (Test-UnityConnection -Session $Sess) {
+        If ($Sess.TestConnection()) {
 
           #Building the URI
           $URI = 'https://'+$sess.Server+'/api/types/hostContainer/action/recommend'

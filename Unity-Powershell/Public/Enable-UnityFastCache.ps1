@@ -49,7 +49,7 @@ Function Enable-UnityFastCache {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      If (Test-UnityConnection -Session $Sess) {
+      If ($Sess.TestConnection()) {
 
           # Creation of the body hash
           $body = @{}

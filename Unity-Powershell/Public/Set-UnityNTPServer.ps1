@@ -43,7 +43,7 @@ Function Set-UnityNTPServer {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      If (Test-UnityConnection -Session $Sess) {
+      If ($Sess.TestConnection()) {
 
           $NTPServer = Get-UnityNTPServer -Session $Sess
 

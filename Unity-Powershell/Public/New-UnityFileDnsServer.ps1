@@ -59,7 +59,7 @@ Function New-UnityFileDNSServer {
             $body["domain"] = "$($domain)"
       }
 
-      If (Test-UnityConnection -Session $Sess) {
+      If ($Sess.TestConnection()) {
 
         #Building the URI
         $URI = 'https://'+$sess.Server+'/api/types/fileDNSServer/instances'

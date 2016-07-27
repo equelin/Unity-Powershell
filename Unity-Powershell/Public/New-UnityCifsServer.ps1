@@ -125,7 +125,7 @@ Function New-UnityCIFSServer {
           $body["interfaces"] += $ÎntArgument
         }
 
-        If (Test-UnityConnection -Session $Sess) {
+        If ($Sess.TestConnection()) {
 
           #Building the URI
           $URI = 'https://'+$sess.Server+'/api/types/cifsServer/instances'

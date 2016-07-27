@@ -50,7 +50,7 @@ Function Get-UnityPool {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      If (Test-UnityConnection -Session $Sess) {
+      If ($Sess.TestConnection()) {
 
         #Building the URL from Object Type.
         $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
@@ -82,8 +82,14 @@ Function Get-UnityPool {
 
             Foreach ($Result in $ResultCollection) {
 
+              # Instantiate object
+              $Object = [UnityPool]$Result
+
+              # Convert to MB
+              $Object.ConvertToMB()
+
               # Output results
-              [UnityPool]$Result
+              $Object
             }
           }
         }

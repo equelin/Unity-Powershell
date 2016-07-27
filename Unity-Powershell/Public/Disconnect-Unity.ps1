@@ -53,7 +53,7 @@ Function Disconnect-Unity {
         if ($pscmdlet.ShouldProcess($sess.Server,"Disconnecting from Unity Array")) {
 
           #Sending request
-          $request = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $sess.headers -Headers $sess.headers -Method POST
+          $request = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $sess.Websession -Headers $sess.headers -Method POST
 
           If ($request.StatusCode -eq 200) {
             Write-Verbose "Delete session from DefaultUnitySession"

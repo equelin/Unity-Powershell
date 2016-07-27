@@ -37,6 +37,23 @@ Class UnitySession {
   [string]$Name
   [string]$model
   [string]$SerialNumber
+
+  ## Methods
+
+  [bool] TestConnection () {
+
+    $URI = 'https://'+$This.Server+'/api/types/system/instances'
+
+    Try {
+        Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $this.Websession -Headers $this.Headers -Method 'GET'
+    }
+    Catch {
+        $this.IsConnected = $false
+        return $false
+    }
+
+    return $True
+  }
 }
 
 Class UnitySystem {
@@ -88,33 +105,74 @@ Class UnityLUN {
 
 Class UnityPool {
   [string]$id
-  $health
+  [UnityHealth]$health
   [string]$name
   [string]$description
   [StorageResourceTypeEnum]$storageResourceType
   [RaidTypeEnum]$raidType
-  [long]$sizeFree
-  [long]$sizeTotal
-  [long]$sizeUsed
-  [long]$sizeSubscribed
+  [UInt64]$sizeFree
+  [UInt64]$sizeTotal
+  [UInt64]$sizeUsed
+  [UInt64]$sizeSubscribed
   [long]$alertThreshold
   [bool]$isFASTCacheEnabled
-  $tiers
+  [UnityPoolTier[]]$tiers
   [DateTime]$creationTime
   [bool]$isEmpty
-  $poolFastVP
+  [UnityPoolFASTVP]$poolFastVP
   [bool]$isHarvestEnabled
   [UsageHarvestStateEnum]$harvestState
   [bool]$isSnapHarvestEnabled
-  [long]$poolSpaceHarvestHighThreshold
-  [long]$poolSpaceHarvestLowThreshold
-  [long]$snapSpaceHarvestHighThreshold
-  [long]$snapSpaceHarvestLowThreshold
-  [long]$metadataSizeSubscribed
-  [long]$snapSizeSubscribed
-  [long]$metadataSizeUsed
-  [long]$snapSizeUsed
-  [long]$rebalanceProgress
+  [float]$poolSpaceHarvestHighThreshold
+  [float]$poolSpaceHarvestLowThreshold
+  [float]$snapSpaceHarvestHighThreshold
+  [float]$snapSpaceHarvestLowThreshold
+  [UInt64]$metadataSizeSubscribed
+  [UInt64]$snapSizeSubscribed
+  [UInt64]$metadataSizeUsed
+  [UInt64]$snapSizeUsed
+  [Uint16]$rebalanceProgress
+
+  [void] ConvertToMB () {
+    $this.sizeFree = $this.sizeFree / 1MB
+    $this.sizeTotal = $this.sizeTotal / 1MB
+    $this.sizeUsed = $this.sizeUsed / 1MB
+    $this.sizeSubscribed = $this.sizeSubscribed / 1MB
+    $this.metadataSizeSubscribed = $this.metadataSizeSubscribed / 1MB
+    $this.snapSizeSubscribed = $this.snapSizeSubscribed / 1MB
+    $this.metadataSizeUsed = $this.metadataSizeUsed / 1MB
+    $this.snapSizeUsed = $this.snapSizeUsed / 1MB
+  }
+}
+
+Class UnityPoolFASTVP {
+  [FastVPStatusEnum]$status
+  [FastVPRelocationRateEnum]$relocationRate
+  [bool]$isScheduleEnabled
+  [DateTime]$relocationDurationEstimate
+  [UInt64]$sizeMovingDown
+  [UInt64]$sizeMovingUp
+  [UInt64]$sizeMovingWithin
+  [Uint16]$percentComplete
+  [PoolDataRelocationTypeEnum]$type
+  [Uint16]$dataRelocated
+  [DateTime]$lastStartTime
+  [DateTime]$lastEndTime
+}
+
+Class UnityPoolTier {
+  [TierTypeEnum]$tierType
+  [RaidStripeWidthEnum]$stripeWidth
+  [RaidTypeEnum]$raidType
+  [UInt64]$sizeTotal
+  [UInt64]$sizeUsed
+  [UInt64]$sizeFree
+  [UInt64]$sizeMovingDown
+  [UInt64]$sizeMovingUp
+  [UInt64]$sizeMovingWithin
+  [String]$name
+  $poolUnits
+  [Int]$diskCount
 }
 
 Class UnityBasicSystemInfo {
@@ -459,6 +517,29 @@ Class UnityHostContainer {
 }
 
 #Custom Enum
+
+Enum FastVPStatusEnum {
+  Not_Applicable = 1
+  Paused = 2
+  Active = 3
+  Not_started = 4 
+  Completed = 5
+  Stopped_by_user = 6
+  Failed = 7
+}
+
+Enum FastVPRelocationRateEnum {
+  High = 1
+  Medium = 2
+  Low = 3
+  None = 4 
+}
+
+Enum PoolDataRelocationTypeEnum {
+  Manual = 1
+  Scheduled = 2
+  Rebalance = 3
+}
 
 Enum HostContainerTypeEnum {
   UNKNOWN = 0

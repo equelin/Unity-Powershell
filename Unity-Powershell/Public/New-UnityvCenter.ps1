@@ -90,7 +90,7 @@ Function New-UnityvCenter {
           $body["potentialHosts"] = $recommendation.potentialHosts | Where-Object {$_.importOption -ne 2}
         }
 
-        If (Test-UnityConnection -Session $Sess) {
+        If ($Sess.TestConnection()) {
 
           #Building the URI
           $URI = 'https://'+$sess.Server+'/api/types/hostContainer/instances'

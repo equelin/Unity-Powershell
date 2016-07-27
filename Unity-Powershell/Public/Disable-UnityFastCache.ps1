@@ -35,7 +35,7 @@ Function Disable-UnityFastCache {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      If (Test-UnityConnection -Session $Sess) {
+      If ($Sess.TestConnection()) {
 
           #Building the URI
           $URI = 'https://'+$sess.Server+'/api/instances/fastCache/0/action/disable?timeout=0' #run async

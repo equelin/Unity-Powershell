@@ -41,7 +41,7 @@ Function Get-UnityItem {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      If (Test-UnityConnection -Session $Sess) {
+      If ($Sess.TestConnection()) {
 
         #Building the URI
         $URL = 'https://'+$sess.Server+$URI

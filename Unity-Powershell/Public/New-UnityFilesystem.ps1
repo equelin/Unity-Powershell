@@ -188,7 +188,7 @@ Function New-UnityFilesystem {
           $body["snapScheduleParameters"] = $snapScheduleParameters
         }
 
-        If (Test-UnityConnection -Session $Sess) {
+        If ($Sess.TestConnection()) {
 
           #Building the URI
           $URI = 'https://'+$sess.Server+'/api/types/storageResource/action/createFilesystem'

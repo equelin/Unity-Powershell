@@ -41,7 +41,7 @@ Function Set-UnityFileDnsServer {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      If (Test-UnityConnection -Session $Sess) {
+      If ($Sess.TestConnection()) {
 
         # Determine input and convert to UnityPool object
         Switch ($ID.GetType().Name)
