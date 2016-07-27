@@ -7,7 +7,7 @@ Function Disconnect-Unity {
       Disconnects from an EMC Unity Array. By default, Disconnect-Unity closes all sessions. To close a specific session, use the -Session parameter.
       When a session is disconnected, it is removed form the default array list.
       .NOTES
-      Written by Erwan Quelin under Apache licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
+      Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE

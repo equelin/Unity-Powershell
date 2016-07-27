@@ -7,7 +7,7 @@ Function New-UnityNASServer {
       Create a NAS server. You can create a maximum of 24 NAS servers per system.
       You need to have an active session with the array.
       .NOTES
-      Written by Erwan Quelin under Apache licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
+      Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session

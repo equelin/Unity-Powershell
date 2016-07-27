@@ -4,7 +4,7 @@ Function Get-UnityHostContainerReco {
       .SYNOPSIS
       Get the hostContainer recommendations for importing ESXi servers
       .NOTES
-      Written by Erwan Quelin under Apache licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
+      Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
   #>

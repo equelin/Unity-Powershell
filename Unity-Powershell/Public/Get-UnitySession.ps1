@@ -6,7 +6,7 @@ Function Get-UnitySession {
       .DESCRIPTION
       List the existing sessions.
       .NOTES
-      Written by Erwan Quelin under Apache licence
+      Written by Erwan Quelin under MIT licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE

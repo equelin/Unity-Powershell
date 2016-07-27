@@ -1,3 +1,5 @@
+#Deprecated, replaced by ConvertTo-Hashtable
+
 function Add-UnityObjectType {
   [CmdletBinding()]
   Param (

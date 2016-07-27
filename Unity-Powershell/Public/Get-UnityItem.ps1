@@ -8,7 +8,7 @@ Function Get-UnityItem {
       By default, the response is a powershell object. You can retrieve the JSON response by using the -JSON parameter.
       You need to have an active session with the array.
       .NOTES
-      Written by Erwan Quelin under Apache licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
+      Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE

@@ -7,7 +7,7 @@ Function Get-UnitystorageResource {
       Querries the EMC Unity array to retrieve informations about UnitystorageResource.
       You need to have an active session with the array.
       .NOTES
-      Written by Erwan Quelin under Apache licence
+      Written by Erwan Quelin under MIT licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session

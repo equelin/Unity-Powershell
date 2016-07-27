@@ -9,7 +9,7 @@ Function Connect-Unity {
       You can have more than one connection to the same array. To disconnect from an array, you need to close all active connections to this server using the Disconnect-Unity cmdlet.
       Every new connection is stored in the $global:DefaultUnitySession array.
       .NOTES
-      Written by Erwan Quelin under Apache licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
+      Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session

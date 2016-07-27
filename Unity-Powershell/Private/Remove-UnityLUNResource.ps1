@@ -7,7 +7,7 @@ Function Remove-UnityLUNResource {
       Delete a LUN ressource (LUN, VMWare VMFS LUN, VMware NFS LUN).
       You need to have an active session with the array.
       .NOTES
-      Written by Erwan Quelin under Apache licence
+      Written by Erwan Quelin under MIT licence
       .LINK
       https://github.com/equelin/Unity-Powershell
       .EXAMPLE
