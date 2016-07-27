@@ -4,7 +4,7 @@ Function Get-UnityLUNResource {
       .SYNOPSIS
       Queries the EMC Unity array to retrieve informations about LUN.
       .DESCRIPTION
-      Querries the EMC Unity array to retrieve informations about LUN.
+      Queries the EMC Unity array to retrieve informations about LUN.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under Apache licence
@@ -73,8 +73,14 @@ Function Get-UnityLUNResource {
 
           Foreach ($Result in $ResultCollection) {
 
-            # Output results
-            [UnityLUN]$Result
+              # Instantiate object
+              $Object = [UnityLUN]$Result
+
+              # Convert to MB
+              $Object.ConvertToMB()
+
+              # Output results
+              $Object
           }
         }
       }

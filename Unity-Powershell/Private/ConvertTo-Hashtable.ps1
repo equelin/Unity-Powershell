@@ -13,8 +13,10 @@ function ConvertTo-Hashtable {
 
       $D | 
         get-member -MemberType NoteProperty | 
-        Where-Object { -not [string]::IsNullOrEmpty($D."$($_.name)") } | 
-        ForEach-Object { $HashTable.add($_.name,$D."$($_.name)")}
+        #Where-Object { -not [string]::IsNullOrEmpty($D."$($_.name)") } | 
+        ForEach-Object {
+          $HashTable.add($_.name,$D."$($_.name)")
+        }
 
       # Output results
       $HashTable

@@ -79,9 +79,9 @@ Class UnityLUN {
   [string]$name
   [string]$description
   [LUNTypeEnum]$type
-  [long]$sizeTotal
-  [long]$sizeUsed
-  [long]$sizeAllocated
+  [UInt64]$sizeTotal
+  [UInt64]$sizeUsed
+  [UInt64]$sizeAllocated
   $perTierSizeUsed
   [bool]$isThinEnabled
   $storageResource
@@ -94,13 +94,29 @@ Class UnityLUN {
   $snapSchedule
   [bool]$isSnapSchedulePaused
   $ioLimitPolicy
-  [long]$metadataSize
-  [long]$metadataSizeAllocated
+  [UInt64]$metadataSize
+  [UInt64]$metadataSizeAllocated
   [string]$snapWwn
-  [long]$snapsSize
-  [long]$snapsSizeAllocated
+  [UInt64]$snapsSize
+  [UInt64]$snapsSizeAllocated
   $hostAccess
   [int]$snapCount
+
+  ## Methods
+
+  [void] ConvertToMB () {
+    $this.sizeTotal = $this.sizeTotal / 1MB
+    $this.sizeUsed = $this.sizeUsed / 1MB
+    $this.sizeAllocated = $this.sizeAllocated / 1MB
+    $this.metadataSize = $this.metadataSize / 1MB
+    $this.metadataSizeAllocated = $this.metadataSizeAllocated / 1MB
+    $this.snapsSizeAllocated = $this.snapsSizeAllocated / 1MB
+  }
+
+  [string] GetNaa () {
+    $NAA = 'naa.' + ($($this.wwn) -replace ':','')
+    return $NAA  
+  }
 }
 
 Class UnityPool {
@@ -132,6 +148,8 @@ Class UnityPool {
   [UInt64]$metadataSizeUsed
   [UInt64]$snapSizeUsed
   [Uint16]$rebalanceProgress
+
+  ## Methods
 
   [void] ConvertToMB () {
     $this.sizeFree = $this.sizeFree / 1MB
@@ -212,9 +230,9 @@ Class UnityStorageResource {
   [StorageResourceTypeEnum]$type
   [bool]$isReplicationDestination
   [ReplicationTypeEnum]$replicationType
-  [long]$sizeTotal
-  [long]$sizeUsed
-  [long]$sizeAllocated
+  [UInt64]$sizeTotal
+  [UInt64]$sizeUsed
+  [UInt64]$sizeAllocated
   [ThinStatusEnum]$thinStatus
   [ESXFilesystemMajorVersionEnum]$esxFilesystemMajorVersion
   [ESXFilesystemBlockSizeEnum]$esxFilesystemBlockSize
@@ -223,10 +241,10 @@ Class UnityStorageResource {
   [TieringPolicyEnum]$relocationPolicy
   $perTierSizeUsed
   $blockHostAccess
-  [long]$metadataSize
-  [long]$metadataSizeAllocated
-  [long]$snapsSizeTotal
-  [long]$snapsSizeAllocated
+  [UInt64]$metadataSize
+  [UInt64]$metadataSizeAllocated
+  [UInt64]$snapsSizeTotal
+  [UInt64]$snapsSizeAllocated
   [Int]$snapCount
   [string]$vmwareUUID
   $pools
@@ -235,6 +253,18 @@ Class UnityStorageResource {
   $hostVVolDatastore
   $luns
   $virtualVolumes
+
+  ## Methods
+
+  [void] ConvertToMB () {
+    $this.sizeTotal = $this.sizeTotal / 1MB
+    $this.sizeUsed = $this.sizeUsed / 1MB
+    $this.sizeAllocated = $this.sizeAllocated / 1MB
+    $this.metadataSize = $this.metadataSize / 1MB
+    $this.metadataSizeAllocated = $this.metadataSizeAllocated / 1MB
+    $this.snapsSizeTotal = $this.snapsSizeTotal / 1MB
+    $this.snapsSizeAllocated = $this.snapsSizeAllocated / 1MB
+  }
 }
 
 Class UnityPoolUnit {
