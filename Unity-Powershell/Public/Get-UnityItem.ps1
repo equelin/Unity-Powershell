@@ -50,7 +50,6 @@ Function Get-UnityItem {
         #Sending the request
         $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
 
-
         #Formating the result. Converting it from JSON to a Powershell object
         If ($JSON) {
           $results = $request.content

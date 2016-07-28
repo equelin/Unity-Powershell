@@ -58,6 +58,8 @@ Function Get-UnityFileDNSServer {
         #Building the result collection (Add ressource type)
         If ($Results) {
 
+          $ResultsFiltered = @()
+          
           # Results filtering
           Switch ($PsCmdlet.ParameterSetName) {
             'ByID' {

@@ -9,10 +9,14 @@ function Find-FromFilter {
     $Filter
     )
 
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Process {
+        Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    Foreach ($F in $Filter) {
-        Write-Verbose "Filtering result(s) on parameter $Parameter withe value $F"
-        $Data | Where-Object {$_."$Parameter" -like $F}
+        Foreach ($F in $Filter) {
+            Write-Verbose "Filtering result(s) on parameter $Parameter withe value $F"
+            $Data | Where-Object {$_."$Parameter" -like $F}
+        }
     }
+
+
 }
