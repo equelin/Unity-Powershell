@@ -173,7 +173,7 @@ Class UnityPoolFASTVP {
   [UInt64]$sizeMovingWithin
   [Uint16]$percentComplete
   [PoolDataRelocationTypeEnum]$type
-  [Uint16]$dataRelocated
+  [UInt64]$dataRelocated
   [DateTime]$lastStartTime
   [DateTime]$lastEndTime
 }
