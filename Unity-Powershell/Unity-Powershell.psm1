@@ -54,6 +54,15 @@ Class UnitySession {
 
     return $True
   }
+
+  # Test if the Unity is a virtual appliance
+  [bool] isUnityVSA () {
+    If ($this.model -match 'UnityVSA') {
+      return $True
+    } else {
+      return $False
+    }
+  }
 }
 
 Class UnitySystem {
@@ -176,6 +185,14 @@ Class UnityPoolFASTVP {
   [UInt64]$dataRelocated
   [DateTime]$lastStartTime
   [DateTime]$lastEndTime
+
+  ## Methods
+
+  [void] ConvertToMB () {
+    $this.sizeMovingDown = $this.sizeMovingDown / 1MB
+    $this.sizeMovingUp = $this.sizeMovingUp / 1MB
+    $this.sizeMovingWithin = $this.sizeMovingWithin / 1MB
+  }
 }
 
 Class UnityPoolTier {

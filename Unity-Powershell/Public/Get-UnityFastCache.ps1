@@ -47,47 +47,53 @@ Function Get-UnityFastCache {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      If ($Sess.TestConnection()) {
-
-        #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
-
-        Write-Verbose "URL: $URL"
-
-        #Sending the request
-        $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
-
-        #Formating the result. Converting it from JSON to a Powershell object
-        $Results = ($request.content | ConvertFrom-Json).entries.content
-
-        #Building the result collection (Add ressource type)
-        If ($Results) {
-
-          $ResultsFiltered = @()
-          
-          # Results filtering
-          Switch ($PsCmdlet.ParameterSetName) {
-            'ByID' {
-              $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
-            }
-          }
-
-          If ($ResultsFiltered) {
-            
-            $ResultCollection = ConvertTo-Hashtable -Data $ResultsFiltered
-
-            Foreach ($Result in $ResultCollection) {
-
-              # Instantiate object
-              $Object = [UnityFastCache]$Result
-
-              # Output results
-              $Object
-            }
-          }
-        }
+      # Test if the Unity is a virtual appliance
+      If ($Sess.isUnityVSA()) {
+        Write-Warning -Message "This functionnality is not supported on this Unity VSA ($($Sess.Name))"
       } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+
+        If ($Sess.TestConnection()) {
+
+          #Building the URL from Object Type.
+          $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
+
+          Write-Verbose "URL: $URL"
+
+          #Sending the request
+          $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
+
+          #Formating the result. Converting it from JSON to a Powershell object
+          $Results = ($request.content | ConvertFrom-Json).entries.content
+
+          #Building the result collection (Add ressource type)
+          If ($Results) {
+
+            $ResultsFiltered = @()
+            
+            # Results filtering
+            Switch ($PsCmdlet.ParameterSetName) {
+              'ByID' {
+                $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
+              }
+            }
+
+            If ($ResultsFiltered) {
+              
+              $ResultCollection = ConvertTo-Hashtable -Data $ResultsFiltered
+
+              Foreach ($Result in $ResultCollection) {
+
+                # Instantiate object
+                $Object = [UnityFastCache]$Result
+
+                # Output results
+                $Object
+              }
+            }
+          }
+        } else {
+          Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+        }
       }
     }
   }
