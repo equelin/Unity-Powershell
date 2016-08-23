@@ -60,12 +60,31 @@ PowerShellVersion = '5.0'
 # TypesToProcess = @()
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = 'Unity-Powershell.UnityLUN.Format.ps1xml','Unity-Powershell.UnitySession.Format.ps1xml','Unity-Powershell.UnityUser.Format.ps1xml',
-                  'Unity-Powershell.UnityPool.Format.ps1xml','Unity-Powershell.UnityBasicSystemInfo.Format.ps1xml','Unity-Powershell.UnityLicense.Format.ps1xml',
-                  'Unity-Powershell.UnityFeature.Format.ps1xml','Unity-Powershell.UnityStorageResource.Format.ps1xml','Unity-Powershell.UnityPoolUnit.Format.ps1xml',
-                  'Unity-Powershell.UnityNasServer.Format.ps1xml','Unity-Powershell.UnityIpPort.Format.ps1xml','Unity-Powershell.UnityFilesystem.Format.ps1xml',
-                  'Unity-Powershell.UnityCIFSShare.Format.ps1xml','Unity-Powershell.UnityFastCache.Format.ps1xml','Unity-Powershell.UnityDiskGroup.Format.ps1xml',
-                  'Unity-Powershell.UnityHost.Format.ps1xml','Unity-Powershell.UnityHostContainer.Format.ps1xml'
+FormatsToProcess = @(
+'.\Format\Unity-Powershell.UnityLUN.Format.ps1xml',
+'.\Format\Unity-Powershell.UnitySession.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityUser.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityPool.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityBasicSystemInfo.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityLicense.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityFeature.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityStorageResource.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityPoolUnit.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityNasServer.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityIpPort.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityFilesystem.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityCIFSShare.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityFastCache.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityDiskGroup.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityHost.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityHostContainer.Format.ps1xml',
+'.\Format\Unity-Powershell.UnitySystem.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityCIFSServer.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityDNSServer.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityFileDNSServer.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityFileInterface.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityNTPServer.Format.ps1xml'
+)
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 # NestedModules = @()

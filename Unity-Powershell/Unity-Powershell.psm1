@@ -1,5 +1,5 @@
 
-#Get public and private function definition files
+#Get Class, public and private function definition files
 $Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue )
 $Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue )
 
@@ -58,7 +58,7 @@ Class UnitySession {
 
 Class UnitySystem {
   [string]$id
-  $health
+  [UnityHealth]$health
   [string]$name
   [string]$model
   [string]$serialNumber
@@ -75,7 +75,7 @@ Class UnityUser {
 
 Class UnityLUN {
   [string]$id
-  $health
+  [UnityHealth]$health
   [string]$name
   [string]$description
   [LUNTypeEnum]$type
@@ -224,7 +224,7 @@ Class UnityLicense {
 
 Class UnityStorageResource {
   [string]$id
-  $health
+  [UnityHealth]$health
   [string]$name
   [string]$description
   [StorageResourceTypeEnum]$type
@@ -270,7 +270,7 @@ Class UnityStorageResource {
 Class UnityPoolUnit {
   [string]$id
   [PoolUnitTypeEnum]$type
-  $health
+  [UnityHealth]$health
   [string]$name
   [string]$description
   [string]$wwn
@@ -294,7 +294,7 @@ Class UnityNTPServer {
 Class UnityNasServer {
   [string]$id
   [string]$name
-  $health
+  [UnityHealth]$health
   $homeSP
   $currentSP
   $pool
@@ -328,7 +328,7 @@ Class UnityFileInterface {
   [string]$id
   $nasServer
   $ipPort
-  $health
+  [UnityHealth]$health
   [string]$ipAddress
   [IpProtocolVersionEnum]$ipProtocolVersion
   [string]$netmask
@@ -362,7 +362,7 @@ Class UnityCifsServer {
   [string]$lastUsedOrganizationalUnit
   [string]$workgroup
   [bool]$isStandalone
-  $health
+  [UnityHealth]$health
   $nasServer
   $fileInterfaces
   [bool]$smbcaSupported
@@ -372,7 +372,7 @@ Class UnityCifsServer {
 
 Class UnityFilesystem {
   [string]$id
-  $health
+  [UnityHealth]$health
   [string]$name
   [string]$description
   [FilesystemTypeEnum]$type
@@ -820,3 +820,7 @@ Enum FeatureReasonEnum {
   FeatureReasonPlatformRestriction = 3
   FeatureReasonExcluded = 4
 }
+
+
+
+
