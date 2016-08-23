@@ -12,7 +12,7 @@
 RootModule = 'Unity-Powershell.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.6.2'
+ModuleVersion = '0.6.3'
 
 # ID used to uniquely identify this module
 GUID = '586e7e62-9753-4fd6-91b6-89d8d89d69a2'
