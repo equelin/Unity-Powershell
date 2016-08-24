@@ -580,7 +580,18 @@ Class UnityMgmtInterfaceSettings {
   [InterfaceConfigModeEnum]$v6ConfigMode
 }
 
+Class UnitySmtpServer {
+  [string]$id
+  [string[]]$address
+  [SmtpTypeEnum]$type
+}
+
 #Custom Enum
+
+Enum SmtpTypeEnum {
+  Default = 0
+  PhoneHome = 1
+}
 
 Enum InterfaceConfigModeEnum {
   Disabled = 0
