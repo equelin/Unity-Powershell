@@ -10,13 +10,39 @@ Function Set-UnityCIFSShare {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER ID
+      ID of the CIFS share.
+      .PARAMETER description
+      CIFS share description
+      .PARAMETER isReadOnly
+      Indicates whether the CIFS share is read-only
+      .PARAMETER isEncryptionEnabled
+      Indicates whether CIFS encryption for Server Message Block (SMB) 3.0 is enabled for the CIFS share
+      .PARAMETER isContinuousAvailabilityEnabled
+      Indicates whether continuous availability for SMB 3.0 is enabled for the CIFS share
+      .PARAMETER isABEEnabled
+      Enumerate file with read access and directories with list access in folder listings
+      .PARAMETER isBranchCacheEnabled
+      Branch Cache optimizes traffic between the NAS server and Branch Office Servers
+      .PARAMETER offlineAvailability
+      Offline Files store a version of the shared resources on the client computer in the file system cache, 
+      a reserved portion of disk space, which the client computer can access even when it is disconnected from the network.
+      .PARAMETER umask
+      The default UNIX umask for new files created on the share.
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. 
+      If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
       Set-UnityCIFSShare -ID 'SMBShare_1' -Description 'New description'
 
       Modifies the CIFS share with id 'SMBShare_1'
   #>
 
-    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]

@@ -10,6 +10,14 @@ Function Remove-UnityFileDNSServer {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER ID
+      File DNS ID or Object.
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
       Remove-UnityFileDnsServer -ID 'dns_1'
 
@@ -20,11 +28,11 @@ Function Remove-UnityFileDNSServer {
       Delete all the file DNS Servers
   #>
 
-    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'File interface ID or Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'File DNS ID or Object')]
     $ID
   )
 
@@ -75,7 +83,7 @@ Function Remove-UnityFileDNSServer {
 
             }
           } else {
-            Write-Information -MessageData "File Interface $FileDNSServerID does not exist on the array $($sess.Name)"
+            Write-Information -MessageData "File DNS $FileDNSServerID does not exist on the array $($sess.Name)"
           }
         }
       } else {

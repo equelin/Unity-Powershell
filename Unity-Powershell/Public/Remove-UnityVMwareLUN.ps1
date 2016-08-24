@@ -10,6 +10,14 @@ Function Remove-UnityVMwareLUN {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER Name
+      VMware LUN Name or Object.
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
       Remove-UnityVMwareLUN -Name 'LUN01'
 
@@ -24,7 +32,7 @@ Function Remove-UnityVMwareLUN {
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name or LUN Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN Name or Object')]
     $Name
   )
 
@@ -60,7 +68,9 @@ Function Remove-UnityVMwareLUN {
           }
 
           If ($LUNID) {
-            $LUN | Remove-UnityLUNResource -Session $Sess
+            if ($pscmdlet.ShouldProcess($LUNName,"Delete VMware LUN")) {
+              $LUN | Remove-UnityLUNResource -Session $Sess -Confirm:$false
+            }
           } else {
             Write-Verbose "VMware LUN $LUNName does not exist on the array $($sess.Name)"
           }

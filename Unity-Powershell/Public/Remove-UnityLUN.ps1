@@ -10,6 +10,14 @@ Function Remove-UnityLUN {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER Name
+      LUN Name or Object.
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
       Remove-UnityLUN -Name 'LUN01'
 
@@ -60,7 +68,9 @@ Function Remove-UnityLUN {
           }
 
           If ($LUNID) {
-            $LUN | Remove-UnityLUNResource -Session $Sess
+            if ($pscmdlet.ShouldProcess($LUNName,"Delete LUN")) {
+              $LUN | Remove-UnityLUNResource -Session $Sess -Confirm:$false
+            }
           } else {
             Write-Verbose "LUN $LUNName does not exist on the array $($sess.Name)"
           }

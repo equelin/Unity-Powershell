@@ -13,7 +13,7 @@ Function Remove-UnityAlert {
       .PARAMETER Session
       Specify an UnitySession Object.
       .PARAMETER ID
-      Management interface ID or Object.
+      Alert ID or Object.
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
