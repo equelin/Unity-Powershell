@@ -563,7 +563,30 @@ Class UnityHostContainer {
   [array]$hosts
 }
 
+Class UnityMgmtInterface {
+  [string]$id
+  [InterfaceConfigModeEnum]$configMode
+  $ethernetPort
+  [IpProtocolVersionEnum]$protocolVersion
+  [string]$ipAddress
+  [string]$netmask
+  [UInt64]$v6PrefixLength
+  [string]$gateway
+}
+
+Class UnityMgmtInterfaceSettings {
+  [string]$id
+  [InterfaceConfigModeEnum]$v4ConfigMode
+  [InterfaceConfigModeEnum]$v6ConfigMode
+}
+
 #Custom Enum
+
+Enum InterfaceConfigModeEnum {
+  Disabled = 0
+  Static = 1
+  Auto = 2
+}
 
 Enum FastVPStatusEnum {
   Not_Applicable = 1

@@ -83,7 +83,9 @@ FormatsToProcess = @(
 '.\Format\Unity-Powershell.UnityDNSServer.Format.ps1xml',
 '.\Format\Unity-Powershell.UnityFileDNSServer.Format.ps1xml',
 '.\Format\Unity-Powershell.UnityFileInterface.Format.ps1xml',
-'.\Format\Unity-Powershell.UnityNTPServer.Format.ps1xml'
+'.\Format\Unity-Powershell.UnityNTPServer.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityMgmtInterface.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityMgmtInterfaceSettings.Format.ps1xml'
 )
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
