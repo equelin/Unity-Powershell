@@ -586,7 +586,33 @@ Class UnitySmtpServer {
   [SmtpTypeEnum]$type
 }
 
+Class UnityAlert {
+  [string]$id
+  [DateTime]$timestamp
+  [SeverityEnum]$severity
+  [string]$component
+  [string]$messageId
+  [string]$message
+  [string]$descriptionId
+  [string]$description
+  [string]$resolutionId
+  [string]$resolution
+  [bool]$isAcknowledged
+}
+
 #Custom Enum
+
+Enum SeverityEnum {
+  OK = 8
+  DEBUG = 7
+  INFO = 6
+  NOTICE = 5
+  WARNING = 4
+  ERROR = 3
+  CRITICAL = 2
+  ALERT = 1
+  EMERGENCY = 0
+}
 
 Enum SmtpTypeEnum {
   Default = 0
