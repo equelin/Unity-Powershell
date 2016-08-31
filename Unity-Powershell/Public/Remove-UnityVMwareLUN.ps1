@@ -12,28 +12,28 @@ Function Remove-UnityVMwareLUN {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specify an UnitySession Object.
-      .PARAMETER Name
-      VMware LUN Name or Object.
+      .PARAMETER ID
+      VMware LUN ID or Object.
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Remove-UnityVMwareLUN -Name 'LUN01'
+      Remove-UnityVMwareLUN -ID 'sv_15'
 
-      Delete the VMware block LUN named 'LUN01'
+      Delete the VMware block LUN ID 'sv_15'
       .EXAMPLE
-      Get-UnityVMwareLUN -Name 'LUN01' | Remove-UnityVMwareLUN
+      Get-UnityVMwareLUN -ID 'sv_15' | Remove-UnityVMwareLUN
 
-      Delete the VMware block LUN named 'LUN01'. The LUN's informations are provided by the Get-UnityVMwareLUN through the pipeline.
+      Delete the VMware block LUN ID 'sv_15'. The LUN's informations are provided by the Get-UnityVMwareLUN through the pipeline.
   #>
 
     [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN Name or Object')]
-    $Name
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN ID or Object')]
+    $ID
   )
 
   Begin {
@@ -48,21 +48,21 @@ Function Remove-UnityVMwareLUN {
 
       If ($Sess.TestConnection()) {
 
-        Foreach ($n in $Name) {
+        Foreach ($i in $ID) {
 
           # Determine input and convert to UnityLUN object
-          Switch ($n.GetType().Name)
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $LUN = get-UnityVMwareLUN -Session $Sess -Name $n
+              $LUN = get-UnityVMwareLUN -Session $Sess -ID $i
               $LUNID = $LUN.id
-              $LUNName = $n
+              $LUNName = $i
             }
             "UnityLUN" {
-              Write-Verbose "Input object type is $($n.GetType().Name)"
-              $LUNName = $n.Name
-              If ($LUN = Get-UnityVMwareLUN -Session $Sess -Name $n.Name) {
-                        $LUNID = $n.id
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $LUNName = $i.Name
+              If ($LUN = Get-UnityVMwareLUN -Session $Sess -ID $i.id) {
+                        $LUNID = $i.id
               }
             }
           }

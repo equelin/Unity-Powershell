@@ -600,7 +600,110 @@ Class UnityAlert {
   [bool]$isAcknowledged
 }
 
+Class UnityIpInterface {
+  [string]$id
+  $ipPort
+  [IpProtocolVersionEnum]$ipProtocolVersion
+  [string]$ipAddress
+  [string]$netmask
+  [Uint64]$v6PrefixLength
+  [string]$gateway
+  [Uint64]$vlanId
+  [IpInterfaceTypeEnum]$type
+}
+
+Class UnityEthernetPort {
+  [string]$id
+  [UnityHealth]$health
+  $storageProcessor
+  [bool]$needsReplacement
+  [string]$name
+  [UInt64]$portNumber
+  [EPSpeedValuesEnum]$speed
+  [UInt32]$mtu
+  [ConnectorTypeEnum]$connectorType
+  [bool]$bond
+  [bool]$isLinkUp
+  [string]$macAddress
+  [bool]$isRSSCapable
+  [bool]$isRDMACapable
+  [EPSpeedValuesEnum]$requestedSpeed
+  $parentIOModule
+  $parentStorageProcessor
+  [EPSpeedValuesEnum[]]$supportedSpeeds
+  [UInt32]$requestedMtu
+  [UInt64[]]$supportedMtus
+  $parent
+  [SFPSpeedValuesEnum[]]$sfpSupportedSpeeds
+  [SFPSpeedValuesEnum[]]$sfpSupportedProtocols
+}
+
+Class UnityIscsiPortal {
+  [string]$id
+  $ethernetPort
+  $iscsiNode
+  [string]$ipAddress
+  [string]$netmask
+  [Uint64]$v6PrefixLength
+  [string]$gateway
+  [Uint64]$vlanId
+  [IpProtocolVersionEnum]$ipProtocolVersion
+}
+
 #Custom Enum
+
+Enum HostLUNAccessEnum {
+  NoAccess = 0
+  Production = 1
+  Snapshot = 2
+  Both = 3
+  Mixed = 0xffff
+}
+
+Enum SFPSpeedValuesEnum {
+  Auto = 0
+  _10Mbps = 10
+  _100Mbps = 100
+  _1Gbps = 1000
+  _1500Mbps = 1500
+  _2Gbps = 2000
+  _3Gbps = 3000 
+  _4Gbps = 4000
+  _6Gbps = 6000
+  _8Gbps = 8000 
+  _10Gbps = 10000
+  _12Gbps = 12000
+  _16Gbps = 16000
+  _32Gbps = 32000
+  _40Gbps = 40000
+  _100Gbps = 100000
+  _1Tbps = 1000000
+}
+
+Enum ConnectorTypeEnum {
+  Unknown = 0
+  RJ45 = 1
+  LC = 2
+  MiniSAS_HD = 3
+}
+
+Enum EPSpeedValuesEnum {
+  Auto = 0
+  _10Mbps = 10
+  _100Mbps = 100 
+  _1Gbps = 1000
+  _10Gbps = 10000
+  _40Gbps = 40000
+  _100Gbps = 100000
+  _1Tbps = 1000000
+}
+
+Enum IpInterfaceTypeEnum {
+  Mgmt = 1
+  ISCSI = 2
+  File = 3
+  Replication = 4
+}
 
 Enum SeverityEnum {
   OK = 8

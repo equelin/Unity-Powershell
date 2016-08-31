@@ -26,7 +26,7 @@ Function Get-UnityVMwareLUN {
       Retrieves information about VMware block LUN named DATASTORE01
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByName")]
+  [CmdletBinding(DefaultParameterSetName="ByID")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),

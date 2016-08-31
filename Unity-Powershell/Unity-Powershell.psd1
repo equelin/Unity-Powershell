@@ -87,7 +87,10 @@ FormatsToProcess = @(
 '.\Format\Unity-Powershell.UnityMgmtInterface.Format.ps1xml',
 '.\Format\Unity-Powershell.UnityMgmtInterfaceSettings.Format.ps1xml',
 '.\Format\Unity-Powershell.UnitySmtpServer.Format.ps1xml',
-'.\Format\Unity-Powershell.UnityAlert.Format.ps1xml'
+'.\Format\Unity-Powershell.UnityAlert.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityIpInterface.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityEthernetPort.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityIscsiPortal.Format.ps1xml'
 )
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess

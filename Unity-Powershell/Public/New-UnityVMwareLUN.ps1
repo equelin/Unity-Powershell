@@ -27,7 +27,11 @@ Function New-UnityVMwareLUN {
     [Parameter(Mandatory = $true,HelpMessage = 'LUN Pool ID')]
     [String]$Pool,
     [Parameter(Mandatory = $true,HelpMessage = 'LUN Size in Bytes')]
-    [String]$Size,
+    [uint64]$Size,
+    [Parameter(Mandatory = $false,HelpMessage = 'Host to grant access to LUN')]
+    [String[]]$host,
+    [Parameter(Mandatory = $false,HelpMessage = 'Host access mask')]
+    [HostLUNAccessEnum]$accessMask = 'Production',
     [Parameter(Mandatory = $false,HelpMessage = 'Is Thin enabled on LUN ? (Default is true)')]
     [bool]$isThinEnabled = $true,
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
@@ -67,6 +71,25 @@ Function New-UnityVMwareLUN {
         $lunParameters["pool"] = $poolParameters
         $lunParameters["size"] = $($Size)
 
+        If ($PSBoundParameters.ContainsKey('host')) {
+        
+          $lunParameters["hostAccess"] = @()
+          $hostAccess = @()
+
+          foreach ($h in $host) {
+            $blockHostAccessParam = @{}
+              $blockHostAccessParam['host'] = @{}
+                $HostParam = @{}
+                $HostParam['id'] = $h
+              $blockHostAccessParam['host'] = $HostParam
+              $blockHostAccessParam['accessMask'] = $accessMask
+            $hostAccess += $blockHostAccessParam
+          }
+
+          $lunParameters["hostAccess"] = $hostAccess
+    
+        }
+
         $body["lunParameters"] = $lunParameters
 
         #snapScheduleParameters
@@ -84,6 +107,10 @@ Function New-UnityVMwareLUN {
         If ($isThinEnabled) {
           $lunParameters["isThinEnabled"] = $isThinEnabled
         }
+
+        #Displaying request's body 
+        $Json = $body | ConvertTo-Json -Depth 10
+        Write-Verbose $Json
 
         If ($Sess.TestConnection()) {
 

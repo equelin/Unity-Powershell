@@ -27,7 +27,7 @@ Function Set-UnityLUN {
     [Parameter(Mandatory = $false,HelpMessage = 'New LUN Description')]
     [String]$Description,
     [Parameter(Mandatory = $false,HelpMessage = 'New LUN Size in Bytes')]
-    [String]$Size
+    [uint64]$Size
   )
 
   Begin {

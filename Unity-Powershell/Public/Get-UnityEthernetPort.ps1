@@ -1,10 +1,10 @@
-Function Get-UnityPool {
+Function Get-UnityEthernetPort {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about pool.
+      Queries the EMC Unity array to retrieve informations about Ethernet Ports.
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve informations about pool.
+      Queries the EMC Unity array to retrieve informations about Ethernet Ports.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -17,22 +17,22 @@ Function Get-UnityPool {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityPool
+      Get-UnityEthernetPort
 
-      Retrieve information about pool
+      Retrieve information about all ethernet ports
       .EXAMPLE
-      Get-UnityPool -Name 'POOL01'
+      Get-UnityEthernetPort -Name 'Ethernet Ports01'
 
-      Retrieves information about pool named POOL01
+      Retrieves information about ethernet port named 'Ethernet Ports01'
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Ethernet port Name')]
     [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Ethernet port ID')]
     [String[]]$ID='*'
   )
 
@@ -41,8 +41,8 @@ Function Get-UnityPool {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/pool/instances' #URI
-    $TypeName = 'UnityPool'
+    $URI = '/api/types/ethernetPort/instances' #URI
+    $TypeName = 'UnityEthernetPort'
   }
 
   Process {
@@ -85,10 +85,7 @@ Function Get-UnityPool {
             Foreach ($Result in $ResultCollection) {
 
               # Instantiate object
-              $Object = [UnityPool]$Result
-
-              # Convert to MB
-              #$Object.ConvertToMB()
+              $Object = New-Object -TypeName $TypeName -Property $Result
 
               # Output results
               $Object
@@ -96,7 +93,7 @@ Function Get-UnityPool {
           }
         }
       } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }
     }
   }

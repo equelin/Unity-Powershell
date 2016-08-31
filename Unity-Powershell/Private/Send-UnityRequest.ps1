@@ -29,7 +29,7 @@ function Send-UnityRequest {
   If (($Method -eq 'POST') -or ($type -eq 'PUT')) {
     Try
     {
-      $json = $body | ConvertTo-Json -Depth 3
+      $json = $body | ConvertTo-Json -Depth 10
       $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Session.Websession -Headers $session.headers -Method $Method -TimeoutSec 600
       return $data
     }
@@ -43,7 +43,7 @@ function Send-UnityRequest {
     Try
     {
       If ($body) {
-        $json = $body | ConvertTo-Json -Depth 3
+        $json = $body | ConvertTo-Json -Depth 10
         $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Session.Websession -Headers $session.headers -Method $Method
       } else {
         $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Session.Websession -Headers $session.headers -Method $Method

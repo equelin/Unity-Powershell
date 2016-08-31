@@ -102,7 +102,7 @@ Function Get-UnitystorageResource {
               $Object = [UnitystorageResource]$Result
 
               # Convert to MB
-              $Object.ConvertToMB()
+              #$Object.ConvertToMB()
               
               # Output results
               $Object

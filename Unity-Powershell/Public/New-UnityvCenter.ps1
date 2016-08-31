@@ -4,7 +4,7 @@ Function New-UnityvCenter {
       .SYNOPSIS
       Adds the vCenter credentials and optionally discovers any ESXi host managed by that vCenter.
       .DESCRIPTION
-      Adds the vCenter credentials and optionally discovers any ESXi host managed by that vCenter.
+      Discover vCenter servers on the network and optionnaly create a host configuration for multiple ESXi hosts managed by a single vCenter server. For any discovered vCenters, you can enable or disable access for any ESXi host managed by the vCenter. After you associate a vCenter server configuration with a VMware datastore, the datastore is available to any ESXi hosts associated with the vCenter host configuration.
       The vCenter credentials are stored in the storage system.
       You need to have an active session with the array.
       .NOTES
@@ -29,7 +29,7 @@ Function New-UnityvCenter {
       Import a vCenter and all the associated hosts.
   #>
 
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
@@ -50,9 +50,6 @@ Function New-UnityvCenter {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
-
-    #Initialazing arrays
-    $ResultCollection = @()
   }
 
   Process {
@@ -90,14 +87,20 @@ Function New-UnityvCenter {
           $body["potentialHosts"] = $recommendation.potentialHosts | Where-Object {$_.importOption -ne 2}
         }
 
+        #Displaying request's body 
+        $Json = $body | ConvertTo-Json -Depth 10
+        Write-Verbose $Json
+
         If ($Sess.TestConnection()) {
 
           #Building the URI
           $URI = 'https://'+$sess.Server+'/api/types/hostContainer/instances'
           Write-Verbose "URI: $URI"
 
-          #Sending the request
-          $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          if ($pscmdlet.ShouldProcess($a,"Add vCenter Server")) {
+            #Sending the request
+            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          }
 
           Write-Verbose "Request status code: $($request.StatusCode)"
 

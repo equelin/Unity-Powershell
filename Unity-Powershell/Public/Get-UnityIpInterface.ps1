@@ -1,10 +1,11 @@
-Function Get-UnityPool {
+Function Get-UnityIpInterface {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about pool.
+      Information about network interfaces in the storage system.  
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve informations about pool.
+      Information about network interfaces in the storage system.
+      Network interfaces enable and control access between the system, network, and configured hosts.  
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -12,27 +13,19 @@ Function Get-UnityPool {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specifies an UnitySession Object.
-      .PARAMETER Name
-      Specifies the object name.
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityPool
+      Get-UnityIpInterface
 
-      Retrieve information about pool
-      .EXAMPLE
-      Get-UnityPool -Name 'POOL01'
-
-      Retrieves information about pool named POOL01
+      Retrieve informations about all the management interface.
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByName")]
+  [CmdletBinding(DefaultParameterSetName="ByID")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
-    [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'IP Interface ID')]
     [String[]]$ID='*'
   )
 
@@ -41,8 +34,8 @@ Function Get-UnityPool {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/pool/instances' #URI
-    $TypeName = 'UnityPool'
+    $URI = '/api/types/ipInterface/instances' #URI for the ressource (example: /api/types/lun/instances)
+    $TypeName = 'UnityIpInterface'
   }
 
   Process {
@@ -67,12 +60,9 @@ Function Get-UnityPool {
         If ($Results) {
 
           $ResultsFiltered = @()
-
+          
           # Results filtering
           Switch ($PsCmdlet.ParameterSetName) {
-            'ByName' {
-              $ResultsFiltered += Find-FromFilter -Parameter 'Name' -Filter $Name -Data $Results
-            }
             'ByID' {
               $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
             }
@@ -85,10 +75,7 @@ Function Get-UnityPool {
             Foreach ($Result in $ResultCollection) {
 
               # Instantiate object
-              $Object = [UnityPool]$Result
-
-              # Convert to MB
-              #$Object.ConvertToMB()
+              $Object = New-Object -TypeName $TypeName -Property $Result
 
               # Output results
               $Object
@@ -96,7 +83,7 @@ Function Get-UnityPool {
           }
         }
       } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
+        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }
     }
   }

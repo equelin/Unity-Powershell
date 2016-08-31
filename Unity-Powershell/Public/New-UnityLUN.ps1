@@ -27,7 +27,7 @@ Function New-UnityLUN {
     [Parameter(Mandatory = $true,HelpMessage = 'LUN Pool ID')]
     [String]$Pool,
     [Parameter(Mandatory = $true,HelpMessage = 'LUN Size in Bytes')]
-    [String]$Size,
+    [uint64]$Size,
     [Parameter(Mandatory = $false,HelpMessage = 'Is Thin enabled on LUN ? (Default is true)')]
     [String]$isThinEnabled = $true,
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]

@@ -77,7 +77,7 @@ Function Get-UnityLUNResource {
               $Object = [UnityLUN]$Result
 
               # Convert to MB
-              $Object.ConvertToMB()
+              #$Object.ConvertToMB()
 
               # Output results
               $Object

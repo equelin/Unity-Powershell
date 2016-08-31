@@ -45,7 +45,7 @@ Function New-UnityFilesystem {
     [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether to enable thin provisioning for file system')]
     [String]$isThinEnabled = $true,
     [Parameter(Mandatory = $true,HelpMessage = 'Filesystem Size in Bytes')]
-    [String]$Size,
+    [uint64]$Size,
     [Parameter(Mandatory = $false,HelpMessage = 'Typical write I/O size from the host to the file system')]
     [HostIOSizeEnum]$hostIOSize,
     [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether caching is disabled')]
