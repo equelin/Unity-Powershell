@@ -36,7 +36,11 @@ Function Set-UnityVMwareLUN {
       - Snapshot: Access to LUN snapshots only. 
       - Both: Access to both production LUNs and their snapshots. 
       .PARAMETER append
+      Add new host access to the existing configuration.
+      .PARAMETER snapSchedule
+      Snapshot schedule assigned to the storage resource 
       .PARAMETER isSnapSchedulePaused
+      Indicates whether the assigned snapshot schedule is paused.
       .EXAMPLE
       Set-UnityVMwareLUN -ID 'sv_78' -Description 'Modified description'
 
@@ -153,7 +157,7 @@ Function Set-UnityVMwareLUN {
                     }
                   }
                 } else {
-                  Write-Warning -Message 'The existing host access parameters will be overwritten by the new settings. It could result to data unavailibility. Use the -Append parameter to add the new settings to the existing configuration.'
+                  Write-Warning -Message 'The existing host access parameters will be overwritten by the new settings. It could result to data unavailibility. Use the -Append parameter to add the new settings to the existing configuration. '
                 }
 
                 $lunParameters["hostAccess"] = $hostAccess

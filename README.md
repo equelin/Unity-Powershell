@@ -6,7 +6,7 @@ This is a PowerShell module for querying EMC Unity array's API.
 
 ![](./Medias/Unity-Powershell-Demo-01.gif)
 
-With this module (version 0.6.0) you can manage:
+With this module (version 0.7.0) you can manage:
 
 - System (DNS,NTP...)
 - Pools (Virtual and physical deployment)
@@ -18,6 +18,7 @@ With this module (version 0.6.0) you can manage:
 - CIFS Server
 - CIFS Shares
 - vCenter and ESXi servers
+- iSCSI parameters
 
 More functionalities will be added later.
 

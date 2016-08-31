@@ -10,10 +10,32 @@ Function New-UnityVMwareLUN {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER Name
+      Name of the VMware VMFS datastore unique to the system.
+      .PARAMETER Description
+      Description of the VMware VMFS datastore.
+      .PARAMETER Size
+      LUN Size.
+      .PARAMETER snapSchedule
+      Snapshot schedule settings for the VMware VMFS datastore, as defined by the snapScheduleParameters.
+      .PARAMETER host
+      List of host to grant access to LUN.
+      .PARAMETER accessMask
+      Host access mask. Might be:
+      - NoAccess: No access. 
+      - Production: Access to production LUNs only. 
+      - Snapshot: Access to LUN snapshots only. 
+      - Both: Access to both production LUNs and their snapshots.
+      .PARAMETER snapSchedule
+      Snapshot schedule assigned to the storage resource
+      .PARAMETER isSnapSchedulePaused
+      Indicates whether the assigned snapshot schedule is paused.
       .EXAMPLE
-      New-UnityVMwareLUN -Name 'DATASTORE01' -Pool 'pool_1' -Size 10737418240
+      New-UnityVMwareLUN -Name 'DATASTORE01' -Pool 'pool_1' -Size 10GB -host 'Host_12' -accessMask 'Production'
 
-      Create LUN named 'LUN01' on pool 'pool_1' and with a size of '10737418240' bytes
+      Create LUN named 'LUN01' on pool 'pool_1' and with a size of '10GB', grant production access to 'Host_12'
   #>
 
   [CmdletBinding()]
