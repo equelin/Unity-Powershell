@@ -2,9 +2,9 @@ Function Set-UnitySMTPServer {
 
   <#
       .SYNOPSIS
-      Modifies CIFS share.
+      Modifies SMTP Server.
       .DESCRIPTION
-      Modifies CIFS share.
+      Modifies SMTP Server.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -21,9 +21,9 @@ Function Set-UnitySMTPServer {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Set-UnitySMTPServer -ID 'SMBShare_1' -Description 'New description'
+      Set-UnitySMTPServer -ID 'ID01' -Description 'New description'
 
-      Modifies the CIFS share with id 'SMBShare_1'
+      Modifies the SMTP Server with id 'ID01'
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]

@@ -2,9 +2,9 @@ Function Remove-UnityPool {
 
   <#
       .SYNOPSIS
-      Delete a LUN.
+      Delete a pool.
       .DESCRIPTION
-      Delete a LUN.
+      Delete a pool.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -12,33 +12,38 @@ Function Remove-UnityPool {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specify an UnitySession Object.
-      .PARAMETER Name
-      Name of the pool or Pool Object.
+      .PARAMETER ID
+      ID of the pool or Pool Object.
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. 
       If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Remove-UnityPool -Name 'POOL01'
+      Remove-UnityPool -ID 'pool_12'
 
-      Delete the pool named 'POOL01'
+      Delete the pool with ID 'pool_12'
       .EXAMPLE
       Get-UnityPool -Name 'POOL01' | Remove-UnityPool
 
       Delete the pool named 'POOL01'. The pool's informations are provided by the Get-UnityPool through the pipeline.
   #>
 
-    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool Name or Pool Object')]
-    $Name
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool ID or Pool Object')]
+    $ID
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/pool/<id>'
+    $Type = 'Pool'
+    $TypeName = 'UnityPool'
   }
 
   Process {
@@ -49,42 +54,53 @@ Function Remove-UnityPool {
 
       If ($Sess.TestConnection()) {
 
-        Foreach ($n in $Name) {
+        Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityPool object
-          Switch ($n.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $Pool = get-UnityPool -Session $Sess -Name $n
-              $PoolID = $Pool.id
-              $PoolName = $Pool.Name
+              $Object = get-UnityPool -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
             }
-            "UnityPool" {
-              Write-Verbose "Input object type is $($n.GetType().Name)"
-              $PoolName = $n.Name
-              If ($Pool = Get-UnityPool -Session $Sess -Name $PoolName) {
-                        $PoolID = $n.id
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityPool -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
               }
             }
           }
 
-          If ($PoolID) {
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/pool/'+$PoolID
-            Write-Verbose "URI: $URI"
+          If ($ObjectID) {
+            
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
 
-            if ($pscmdlet.ShouldProcess($PoolName,"Delete pool")) {
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $($ObjectName)")) {
               #Sending the request
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
             }
 
             If ($request.StatusCode -eq '204') {
 
-              Write-Verbose "Pool with ID: $id has been deleted"
+              Write-Verbose "$Type with ID $i has been deleted"
 
             }
           } else {
-            Write-Information -MessageData "LUN $PoolName does not exist on the array $($sess.Name)"
+            Write-Verbose "$Type with ID $i does not exist on the array $($sess.Name)"
           }
         }
       } else {

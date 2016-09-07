@@ -29,7 +29,7 @@ Function Set-UnityUser {
     [Parameter(Mandatory = $false,HelpMessage = 'User role. It mights be administrator, storageadmin, vmadmin or operator')]
     [String]$Role,
     [Parameter(Mandatory = $false,HelpMessage = 'User Password')]
-    [String]$Password,
+    [String]$newPassword,
     [Parameter(Mandatory = $false,HelpMessage = 'User Password')]
     [String]$oldPassword
   )
@@ -80,7 +80,7 @@ Function Set-UnityUser {
             # oldPassword parameter
             If ($password -and $oldPassword) {
               $body["oldPassword"] = "$($oldPassword)"
-              $body["password"] = "$($password)"
+              $body["password"] = "$($newPassword)"
             }
 
             #Building the URI
@@ -91,6 +91,8 @@ Function Set-UnityUser {
             If ($pscmdlet.ShouldProcess($UserName,"Modify User")) {
               $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
             }
+
+            Write-Verbose "Request status code: $($request.StatusCode)"
 
             If ($request.StatusCode -eq '204') {
 

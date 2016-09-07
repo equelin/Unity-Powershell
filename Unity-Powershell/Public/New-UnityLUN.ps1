@@ -29,7 +29,7 @@ Function New-UnityLUN {
     [Parameter(Mandatory = $true,HelpMessage = 'LUN Size in Bytes')]
     [uint64]$Size,
     [Parameter(Mandatory = $false,HelpMessage = 'Is Thin enabled on LUN ? (Default is true)')]
-    [String]$isThinEnabled = $true,
+    [Bool]$isThinEnabled = $true,
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
     [String]$snapSchedule,
     [Parameter(Mandatory = $false,HelpMessage = 'Is assigned snapshot schedule is paused ? (Default is false)')]

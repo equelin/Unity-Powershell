@@ -74,6 +74,8 @@ Class UnitySystem {
   [string]$internalModel
   [string]$platform
   [string]$macAddress
+  [bool]$isEULAAccepted
+  [bool]$isUpgradeComplete
 }
 
 Class UnityUser {

@@ -17,8 +17,8 @@ Function Set-UnityPool {
       If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
-      .PARAMETER Name
-      Name of the pool or Pool Object.
+      .PARAMETER ID
+      ID of the pool or Pool Object.
       .PARAMETER NewName
       New name of the pool.
       .PARAMETER Description
@@ -59,15 +59,15 @@ Function Set-UnityPool {
       Add a raid group 'dg_8' to the pool named 'Pool01'
   #>
 
-    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High',DefaultParameterSetName="RaidGroup")]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High',DefaultParameterSetName="RaidGroup")]
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
     #UnityPool
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool Name or Pool Object')]
-    $Name,
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool ID or Pool Object')]
+    $ID,
     [Parameter(Mandatory = $false,HelpMessage = 'New Name of the Pool')]
     [String]$NewName,
     [Parameter(Mandatory = $false,HelpMessage = 'Pool Description')]
@@ -99,6 +99,11 @@ Function Set-UnityPool {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
+    # Variables
+    $URI = '/api/instances/pool/<id>/action/modify'
+    $Type = 'Pool'
+    $TypeName = 'UnityPool'
+    
     $tier = @{
       "Extreme_Performance" = "10"
       "Performance" = "20"
@@ -126,26 +131,34 @@ Function Set-UnityPool {
 
       If ($Sess.TestConnection()) {
 
-        Foreach ($n in $Name) {
+        Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityPool object
-          Switch ($n.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $Pool = get-UnityPool -Session $Sess -Name $n
-              $PoolID = $Pool.id
-              $PoolName = $Pool.Name
+              $Object = get-UnityPool -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
             }
-            "UnityPool" {
-              Write-Verbose "Input object type is $($n.GetType().Name)"
-              $PoolName = $n.Name
-              If ($Pool = Get-UnityPool -Session $Sess -Name $PoolName) {
-                        $PoolID = $n.id
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityPool -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
               }
             }
           }
 
-          If ($PoolID) {
+          If ($ObjectID) {
 
             # Creation of the body hash
             $body = @{}
@@ -239,24 +252,29 @@ Function Set-UnityPool {
                   $body["isFASTVpScheduleEnabled"] = $isFASTVpScheduleEnabled
             }
 
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/pool/'+$PoolID+'/action/modify'
-            Write-Verbose "URI: $URI"
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
 
             #Sending the request
-            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify Pool $($PoolName)")) {
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $($ObjectName)")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
             }
 
             If ($request.StatusCode -eq '204') {
 
-              Write-Verbose "Pool with ID: $PoolID has been modified"
+              Write-Verbose "$Type with ID: $ObjectID has been modified"
 
-              Get-UnityPool -Session $Sess -id $PoolID
+              Get-UnityPool -Session $Sess -id $ObjectID
 
             }
           } else {
-            Write-Verbose "Pool $PoolName does not exist on the array $($sess.Name)"
+            Write-Verbose "$Type with ID $i does not exist on the array $($sess.Name)"
           }
         }
       } else {

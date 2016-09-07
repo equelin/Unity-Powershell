@@ -48,7 +48,7 @@ Function New-UnityPool {
       Create pool named 'POOL01' with with 15 disks from diskgroup ID 'dg_11'.RAID protection is a 'RAID5' with a stripe width of 5 (4+1). Apply to physical deployment only.
   #>
 
-  [CmdletBinding(DefaultParameterSetName="RaidGroup")]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High',DefaultParameterSetName="RaidGroup")]
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
@@ -59,9 +59,9 @@ Function New-UnityPool {
     [String[]]$Name,
     [Parameter(Mandatory = $false,HelpMessage = 'Pool Description')]
     [String]$Description,
-    [Parameter(Mandatory = $false,ParameterSetName="VirtualDisk",HelpMessage = 'Parameters to add virtual disks to the pool')]
+    [Parameter(Mandatory = $true,ParameterSetName="VirtualDisk",HelpMessage = 'Parameters to add virtual disks to the pool')]
     [array]$virtualDisk,
-    [Parameter(Mandatory = $false,ParameterSetName="RaidGroup",HelpMessage = 'Parameters to add RAID groups to the pool')]
+    [Parameter(Mandatory = $true,ParameterSetName="RaidGroup",HelpMessage = 'Parameters to add RAID groups to the pool')]
     [array]$raidGroup,
     [Parameter(Mandatory = $false,HelpMessage = 'Threshold at which the system will generate alerts about the free space in the pool')]
     [Int]$alertThreshold,
@@ -86,8 +86,9 @@ Function New-UnityPool {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    #Initialazing arrays
-    $ResultCollection = @()
+    ## Variables
+    $URI = '/api/types/pool/instances'
+    $Type = 'Pool'
 
     $tier = @{
       "Extreme_Performance" = "10"
@@ -205,14 +206,19 @@ Function New-UnityPool {
               $body["isFASTVpScheduleEnabled"] = $isFASTVpScheduleEnabled
         }
 
+        $Json = $body | ConvertTo-Json -Depth 10
+        Write-Verbose $Json 
+
         If ($Sess.TestConnection()) {
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/types/pool/instances'
-          Write-Verbose "URI: $URI"
+          ##Building the URL
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
           #Sending the request
-          $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type $n")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+          }
 
           Write-Verbose "Request status code: $($request.StatusCode)"
 
@@ -221,7 +227,7 @@ Function New-UnityPool {
             #Formating the result. Converting it from JSON to a Powershell object
             $results = ($request.content | ConvertFrom-Json).content
 
-            Write-Verbose "LUN created with the ID: $($results.id) "
+            Write-Verbose "$Type created with the ID: $($results.id) "
 
             #Executing Get-UnityUser with the ID of the new user
             Get-UnityPool -Session $Sess -ID $results.id
