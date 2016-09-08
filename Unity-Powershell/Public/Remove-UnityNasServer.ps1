@@ -18,35 +18,41 @@ Function Remove-UnityNASServer {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specifies an UnitySession Object.
-      .PARAMETER Name
-      Specifies the NAS server name or Object.
+      .PARAMETER ID
+      Specifies the NAS server ID or Object.
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Remove-UnityNasServer -Name 'NAS01'
+      Remove-UnityNasServer -ID 'nas_6'
 
-      Delete the Nas Server named 'NAS01'
+      Delete the Nas Server with ID 'nas_6'
       .EXAMPLE
       Get-UnityNasServer -Name 'NAS01' | Remove-UnityNasServer
 
       Delete the Nas Server named 'NAS01'. The NAS server's informations are provided by the Get-UnityNasServer through the pipeline.
   #>
 
-    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     
     #NasServer
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Nas server Name or Object')]
-    $Name
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Nas server ID or Object')]
+    $ID
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/nasServer/<id>'
+    $Type = 'NAS Server'
+    $TypeName = 'UnityNasServer'
+    $StatusCode = 204
   }
 
   Process {
@@ -57,49 +63,56 @@ Function Remove-UnityNASServer {
 
       If ($Sess.TestConnection()) {
 
-        Foreach ($n in $Name) {
+        Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityPool object
-          Switch ($n.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $NasServer = Get-UnityNasServer -Session $Sess -Name $n
-              $NasServerID = $NasServer.id
-              $NasServerName = $NasServer.Name
-            }
-            "UnityNasServer" {
-              Write-Verbose "Input object type is $($n.GetType().Name)"
-              $NasServerName = $n.Name
-              If ($NasServer = Get-UnityNasServer -Session $Sess -Name $NasServerName) {
-                        $NasServerID = $n.id
+              $Object = get-UnityNASServer -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
               }
             }
-          }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityNASServer -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
+            }
+          } # End Switch
 
-          If ($NasServerID) {
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/nasServer/'+$NasServerID
-            Write-Verbose "URI: $URI"
+          If ($ObjectID) {
+            
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
 
-            if ($pscmdlet.ShouldProcess($NasServerName,"Delete NAS Server")) {
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
               #Sending the request
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
             }
 
-            If ($request.StatusCode -eq '204') {
+            If ($request.StatusCode -eq $StatusCode) {
 
-              Write-Verbose "Pool with ID: $id has been deleted"
+              Write-Verbose "$Type with ID $ObjectID has been deleted"
 
-            }
+            } # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Information -MessageData "LUN $NasServerName does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

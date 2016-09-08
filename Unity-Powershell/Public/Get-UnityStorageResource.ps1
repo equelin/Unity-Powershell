@@ -99,19 +99,17 @@ Function Get-UnitystorageResource {
             Foreach ($Result in $ResultCollection) {
 
               # Instantiate object
-              $Object = [UnitystorageResource]$Result
+              $Object = New-Object -TypeName $TypeName -Property $Result
 
               # Convert to MB
               #$Object.ConvertToMB()
-              
+
               # Output results
               $Object
-            }
-          }
-        }
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-}
+            } # End Foreach ($Result in $ResultCollection)
+          } # End If ($ResultsFiltered) 
+        } # End If ($Results)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

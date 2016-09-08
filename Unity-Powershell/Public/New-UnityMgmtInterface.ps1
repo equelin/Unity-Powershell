@@ -47,14 +47,18 @@ Function New-UnityMgmtInterface {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    #Initialazing arrays
-    $ResultCollection = @()
+    ## Variables
+    $URI = '/api/types/mgmtInterface/instances?timeout=0' #run async
+    $Type = 'Management Interface'
+    $StatusCode = 202
   }
 
   Process {
     Foreach ($sess in $session) {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+
+      #### REQUEST BODY 
 
       #Creation of the body hash
       $body = @{}
@@ -71,28 +75,32 @@ Function New-UnityMgmtInterface {
         $body["v6PrefixLength"] = "$($v6PrefixLength)"
       }
 
-      If ($Sess.TestConnection()) {
+      ####### END BODY - Do not edit beyond this line
 
-        #Building the URI
-        $URI = 'https://'+$sess.Server+'/api/types/mgmtInterface/instances?timeout=0' #run async
-        Write-Verbose "URI: $URI"
+      #Show $body in verbose message
+      $Json = $body | ConvertTo-Json -Depth 10
+      Write-Verbose $Json  
 
-        #Sending the request
-        If ($pscmdlet.ShouldProcess($($Sess.Server),"Create a new management interface. WARNING: You might be disconnected from the old interface.")) {
+        If ($Sess.TestConnection()) {
+
+          ##Building the URL
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
+
+          #Sending the request
+
+          Write-Warning -Message 'You might be disconnected from the old interface'
+
+        If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type $ipAddress")) {
           $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
         }
 
         Write-Verbose "Request status code: $($request.StatusCode)"
 
-        If ($request.StatusCode -eq '202') {
+        If ($request.StatusCode -eq $StatusCode) {
           Write-Host "Management interface is creating asynchronously."
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-
-    }
-  }
-
-  End {}
-}
+        } # End If ($request.StatusCode -eq $StatusCode)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

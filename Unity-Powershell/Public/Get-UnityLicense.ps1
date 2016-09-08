@@ -80,14 +80,15 @@ Function Get-UnityLicense {
 
             Foreach ($Result in $ResultCollection) {
 
+              # Instantiate object
+              $Object = New-Object -TypeName $TypeName -Property $Result
+
               # Output results
-              [UnityLicense]$Result
-            }
-          }
-        }
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-}
+              $Object
+            } # End Foreach ($Result in $ResultCollection)
+          } # End If ($ResultsFiltered) 
+        } # End If ($Results)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

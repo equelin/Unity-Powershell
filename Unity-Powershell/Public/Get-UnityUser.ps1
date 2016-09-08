@@ -85,16 +85,14 @@ Function Get-UnityUser {
             Foreach ($Result in $ResultCollection) {
 
               # Instantiate object
-              $Object = [UnityUser]$Result
+              $Object = New-Object -TypeName $TypeName -Property $Result
 
               # Output results
               $Object
-            }
-          }
-        }
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-}
+            } # End Foreach ($Result in $ResultCollection)
+          } # End If ($ResultsFiltered) 
+        } # End If ($Results)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

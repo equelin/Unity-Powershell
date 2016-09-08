@@ -2,7 +2,7 @@ Function New-UnityvCenter {
 
   <#
       .SYNOPSIS
-      Adds the vCenter credentials and optionally discovers any ESXi host managed by that vCenter.
+      Add the vCenter credentials and optionally discovers any ESXi host managed by that vCenter.
       .DESCRIPTION
       Discover vCenter servers on the network and optionnaly create a host configuration for multiple ESXi hosts managed by a single vCenter server. For any discovered vCenters, you can enable or disable access for any ESXi host managed by the vCenter. After you associate a vCenter server configuration with a VMware datastore, the datastore is available to any ESXi hosts associated with the vCenter host configuration.
       The vCenter credentials are stored in the storage system.
@@ -26,7 +26,7 @@ Function New-UnityvCenter {
       .EXAMPLE
       New-UnityvCenter -Address 'vcenter.example.com' -Username 'admin' -Password 'Password123#' -ImportHosts
 
-      Import a vCenter and all the associated hosts.
+      Import a vCenter and all the associated ESXi hosts.
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
@@ -50,12 +50,19 @@ Function New-UnityvCenter {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/types/hostContainer/instances'
+    $Type = 'vCenter'
+    $StatusCode = 201
   }
 
   Process {
     Foreach ($sess in $session) {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+
+      #### REQUEST BODY 
 
       Foreach ($a in $Address) {
 
@@ -87,40 +94,36 @@ Function New-UnityvCenter {
           $body["potentialHosts"] = $recommendation.potentialHosts | Where-Object {$_.importOption -ne 2}
         }
 
-        #Displaying request's body 
+        ####### END BODY - Do not edit beyond this line
+
+        #Show $body in verbose message
         $Json = $body | ConvertTo-Json -Depth 10
-        Write-Verbose $Json
+        Write-Verbose $Json  
 
         If ($Sess.TestConnection()) {
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/types/hostContainer/instances'
-          Write-Verbose "URI: $URI"
+          ##Building the URL
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
-          if ($pscmdlet.ShouldProcess($a,"Add vCenter Server")) {
-            #Sending the request
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          #Sending the request
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type $a")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
           }
 
           Write-Verbose "Request status code: $($request.StatusCode)"
 
-          If ($request.StatusCode -eq '201') {
+          If ($request.StatusCode -eq $StatusCode) {
 
             #Formating the result. Converting it from JSON to a Powershell object
             $results = ($request.content | ConvertFrom-Json).content
 
-            Write-Verbose "vCenter created with the ID: $($results.id) "
+            Write-Verbose "$Type with the ID $($results.id) has been created"
 
-            #Executing Get-UnityUser with the ID of the new user
             Get-UnityvCenter -Session $Sess -ID $results.id  
-            
-          }
-        } else {
-          Write-Warning "You are no longer connected to EMC Unity array: $($Sess.Server)"
-        }
-      }
-    }
-  }
-
-  End {}
-}
+          } # End If ($request.StatusCode -eq $StatusCode)
+        } # End If ($Sess.TestConnection()) 
+      } # End Foreach
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

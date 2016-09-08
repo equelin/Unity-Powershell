@@ -12,8 +12,8 @@ Function Remove-UnityLUN {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specify an UnitySession Object.
-      .PARAMETER Name
-      LUN Name or Object.
+      .PARAMETER ID
+      LUN ID or Object.
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
@@ -32,12 +32,18 @@ Function Remove-UnityLUN {
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name or LUN Object')]
-    $Name
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID or LUN Object')]
+    $ID
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/storageResource/<id>'
+    $Type = 'LUN Resource'
+    $TypeName = 'UnityLUN'
+    $StatusCode = 204
   }
 
   Process {
@@ -48,38 +54,58 @@ Function Remove-UnityLUN {
 
       If ($Sess.TestConnection()) {
 
-        Foreach ($n in $Name) {
+        Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityLUN object
-          Switch ($n.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $LUN = get-UnityLUN -Session $Sess -Name $n
-              $LUNID = $LUN.id
-              $LUNName = $LUN.Name
-            }
-            "UnityLUN" {
-              Write-Verbose "Input object type is $($n.GetType().Name)"
-              $LUNName = $n.Name
-              If ($LUN = Get-UnityLUN -Session $Sess -Name $LUNName) {
-                        $LUNID = $n.id
+              $Object = get-UnityLUN -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
               }
             }
-          }
-
-          If ($LUNID) {
-            if ($pscmdlet.ShouldProcess($LUNName,"Delete LUN")) {
-              $LUN | Remove-UnityLUNResource -Session $Sess -Confirm:$false
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityLUN -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
             }
-          } else {
-            Write-Verbose "LUN $LUNName does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
+          } # End Switch
 
-  End {}
-}
+          If ($ObjectID) {
+
+            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$UnityStorageRessource.id
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
+              #Sending the request
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
+            }
+
+            If ($request.StatusCode -eq $StatusCode) {
+
+              Write-Verbose "$Type with ID $ObjectID has been deleted"
+
+            } # End If ($request.StatusCode -eq $StatusCode)
+          } else {
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

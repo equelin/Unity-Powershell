@@ -46,17 +46,17 @@ Function Set-UnityPool {
       .PARAMETER snapSpaceHarvestLowThreshold
       Specify the snapshot space used low watermark to trigger auto-delete on the storage pool.
       .EXAMPLE
-      Set-UnityPool -Name 'Pool01' -Description 'Modified description'
+      Set-UnityPool -ID 'pool_10' -Description 'Modified description'
 
-      Change the description of the Pool named Pool01
+      Change the description of the pool with ID 'pool_10'
       .EXAMPLE
-      Set-UnityPool -Name 'Pool01' -AddVirtualDisk @{'id'='vdisk_1';'tier'='Performance'}
+      Set-UnityPool -ID 'pool_10' -AddVirtualDisk @{'id'='vdisk_1';'tier'='Performance'}
 
-      Add a virtual disk 'vdisk_1' to the pool named 'Pool01'
+      Add a virtual disk 'vdisk_1' to the pool with ID 'pool_10'
       .EXAMPLE
-      Set-UnityPool -Name 'Pool01' -AddraidGroup @{"id"='dg_8';"numDisks"= 8; 'raidType'='RAID6'; 'stripeWidth'='8'}
+      Set-UnityPool -ID 'pool_10' -AddraidGroup @{"id"='dg_8';"numDisks"= 8; 'raidType'='RAID6'; 'stripeWidth'='8'}
 
-      Add a raid group 'dg_8' to the pool named 'Pool01'
+      Add a raid group 'dg_8' to the pool with ID 'pool_10'
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High',DefaultParameterSetName="RaidGroup")]
@@ -103,6 +103,7 @@ Function Set-UnityPool {
     $URI = '/api/instances/pool/<id>/action/modify'
     $Type = 'Pool'
     $TypeName = 'UnityPool'
+    $StatusCode = 204
     
     $tier = @{
       "Extreme_Performance" = "10"
@@ -159,6 +160,8 @@ Function Set-UnityPool {
           }
 
           If ($ObjectID) {
+
+            #### REQUEST BODY 
 
             # Creation of the body hash
             $body = @{}
@@ -252,6 +255,9 @@ Function Set-UnityPool {
                   $body["isFASTVpScheduleEnabled"] = $isFASTVpScheduleEnabled
             }
 
+            ####### END BODY - Do not edit beyond this line
+
+            #Show $body in verbose message
             $Json = $body | ConvertTo-Json -Depth 10
             Write-Verbose $Json 
 
@@ -266,22 +272,18 @@ Function Set-UnityPool {
               $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
             }
 
-            If ($request.StatusCode -eq '204') {
+            If ($request.StatusCode -eq $StatusCode) {
 
-              Write-Verbose "$Type with ID: $ObjectID has been modified"
+              Write-Verbose "$Type with ID $ObjectID has been modified"
 
               Get-UnityPool -Session $Sess -id $ObjectID
 
-            }
+            }  # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Verbose "$Type with ID $i does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

@@ -10,13 +10,20 @@ Function New-UnityFilesystem {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
-      .EXAMPLE
-      New-UnityFilesystem -Name 'FS01' -Pool 'pool_1' -Size 3298534883328 -nasServer 'nas_1' -supportedProtocols 'CIFS'
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
 
-      Create CIFS filesystem named 'FS01' on pool 'pool_1' and with a size of '3298534883328' bytes
+      .EXAMPLE
+      New-UnityFilesystem -Name 'FS01' -Pool 'pool_1' -Size 10GB -nasServer 'nas_1' -supportedProtocols 'CIFS'
+
+      Create CIFS filesystem named 'FS01' on pool 'pool_1' and with a size of '10GB' bytes
   #>
 
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     
     #Default Parameters
@@ -74,6 +81,11 @@ Function New-UnityFilesystem {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    ## Variables
+    $URI = '/api/types/storageResource/action/createFilesystem'
+    $Type = 'Filesystem'
+    $StatusCode = 200
   }
 
   Process {
@@ -82,6 +94,8 @@ Function New-UnityFilesystem {
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       Foreach ($n in $Name) {
+
+        #### REQUEST BODY 
 
         # Creation of the body hash
         $body = @{}
@@ -188,34 +202,38 @@ Function New-UnityFilesystem {
           $body["snapScheduleParameters"] = $snapScheduleParameters
         }
 
+        ####### END BODY - Do not edit beyond this line
+
+        #Show $body in verbose message
+        $Json = $body | ConvertTo-Json -Depth 10
+        Write-Verbose $Json  
+
         If ($Sess.TestConnection()) {
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/types/storageResource/action/createFilesystem'
-          Write-Verbose "URI: $URI"
+          ##Building the URL
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
           #Sending the request
-          $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type $n")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+          }
 
           Write-Verbose "Request status code: $($request.StatusCode)"
 
-          If ($request.StatusCode -eq '200') {
+          If ($request.StatusCode -eq $StatusCode) {
 
             #Formating the result. Converting it from JSON to a Powershell object
-            $results = ($request.content | ConvertFrom-Json).content.storageResource
+            $results = ($request.content | ConvertFrom-Json).content
 
-            Write-Verbose "Filesystem created with the storage resource ID: $($results.id) "
+            $Storageresource = Get-UnitystorageResource -session $Sess -ID $results.storageResource.id
 
-            #Executing Get-UnityFilesystem with the ID of the new user
-            Get-UnityFilesystem -Session $Sess -Name $n
-          }
-        } else {
-          Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-        }
-      }
-    }
-  }
+            Write-Verbose "$Type with the ID $($Storageresource.Filesystem.id) has been created"
 
-  End {
-  }
-}
+            Get-UnityFilesystem -Session $Sess -ID $Storageresource.Filesystem.id
+          } # End If ($request.StatusCode -eq $StatusCode)
+        } # End If ($Sess.TestConnection()) 
+      } # End Foreach
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

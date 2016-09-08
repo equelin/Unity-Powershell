@@ -76,9 +76,7 @@ Function Get-UnityVMwareLUN {
             Write-Output $ResultCollection | Where-Object {$_.Id -like $I}
           }
         }
-      }
-    }
-  }
-
-  End {}
-}
+      } #End Switch
+    } # End If ($ResultCollection)
+  } # End Process
+} # End Function

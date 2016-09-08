@@ -41,14 +41,18 @@ Function New-UnitySMTPServer {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    #Initialazing arrays
-    $ResultCollection = @()
+    ## Variables
+    $URI = '/api/types/smtpServer/instances'
+    $Item = 'SMTP Server'
+    $StatusCode = 201
   }
 
   Process {
     Foreach ($sess in $session) {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+
+      #### REQUEST BODY 
 
       #Creation of the body hash
       $body = @{}
@@ -57,35 +61,36 @@ Function New-UnitySMTPServer {
       $body["address"] = $address
       $body["type"] = $type
 
-      If ($Sess.TestConnection()) {
+      ####### END BODY - Do not edit beyond this line
 
-        #Building the URI
-        $URI = 'https://'+$sess.Server+'/api/types/smtpServer/instances'
-        Write-Verbose "URI: $URI"
+      #Show $body in verbose message
+      $Json = $body | ConvertTo-Json -Depth 10
+      Write-Verbose $Json  
 
-        #Sending the request
-        If ($pscmdlet.ShouldProcess($($Sess.Server),"Create a new SMTP Server.")) {
-          $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
-        }
+        If ($Sess.TestConnection()) {
 
-        Write-Verbose "Request status code: $($request.StatusCode)"
+          ##Building the URL
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
-        If ($request.StatusCode -eq '201') {
+          #Sending the request
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Item $address")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+          }
 
-          #Formating the result. Converting it from JSON to a Powershell object
-          $results = ($request.content | ConvertFrom-Json).content
+          Write-Verbose "Request status code: $($request.StatusCode)"
 
-          Write-Verbose "SMTP Server created with the ID: $($results.id) "
+          If ($request.StatusCode -eq $StatusCode) {
+
+            #Formating the result. Converting it from JSON to a Powershell object
+            $results = ($request.content | ConvertFrom-Json).content
+
+            Write-Verbose "$Item with the ID $($results.id) has been created"
 
           #Executing Get-UnityUser with the ID of the new user
           Get-UnitySMTPServer -Session $Sess -ID $results.id
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-
-    }
-  }
-
-  End {}
-}
+        } # End If ($request.StatusCode -eq $StatusCode)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

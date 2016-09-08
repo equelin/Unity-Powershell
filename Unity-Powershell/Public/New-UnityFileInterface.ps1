@@ -4,19 +4,27 @@ Function New-UnityFileInterface {
       .SYNOPSIS
       Creates a File Interface.
       .DESCRIPTION
-      Creates a NAS Server.
+      Creates a File Interface.
+      These interfaces control access to Windows (CIFS) and UNIX/Linux (NFS) file storage.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. 
+      If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      New-UnityFileInterface -Name 'POOL01' -virtualDisk -virtualDisk @{"id"='vdisk_1';"tier"='Performance'},@{"id"='vdisk_2';"tier"='Performance'}
-
-      Create pool named 'POOL01' with virtual disks 'vdisk_1' and'vdisk_2'. Virtual disks are assigned to the performance tier. Apply to Unity VSA only.
+      New-UnityFileInterface -ipPort spa_eth0 -nasServer nas_6 -ipAddress 192.168.0.1 -netmask 255.255.255.0 -gateway 192.168.0.254
+      
+      Create interface on the ethernet port 'spa_eth0' associated to the NAS server 'nas_6' 
   #>
 
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
@@ -43,8 +51,10 @@ Function New-UnityFileInterface {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    #Initialazing arrays
-    $ResultCollection = @()
+    # Variables
+    $URI = '/api/types/fileInterface/instances'
+    $Type = 'File Interface'
+    $StatusCode = 201
 
     $FileInterfaceRoleEnum = @{
       "Production" = "0"
@@ -100,33 +110,36 @@ Function New-UnityFileInterface {
             $body["role"] = "$($FileInterfaceRoleEnum["$($role)"])"
       }
 
-      If ($Sess.TestConnection()) {
+      ####### END BODY - Do not edit beyond this line
 
-        #Building the URI
-        $URI = 'https://'+$sess.Server+'/api/types/fileInterface/instances'
-        Write-Verbose "URI: $URI"
+      #Show $body in verbose message
+      $Json = $body | ConvertTo-Json -Depth 10
+      Write-Verbose $Json  
 
-        #Sending the request
-        $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+        If ($Sess.TestConnection()) {
 
-        Write-Verbose "Request status code: $($request.StatusCode)"
+          ##Building the URL
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
-        If ($request.StatusCode -eq '201') {
+          #Sending the request
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type on $ipPort")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+          }
 
-          #Formating the result. Converting it from JSON to a Powershell object
-          $results = ($request.content | ConvertFrom-Json).content
+          Write-Verbose "Request status code: $($request.StatusCode)"
 
-          Write-Verbose "File interface created with the ID: $($results.id) "
+          If ($request.StatusCode -eq $StatusCode) {
 
-          #Executing Get-UnityUser with the ID of the new user
-          Get-UnityFileInterface -Session $Sess -ID $results.id
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
+            #Formating the result. Converting it from JSON to a Powershell object
+            $results = ($request.content | ConvertFrom-Json).content
 
-    }
-  }
+            Write-Verbose "$Type with the ID $($results.id) has been created"
 
-  End {}
-}
+            #Executing Get-UnityUser with the ID of the new user
+            Get-UnityFileInterface -Session $Sess -ID $results.id
+         } # End If ($request.StatusCode -eq $StatusCode)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

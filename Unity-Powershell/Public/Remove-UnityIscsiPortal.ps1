@@ -1,4 +1,4 @@
-Function Remove-UnityIscsiPortal {
+Function Remove-UnityiSCSIPortal {
 
   <#
       .SYNOPSIS
@@ -39,6 +39,12 @@ Function Remove-UnityIscsiPortal {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/iscsiPortal/<id>'
+    $Type = 'iSCSI Portal'
+    $TypeName = 'UnityIscsiPortal'
+    $StatusCode = 204
   }
 
   Process {
@@ -51,43 +57,54 @@ Function Remove-UnityIscsiPortal {
 
         Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityIscsiPortal object
-          Write-Verbose "Input object type is $($ID.GetType().Name)"
-          Switch ($ID.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $IscsiPortal = get-UnityIscsiPortal -Session $Sess -ID $ID
-              $IscsiPortalID = $IscsiPortal.id
+              $Object = get-UnityiSCSIPortal -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
             }
-            "UnityIscsiPortal" {
-              $IscsiPortalID = $ID.id
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityiSCSIPortal -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
             }
-          }
+          } # End Switch
 
-          If ($IscsiPortalID) {
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/iscsiPortal/'+$IscsiPortalID
-            Write-Verbose "URI: $URI"
+          If ($ObjectID) {
+            
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
 
-            if ($pscmdlet.ShouldProcess($IscsiPortalID,"Delete iSCSI network portal")) {
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
               #Sending the request
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
             }
 
-            If ($request.StatusCode -eq '204') {
+            If ($request.StatusCode -eq $StatusCode) {
 
-              Write-Verbose "iSCSI network portal with ID: $id has been deleted"
+              Write-Verbose "$Type with ID $ObjectID has been deleted"
 
-            }
+            } # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Information -MessageData "iSCSI network portal $IscsiPortalID does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

@@ -27,6 +27,7 @@ Function Set-UnityUser {
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'User Name or User Object')]
     $Name,
     [Parameter(Mandatory = $false,HelpMessage = 'User role. It mights be administrator, storageadmin, vmadmin or operator')]
+    [ValidateSet('administrator', 'storageadmin', 'vmadmin', 'operator')]
     [String]$Role,
     [Parameter(Mandatory = $false,HelpMessage = 'User Password')]
     [String]$newPassword,

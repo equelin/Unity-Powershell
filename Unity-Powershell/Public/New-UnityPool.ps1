@@ -38,6 +38,10 @@ Function New-UnityPool {
       Specify the snapshot space used high watermark to trigger auto-delete on the storage pool.
       .PARAMETER snapSpaceHarvestLowThreshold
       Specify the snapshot space used low watermark to trigger auto-delete on the storage pool.
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
       New-UnityPool -Name 'POOL01' -virtualDisk @{"id"='vdisk_1';"tier"='Performance'},@{"id"='vdisk_2';"tier"='Performance'}
 
@@ -89,6 +93,7 @@ Function New-UnityPool {
     ## Variables
     $URI = '/api/types/pool/instances'
     $Type = 'Pool'
+    $StatusCode = 201
 
     $tier = @{
       "Extreme_Performance" = "10"
@@ -115,6 +120,8 @@ Function New-UnityPool {
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       Foreach ($n in $Name) {
+
+        #### REQUEST BODY 
 
         # Creation of the body hash
         $body = @{}
@@ -206,8 +213,11 @@ Function New-UnityPool {
               $body["isFASTVpScheduleEnabled"] = $isFASTVpScheduleEnabled
         }
 
+        ####### END BODY - Do not edit beyond this line
+
+        #Show $body in verbose message
         $Json = $body | ConvertTo-Json -Depth 10
-        Write-Verbose $Json 
+        Write-Verbose $Json  
 
         If ($Sess.TestConnection()) {
 
@@ -222,22 +232,17 @@ Function New-UnityPool {
 
           Write-Verbose "Request status code: $($request.StatusCode)"
 
-          If ($request.StatusCode -eq '201') {
+          If ($request.StatusCode -eq $StatusCode) {
 
             #Formating the result. Converting it from JSON to a Powershell object
             $results = ($request.content | ConvertFrom-Json).content
 
-            Write-Verbose "$Type created with the ID: $($results.id) "
+            Write-Verbose "$Type with the ID $($results.id) has been created"
 
-            #Executing Get-UnityUser with the ID of the new user
             Get-UnityPool -Session $Sess -ID $results.id
-          }
-        } else {
-          Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-        }
-      }
-    }
-  }
-
-  End {}
-}
+          } # End If ($request.StatusCode -eq $StatusCode)
+        } # End If ($Sess.TestConnection()) 
+      } # End Foreach
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

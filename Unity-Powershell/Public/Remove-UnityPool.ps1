@@ -24,9 +24,9 @@ Function Remove-UnityPool {
 
       Delete the pool with ID 'pool_12'
       .EXAMPLE
-      Get-UnityPool -Name 'POOL01' | Remove-UnityPool
+      Get-UnityPool -ID 'pool_10' | Remove-UnityPool
 
-      Delete the pool named 'POOL01'. The pool's informations are provided by the Get-UnityPool through the pipeline.
+      Delete the pool with ID 'pool_10'. The pool's informations are provided by the Get-UnityPool through the pipeline.
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
@@ -44,6 +44,7 @@ Function Remove-UnityPool {
     $URI = '/api/instances/pool/<id>'
     $Type = 'Pool'
     $TypeName = 'UnityPool'
+    $StatusCode = 204
   }
 
   Process {
@@ -79,7 +80,7 @@ Function Remove-UnityPool {
                 }          
               }
             }
-          }
+          } # End Switch
 
           If ($ObjectID) {
             
@@ -89,25 +90,21 @@ Function Remove-UnityPool {
             $URL = 'https://'+$sess.Server+$URI
             Write-Verbose "URL: $URL"
 
-            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $($ObjectName)")) {
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
               #Sending the request
               $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
             }
 
-            If ($request.StatusCode -eq '204') {
+            If ($request.StatusCode -eq $StatusCode) {
 
-              Write-Verbose "$Type with ID $i has been deleted"
+              Write-Verbose "$Type with ID $ObjectID has been deleted"
 
-            }
+            } # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Verbose "$Type with ID $i does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

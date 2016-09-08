@@ -49,6 +49,7 @@ Class UnitySession {
     }
     Catch {
         $this.IsConnected = $false
+        Write-Warning -Message "You are no longer connected to EMC Unity array: $($this.Server)"
         return $false
     }
 

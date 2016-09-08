@@ -79,12 +79,10 @@ Function Get-UnityIpInterface {
 
               # Output results
               $Object
-            }
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-}
+            } # End Foreach ($Result in $ResultCollection)
+          } # End If ($ResultsFiltered) 
+        } # End If ($Results)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

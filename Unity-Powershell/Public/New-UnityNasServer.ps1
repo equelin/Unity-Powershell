@@ -42,13 +42,18 @@ Function New-UnityNASServer {
       .PARAMETER defaultWindowsUser
       Default Windows user name that grants file access in the multiprotocol sharing mode. 
       This user name is used when the corresponding Windows user name is not found by the mapping mechanism.
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
+
       .EXAMPLE
       New-UnityNasServer -Name 'NAS01' -Pool 'pool_1' -homeSP 'spa'
 
       Create NAS server named 'NAS01' on the pool ID 'pool_1' and attached to the sp 'spa'
   #>
 
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
@@ -79,8 +84,10 @@ Function New-UnityNASServer {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    #Initialazing arrays
-    $ResultCollection = @()
+    ## Variables
+    $URI = '/api/types/nasServer/instances'
+    $Type = 'NAS Server'
+    $StatusCode = 201
   }
 
   Process {
@@ -89,6 +96,8 @@ Function New-UnityNASServer {
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       Foreach ($n in $Name) {
+
+        #### REQUEST BODY 
 
         # Creation of the body hash
         $body = @{}
@@ -132,33 +141,36 @@ Function New-UnityNASServer {
               $body["defaultWindowsUser"] = $defaultWindowsUser
         }
 
+        ####### END BODY - Do not edit beyond this line
+
+        #Show $body in verbose message
+        $Json = $body | ConvertTo-Json -Depth 10
+        Write-Verbose $Json  
+
         If ($Sess.TestConnection()) {
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/types/nasServer/instances'
-          Write-Verbose "URI: $URI"
+          ##Building the URL
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
           #Sending the request
-          $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type $n")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+          }
 
           Write-Verbose "Request status code: $($request.StatusCode)"
 
-          If ($request.StatusCode -eq '201') {
+          If ($request.StatusCode -eq $StatusCode) {
 
             #Formating the result. Converting it from JSON to a Powershell object
             $results = ($request.content | ConvertFrom-Json).content
 
-            Write-Verbose "NAS Server created with the ID: $($results.id) "
+            Write-Verbose "$Type with the ID $($results.id) has been created"
 
-            #Executing Get-UnityUser with the ID of the new user
-            Get-UnityNasServer -Session $Sess -ID $results.id
-          }
-        } else {
-          Write-Warning "You are no longer connected to EMC Unity array: $($Sess.Server)"
-        }
-      }
-    }
-  }
-
-  End {}
-}
+            Get-UnityNASServer -Session $Sess -ID $results.id
+          } # End If ($request.StatusCode -eq $StatusCode)
+        } # End If ($Sess.TestConnection()) 
+      } # End Foreach
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

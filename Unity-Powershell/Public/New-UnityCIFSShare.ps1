@@ -16,7 +16,7 @@ Function New-UnityCIFSShare {
       Change the description of the filesystem named FS01
   #>
 
-    [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
@@ -27,7 +27,7 @@ Function New-UnityCIFSShare {
     [String[]]$Filesystem,
 
     #cifsShareCreate
-    [Parameter(Mandatory = $false,HelpMessage = 'Local path to a location within a file system')]
+    [Parameter(Mandatory = $true,HelpMessage = 'Local path to a location within a file system')]
     [String]$path,
     [Parameter(Mandatory = $true,HelpMessage = 'Name of the CIFS share unique to NAS server')]
     [String]$Name,
@@ -55,6 +55,12 @@ Function New-UnityCIFSShare {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    ## Variables
+    $URI = '/api/instances/storageResource/<id>/action/modifyFilesystem'
+    $Type = 'Share CIFS'
+    $TypeName = 'UnityFilesystem'
+    $StatusCode = 204
   }
 
   Process {
@@ -71,22 +77,32 @@ Function New-UnityCIFSShare {
           Switch ($fs.GetType().Name)
           {
             "String" {
-              $fs = get-UnityFilesystem -Session $Sess -Name $fs
-              $filesystemID = $fs.id
-              $filesystemName = $fs.Name
+              $Object = get-UnityFilesystem -Session $Sess -ID $fs
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
             }
-            "UnityFilesystem" {
-              Write-Verbose "Input object type is $($n.GetType().Name)"
-              $filesystemName = $fs.Name
-              If ($filesystem = Get-UnityFilesystem -Session $Sess -Name $fs) {
-                        $filesystemID = $fs.id
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $fs.id
+              If ($Object = Get-UnityFilesystem -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
               }
             }
           }
 
-          If ($filesystemID) {
+          If ($ObjectID) {
 
-             $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $filesystemName) -and ($_.filesystem.id -like $filesystemID)}
+            #### REQUEST BODY
+
+            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.filesystem.id -like $ObjectID)}
 
             # Creation of the body hash
             $body = @{}
@@ -151,29 +167,35 @@ Function New-UnityCIFSShare {
 
             $body["cifsShareCreate"] += $cifsShareCreateParameters
 
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/storageResource/'+($UnityStorageRessource.id)+'/action/modifyFilesystem'
-            Write-Verbose "URI: $URI"
+            ####### END BODY - Do not edit beyond this line
+
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$UnityStorageRessource.id
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
 
             #Sending the request
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
-
-            If ($request.StatusCode -eq '204') {
-
-              Write-Verbose "CIFS Share named $name on filesystem $filesystemName has been created"
-
-              Get-UnityCIFSShare -Session $Sess -id $filesystemID
-
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type $name")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
             }
-          } else {
-            Write-Verbose "filesystem $filesystemName does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
 
-  End {}
-}
+            If ($request.StatusCode -eq $StatusCode) {
+
+              Write-Verbose "$Type with ID $ObjectID has been modified"
+
+              Get-UnityCIFSShare -Session $Sess -Name $name
+
+            } # End If ($request.StatusCode -eq $StatusCode)
+          } else {
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($fs in $Filesystem)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function
