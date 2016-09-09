@@ -21,7 +21,7 @@ Function Set-UnityAlert {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Set-UnityAlert -ID 'alert_38' -isAcknowledged $True
+      Set-UnityAlert -ID 'alert_38' -isAcknowledged $true
 
       Acknoledge alert with id 'alert_38'
   #>
@@ -33,13 +33,19 @@ Function Set-UnityAlert {
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID or Object')]
-    [String]$ID,
-    [Parameter(Mandatory = $true,HelpMessage = 'Whether alert is acknowledged.')]
-    [bool]$isAcknowledged
+    [String[]]$ID,
+    [Parameter(Mandatory = $false,HelpMessage = 'Whether alert is acknowledged.')]
+    [bool]$isAcknowledged = $false
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/alert/<id>/action/modify'
+    $Type = 'Pool'
+    $TypeName = 'UnityAlert'
+    $StatusCode = 204
   }
 
   Process {
@@ -50,51 +56,71 @@ Function Set-UnityAlert {
 
       If ($Sess.TestConnection()) {
 
-        # Determine input and convert to UnityAlert object
+        Foreach ($i in $ID) {
 
-        Write-Verbose "Input object type is $($ID.GetType().Name)"
-        Switch ($ID.GetType().Name)
-        {
-          "String" {
-            $Alert = get-UnityAlert -Session $Sess -ID $ID
-            $AlertID = $Alert.id
-          }
-          "UnityAlert" {
-            $AlertID = $ID.id
-          }
-        }
-
-        If ($AlertID) {
-
-          # Creation of the body hash
-          $body = @{}
-
-          $body["isAcknowledged"] = $isAcknowledged
-
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/alert/'+$AlertID+'/action/modify'
-          Write-Verbose "URI: $URI"
-
-          #Sending the request
-          If ($pscmdlet.ShouldProcess($AlertID,"Modify alert")) {
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
+          {
+            "String" {
+              $Object = get-UnityAlert -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
+            }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityAlert -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
+            }
           }
 
-          If ($request.StatusCode -eq '204') {
+          If ($ObjectID) {
 
-            Write-Verbose "Alert with ID: $AlertID has been modified"
+            #### REQUEST BODY
 
-            Get-UnityAlert -Session $Sess -id $AlertID
+            # Creation of the body hash
+            $body = @{}
 
-          }
-        } else {
-          Write-Verbose "Alert $AlertID does not exist on the array $($sess.Name)"
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
+            $body["isAcknowledged"] = $isAcknowledged
 
-  End {}
-}
+            ####### END BODY - Do not edit beyond this line
+
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            #Sending the request
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $($ObjectName)")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+            }
+
+            If ($request.StatusCode -eq $StatusCode) {
+
+              Write-Verbose "$Type with ID $ObjectID has been modified"
+
+              Get-UnityAlert -Session $Sess -id $ObjectID
+
+              }  # End If ($request.StatusCode -eq $StatusCode)
+            } else {
+              Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+            } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

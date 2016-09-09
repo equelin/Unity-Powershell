@@ -32,7 +32,7 @@ Function Set-UnityMgmtInterfaceSettings {
       replace the exsting address list for this DNS server with this new list.
   #>
 
-    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
@@ -45,6 +45,11 @@ Function Set-UnityMgmtInterfaceSettings {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/mgmtInterfaceSettings/0/action/modify'
+    $Type = 'Global management interfaces settings'
+    $StatusCode = 204
   }
 
   Process {
@@ -54,6 +59,8 @@ Function Set-UnityMgmtInterfaceSettings {
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       If ($Sess.TestConnection()) {
+
+          #### REQUEST BODY 
 
           # Creation of the body hash
           $body = @{}
@@ -66,27 +73,28 @@ Function Set-UnityMgmtInterfaceSettings {
             $body["v6ConfigMode"] = $v6ConfigMode
           }
 
+          ####### END BODY - Do not edit beyond this line
+
+          #Show $body in verbose message
+          $Json = $body | ConvertTo-Json -Depth 10
+          Write-Verbose $Json 
+
           #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/mgmtInterfaceSettings/0/action/modify'
-          Write-Verbose "URI: $URI"
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
           #Sending the request
-          If ($pscmdlet.ShouldProcess($($Sess.Server),"Modify mgmt interface settings")) {
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
           }
 
-          If ($request.StatusCode -eq '204') {
+          If ($request.StatusCode -eq $StatusCode) {
 
-            Write-Verbose "Global management interfaces settings has been modified"
+            Write-Verbose "$Type with ID $ObjectID has been modified"
 
             Get-UnityMgmtInterfaceSettings -Session $Sess
-          }
-
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+          } # End If ($ObjectID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

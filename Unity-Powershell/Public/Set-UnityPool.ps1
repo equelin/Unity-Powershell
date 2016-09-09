@@ -67,7 +67,7 @@ Function Set-UnityPool {
 
     #UnityPool
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool ID or Pool Object')]
-    $ID,
+    [String[]]$ID,
     [Parameter(Mandatory = $false,HelpMessage = 'New Name of the Pool')]
     [String]$NewName,
     [Parameter(Mandatory = $false,HelpMessage = 'Pool Description')]
@@ -268,7 +268,7 @@ Function Set-UnityPool {
             Write-Verbose "URL: $URL"
 
             #Sending the request
-            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $($ObjectName)")) {
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
               $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
             }
 

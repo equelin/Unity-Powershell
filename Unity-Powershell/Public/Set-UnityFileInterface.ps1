@@ -21,7 +21,7 @@ Function Set-UnityFileInterface {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'File interface ID or Object')]
-    $ID,
+    [String[]]$ID,
     [Parameter(Mandatory = $false,HelpMessage = 'Physical port or link aggregation on the storage processor on which the interface is running')]
     $ipPort,
     [Parameter(Mandatory = $false,HelpMessage = 'IP address of the network interface')]
@@ -43,6 +43,12 @@ Function Set-UnityFileInterface {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
+    # Variables
+    $URI = '/api/instances/fileInterface/<id>/action/modify '
+    $Type = 'File Interface'
+    $TypeName = 'UnityFileInterface'
+    $StatusCode = 204
+
     $ReplicationPolicyEnum = @{
       "Not_Replicated" = "0"
       "Replicated" = "1"
@@ -58,97 +64,114 @@ Function Set-UnityFileInterface {
 
       If ($Sess.TestConnection()) {
 
-        # Determine input and convert to UnityPool object
-        Switch ($ID.GetType().Name)
-        {
-          "String" {
-            $FileInterface = get-UnityFileInterface -Session $Sess -ID $ID
-            $FileInterfaceID = $FileInterface.id
-            $FileInterfaceName = $FileInterface.Name
-          }
-          "UnityFileInterface" {
-            Write-Verbose "Input object type is $($ID.GetType().Name)"
-            $FileInterfaceID = $ID.id
-            If ($FileInterface = Get-UnityFileInterface -Session $Sess -ID $FileInterfaceID) {
-                      $FileInterfaceName = $ID.name
+        Foreach ($i in $ID) {
+
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
+          {
+            "String" {
+              $Object = get-UnityFileInterface -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
+            }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityFileInterface -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
             }
           }
-        }
 
-        If ($FileInterfaceID) {
+          If ($ObjectID) {
 
-          # Creation of the body hash
-          $body = @{}
+            #### REQUEST BODY 
 
-          If ($PSBoundParameters.ContainsKey('nasServer')) {
-            # nasServer argument
-            $body["nasServer"] = @{}
-            $FileInterfaceArg = @{}
-            $FileInterfaceArg["id"] = "$($FileInterface)"
-            $body["nasServer"] = $FileInterfaceArg
-          }
+            # Creation of the body hash
+            $body = @{}
 
-          If ($PSBoundParameters.ContainsKey('ipPort')) {
-            # ipPort argument
-            $body["ipPort"] = @{}
-            $ipPortArg = @{}
-            $ipPortArg["id"] = "$($ipPort)"
-            $body["ipPort"] = $ipPortArg
-          }
+            If ($PSBoundParameters.ContainsKey('nasServer')) {
+              # nasServer argument
+              $body["nasServer"] = @{}
+              $FileInterfaceArg = @{}
+              $FileInterfaceArg["id"] = "$($FileInterface)"
+              $body["nasServer"] = $FileInterfaceArg
+            }
 
-          # ipAddress argument
-          If ($PSBoundParameters.ContainsKey('ipAddress')) {
-            $body["ipAddress"] = "$ipAddress"
-          }
+            If ($PSBoundParameters.ContainsKey('ipPort')) {
+              # ipPort argument
+              $body["ipPort"] = @{}
+              $ipPortArg = @{}
+              $ipPortArg["id"] = "$($ipPort)"
+              $body["ipPort"] = $ipPortArg
+            }
 
-          If ($PSBoundParameters.ContainsKey('netmask')) {
-                $body["netmask"] = "$netmask"
-          }
+            # ipAddress argument
+            If ($PSBoundParameters.ContainsKey('ipAddress')) {
+              $body["ipAddress"] = "$ipAddress"
+            }
 
-          If ($PSBoundParameters.ContainsKey('v6PrefixLength')) {
-                $body["v6PrefixLength"] = "$v6PrefixLength"
-          }
+            If ($PSBoundParameters.ContainsKey('netmask')) {
+                  $body["netmask"] = "$netmask"
+            }
 
-          If ($PSBoundParameters.ContainsKey('gateway')) {
-                $body["gateway"] = "$gateway"
-          }
+            If ($PSBoundParameters.ContainsKey('v6PrefixLength')) {
+                  $body["v6PrefixLength"] = "$v6PrefixLength"
+            }
 
-          If ($PSBoundParameters.ContainsKey('vlanId')) {
-                $body["vlanId"] = $vlanId
-          }
+            If ($PSBoundParameters.ContainsKey('gateway')) {
+                  $body["gateway"] = "$gateway"
+            }
 
-          If ($PSBoundParameters.ContainsKey('isPreferred')) {
-                $body["isPreferred"] = $isPreferred
-          }
+            If ($PSBoundParameters.ContainsKey('vlanId')) {
+                  $body["vlanId"] = $vlanId
+            }
 
-          If ($PSBoundParameters.ContainsKey('replicationPolicy')) {
-                $body["replicationPolicy"] = "$($ReplicationPolicyEnum["$($replicationPolicy)"])"
-          }
+            If ($PSBoundParameters.ContainsKey('isPreferred')) {
+                  $body["isPreferred"] = $isPreferred
+            }
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/fileInterface/'+$FileInterfaceID+'/action/modify'
-          Write-Verbose "URI: $URI"
+            If ($PSBoundParameters.ContainsKey('replicationPolicy')) {
+                  $body["replicationPolicy"] = "$($ReplicationPolicyEnum["$($replicationPolicy)"])"
+            }
 
-          #Sending the request
-          If ($pscmdlet.ShouldProcess($FileInterfaceID,"Modify File Interface")) {
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
-          }
+            ####### END BODY - Do not edit beyond this line
 
-          If ($request.StatusCode -eq '204') {
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
 
-            Write-Verbose "Pool with ID: $FileInterfaceID has been modified"
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
 
-            Get-UnityFileInterface -Session $Sess -id $FileInterfaceID
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
 
-          }
-        } else {
-          Write-Verbose "NAS Server $FileInterfaceID does not exist on the array $($sess.Name)"
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
+            #Sending the request
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+            }
 
-  End {}
-}
+            If ($request.StatusCode -eq $StatusCode) {
+
+              Write-Verbose "$Type with ID $ObjectID has been modified"
+
+              Get-UnityFileInterface -Session $Sess -id $ObjectID
+
+            }  # End If ($request.StatusCode -eq $StatusCode)
+          } else {
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

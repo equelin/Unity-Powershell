@@ -57,7 +57,7 @@ Function New-UnityiSCSIPortal {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
     ## Variables
-    $URI = '/api/types/iSCSIPortal/instances'
+    $URI = '/api/types/iscsiPortal/instances'
     $Type = 'iSCSI Portal'
     $StatusCode = 201
   }

@@ -22,7 +22,7 @@ Function Set-UnityNTPServer {
       replace the exsting address list for this NTP server with this new list.
   #>
 
-    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
@@ -35,6 +35,11 @@ Function Set-UnityNTPServer {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/ntpServer/<id>/action/modify'
+    $Type = 'NTP Server'
+    $StatusCode = 204
   }
 
   Process {
@@ -45,7 +50,10 @@ Function Set-UnityNTPServer {
 
       If ($Sess.TestConnection()) {
 
-          $NTPServer = Get-UnityNTPServer -Session $Sess
+          $Object = Get-UnityNTPServer -Session $Sess
+          $ObjectID = $Object.id
+
+          #### REQUEST BODY 
 
           # Creation of the body hash
           $body = @{}
@@ -57,35 +65,33 @@ Function Set-UnityNTPServer {
 
           $body["rebootPrivilege"] = $rebootPrivilege
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/ntpServer/'+($NTPServer.id)+'/action/modify'
-          Write-Verbose "URI: $URI"
+          ####### END BODY - Do not edit beyond this line
+
+          #Show $body in verbose message
+          $Json = $body | ConvertTo-Json -Depth 10
+          Write-Verbose $Json 
+
+          #Building the URL
+          $URI = $URI -replace '<id>',$ObjectID
+
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
           #Sending the request
-          If ($pscmdlet.ShouldProcess($($NTPServer.id),"Modify NTP Server")) {
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
           }
 
-          Write-Verbose "Request Status Code: $($request.StatusCode)"
+          If ($request.StatusCode -eq $StatusCode) {
 
-          If ($request.StatusCode -eq '204') {
+            Write-Verbose "$Type with ID $ObjectID has been modified"
 
-            Write-Verbose "NTP Server has been modified"
+            Get-UnityPool -Session $Sess -id $ObjectID
 
-            Get-UnityNTPServer -Session $Sess
-          }
-
-          If ($request.StatusCode -eq '202') {
-
-            Write-Host "NTP Server has been modified. Array might reboot depending of the parameters you provided."
-
-          }
-
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+          }  # End If ($request.StatusCode -eq $StatusCode)
+        } else {
+          Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+        } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

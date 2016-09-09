@@ -37,7 +37,7 @@ Function Set-UnityMgmtInterface {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Management interface ID or Object')]
-    $ID,
+    [String[]]$ID,
     [Parameter(Mandatory = $false,Position = 1,HelpMessage = 'IPv4 or IPv6 address for the interface.')]
     [string]$ipAddress,
     [Parameter(Mandatory = $false,HelpMessage = 'IPv4 netmask for the interface, if the interface uses an IPv4 address.')]
@@ -50,75 +50,102 @@ Function Set-UnityMgmtInterface {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/mgmtInterface/<id>/action/modify'
+    $Type = 'Management Interface'
+    $TypeName = 'UnityMgmtInterface'
+    $StatusCode = 204
   }
 
   Process {
 
     Foreach ($sess in $session) {
 
-      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Foreach ($i in $ID) {
 
-      If ($Sess.TestConnection()) {
+        Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-        # Determine input and convert to UnityMgmtInterface object
-        Switch ($ID.GetType().Name)
-        {
-          "String" {
-            $MgmtInterface = get-UnityMgmtInterface -Session $Sess -ID $ID
-            $MgmtInterfaceID = $MgmtInterface.id
-          }
-          "UnityMgmtInterface" {
-            Write-Verbose "Input object type is $($ID.GetType().Name)"
-            $MgmtInterfaceID = $ID.id
-          }
-        }
+        If ($Sess.TestConnection()) {
 
-        If ($MgmtInterfaceID) {
+            # Determine input and convert to object if necessary
+            Switch ($i.GetType().Name)
+            {
+              "String" {
+                $Object = get-UnityMgmtInterface -Session $Sess -ID $i
+                $ObjectID = $Object.id
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }
+              }
+              "$TypeName" {
+                Write-Verbose "Input object type is $($i.GetType().Name)"
+                $ObjectID = $i.id
+                If ($Object = Get-UnityMgmtInterface -Session $Sess -ID $ObjectID) {
+                  If ($Object.Name) {
+                    $ObjectName = $Object.Name
+                  } else {
+                    $ObjectName = $ObjectID
+                  }          
+                }
+              }
+            }
 
-          # Creation of the body hash
-          $body = @{}
+          If ($ObjectID) {
 
-          # ipAddress argument
-          If ($PSBoundParameters.ContainsKey('ipAddress')) {
-            $body["ipAddress"] = "$ipAddress"
-          }
+            #### REQUEST BODY 
 
-          If ($PSBoundParameters.ContainsKey('netmask')) {
-            $body["netmask"] = "$netmask"
-          }
+            # Creation of the body hash
+            $body = @{}
 
-          If ($PSBoundParameters.ContainsKey('v6PrefixLength')) {
-            $body["v6PrefixLength"] = "$v6PrefixLength"
-          }
+            # ipAddress argument
+            If ($PSBoundParameters.ContainsKey('ipAddress')) {
+              $body["ipAddress"] = "$ipAddress"
+            }
 
-          If ($PSBoundParameters.ContainsKey('gateway')) {
-            $body["gateway"] = "$gateway"
-          }
+            If ($PSBoundParameters.ContainsKey('netmask')) {
+              $body["netmask"] = "$netmask"
+            }
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/mgmtInterface/'+$MgmtInterfaceID+'/action/modify'
-          Write-Verbose "URI: $URI"
+            If ($PSBoundParameters.ContainsKey('v6PrefixLength')) {
+              $body["v6PrefixLength"] = "$v6PrefixLength"
+            }
 
-          #Sending the request
-          If ($pscmdlet.ShouldProcess($MgmtInterfaceID,"Modify File Interface. WARNING: You might be disconnected from the interface.")) {
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
-          }
+            If ($PSBoundParameters.ContainsKey('gateway')) {
+              $body["gateway"] = "$gateway"
+            }
 
-          If ($request.StatusCode -eq '204') {
+            ####### END BODY - Do not edit beyond this line
 
-            Write-Verbose "Management interface with ID: $MgmtInterfaceID has been modified"
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
 
-            Get-UnityMgmtInterface -Session $Sess -id $MgmtInterfaceID
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
 
-          }
-        } else {
-          Write-Verbose "Management interface $MgmtInterfaceID does not exist on the array $($sess.Name)"
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
 
-  End {}
-}
+            #Sending the request
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+            }
+
+            If ($request.StatusCode -eq $StatusCode) {
+
+              Write-Verbose "$Type with ID $ObjectID has been modified"
+
+              Get-UnityMgmtInterface -Session $Sess -id $ObjectID
+
+            }  # End If ($request.StatusCode -eq $StatusCode)
+          } else {
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

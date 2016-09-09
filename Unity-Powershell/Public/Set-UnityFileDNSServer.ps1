@@ -16,7 +16,7 @@ Function Set-UnityFileDnsServer {
       Change ip of the file DNS server with ID 'dns_1'
   #>
 
-    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
@@ -33,6 +33,12 @@ Function Set-UnityFileDnsServer {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
+    # Variables
+    $URI = '/api/instances/fileDNSServer/<id>/action/modify'
+    $Type = 'File DNS Server'
+    $TypeName = 'UnityFileDnsServer'
+    $StatusCode = 204
+
   }
 
   Process {
@@ -43,66 +49,81 @@ Function Set-UnityFileDnsServer {
 
       If ($Sess.TestConnection()) {
 
-        # Determine input and convert to UnityPool object
-        Switch ($ID.GetType().Name)
-        {
-          "String" {
-            $FileDNSServer = get-UnityFileDNSServer -Session $Sess -ID $ID
-            $FileDNSServerID = $FileDNSServer.id
-            $FileDNSServerName = $FileDNSServer.Name
-          }
-          "UnityFileInterface" {
-            Write-Verbose "Input object type is $($ID.GetType().Name)"
-            $FileDNSServerID = $ID.id
-            If ($FileDNSServer = Get-UnityFileDNSServer -Session $Sess -ID $FileDNSServerID) {
-                      $FileDNSServerName = $ID.name
+        Foreach ($i in $ID) {
+
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
+          {
+            "String" {
+              $Object = get-UnityFileDnsServer -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
+            }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityFileDnsServer -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
             }
           }
-        }
 
-        If ($FileDNSServerID) {
+          If ($ObjectID) {
 
-          # Creation of the body hash
-          $body = @{}
+            # Creation of the body hash
+            $body = @{}
 
-          #Addresses argument
-          $body['addresses'] = @()
-          Foreach ($Addresse in $Addresses) {
-            $body["addresses"] += $Addresse
-          }
+            #Addresses argument
+            $body['addresses'] = @()
+            Foreach ($Addresse in $Addresses) {
+              $body["addresses"] += $Addresse
+            }
 
-          If ($PSBoundParameters.ContainsKey('domain')) {
-                $body["domain"] = "$($domain)"
-          }
+            If ($PSBoundParameters.ContainsKey('domain')) {
+                  $body["domain"] = "$($domain)"
+            }
 
-          If ($PSBoundParameters.ContainsKey('replicationPolicy')) {
-                $body["replicationPolicy"] = $replicationPolicy
-          }
+            If ($PSBoundParameters.ContainsKey('replicationPolicy')) {
+                  $body["replicationPolicy"] = $replicationPolicy
+            }
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/fileDNSServer/'+$FileDNSServerID+'/action/modify'
-          Write-Verbose "URI: $URI"
+            ####### END BODY - Do not edit beyond this line
 
-          #Sending the request
-          If ($pscmdlet.ShouldProcess($FileDNSServerID,"Modify File DNS Server Interface")) {
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
-          }
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
 
-          If ($request.StatusCode -eq '204') {
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
 
-            Write-Verbose "File DNS Server with ID: $FileDNSServerID has been modified"
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
 
-            Get-UnityFileDNSServer -Session $Sess -id $FileDNSServerID
+            #Sending the request
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+            }
 
-          }
-        } else {
-          Write-Verbose "NAS Server $FileDNSServerID does not exist on the array $($sess.Name)"
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
+            If ($request.StatusCode -eq $StatusCode) {
 
-  End {}
-}
+              Write-Verbose "$Type with ID $ObjectID has been modified"
+
+              Get-UnityFileDnsServer -Session $Sess -id $ObjectID
+
+            }  # End If ($request.StatusCode -eq $StatusCode)
+          } else {
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

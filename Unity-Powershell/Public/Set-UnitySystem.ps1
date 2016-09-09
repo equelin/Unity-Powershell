@@ -52,6 +52,12 @@ Function Set-UnitySystem {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/system/<id>/action/modify'
+    $Type = 'System'
+    $TypeName = 'UnitySystem'
+    $StatusCode = 204
   }
 
   Process {
@@ -62,65 +68,82 @@ Function Set-UnitySystem {
 
       If ($Sess.TestConnection()) {
 
-        # Determine input and convert to UnitySystem object
-
-        Write-Verbose "Input object type is $($ID.GetType().Name)"
-        Switch ($ID.GetType().Name)
-        {
-          "String" {
-            $UnitySystem = get-UnitySystem -Session $Sess -ID $ID
-            $UnitySystemID = $UnitySystem.id
-          }
-          "UnitySystem" {
-            $UnitySystemID = $ID.id
-          }
-        }
-
-        If ($UnitySystemID) {
-
-          # Creation of the body hash
-          $body = @{}
-
-          If ($PSBoundParameters.ContainsKey('name')) {
-                $body["name"] = $name
-          }
-
-          If ($PSBoundParameters.ContainsKey('isUpgradeCompleted')) {
-                $body["isUpgradeCompleted"] = $isUpgradeCompleted
+          # Determine input and convert to object if necessary
+          Switch ($ID.GetType().Name)
+          {
+            "String" {
+              $Object = get-UnitySystem -Session $Sess -ID $ID
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
+            }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($ID.GetType().Name)"
+              $ObjectID = $ID.id
+              If ($Object = Get-UnitySystem -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
+            }
           }
 
-          If ($PSBoundParameters.ContainsKey('isEulaAccepted')) {
-                $body["isEulaAccepted"] = $isEulaAccepted
-          }
+          If ($ObjectID) {
 
-          If ($PSBoundParameters.ContainsKey('isAutoFailbackEnabled')) {
-                $body["isAutoFailbackEnabled"] = $isAutoFailbackEnabled
-          }
+            #### REQUEST BODY 
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/system/'+$UnitySystemID+'/action/modify'
-          Write-Verbose "URI: $URI"
+            # Creation of the body hash
+            $body = @{}
 
-          #Sending the request
-          If ($pscmdlet.ShouldProcess($UnitySystemID,"Modify Unity Server")) {
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
-          }
+            If ($PSBoundParameters.ContainsKey('name')) {
+                  $body["name"] = $name
+            }
 
-          If ($request.StatusCode -eq '204') {
+            If ($PSBoundParameters.ContainsKey('isUpgradeCompleted')) {
+                  $body["isUpgradeCompleted"] = $isUpgradeCompleted
+            }
 
-            Write-Verbose "Unity Server with ID: $UnitySystemID has been modified"
+            If ($PSBoundParameters.ContainsKey('isEulaAccepted')) {
+                  $body["isEulaAccepted"] = $isEulaAccepted
+            }
 
-            Get-UnitySystem -Session $Sess -id $UnitySystemID
+            If ($PSBoundParameters.ContainsKey('isAutoFailbackEnabled')) {
+                  $body["isAutoFailbackEnabled"] = $isAutoFailbackEnabled
+            }
 
-          }
-        } else {
-          Write-Verbose "Unity Server $UnitySystemID does not exist on the array $($sess.Name)"
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
+            ####### END BODY - Do not edit beyond this line
 
-  End {}
-}
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            #Sending the request
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+            }
+
+            If ($request.StatusCode -eq $StatusCode) {
+
+              Write-Verbose "$Type with ID $ObjectID has been modified"
+
+              Get-UnitySystem -Session $Sess -id $ObjectID
+
+            }  # End If ($request.StatusCode -eq $StatusCode)
+          } else {
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

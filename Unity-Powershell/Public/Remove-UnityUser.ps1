@@ -34,7 +34,7 @@ Function Remove-UnityUser {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'User ID or Object')]
-    $ID
+    [String[]]$ID
   )
 
   Begin {
