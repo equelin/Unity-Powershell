@@ -47,7 +47,7 @@ Function Connect-Unity {
   Param(
       [Parameter(Mandatory = $true,Position = 0,ParameterSetName="ByServer",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'EMC Unity FQDN or IP address')]
       [String[]]$Server,
-      [Parameter(Mandatory = $true,Position = 0,ParameterSetName="BySession",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'EMC Unity Session object')]
+      [Parameter(Mandatory = $true,ParameterSetName="BySession",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'EMC Unity Session object')]
       [UnitySession]$Session,
       [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity username')]
       [String]$Username,

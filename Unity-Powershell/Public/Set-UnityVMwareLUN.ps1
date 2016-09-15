@@ -51,7 +51,7 @@ Function Set-UnityVMwareLUN {
       Grant 'production' access to host 'Host_12' to VMware bock LUN with ID 'sv_78'.
   #>
 
-    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
@@ -77,6 +77,12 @@ Function Set-UnityVMwareLUN {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/storageResource/<id>/action/modifyVmwareLun'
+    $Type = 'VMware LUN'
+    $TypeName = 'UnityLun'
+    $StatusCode = 204
   }
 
   Process {
@@ -87,29 +93,35 @@ Function Set-UnityVMwareLUN {
 
       If ($Sess.TestConnection()) {
 
-        Foreach ($I in $ID) {
+        Foreach ($i in $ID) {
 
-          # Determine input and convert to an object
-          Write-Verbose "Input object type is $($I.GetType().Name)"
-          Switch ($I.GetType().Name)
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $LUN = get-UnityVMwareLUN -Session $Sess -ID $I
-              $LUNID = $LUN.idget
-              $LUNName = $LUN.Name
+              $Object = get-UnityVMwareLUN -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
             }
-            "UnityLUN" {
-              Write-Verbose "Input object type is $($n.GetType().Name)"
-              $LUNName = $I.Name
-              If ($LUN = Get-UnityVMwareLUN -Session $Sess -ID $I.id) {
-                        $LUNID = $LUN.id
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityVMwareLUN -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
               }
             }
           }
 
-          If ($LUNID) {
+          If ($ObjectID) {
 
-            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | Where-Object {($_.Name -like $LUNName) -and ($_.luns.id -like $LUNID)}
+            $UnitystorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
 
             # Creation of the body hash
             $body = @{}
@@ -179,35 +191,35 @@ Function Set-UnityVMwareLUN {
               $body["snapScheduleParameters"] = $snapScheduleParameters
             }
 
-            #Displaying request's body 
-            $Json = $body | ConvertTo-Json -Depth 10
-            Write-Verbose $Json
+            ####### END BODY - Do not edit beyond this line
 
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/storageResource/'+($UnityStorageRessource.id)+'/action/modifyVmwareLun '
-            Write-Verbose "URI: $URI"
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$UnitystorageResource.id
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
 
             #Sending the request
-            If ($pscmdlet.ShouldProcess($LUNName,"Modify LUN")) {
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
             }
+            
+            If ($request.StatusCode -eq $StatusCode) {
 
-            If ($request.StatusCode -eq '204') {
+              Write-Verbose "$Type with ID $ObjectID has been modified"
 
-              Write-Verbose "LUN with ID: $LUNID has been modified"
+              Get-UnityVMwareLUN -Session $Sess -ID $ObjectID
 
-              Get-UnityVMwareLUN -Session $Sess -id $LUNID
-
-            }
+            }  # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Verbose "VMware LUN $LUNName does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

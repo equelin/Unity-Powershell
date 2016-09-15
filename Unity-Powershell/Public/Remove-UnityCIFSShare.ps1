@@ -32,7 +32,7 @@ Function Remove-UnityCIFSShare {
 
     #cifsShareDelete
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID of the CIFS share')]
-    [String[]]$ID
+    $ID
   )
 
   Begin {

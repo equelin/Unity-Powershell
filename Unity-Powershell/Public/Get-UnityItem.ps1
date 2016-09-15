@@ -11,6 +11,12 @@ Function Get-UnityItem {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specifies an UnitySession Object.
+      .PARAMETER URI
+      URI of the Unity ressource (ex: /api/types/lun/instances)
+      .PARAMETER JSON
+      Output in the JSON Format
       .EXAMPLE
       Get-UnityItem -URI '/api/types/pool/instances'
 
@@ -27,7 +33,7 @@ Function Get-UnityItem {
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $true,HelpMessage = 'EMC Unity Session')]
     [String]$URI,
-    [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
+    [Parameter(Mandatory = $false,HelpMessage = 'Output in the JSON Format')]
     [Switch]$JSON
   )
 

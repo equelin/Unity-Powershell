@@ -1,4 +1,4 @@
-Function Get-UnitySmtpServer {
+Function Get-UnitySMTPServer {
 
   <#
       .SYNOPSIS
@@ -15,9 +15,9 @@ Function Get-UnitySmtpServer {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnitySmtpServer
+      Get-UnitySMTPServer
 
-      Retrieve informations about all the smtp servers.
+      Retrieve informations about all the SMTP servers.
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByID")]

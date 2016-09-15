@@ -2,9 +2,9 @@ Function Get-UnityFilesystem {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about filesystem.
+      Queries the EMC Unity array to retrieve informations about filesystems.
       .DESCRIPTION
-      Querries the EMC Unity array to retrieve informations about filesystem.
+      Querries the EMC Unity array to retrieve informations about filesystems.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
