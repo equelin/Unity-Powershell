@@ -5,7 +5,7 @@ Param ()
 
 $Server = '10.44.10.112'
 $UnityUsername = 'admin'
-$UnityPassword = 'Cheopsfr44@'
+$UnityPassword = 'Password123#'
 
 #System
 
@@ -52,13 +52,13 @@ $FileInterfacenetmask = '255.255.0.0'
 $FileInterfacegateway = '10.44.1.254'
 
 # File DNS Server
-$FileDNSDomainName = 'lab.nantes'
+$FileDNSDomainName = 'example.local'
 $FileDNSAddress = '10.44.10.101'
 
 # CIFS Server
 $CIFSServerName = 'CIFS01'
 $CIFSServerdomainUsername = 'administrator'
-$CIFSServerdomainPassword = 'Cheopsfr44@'
+$CIFSServerdomainPassword = 'Password123#'
 
 # Filesystem
 $FilesystemName = 'FS01'
