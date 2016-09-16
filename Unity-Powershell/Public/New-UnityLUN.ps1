@@ -14,6 +14,8 @@ Function New-UnityLUN {
       Specify an UnitySession Object.
       .PARAMETER Name
       Name of the LUN unique to the system.
+      .PARAMETER Pool
+      Pool ID
       .PARAMETER Description
       Description of the LUN.
       .PARAMETER Size
@@ -28,6 +30,8 @@ Function New-UnityLUN {
       - Production: Access to production LUNs only. 
       - Snapshot: Access to LUN snapshots only. 
       - Both: Access to both production LUNs and their snapshots.
+      .PARAMETER isThinEnabled
+      Is Thin enabled on LUN ? (Default is true)
       .PARAMETER snapSchedule
       Snapshot schedule assigned to the storage resource
       .PARAMETER isSnapSchedulePaused

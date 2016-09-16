@@ -13,6 +13,24 @@ Function New-UnityFileInterface {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specify an UnitySession Object.
+      .PARAMETER nasServer
+      ID of the NAS server to which the network interface belongs
+      .PARAMETER ipPort
+      Physical port or link aggregation on the storage processor on which the interface is running
+      .PARAMETER ipAddress
+      IP address of the network interface
+      .PARAMETER netmask
+      IPv4 netmask for the network interface, if it uses an IPv4 address
+      .PARAMETER v6PrefixLength
+      IPv6 prefix length for the interface, if it uses an IPv6 address
+      .PARAMETER gateway
+      IPv4 or IPv6 gateway address for the network interface
+      .PARAMETER vlanId
+      LAN identifier for the interface. The interface uses the identifier to accept packets that have matching VLAN tags. Values are 1 - 4094.
+      .PARAMETER isPreferred
+      Sets the current IP interface as preferred for associated for file-based storage and unsets the previous one
+      .PARAMETER role
+      Role of NAS server network interface
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. 
       If the value is $false, the cmdlet runs without asking for user confirmation.
@@ -45,7 +63,7 @@ Function New-UnityFileInterface {
     [Parameter(Mandatory = $false,HelpMessage = 'Sets the current IP interface as preferred for associated for file-based storage and unsets the previous one')]
     [bool]$isPreferred,
     [Parameter(Mandatory = $false,HelpMessage = 'Role of NAS server network interface')]
-    [String]$role
+    [FileInterfaceRoleEnum]$role
   )
 
   Begin {
@@ -55,11 +73,6 @@ Function New-UnityFileInterface {
     $URI = '/api/types/fileInterface/instances'
     $Type = 'File Interface'
     $StatusCode = 201
-
-    $FileInterfaceRoleEnum = @{
-      "Production" = "0"
-      "Backup" = "1"
-    }
 
   }
 
@@ -107,7 +120,7 @@ Function New-UnityFileInterface {
       }
 
       If ($PSBoundParameters.ContainsKey('role')) {
-            $body["role"] = "$($FileInterfaceRoleEnum["$($role)"])"
+            $body["role"] = "$role"
       }
 
       ####### END BODY - Do not edit beyond this line

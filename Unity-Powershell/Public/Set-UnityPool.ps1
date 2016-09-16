@@ -23,9 +23,9 @@ Function Set-UnityPool {
       New name of the pool.
       .PARAMETER Description
       Description of the pool.
-      .PARAMETER virtualDisk
+      .PARAMETER AddVirtualDisk
       Virtual Disks only with associated parameters to add to the pool. See examples for details.
-      .PARAMETER raidGroup
+      .PARAMETER AddraidGroup
       Parameters to add RAID groups to the pool (disk group, number of disks, RAID level, stripe length). See examples for details.
       .PARAMETER isFASTCacheEnabled
       Specify whether to enable FAST Cache on the storage pool.

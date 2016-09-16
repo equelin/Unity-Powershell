@@ -10,6 +10,8 @@ Function Disconnect-Unity {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specifies an UnitySession Object.
       .EXAMPLE
       Disconnect-Unity
 

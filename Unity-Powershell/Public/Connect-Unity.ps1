@@ -14,10 +14,14 @@ Function Connect-Unity {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specifies an UnitySession Object.
+      .PARAMETER Server
+      IP or FQDN of the Unity array.
       .PARAMETER Username
       Specifies the username.
       .PARAMETER Password
       Specifies the password. It as to be a powershell's secure string.
+      .PARAMETER Credentials
+      Credentials object of type [System.Management.Automation.PSCredential]
       .PARAMETER TrustAllCerts
       Specifies if 
       .EXAMPLE
@@ -40,7 +44,7 @@ Function Connect-Unity {
       $Credentials = New-Object System.Management.Automation.PSCredential($Username,$secpasswd)
       Connect-Unity -Server $IP -Credentials $Credentials
 
-      Connects to the arrays with the IP 192.168.0.1
+      Connects to the arrays with the IP 192.168.0.1 and using powershell credentials
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByServer")]

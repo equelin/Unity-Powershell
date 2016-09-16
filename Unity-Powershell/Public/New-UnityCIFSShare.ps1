@@ -10,10 +10,36 @@ Function New-UnityCIFSShare {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER Filesystem
+      Specify Filesystem ID
+      .PARAMETER Path
+      Local path to a location within a file system.
+      .PARAMETER Name
+      Name of the CIFS share unique to NAS server
+      .PARAMETER cifsServer
+      CIFS server ID to use for CIFS share creation, as defined by the cifsServer type
+      .PARAMETER description
+      CIFS share description
+      .PARAMETER isReadOnly
+      Indicates whether the CIFS share is read-only
+      .PARAMETER isEncryptionEnabled
+      Indicates whether CIFS encryption for Server Message Block (SMB) 3.0 is enabled for the CIFS share
+      .PARAMETER isContinuousAvailabilityEnabled
+      Indicates whether continuous availability for SMB 3.0 is enabled for the CIFS share
+      .PARAMETER isABEEnabled
+      Enumerate file with read access and directories with list access in folder listings
+      .PARAMETER isBranchCacheEnabled
+      Branch Cache optimizes traffic between the NAS server and Branch Office Servers
+      .PARAMETER offlineAvailability
+      Offline Files store a version of the shared resources on the client computer in the file system cache, a reserved portion of disk space, which the client computer can access even when it is disconnected from the network
+      .PARAMETER umask
+      The default UNIX umask for new files created on the share
       .EXAMPLE
-      New-UnityCIFSShare -Name 'FS01' -Description 'Modified description'
+      New-UnityCIFSShare -Filesystem 'fs_1' -Name 'SHARE01' -path '/' -cifsServer 'cifs_1'
 
-      Change the description of the filesystem named FS01
+      Create a new CIFS Share named 'SHARE01'
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
@@ -23,12 +49,12 @@ Function New-UnityCIFSShare {
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     
     #SetFilesystem
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem Name')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem ID')]
     [String[]]$Filesystem,
 
     #cifsShareCreate
     [Parameter(Mandatory = $true,HelpMessage = 'Local path to a location within a file system')]
-    [String]$path,
+    [String]$Path,
     [Parameter(Mandatory = $true,HelpMessage = 'Name of the CIFS share unique to NAS server')]
     [String]$Name,
     [Parameter(Mandatory = $true,HelpMessage = 'CIFS server ID to use for CIFS share creation, as defined by the cifsServer type')]

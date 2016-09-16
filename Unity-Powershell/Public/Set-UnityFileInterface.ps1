@@ -10,6 +10,31 @@ Function Set-UnityFileInterface {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER ID
+      File interface ID or Object
+      .PARAMETER ipPort
+      Physical port or link aggregation on the storage processor on which the interface is running
+      .PARAMETER ipAddress
+      IP address of the network interface
+      .PARAMETER netmask
+      IPv4 netmask for the network interface, if it uses an IPv4 address
+      .PARAMETER v6PrefixLength
+      IPv6 prefix length for the interface, if it uses an IPv6 address
+      .PARAMETER gateway
+      IPv4 or IPv6 gateway address for the network interface
+      .PARAMETER vlanId
+      LAN identifier for the interface. The interface uses the identifier to accept packets that have matching VLAN tags. Values are 1 - 4094.
+      .PARAMETER isPreferred
+      Sets the current IP interface as preferred for associated for file-based storage and unsets the previous one
+      .PARAMETER replicationPolicy
+      Indicates the status of the NAS server object operating as a replication destination
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. 
+      If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
       Set-UnityFileInterface -ID 'if_1' -ipAddress '192.168.0.1'
 
@@ -21,7 +46,7 @@ Function Set-UnityFileInterface {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'File interface ID or Object')]
-    [String[]]$ID,
+    $ID,
     [Parameter(Mandatory = $false,HelpMessage = 'Physical port or link aggregation on the storage processor on which the interface is running')]
     $ipPort,
     [Parameter(Mandatory = $false,HelpMessage = 'IP address of the network interface')]
@@ -37,7 +62,7 @@ Function Set-UnityFileInterface {
     [Parameter(Mandatory = $false,HelpMessage = 'Sets the current IP interface as preferred for associated for file-based storage and unsets the previous one')]
     [bool]$isPreferred,
     [Parameter(Mandatory = $false,HelpMessage = 'Indicates the status of the NAS server object operating as a replication destination')]
-    [String]$replicationPolicy
+    [ReplicationPolicyEnum]$replicationPolicy
   )
 
   Begin {
@@ -48,12 +73,6 @@ Function Set-UnityFileInterface {
     $Type = 'File Interface'
     $TypeName = 'UnityFileInterface'
     $StatusCode = 204
-
-    $ReplicationPolicyEnum = @{
-      "Not_Replicated" = "0"
-      "Replicated" = "1"
-      "Overridden" = "2"
-    }
   }
 
   Process {
@@ -140,7 +159,7 @@ Function Set-UnityFileInterface {
             }
 
             If ($PSBoundParameters.ContainsKey('replicationPolicy')) {
-                  $body["replicationPolicy"] = "$($ReplicationPolicyEnum["$($replicationPolicy)"])"
+                  $body["replicationPolicy"] = "$replicationPolicy"
             }
 
             ####### END BODY - Do not edit beyond this line

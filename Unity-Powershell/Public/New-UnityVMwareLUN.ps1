@@ -14,12 +14,16 @@ Function New-UnityVMwareLUN {
       Specify an UnitySession Object.
       .PARAMETER Name
       Name of the VMware VMFS datastore unique to the system.
+      .PARAMETER Pool
+      Pool ID
       .PARAMETER Description
       Description of the VMware VMFS datastore.
       .PARAMETER Size
       LUN Size.
       .PARAMETER snapSchedule
       Snapshot schedule settings for the VMware VMFS datastore, as defined by the snapScheduleParameters.
+      .PARAMETER isThinEnabled
+      Is Thin enabled? (Default is true)
       .PARAMETER host
       List of host to grant access to LUN.
       .PARAMETER accessMask
@@ -42,19 +46,19 @@ Function New-UnityVMwareLUN {
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN Name')]
     [String[]]$Name,
-    [Parameter(Mandatory = $false,HelpMessage = 'LUN Description')]
+    [Parameter(Mandatory = $false,HelpMessage = 'VMware LUN Description')]
     [String]$Description,
-    [Parameter(Mandatory = $true,HelpMessage = 'LUN Pool ID')]
+    [Parameter(Mandatory = $true,HelpMessage = 'VMware LUN Pool ID')]
     [String]$Pool,
-    [Parameter(Mandatory = $true,HelpMessage = 'LUN Size in Bytes')]
+    [Parameter(Mandatory = $true,HelpMessage = 'VMware LUN Size in Bytes')]
     [uint64]$Size,
-    [Parameter(Mandatory = $false,HelpMessage = 'Host to grant access to LUN')]
+    [Parameter(Mandatory = $false,HelpMessage = 'Host to grant access to VMware LUN')]
     [String[]]$host,
     [Parameter(Mandatory = $false,HelpMessage = 'Host access mask')]
     [HostLUNAccessEnum]$accessMask = 'Production',
-    [Parameter(Mandatory = $false,HelpMessage = 'Is Thin enabled on LUN ? (Default is true)')]
+    [Parameter(Mandatory = $false,HelpMessage = 'Is Thin enabled on VMware LUN ? (Default is true)')]
     [bool]$isThinEnabled = $true,
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
     [String]$snapSchedule,

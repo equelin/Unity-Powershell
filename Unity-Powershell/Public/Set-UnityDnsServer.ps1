@@ -10,6 +10,10 @@ Function Set-UnityDNSServer {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER addresses
+      New list of IP addresses to replace the exsting address list for this DNS server.
       .EXAMPLE
       Set-UnityDnsServer -Addresses '192.168.0.1','192.168.0.2'
 
@@ -21,7 +25,7 @@ Function Set-UnityDNSServer {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name or LUN Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'New list of IP addresses to replace the exsting address list for this DNS server.')]
     [String[]]$Addresses
   )
 

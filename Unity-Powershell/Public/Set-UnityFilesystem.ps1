@@ -10,6 +10,44 @@ Function Set-UnityFilesystem {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER Name
+      New Name of the filesystem
+      .PARAMETER Description
+      Filesystem Description
+      .PARAMETER snapSchedule
+      ID of a protection schedule to apply to the filesystem
+      .PARAMETER isSnapSchedulePaused
+      Is assigned snapshot schedule is paused ? (Default is false)
+      .PARAMETER isThinEnabled
+      Indicates whether to enable thin provisioning for file system. Default is $True
+      .PARAMETER Size
+      Filesystem Size
+      .PARAMETER hostIOSize
+      Typical write I/O size from the host to the file system
+      .PARAMETER isCacheDisabled
+      Indicates whether caching is disabled
+      .PARAMETER accessPolicy
+      Access policy
+      .PARAMETER poolFullPolicy
+      Behavior to follow when pool is full and a write to this filesystem is attempted
+      .PARAMETER tieringPolicy
+      Filesystem tiering policy
+      .PARAMETER isCIFSSyncWritesEnabled
+      Indicates whether the CIFS synchronous writes option is enabled for the file system
+      .PARAMETER isCIFSOpLocksEnabled
+      Indicates whether opportunistic file locks are enabled for the file system
+      .PARAMETER isCIFSNotifyOnWriteEnabled
+      Indicates whether the system generates a notification when the file system is written to
+      .PARAMETER isCIFSNotifyOnAccessEnabled
+      Indicates whether the system generates a notification when a user accesses the file system
+      .PARAMETER cifsNotifyOnChangeDirDepth
+      Indicates the lowest directory level to which the enabled notifications apply, if any
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
       Set-UnityFilesystem -Name 'FS01' -Description 'Modified description'
 
@@ -26,7 +64,7 @@ Function Set-UnityFilesystem {
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem ID or Object')]
     [String[]]$ID,
     [Parameter(Mandatory = $false,HelpMessage = 'New Name of the filesystem')]
-    [String]$NewName,
+    [String]$Name,
     [Parameter(Mandatory = $false,HelpMessage = 'Filesystem Description')]
     [String]$Description,
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the filesystem')]
@@ -121,7 +159,7 @@ Function Set-UnityFilesystem {
 
             # Name parameter
             If ($NewName) {
-              $body["name"] = "$($NewName)"
+              $body["name"] = "$($Name)"
             }
 
             # Domain parameter

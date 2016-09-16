@@ -10,6 +10,16 @@ Function Set-UnityFileDnsServer {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER ID
+      File DNS Server ID or Object
+      .PARAMETER domain
+      DNS domain name
+      .PARAMETER addresses
+      The list of DNS server IP addresses
+      .PARAMETER replicationPolicy
+      Status of the LDAP list in the NAS server operating as a replication destination.
       .EXAMPLE
       Set-UnityFileDnsServer -ID 'dns_1' -ipAddress '192.168.0.1'
 
@@ -20,13 +30,13 @@ Function Set-UnityFileDnsServer {
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'File interface ID or Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'File DNS Server ID or Object')]
     $ID,
     [Parameter(Mandatory = $false,HelpMessage = 'DNS domain name')]
     [string]$domain,
-    [Parameter(Mandatory = $false,HelpMessage = 'Prioritized list of one to three IPv4 and/or IPv6 addresses of DNS servers for the domain')]
+    [Parameter(Mandatory = $false,HelpMessage = 'The list of DNS server IP addresses')]
     [String[]]$addresses,
-    [Parameter(Mandatory = $false,HelpMessage = 'replication policy')]
+    [Parameter(Mandatory = $false,HelpMessage = 'Status of the LDAP list in the NAS server operating as a replication destination.')]
     [ReplicationPolicyEnum]$replicationPolicy
   )
 

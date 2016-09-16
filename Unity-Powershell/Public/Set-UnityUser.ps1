@@ -25,7 +25,9 @@ Function Set-UnityUser {
       - storageadmin
       - vmadmin
       - operator
-      .PARAMETER password
+      .PARAMETER newPassword
+      New password for the user
+      .PARAMETER oldPassword
       Initial password for the user.
       .EXAMPLE
       Set-UnityUser -Name 'User' -Role 'operator'

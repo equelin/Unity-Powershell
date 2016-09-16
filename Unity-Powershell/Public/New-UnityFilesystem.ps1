@@ -12,6 +12,46 @@ Function New-UnityFilesystem {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specify an UnitySession Object.
+      .PARAMETER Name
+      Filesystem Name
+      .PARAMETER Description
+      Filesystem Description
+      .PARAMETER snapSchedule
+      ID of a protection schedule to apply to the filesystem
+      .PARAMETER isSnapSchedulePaused
+      Is assigned snapshot schedule is paused ? (Default is false)
+      .PARAMETER Pool
+      Filesystem Pool ID
+      .PARAMETER nasServer
+      Filesystem nasServer ID
+      .PARAMETER supportedProtocols
+      Filesystem supported protocols
+      .PARAMETER isFLREnabled
+      Indicates whether File Level Retention (FLR) is enabled for the file system
+      .PARAMETER isThinEnabled
+      Indicates whether to enable thin provisioning for file system. Default is $True
+      .PARAMETER Size
+      Filesystem Size
+      .PARAMETER hostIOSize
+      Typical write I/O size from the host to the file system
+      .PARAMETER isCacheDisabled
+      Indicates whether caching is disabled
+      .PARAMETER accessPolicy
+      Access policy
+      .PARAMETER poolFullPolicy
+      Behavior to follow when pool is full and a write to this filesystem is attempted
+      .PARAMETER tieringPolicy
+      Filesystem tiering policy
+      .PARAMETER isCIFSSyncWritesEnabled
+      Indicates whether the CIFS synchronous writes option is enabled for the file system
+      .PARAMETER isCIFSOpLocksEnabled
+      Indicates whether opportunistic file locks are enabled for the file system
+      .PARAMETER isCIFSNotifyOnWriteEnabled
+      Indicates whether the system generates a notification when the file system is written to
+      .PARAMETER isCIFSNotifyOnAccessEnabled
+      Indicates whether the system generates a notification when a user accesses the file system
+      .PARAMETER cifsNotifyOnChangeDirDepth
+      Indicates the lowest directory level to which the enabled notifications apply, if any
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
@@ -43,7 +83,7 @@ Function New-UnityFilesystem {
     #fsParameters
     [Parameter(Mandatory = $true,HelpMessage = 'Filesystem Pool ID')]
     [String]$Pool,
-    [Parameter(Mandatory = $true,HelpMessage = 'Filesystem nasServer')]
+    [Parameter(Mandatory = $true,HelpMessage = 'Filesystem nasServer ID')]
     [String]$nasServer,
     [Parameter(Mandatory = $true,HelpMessage = 'Filesystem supported protocols')]
     [FSSupportedProtocolEnum]$supportedProtocols,
@@ -51,7 +91,7 @@ Function New-UnityFilesystem {
     [String]$isFLREnabled = $false,
     [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether to enable thin provisioning for file system')]
     [String]$isThinEnabled = $true,
-    [Parameter(Mandatory = $true,HelpMessage = 'Filesystem Size in Bytes')]
+    [Parameter(Mandatory = $true,HelpMessage = 'Filesystem Size')]
     [uint64]$Size,
     [Parameter(Mandatory = $false,HelpMessage = 'Typical write I/O size from the host to the file system')]
     [HostIOSizeEnum]$hostIOSize,
