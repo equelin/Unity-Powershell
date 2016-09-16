@@ -2,9 +2,9 @@ Function Set-UnitySMTPServer {
 
   <#
       .SYNOPSIS
-      Modifies CIFS share.
+      Modifies SMTP Server.
       .DESCRIPTION
-      Modifies CIFS share.
+      Modifies SMTP Server.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -21,9 +21,9 @@ Function Set-UnitySMTPServer {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Set-UnitySMTPServer -ID 'SMBShare_1' -Description 'New description'
+      Set-UnitySMTPServer -ID 'default' -Address smtp.example.com
 
-      Modifies the CIFS share with id 'SMBShare_1'
+      Modifies the default SMTP Server
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
@@ -33,13 +33,19 @@ Function Set-UnitySMTPServer {
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID of the SMTP Server')]
-    [String]$ID,
+    [String[]]$ID,
     [Parameter(Mandatory = $true,HelpMessage = 'IP address of the SMTP server.')]
     [String]$address
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/smtpServer/<id>/action/modify'
+    $Type = 'SMTP Server'
+    $TypeName = 'UnitySMTPServer'
+    $StatusCode = 204
   }
 
   Process {
@@ -50,51 +56,71 @@ Function Set-UnitySMTPServer {
 
       If ($Sess.TestConnection()) {
 
-        # Determine input and convert to UnitySMTPServer object
+        Foreach ($i in $ID) {
 
-        Write-Verbose "Input object type is $($ID.GetType().Name)"
-        Switch ($ID.GetType().Name)
-        {
-          "String" {
-            $SMTPServer = get-UnitySMTPServer -Session $Sess -ID $ID
-            $SMTPServerID = $SMTPServer.id
-          }
-          "UnitySMTPServer" {
-            $SMTPServerID = $ID.id
-          }
-        }
-
-        If ($SMTPServerID) {
-
-          # Creation of the body hash
-          $body = @{}
-
-          $body["address"] = $address
-
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/smtpServer/'+$SMTPServerID+'/action/modify'
-          Write-Verbose "URI: $URI"
-
-          #Sending the request
-          If ($pscmdlet.ShouldProcess($SMTPServerID,"Modify SMTP Server")) {
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
+          {
+            "String" {
+              $Object = get-UnitySMTPServer -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
+            }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnitySMTPServer -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
+            }
           }
 
-          If ($request.StatusCode -eq '204') {
+          If ($ObjectID) {
 
-            Write-Verbose "SMTP Server with ID: $SMTPServerID has been modified"
+            #### REQUEST BODY
 
-            Get-UnitySMTPServer -Session $Sess -id $SMTPServerID
+            # Creation of the body hash
+            $body = @{}
 
-          }
-        } else {
-          Write-Verbose "SMTP Server $SMTPServerID does not exist on the array $($sess.Name)"
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
+            $body["address"] = $address
 
-  End {}
-}
+            ####### END BODY - Do not edit beyond this line
+
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            #Sending the request
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+            }
+
+            If ($request.StatusCode -eq $StatusCode) {
+
+              Write-Verbose "$Type with ID $ObjectID has been modified"
+
+              Get-UnitySMTPServer -Session $Sess -id $ObjectID
+
+            }  # End If ($request.StatusCode -eq $StatusCode)
+          } else {
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

@@ -4,7 +4,7 @@ Function Disable-UnityFastCache {
       .SYNOPSIS
       Disable FAST Cache.
       .DESCRIPTION
-      Disable FAST Cache using specified disk group and number of disks and if specified, Disable FAST Cache on all existing pools. 
+      Disable FAST Cache.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -49,12 +49,7 @@ Function Disable-UnityFastCache {
           If ($request.StatusCode -eq '202') {
             Write-Host "Fast Cache is currently disabling"
           }
-
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }
     }
   }
-
-  End {}
 }

@@ -29,7 +29,7 @@ Function Get-UnityFastCache {
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Fast Cache ID')]
     [String[]]$ID='*'
   )
 
@@ -49,7 +49,7 @@ Function Get-UnityFastCache {
 
       # Test if the Unity is a virtual appliance
       If ($Sess.isUnityVSA()) {
-        Write-Warning -Message "This functionnality is not supported on this Unity VSA ($($Sess.Name))"
+        Write-Warning -Message "This functionnality is not supported on the Unity VSA ($($Sess.Name))"
       } else {
 
         If ($Sess.TestConnection()) {
@@ -84,17 +84,15 @@ Function Get-UnityFastCache {
               Foreach ($Result in $ResultCollection) {
 
                 # Instantiate object
-                $Object = [UnityFastCache]$Result
+                $Object = New-Object -TypeName $TypeName -Property $Result
 
                 # Output results
                 $Object
-              }
-            }
-          }
-        } else {
-          Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-        }
-      }
-    }
-  }
-}
+              } # End Foreach ($Result in $ResultCollection)
+            } # End If ($ResultsFiltered) 
+          } # End If ($Results)
+        } # End If ($Sess.TestConnection()) 
+      } #End If ($Sess.isUnityVSA())
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

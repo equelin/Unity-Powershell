@@ -1,4 +1,4 @@
-Function New-UnityIscsiPortal {
+Function New-UnityiSCSIPortal {
 
   <#
       .SYNOPSIS
@@ -24,13 +24,18 @@ Function New-UnityIscsiPortal {
       IPv4 or IPv6 gateway address for the iSCSI Network Portal.
       .PARAMETER vlanId
       Ethernet virtual LAN identifier used for tagging iSCSI portal outgoing packets and for filtering iSCSI portal incoming packets.
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
+
       .EXAMPLE
-      New-UnityIscsiPortal -ipAddress '192.168.0.1' -netmask '255.255.255.0' -gateway '192.168.0.254'
+      New-UnityiSCSIPortal -ethernetPort 'spa_eth0' -ipAddress '192.168.0.1' -netmask '255.255.255.0' -gateway '192.168.0.254'
 
       Create a new iSCSI portal.
   #>
 
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
@@ -51,14 +56,18 @@ Function New-UnityIscsiPortal {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    #Initialazing arrays
-    $ResultCollection = @()
+    ## Variables
+    $URI = '/api/types/iscsiPortal/instances'
+    $Type = 'iSCSI Portal'
+    $StatusCode = 201
   }
 
   Process {
     Foreach ($sess in $session) {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+
+      #### REQUEST BODY 
 
       #Creation of the body hash
       $body = @{}
@@ -89,33 +98,35 @@ Function New-UnityIscsiPortal {
         $body["gateway"] = "$($gateway)"
       }
 
-      If ($Sess.TestConnection()) {
+      ####### END BODY - Do not edit beyond this line
 
-        #Building the URI
-        $URI = 'https://'+$sess.Server+'/api/types/iscsiPortal/instances'
-        Write-Verbose "URI: $URI"
+      #Show $body in verbose message
+      $Json = $body | ConvertTo-Json -Depth 10
+      Write-Verbose $Json  
 
-        #Sending the request
-        $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+        If ($Sess.TestConnection()) {
 
-        Write-Verbose "Request status code: $($request.StatusCode)"
+          ##Building the URL
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
-        If ($request.StatusCode -eq '201') {
+          #Sending the request
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type $n")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+          }
 
-          #Formating the result. Converting it from JSON to a Powershell object
-          $results = ($request.content | ConvertFrom-Json).content
+          Write-Verbose "Request status code: $($request.StatusCode)"
 
-          Write-Verbose "iSCSI Portal created with the ID: $($results.id) "
+          If ($request.StatusCode -eq $StatusCode) {
 
-          #Executing Get-UnityIscsiPortal
-          Get-UnityIscsiPortal -Session $Sess -Id $results.id
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
+            #Formating the result. Converting it from JSON to a Powershell object
+            $results = ($request.content | ConvertFrom-Json).content
 
-    }
-  }
+            Write-Verbose "$Type with the ID $($results.id) has been created"
 
-  End {}
-}
+            Get-UnityiSCSIPortal -Session $Sess -Id $results.id
+          } # End If ($request.StatusCode -eq $StatusCode)
+        } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

@@ -9,6 +9,8 @@ Function Get-UnitySession {
       Written by Erwan Quelin under MIT licence
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Server
+      IP or FQDN of the Unity array.
       .EXAMPLE
       Get-UnitySession
 

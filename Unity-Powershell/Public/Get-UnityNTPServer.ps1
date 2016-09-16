@@ -58,16 +58,14 @@ Function Get-UnityNTPServer {
 
           Foreach ($Result in $ResultCollection) {
 
-            # Instantiate object
-            $Object = [UnityNTPServer]$Result
+              # Instantiate object
+              $Object = New-Object -TypeName $TypeName -Property $Result
 
-            # Output results
-            $Object
-          }
-        }
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-}
+              # Output results
+              $Object
+          } # End Foreach ($Result in $ResultCollection)
+        } # End If ($Results)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

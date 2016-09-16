@@ -38,6 +38,12 @@ Function Remove-UnityVMwareLUN {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/storageResource/<id>'
+    $Type = 'VMware LUN'
+    $TypeName = 'UnityLUN'
+    $StatusCode = 204
   }
 
   Process {
@@ -50,36 +56,56 @@ Function Remove-UnityVMwareLUN {
 
         Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityLUN object
+          # Determine input and convert to object if necessary
           Switch ($i.GetType().Name)
           {
             "String" {
-              $LUN = get-UnityVMwareLUN -Session $Sess -ID $i
-              $LUNID = $LUN.id
-              $LUNName = $i
-            }
-            "UnityLUN" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $LUNName = $i.Name
-              If ($LUN = Get-UnityVMwareLUN -Session $Sess -ID $i.id) {
-                        $LUNID = $i.id
+              $Object = get-UnityVMwareLUN -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
               }
             }
-          }
-
-          If ($LUNID) {
-            if ($pscmdlet.ShouldProcess($LUNName,"Delete VMware LUN")) {
-              $LUN | Remove-UnityLUNResource -Session $Sess -Confirm:$false
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityVMwareLUN -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
             }
-          } else {
-            Write-Verbose "VMware LUN $LUNName does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
+          } # End Switch
 
-  End {}
-}
+          If ($ObjectID) {
+
+            $UnityStorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$UnityStorageResource.id
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
+              #Sending the request
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
+            }
+
+            If ($request.StatusCode -eq $StatusCode) {
+
+              Write-Verbose "$Type with ID $ObjectID has been deleted"
+
+            } # End If ($request.StatusCode -eq $StatusCode)
+          } else {
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

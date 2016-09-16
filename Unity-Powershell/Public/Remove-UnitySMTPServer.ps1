@@ -39,6 +39,12 @@ Function Remove-UnitySMTPServer {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/smtpServer/<id>'
+    $Type = 'SMTP Server'
+    $TypeName = 'UnitySMTPServer'
+    $StatusCode = 204
   }
 
   Process {
@@ -51,43 +57,54 @@ Function Remove-UnitySMTPServer {
 
         Foreach ($i in $ID) {
 
-          # Determine input and convert to UnitySMTPServer object
-          Write-Verbose "Input object type is $($ID.GetType().Name)"
-          Switch ($ID.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $SMTPServer = get-UnitySMTPServer -Session $Sess -ID $ID
-              $SMTPServerID = $SMTPServer.id
+              $Object = get-UnitySMTPServer -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
             }
-            "UnitySMTPServer" {
-              $SMTPServerID = $ID.id
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnitySMTPServer -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
             }
-          }
+          } # End Switch
 
-          If ($SMTPServerID) {
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/smtpServer/'+$SMTPServerID
-            Write-Verbose "URI: $URI"
+          If ($ObjectID) {
+            
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
 
-            if ($pscmdlet.ShouldProcess($SMTPServerID,"Delete File Interface")) {
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
               #Sending the request
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
             }
 
-            If ($request.StatusCode -eq '204') {
+            If ($request.StatusCode -eq $StatusCode) {
 
-              Write-Verbose "SMTP Server with ID: $id has been deleted"
+              Write-Verbose "$Type with ID $ObjectID has been deleted"
 
-            }
+            } # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Information -MessageData "SMTP Server $SMTPServerID does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

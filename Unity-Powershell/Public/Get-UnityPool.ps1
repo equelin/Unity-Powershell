@@ -30,9 +30,9 @@ Function Get-UnityPool {
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool Name')]
     [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool ID')]
     [String[]]$ID='*'
   )
 
@@ -85,19 +85,14 @@ Function Get-UnityPool {
             Foreach ($Result in $ResultCollection) {
 
               # Instantiate object
-              $Object = [UnityPool]$Result
-
-              # Convert to MB
-              #$Object.ConvertToMB()
+              $Object = New-Object -TypeName $TypeName -Property $Result
 
               # Output results
               $Object
-            }
-          }
-        }
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-}
+            } # End Foreach ($Result in $ResultCollection)
+          } # End If ($ResultsFiltered) 
+        } # End If ($Results)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

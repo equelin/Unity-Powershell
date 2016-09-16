@@ -14,12 +14,16 @@ Function New-UnityVMwareLUN {
       Specify an UnitySession Object.
       .PARAMETER Name
       Name of the VMware VMFS datastore unique to the system.
+      .PARAMETER Pool
+      Pool ID
       .PARAMETER Description
       Description of the VMware VMFS datastore.
       .PARAMETER Size
       LUN Size.
       .PARAMETER snapSchedule
       Snapshot schedule settings for the VMware VMFS datastore, as defined by the snapScheduleParameters.
+      .PARAMETER isThinEnabled
+      Is Thin enabled? (Default is true)
       .PARAMETER host
       List of host to grant access to LUN.
       .PARAMETER accessMask
@@ -38,23 +42,23 @@ Function New-UnityVMwareLUN {
       Create LUN named 'LUN01' on pool 'pool_1' and with a size of '10GB', grant production access to 'Host_12'
   #>
 
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN Name')]
     [String[]]$Name,
-    [Parameter(Mandatory = $false,HelpMessage = 'LUN Description')]
+    [Parameter(Mandatory = $false,HelpMessage = 'VMware LUN Description')]
     [String]$Description,
-    [Parameter(Mandatory = $true,HelpMessage = 'LUN Pool ID')]
+    [Parameter(Mandatory = $true,HelpMessage = 'VMware LUN Pool ID')]
     [String]$Pool,
-    [Parameter(Mandatory = $true,HelpMessage = 'LUN Size in Bytes')]
+    [Parameter(Mandatory = $true,HelpMessage = 'VMware LUN Size in Bytes')]
     [uint64]$Size,
-    [Parameter(Mandatory = $false,HelpMessage = 'Host to grant access to LUN')]
+    [Parameter(Mandatory = $false,HelpMessage = 'Host to grant access to VMware LUN')]
     [String[]]$host,
     [Parameter(Mandatory = $false,HelpMessage = 'Host access mask')]
     [HostLUNAccessEnum]$accessMask = 'Production',
-    [Parameter(Mandatory = $false,HelpMessage = 'Is Thin enabled on LUN ? (Default is true)')]
+    [Parameter(Mandatory = $false,HelpMessage = 'Is Thin enabled on VMware LUN ? (Default is true)')]
     [bool]$isThinEnabled = $true,
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
     [String]$snapSchedule,
@@ -64,6 +68,11 @@ Function New-UnityVMwareLUN {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    ## Variables
+    $URI = '/api/types/storageResource/action/createVmwareLun'
+    $Type = 'VMware LUN'
+    $StatusCode = 200
   }
 
   Process {
@@ -130,38 +139,38 @@ Function New-UnityVMwareLUN {
           $lunParameters["isThinEnabled"] = $isThinEnabled
         }
 
-        #Displaying request's body 
+        ####### END BODY - Do not edit beyond this line
+
+        #Show $body in verbose message
         $Json = $body | ConvertTo-Json -Depth 10
-        Write-Verbose $Json
+        Write-Verbose $Json  
 
         If ($Sess.TestConnection()) {
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/types/storageResource/action/createVmwareLun'
-          Write-Verbose "URI: $URI"
+          ##Building the URL
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
           #Sending the request
-          $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type $n")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+          }
 
           Write-Verbose "Request status code: $($request.StatusCode)"
 
-          If ($request.StatusCode -eq '200') {
+          If ($request.StatusCode -eq $StatusCode) {
 
             #Formating the result. Converting it from JSON to a Powershell object
-            $results = ($request.content | ConvertFrom-Json).content.storageResource
+            $results = ($request.content | ConvertFrom-Json).content
 
-            Write-Verbose "LUN created with the storage resource ID: $($results.id) "
+            $Storageresource = Get-UnitystorageResource -session $Sess -ID $results.storageResource.id
 
-            #Executing Get-UnityVMwareLUN with the ID of the new user
-            Get-UnityVMwareLUN -Session $Sess -Name $n
-          }
-        } else {
-          Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-        }
-      }
-    }
-  }
+            Write-Verbose "$Type with the ID $($Storageresource.luns.id) has been created"
 
-  End {
-  }
-}
+            Get-UnityVMwareLUN -Session $Sess -ID $Storageresource.luns.id
+          } # End If ($request.StatusCode -eq $StatusCode)
+        } # End If ($Sess.TestConnection()) 
+      } # End Foreach
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

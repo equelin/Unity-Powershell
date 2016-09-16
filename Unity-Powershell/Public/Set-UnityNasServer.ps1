@@ -12,9 +12,9 @@ Function Set-UnityNASServer {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specifies an UnitySession Object.
+      .PARAMETER ID
+      NAS Server ID or Object
       .PARAMETER Name
-      Specifies the NAS server name.
-      .PARAMETER NewName
       Specifies the NAS server new name.
       NAS server names can contain alphanumeric characters, a single dash, and a single underscore. 
       Server names cannot contain spaces or begin or end with a dash. 
@@ -50,19 +50,19 @@ Function Set-UnityNASServer {
       Change the description of the NAS Server named NAS01
   #>
 
-    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
     #NasServer
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool Name or Pool Object')]
-    $Name,
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'NAS Server ID or Object')]
+    [String[]]$ID,
 
     #NasServer Set parameters
     [Parameter(Mandatory = $false,HelpMessage = 'New Name of the Nas Server')]
-    [String]$NewName,
+    [String]$Name,
     [Parameter(Mandatory = $false,HelpMessage = 'Storage processor ID on which the NAS server will run')]
     $homeSP,
     [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether the NAS server is a replication destination')]
@@ -81,6 +81,12 @@ Function Set-UnityNASServer {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/nasServer/<id>/action/modify'
+    $Type = 'NAS Server'
+    $TypeName = 'UnityNasServer'
+    $StatusCode = 204
   }
 
   Process {
@@ -91,33 +97,41 @@ Function Set-UnityNASServer {
 
       If ($Sess.TestConnection()) {
 
-        Foreach ($n in $Name) {
+        Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityPool object
-          Switch ($n.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $NasServer = get-UnityNasServer -Session $Sess -Name $n
-              $NasServerID = $NasServer.id
-              $NasServerName = $NasServer.Name
+              $Object = get-UnityNASServer -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
             }
-            "UnityPool" {
-              Write-Verbose "Input object type is $($n.GetType().Name)"
-              $NasServerName = $n.Name
-              If ($NasServer = Get-UnityNasServer -Session $Sess -Name $NasServerName) {
-                        $NasServerID = $n.id
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityNASServer -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
               }
             }
           }
 
-          If ($NasServerID) {
+          If ($ObjectID) {
 
             # Creation of the body hash
             $body = @{}
 
             # Name parameter
-            If ($NewName) {
-              $body["name"] = "$($NewName)"
+            If ($Name) {
+              $body["name"] = "$($Name)"
             }
 
             # homeSP parameter
@@ -152,31 +166,35 @@ Function Set-UnityNASServer {
                   $body["defaultWindowsUser"] = $defaultWindowsUser
             }
 
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/nasServer/'+$NasServerID+'/action/modify'
-            Write-Verbose "URI: $URI"
+            ####### END BODY - Do not edit beyond this line
+
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
 
             #Sending the request
-            If ($pscmdlet.ShouldProcess($NasServerName,"Modify NAS Server")) {
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
             }
 
-            If ($request.StatusCode -eq '204') {
+            If ($request.StatusCode -eq $StatusCode) {
 
-              Write-Verbose "Pool with ID: $NasServerID has been modified"
+              Write-Verbose "$Type with ID $ObjectID has been modified"
 
-              Get-UnityNasServer -Session $Sess -id $NasServerID
+              Get-UnityNASServer -Session $Sess -id $ObjectID
 
-            }
+            }  # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Verbose "NAS Server $NasServerName does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

@@ -12,16 +12,16 @@ Function Remove-UnityFilesystem {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specify an UnitySession Object.
-      .PARAMETER Name
-      Filesystem name or Object.
+      .PARAMETER ID
+      Filesystem ID or Object.
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Remove-UnityFilesystem -Name 'FS01'
+      Remove-UnityFilesystem -ID 'fs_1'
 
-      Delete the filesystem named 'FS01'
+      Delete the filesystem named 'fs_1'
       .EXAMPLE
       Get-UnityFilesystem -Name 'FS01' | Remove-UnityFilesystem
 
@@ -32,12 +32,18 @@ Function Remove-UnityFilesystem {
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'filesystem Name or filesystem Object')]
-    $Name
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem ID or Object.')]
+    $ID
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/storageResource/<id>'
+    $Type = 'Filesystem'
+    $TypeName = 'UnityFilesystem'
+    $StatusCode = 204
   }
 
   Process {
@@ -48,52 +54,58 @@ Function Remove-UnityFilesystem {
 
       If ($Sess.TestConnection()) {
 
-        Foreach ($n in $Name) {
+        Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityFilesystem object
-          Switch ($n.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $filesystem = get-UnityFilesystem -Session $Sess -Name $n
-              $filesystemID = $filesystem.id
-              $filesystemName = $n
-            }
-            "UnityFilesystem" {
-              Write-Verbose "Input object type is $($n.GetType().Name)"
-              $filesystemName = $n.Name
-              If (Get-Unityfilesystem -Session $Sess -Name $n.Name) {
-                        $filesystemID = $n.id
+              $Object = get-UnityFilesystem -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
               }
             }
-          }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityFilesystem -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
+            }
+          } # End Switch
 
-          If ($filesystemID) {
+          If ($ObjectID) {
 
-            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $filesystemName) -and ($_.filesystem.id -like $filesystemID)}
+            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.filesystem.id -like $ObjectID)}
 
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/storageResource/' + $UnityStorageRessource.id
-            Write-Verbose "URI: $URI"
+            #Building the URL
+            $URI = $URI -replace '<id>',$UnityStorageRessource.id
 
-            if ($pscmdlet.ShouldProcess($filesystemName,"Delete Filesystem")) {
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
               #Sending the request
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
             }
 
-            If ($request.StatusCode -eq '204') {
+            If ($request.StatusCode -eq $StatusCode) {
 
               Write-Verbose "Filesystem with ID: $filesystemID has been deleted"
 
             }
           } else {
-            Write-Verbose "Filesystem $filesystemName does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

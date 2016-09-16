@@ -41,7 +41,7 @@ Function Set-UnityIscsiPortal {
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'iSCSI Network Portal ID or Oject')]
-    [String]$ID,
+    [String[]]$ID,
     [Parameter(Mandatory = $false,HelpMessage = 'IPv4 or IPv6 address for the interface.')]
     [string]$ipAddress,
     [Parameter(Mandatory = $false,HelpMessage = 'IPv4 netmask for the interface, if the interface uses an IPv4 address.')]
@@ -56,6 +56,12 @@ Function Set-UnityIscsiPortal {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/iscsiPortal/<id>/action/modify'
+    $Type = 'iSCSI Portal'
+    $TypeName = 'UnityIscsiPortal'
+    $StatusCode = 204
   }
 
   Process {
@@ -66,68 +72,89 @@ Function Set-UnityIscsiPortal {
 
       If ($Sess.TestConnection()) {
 
-        # Determine input and convert to UnityIscsiPortal object
-        Write-Verbose "Input object type is $($ID.GetType().Name)"
-        Switch ($ID.GetType().Name)
-        {
-          "String" {
-            $IscsiPortal = get-UnityIscsiPortal -Session $Sess -ID $ID
-            $IscsiPortalID = $IscsiPortal.id
-          }
-          "UnityIscsiPortal" {
-            $IscsiPortalID = $ID.id
-          }
-        }
+        Foreach ($i in $ID) {
 
-        If ($IscsiPortalID) {
-
-          # Creation of the body hash
-          $body = @{}
-
-          If ($PSBoundParameters.ContainsKey('ipAddress')) {
-            $body["ipAddress"] = $ipAddress
-          }
-
-          If ($PSBoundParameters.ContainsKey('netmask')) {
-            $body["netmask"] = "$($netmask)"
-          }
-
-          If ($PSBoundParameters.ContainsKey('v6PrefixLength')) {
-            $body["v6PrefixLength"] = "$($v6PrefixLength)"
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
+          {
+            "String" {
+              $Object = get-UnityIscsiPortal -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
+            }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityIscsiPortal -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
+            }
           }
 
-          If ($PSBoundParameters.ContainsKey('vlanId')) {
-            $body["vlanId"] = "$($vlanId)"
-          }
+          If ($ObjectID) {
 
-          If ($PSBoundParameters.ContainsKey('gateway')) {
-            $body["gateway"] = "$($gateway)"
-          }
+            #### REQUEST BODY 
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/iscsiPortal/'+$IscsiPortalID+'/action/modify'
-          Write-Verbose "URI: $URI"
+            # Creation of the body hash
+            $body = @{}
 
-          #Sending the request
-          If ($pscmdlet.ShouldProcess($IscsiPortalID,"Modify iSCSI Network Portal")) {
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
-          }
+            If ($PSBoundParameters.ContainsKey('ipAddress')) {
+              $body["ipAddress"] = $ipAddress
+            }
 
-          If ($request.StatusCode -eq '204') {
+            If ($PSBoundParameters.ContainsKey('netmask')) {
+              $body["netmask"] = "$($netmask)"
+            }
 
-            Write-Verbose "iSCSI Network Portal with ID: $IscsiPortalID has been modified"
+            If ($PSBoundParameters.ContainsKey('v6PrefixLength')) {
+              $body["v6PrefixLength"] = "$($v6PrefixLength)"
+            }
 
-            Get-UnityIscsiPortal -Session $Sess -id $IscsiPortalID
+            If ($PSBoundParameters.ContainsKey('vlanId')) {
+              $body["vlanId"] = "$($vlanId)"
+            }
 
-          }
-        } else {
-          Write-Verbose "iSCSI Network Portal $IscsiPortalID does not exist on the array $($sess.Name)"
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
+            If ($PSBoundParameters.ContainsKey('gateway')) {
+              $body["gateway"] = "$($gateway)"
+            }
 
-  End {}
-}
+            ####### END BODY - Do not edit beyond this line
+
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            #Sending the request
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+            }
+            
+            If ($request.StatusCode -eq $StatusCode) {
+
+              Write-Verbose "$Type with ID $ObjectID has been modified"
+
+              Get-UnityIscsiPortal -Session $Sess -id $ObjectID
+
+            }  # End If ($request.StatusCode -eq $StatusCode)
+          } else {
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

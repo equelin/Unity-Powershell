@@ -1,4 +1,4 @@
-Function Get-UnitySmtpServer {
+Function Get-UnitySMTPServer {
 
   <#
       .SYNOPSIS
@@ -15,9 +15,9 @@ Function Get-UnitySmtpServer {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnitySmtpServer
+      Get-UnitySMTPServer
 
-      Retrieve informations about all the smtp servers.
+      Retrieve informations about all the SMTP servers.
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByID")]
@@ -78,12 +78,10 @@ Function Get-UnitySmtpServer {
 
               # Output results
               $Object
-            }
-          }
-        }
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-}
+            } # End Foreach ($Result in $ResultCollection)
+          } # End If ($ResultsFiltered) 
+        } # End If ($Results)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

@@ -10,6 +10,44 @@ Function Set-UnityFilesystem {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER Name
+      New Name of the filesystem
+      .PARAMETER Description
+      Filesystem Description
+      .PARAMETER snapSchedule
+      ID of a protection schedule to apply to the filesystem
+      .PARAMETER isSnapSchedulePaused
+      Is assigned snapshot schedule is paused ? (Default is false)
+      .PARAMETER isThinEnabled
+      Indicates whether to enable thin provisioning for file system. Default is $True
+      .PARAMETER Size
+      Filesystem Size
+      .PARAMETER hostIOSize
+      Typical write I/O size from the host to the file system
+      .PARAMETER isCacheDisabled
+      Indicates whether caching is disabled
+      .PARAMETER accessPolicy
+      Access policy
+      .PARAMETER poolFullPolicy
+      Behavior to follow when pool is full and a write to this filesystem is attempted
+      .PARAMETER tieringPolicy
+      Filesystem tiering policy
+      .PARAMETER isCIFSSyncWritesEnabled
+      Indicates whether the CIFS synchronous writes option is enabled for the file system
+      .PARAMETER isCIFSOpLocksEnabled
+      Indicates whether opportunistic file locks are enabled for the file system
+      .PARAMETER isCIFSNotifyOnWriteEnabled
+      Indicates whether the system generates a notification when the file system is written to
+      .PARAMETER isCIFSNotifyOnAccessEnabled
+      Indicates whether the system generates a notification when a user accesses the file system
+      .PARAMETER cifsNotifyOnChangeDirDepth
+      Indicates the lowest directory level to which the enabled notifications apply, if any
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
       Set-UnityFilesystem -Name 'FS01' -Description 'Modified description'
 
@@ -23,10 +61,10 @@ Function Set-UnityFilesystem {
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     
     #SetFilesystem
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem Name')]
-    [String[]]$Name,
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem ID or Object')]
+    [String[]]$ID,
     [Parameter(Mandatory = $false,HelpMessage = 'New Name of the filesystem')]
-    [String]$NewName,
+    [String]$Name,
     [Parameter(Mandatory = $false,HelpMessage = 'Filesystem Description')]
     [String]$Description,
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the filesystem')]
@@ -67,6 +105,12 @@ Function Set-UnityFilesystem {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/storageResource/<id>/action/modifyFilesystem'
+    $Type = 'Filesystem'
+    $TypeName = 'UnityFilesystem'
+    $StatusCode = 204
   }
 
   Process {
@@ -77,35 +121,45 @@ Function Set-UnityFilesystem {
 
       If ($Sess.TestConnection()) {
 
-        Foreach ($n in $Name) {
+        Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityFilesystem object
-          Switch ($n.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $filesystem = get-UnityFilesystem -Session $Sess -Name $n
-              $filesystemID = $filesystem.id
-              $filesystemName = $filesystem.Name
+              $Object = get-UnityFilesystem -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
             }
-            "UnityFilesystem" {
-              Write-Verbose "Input object type is $($n.GetType().Name)"
-              $filesystemName = $n.Name
-              If ($filesystem = Get-UnityFilesystem -Session $Sess -Name $filesystemName) {
-                        $filesystemID = $n.id
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityFilesystem -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
               }
             }
           }
 
-          If ($filesystemID) {
+          If ($ObjectID) {
 
-             $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $filesystemName) -and ($_.filesystem.id -like $filesystemID)}
+            $UnitystorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.filesystem.id -like $ObjectID)}
+
+            #### REQUEST BODY
 
             # Creation of the body hash
             $body = @{}
 
             # Name parameter
             If ($NewName) {
-              $body["name"] = "$($NewName)"
+              $body["name"] = "$($Name)"
             }
 
             # Domain parameter
@@ -199,31 +253,35 @@ Function Set-UnityFilesystem {
               $body["snapScheduleParameters"] = $snapScheduleParameters
             }
 
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/storageResource/'+($UnityStorageRessource.id)+'/action/modifyFilesystem'
-            Write-Verbose "URI: $URI"
+            ####### END BODY - Do not edit beyond this line
+
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
+            #Building the URL
+            $URI = $URI -replace '<id>',$UnitystorageResource.id
+
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
 
             #Sending the request
-            If ($pscmdlet.ShouldProcess($filesystemName,"Modify filesystem")) {
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
             }
+            
+            If ($request.StatusCode -eq $StatusCode) {
 
-            If ($request.StatusCode -eq '204') {
+              Write-Verbose "$Type with ID $ObjectID has been modified"
 
-              Write-Verbose "Filesystem with ID: $filesystemID has been modified"
+              Get-UnityFilesystem  -Session $Sess -ID $ObjectID
 
-              Get-UnityFilesystem -Session $Sess -id $filesystemID
-
-            }
+            }  # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Verbose "filesystem $filesystemName does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

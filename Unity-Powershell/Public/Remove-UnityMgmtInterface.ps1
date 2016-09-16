@@ -38,6 +38,12 @@ Function Remove-UnityMgmtInterface {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/mgmtInterface/<id>'
+    $Type = 'Management Interface'
+    $TypeName = 'UnityMgmtInterface'
+    $StatusCode = 204
   }
 
   Process {
@@ -50,43 +56,54 @@ Function Remove-UnityMgmtInterface {
 
         Foreach ($i in $ID) {
 
-        # Determine input and convert to UnityMgmtInterface object
-        Switch ($ID.GetType().Name)
-        {
-          "String" {
-            $MgmtInterface = get-UnityMgmtInterface -Session $Sess -ID $ID
-            $MgmtInterfaceID = $MgmtInterface.id
-          }
-          "UnityMgmtInterface" {
-            Write-Verbose "Input object type is $($ID.GetType().Name)"
-            $MgmtInterfaceID = $ID.id
-          }
-        }
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
+          {
+            "String" {
+              $Object = get-UnityMgmtInterface -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }
+            }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityMgmtInterface -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
+            }
+          } # End Switch
 
-          If ($MgmtInterfaceID) {
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/mgmtInterface/'+$MgmtInterfaceID
-            Write-Verbose "URI: $URI"
+          If ($ObjectID) {
+            
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
 
-            if ($pscmdlet.ShouldProcess($MgmtInterfaceID,"Delete management interface. WARNING: You might be disconnected from the interface.")) {
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
               #Sending the request
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
             }
 
-            If ($request.StatusCode -eq '204') {
+            If ($request.StatusCode -eq $StatusCode) {
 
-              Write-Verbose "Management Interface with ID: $id has been deleted"
+              Write-Verbose "$Type with ID $ObjectID has been deleted"
 
-            }
+            } # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Information -MessageData "Management Interface $MgmtInterfaceID does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

@@ -38,6 +38,12 @@ Function Remove-UnityFileDNSServer {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/fileDNSServer/<id>'
+    $Type = 'File DNS Server'
+    $TypeName = 'UnityFileDnsServer'
+    $StatusCode = 204
   }
 
   Process {
@@ -50,47 +56,54 @@ Function Remove-UnityFileDNSServer {
 
         Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityFileDnsServer object
-          Switch ($ID.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $FileDNSServer = get-UnityFileDnsServer -Session $Sess -ID $ID
-              $FileDNSServerID = $FileDNSServer.id
-              $FileDNSServerName = $FileDNSServer.Name
-            }
-            "UnityFileDnsServer" {
-              Write-Verbose "Input object type is $($ID.GetType().Name)"
-              $FileDNSServerID = $ID.id
-              If ($FileDNSServer = Get-UnityFileDnsServer -Session $Sess -ID $FileDNSServerID) {
-                        $FileDNSServerName = $ID.name
+              $Object = get-UnityFileDNSServer -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
               }
             }
-          }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityFileDNSServer -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
+            }
+          } # End Switch
 
-          If ($FileDNSServerID) {
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/fileDNSServer/'+$FileDNSServerID
-            Write-Verbose "URI: $URI"
+          If ($ObjectID) {
+            
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
 
-            if ($pscmdlet.ShouldProcess($FileDNSServerID,"Delete File DNS Server")) {
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
               #Sending the request
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
             }
 
-            If ($request.StatusCode -eq '204') {
+            If ($request.StatusCode -eq $StatusCode) {
 
-              Write-Verbose "File DNS Server with ID: $id has been deleted"
+              Write-Verbose "$Type with ID $ObjectID has been deleted"
 
-            }
+            } # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Information -MessageData "File DNS $FileDNSServerID does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

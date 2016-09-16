@@ -1,12 +1,13 @@
-[![GitHub version](https://badge.fury.io/gh/equelin%2FUnity-Powershell.svg)](https://badge.fury.io/gh/equelin%2FUnity-Powershell)
+[![Build status](https://ci.appveyor.com/api/projects/status/y6w9s01j9ddqnsbi/branch/master?svg=true)](https://ci.appveyor.com/api/projects/status/y6w9s01j9ddqnsbi/branch/master?svg=true) [![GitHub version](https://badge.fury.io/gh/equelin%2FUnity-Powershell.svg)](https://badge.fury.io/gh/equelin%2FUnity-Powershell)
 
 # Unity-Powershell
 
-This is a PowerShell module for querying EMC Unity array's API.
+This is a PowerShell module for managing EMC Unity arrays (physical or virtual).
+Unity-Powershell is a member of the DevHigh5 program from [{code} by Dell EMC(tm)](https://github.com/codedellemc/codedellemc.github.io/wiki/DevHigh5-Program-Overview-and-FAQ).
 
 ![](./Medias/Unity-Powershell-Demo-01.gif)
 
-With this module (version 0.7.0) you can manage:
+With this module (version 0.8.0) you can manage:
 
 - System (DNS,NTP...)
 - Pools (Virtual and physical deployment)
@@ -31,7 +32,7 @@ For example, you can manage Pools with the following commands:
 - Set-UnityPool
 - Remove-UnityPool
 
-Some functions accept pipelining. If you want to delete all the existing LUNS you can do this:
+Some functions accept pipelining. For axample, if you want to delete all the existing LUNS you can do this:
 
 ```powershell
 Get-UnityLUN | Remove-UnityLUN
@@ -39,8 +40,8 @@ Get-UnityLUN | Remove-UnityLUN
 
 # Requirements
 
-- Powershell 5
-- An EMC Unity array ! 
+- Powershell 5 (If possible get the latest version)
+- An EMC Unity array ! (virtual or physical)
 
 # Instructions
 ### Install the module
@@ -95,24 +96,24 @@ You can create a new LUN `New-UnityLUN`, retrieves informations `Get-UnityLUN`, 
 
 ```PowerShell
 # Create a block LUN
-    New-UnityLUN -Name 'LUN01' -Pool 'pool_1' -Size 1024000
+    New-UnityLUN -Name 'LUN01' -Pool 'pool_1' -Size '10GB'
 
-    Name  id    pool   isThinEnabled tieringPolicy sizeTotal sizeUsed sizeAllocated
-    ----  --    ----   ------------- ------------- --------- -------- -------------
-    LUN01 sv_69 pool_1 True          Autotier_High 1024000   0        0
+    Id    Name  Pool          IsThinEnabled TieringPolicy SizeTotal   SizeAllocated Type
+    --    ----  ----          ------------- ------------- ---------   ------------- ----
+    sv_94 LUN01 @{id=pool_1} True          Autotier_High 10737418240 0             Standalone
 
 
 # Retrieve informations about block LUN
     Get-UnityLUN
 
-    Name  ID   pool   isThinEnabled tieringPolicy sizeTotal  sizeUsed sizeAllocated
-    ----  --   ----   ------------- ------------- ---------  -------- -------------
-    LUN01 sv_1 pool_1 True          Autotier_High 1073741824 0        0
-    LUN02 sv_2 pool_1 True          Autotier_High 1073741824 0        0
+    Id    Name  Pool          IsThinEnabled TieringPolicy SizeTotal   SizeAllocated Type
+    --    ----  ----          ------------- ------------- ---------   ------------- ----
+    sv_94 LUN01 @{id=pool_1} True          Autotier_High 10737418240 0             Standalone
+    sv_95 LUN02 @{id=pool_1} True          Autotier_High 10737418240 0             Standalone
 
 
 # Delete a LUN
-    Remove-UnityLUN -Name 'LUN01'
+    Remove-UnityLUN -ID 'sv_95'
 ```
 
 ### Users Management
@@ -123,19 +124,19 @@ You can add a new user `New-UnityUser`, modify his properties `Set-UnityUSer` or
 # Retrieve informations about a specific user
     Get-UnityUser -Name 'demo'
 
-    id        Name Role
+    Id        Name Role
     --        ---- ----
-    user_demo demo storageadmin
+    user_demo demo @{id=storageadmin}
 
 # Change the role of the user from storageadmin to operator
     Get-UnityUser -Name 'demo' | Set-UnityUser -Role 'operator'
 
-    id        Name Role
+    Id        Name Role
     --        ---- ----
-    user_demo demo operator    
+    user_demo demo @{id=operator}  
 
 # Delete an user
-    Remove-UnityUser -Name 'demo'
+    Remove-UnityUser -ID 'user_demo'
 ```
 
 ### Query ressources

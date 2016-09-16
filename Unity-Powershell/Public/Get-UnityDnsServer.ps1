@@ -13,17 +13,12 @@ Function Get-UnityDNSServer {
       .PARAMETER Session
       Specifies an UnitySession Object.
       .EXAMPLE
-      Get-UnitySystem
+      Get-UnityDNSServer
 
-      Retrieve informations about all the arrays with an active session.
-      .EXAMPLE
-      Get-UnitySystem -Name 'UnityVSA'
-
-
-      Retrieves informations about an array named 'UnityVSA'
+      Retrieve informations about the DNS server.
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByName")]
+  [CmdletBinding()]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
@@ -63,16 +58,14 @@ Function Get-UnityDNSServer {
 
           Foreach ($Result in $ResultCollection) {
 
-            # Instantiate object
-            $Object = [UnityDnsServer]$Result
+              # Instantiate object
+              $Object = New-Object -TypeName $TypeName -Property $Result
 
-            # Output results
-            $Object
-          }
-        }
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-}
+              # Output results
+              $Object
+          } # End Foreach ($Result in $ResultCollection)
+        } # End If ($Results)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

@@ -150,7 +150,7 @@ Function Set-UnityvCenter {
           }
           'ImportHosts' {
 
-            $recommendation = Get-UnityHostContainerReco  -Session $Sess -Address $vCenterServer.address -Username $Username -Password $Password
+            $recommendation = Get-UnityHostContainerReco -Session $Sess -Address $vCenterServer.address -Username $Username -Password $Password
 
             Foreach ($Host in $recommendation.potentialHosts) {
 

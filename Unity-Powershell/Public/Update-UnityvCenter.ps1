@@ -32,7 +32,7 @@ Function Update-UnityvCenter {
 
     #vCenter
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID or Object of a vCenter server')]
-    $ID,
+    [String[]]$ID,
     [Parameter(Mandatory = $true,ParameterSetName="Refresh",HelpMessage = 'Refresh all the hosts managed by the host container.')]
     [switch]$Refresh,
     [Parameter(Mandatory = $true,ParameterSetName="RefreshAll",HelpMessage = 'Refresh all known vCenters and ESX servers.')]
@@ -42,8 +42,11 @@ Function Update-UnityvCenter {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    #Initialazing arrays
-    $ResultCollection = @()
+    # Variables
+    $URI = '/api/instances/storageResource/<id>/action/modifyLun'
+    $Type = 'vCenter'
+    $TypeName = 'UnityvCenterServer'
+    $StatusCode = 204
   }
 
   Process {
@@ -51,56 +54,69 @@ Function Update-UnityvCenter {
 
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
+      If ($Sess.TestConnection()) {
+
       Foreach ($i in $ID) {
 
-        Write-Verbose "Input object type is $($ID.GetType().Name)"
         Switch ($i.GetType().Name)
         {
           "String" {
-            $vCenterServer = get-UnityvCenter -Session $Sess -ID $i
-            $vCenterServerID = $vCenterServer.id
+            $Object = get-UnityvCenter -Session $Sess -ID $i
+            $ObjectID = $Object.id
+            If ($Object.Name) {
+              $ObjectName = $Object.Name
+            } else {
+              $ObjectName = $ObjectID
+            }
           }
-          "UnityvCenterServer" {
-            $vCenterServerID = $i.id
+          "$TypeName" {
+            Write-Verbose "Input object type is $($i.GetType().Name)"
+            $ObjectID = $i.id
+            If ($Object = Get-UnityvCenter -Session $Sess -ID $ObjectID) {
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
+              }          
+            }
           }
         }
 
-        # Creation of the body hash
-        $body = @{}
+        If ($ObjectID) {
 
-        # serviceType parameter
-        $body["doRescan"] = $True
+          # Creation of the body hash
+          $body = @{}
 
-        If ($Sess.TestConnection()) {
+          # serviceType parameter
+          $body["doRescan"] = $True
 
-          #Building the URI
-          Switch ($PsCmdlet.ParameterSetName) {
-            'Refresh' {
-              $URI = 'https://'+$sess.Server+'/api/instances/hostContainer/'+$vCenterServerID+'/action/refresh'
+            #Building the URI
+            Switch ($PsCmdlet.ParameterSetName) {
+              'Refresh' {
+                $URI = 'https://'+$sess.Server+'/api/instances/hostContainer/'+$ObjectID+'/action/refresh'
+              }
+              'RefreshAll' {
+                $URI = 'https://'+$sess.Server+'/api/types/hostContainer/action/refreshAll'
+              }
             }
-            'RefreshAll' {
-              $URI = 'https://'+$sess.Server+'/api/types/hostContainer/action/refreshAll'
-            }
-          }
 
-          Write-Verbose "URI: $URI"
+            Write-Verbose "URI: $URI"
 
-          #Sending the request
-          $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+            #Sending the request
+            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
 
-          Write-Verbose "Request status code: $($request.StatusCode)"
+            If ($request.StatusCode -eq $StatusCode) {
 
-          If ($request.StatusCode -eq '204') {
+                Write-Verbose "$Type with ID $ObjectID has been refreshed"
 
-            Write-Information -MessageData "vCenter(s) refreshed successfully"
-            
-          }
-        } else {
-          Write-Warning "You are no longer connected to EMC Unity array: $($Sess.Server)"
-        }
-      }
-    }
-  }
-
-  End {}
-}
+                Get-UnityvCenter -Session $Sess -ID $ObjectID
+              
+              }  # End If ($request.StatusCode -eq $StatusCode)
+            } else {
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

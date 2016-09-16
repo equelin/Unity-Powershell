@@ -30,9 +30,9 @@ Function Get-UnityVMwareLUN {
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN Name')]
     [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN ID')]
     [String[]]$ID='*'
   )
 
@@ -76,9 +76,7 @@ Function Get-UnityVMwareLUN {
             Write-Output $ResultCollection | Where-Object {$_.Id -like $I}
           }
         }
-      }
-    }
-  }
-
-  End {}
-}
+      } #End Switch
+    } # End If ($ResultCollection)
+  } # End Process
+} # End Function

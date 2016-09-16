@@ -38,6 +38,10 @@ Function New-UnityPool {
       Specify the snapshot space used high watermark to trigger auto-delete on the storage pool.
       .PARAMETER snapSpaceHarvestLowThreshold
       Specify the snapshot space used low watermark to trigger auto-delete on the storage pool.
+      .PARAMETER Confirm
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      .PARAMETER WhatIf
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
       New-UnityPool -Name 'POOL01' -virtualDisk @{"id"='vdisk_1';"tier"='Performance'},@{"id"='vdisk_2';"tier"='Performance'}
 
@@ -48,7 +52,7 @@ Function New-UnityPool {
       Create pool named 'POOL01' with with 15 disks from diskgroup ID 'dg_11'.RAID protection is a 'RAID5' with a stripe width of 5 (4+1). Apply to physical deployment only.
   #>
 
-  [CmdletBinding(DefaultParameterSetName="RaidGroup")]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High',DefaultParameterSetName="RaidGroup")]
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
@@ -59,9 +63,9 @@ Function New-UnityPool {
     [String[]]$Name,
     [Parameter(Mandatory = $false,HelpMessage = 'Pool Description')]
     [String]$Description,
-    [Parameter(Mandatory = $false,ParameterSetName="VirtualDisk",HelpMessage = 'Parameters to add virtual disks to the pool')]
+    [Parameter(Mandatory = $true,ParameterSetName="VirtualDisk",HelpMessage = 'Parameters to add virtual disks to the pool')]
     [array]$virtualDisk,
-    [Parameter(Mandatory = $false,ParameterSetName="RaidGroup",HelpMessage = 'Parameters to add RAID groups to the pool')]
+    [Parameter(Mandatory = $true,ParameterSetName="RaidGroup",HelpMessage = 'Parameters to add RAID groups to the pool')]
     [array]$raidGroup,
     [Parameter(Mandatory = $false,HelpMessage = 'Threshold at which the system will generate alerts about the free space in the pool')]
     [Int]$alertThreshold,
@@ -86,8 +90,10 @@ Function New-UnityPool {
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-    #Initialazing arrays
-    $ResultCollection = @()
+    ## Variables
+    $URI = '/api/types/pool/instances'
+    $Type = 'Pool'
+    $StatusCode = 201
 
     $tier = @{
       "Extreme_Performance" = "10"
@@ -114,6 +120,8 @@ Function New-UnityPool {
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       Foreach ($n in $Name) {
+
+        #### REQUEST BODY 
 
         # Creation of the body hash
         $body = @{}
@@ -205,33 +213,36 @@ Function New-UnityPool {
               $body["isFASTVpScheduleEnabled"] = $isFASTVpScheduleEnabled
         }
 
+        ####### END BODY - Do not edit beyond this line
+
+        #Show $body in verbose message
+        $Json = $body | ConvertTo-Json -Depth 10
+        Write-Verbose $Json  
+
         If ($Sess.TestConnection()) {
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/types/pool/instances'
-          Write-Verbose "URI: $URI"
+          ##Building the URL
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
           #Sending the request
-          $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type $n")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
+          }
 
           Write-Verbose "Request status code: $($request.StatusCode)"
 
-          If ($request.StatusCode -eq '201') {
+          If ($request.StatusCode -eq $StatusCode) {
 
             #Formating the result. Converting it from JSON to a Powershell object
             $results = ($request.content | ConvertFrom-Json).content
 
-            Write-Verbose "LUN created with the ID: $($results.id) "
+            Write-Verbose "$Type with the ID $($results.id) has been created"
 
-            #Executing Get-UnityUser with the ID of the new user
             Get-UnityPool -Session $Sess -ID $results.id
-          }
-        } else {
-          Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-        }
-      }
-    }
-  }
-
-  End {}
-}
+          } # End If ($request.StatusCode -eq $StatusCode)
+        } # End If ($Sess.TestConnection()) 
+      } # End Foreach
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

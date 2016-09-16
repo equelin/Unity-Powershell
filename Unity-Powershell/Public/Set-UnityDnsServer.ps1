@@ -10,6 +10,10 @@ Function Set-UnityDNSServer {
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
+      .PARAMETER Session
+      Specify an UnitySession Object.
+      .PARAMETER addresses
+      New list of IP addresses to replace the exsting address list for this DNS server.
       .EXAMPLE
       Set-UnityDnsServer -Addresses '192.168.0.1','192.168.0.2'
 
@@ -21,12 +25,17 @@ Function Set-UnityDNSServer {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name or LUN Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'New list of IP addresses to replace the exsting address list for this DNS server.')]
     [String[]]$Addresses
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/dnsServer/<id>/action/modify'
+    $Type = 'DNS Server'
+    $StatusCode = 204
   }
 
   Process {
@@ -37,7 +46,11 @@ Function Set-UnityDNSServer {
 
       If ($Sess.TestConnection()) {
 
-          $DnsServer = Get-UnityDnsServer -Session $Sess
+          $Object = Get-UnityDnsServer -Session $Sess
+
+          $ObjectID = $Object.id
+
+          #### REQUEST BODY 
 
           # Creation of the body hash
           $body = @{}
@@ -47,18 +60,26 @@ Function Set-UnityDNSServer {
             $body["addresses"] += $Addresse
           }
 
-          #Building the URI
-          $URI = 'https://'+$sess.Server+'/api/instances/dnsServer/'+($DnsServer.id)+'/action/modify'
-          Write-Verbose "URI: $URI"
+          ####### END BODY - Do not edit beyond this line
+
+          #Show $body in verbose message
+          $Json = $body | ConvertTo-Json -Depth 10
+          Write-Verbose $Json 
+
+          #Building the URL
+          $URI = $URI -replace '<id>',$ObjectID
+
+          $URL = 'https://'+$sess.Server+$URI
+          Write-Verbose "URL: $URL"
 
           #Sending the request
-          If ($pscmdlet.ShouldProcess($($DnsServer.id),"Modify DNS Server")) {
-            $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectID")) {
+            $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
           }
 
-          If ($request.StatusCode -eq '204') {
+          If ($request.StatusCode -eq $StatusCode) {
 
-            Write-Verbose "DNS Server has been modified"
+            Write-Verbose "$Type with ID $ObjectID has been modified"
 
             Get-UnityDnsServer -Session $Sess
           }

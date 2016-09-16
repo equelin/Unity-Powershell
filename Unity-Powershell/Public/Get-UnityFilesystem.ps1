@@ -2,9 +2,9 @@ Function Get-UnityFilesystem {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about filesystem.
+      Queries the EMC Unity array to retrieve informations about filesystems.
       .DESCRIPTION
-      Querries the EMC Unity array to retrieve informations about filesystem.
+      Querries the EMC Unity array to retrieve informations about filesystems.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -85,16 +85,14 @@ Function Get-UnityFilesystem {
             Foreach ($Result in $ResultCollection) {
 
               # Instantiate object
-              $Object = [UnityFilesystem]$Result
+              $Object = New-Object -TypeName $TypeName -Property $Result
 
               # Output results
               $Object
-            }
-          }
-        }
-      } else {
-        Write-Host "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-}
+            } # End Foreach ($Result in $ResultCollection)
+          } # End If ($ResultsFiltered) 
+        } # End If ($Results)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function

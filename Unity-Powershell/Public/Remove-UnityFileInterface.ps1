@@ -38,6 +38,12 @@ Function Remove-UnityFileInterface {
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+
+    # Variables
+    $URI = '/api/instances/fileInterface/<id>'
+    $Type = 'File Interface'
+    $TypeName = 'UnityFileInterface'
+    $StatusCode = 204
   }
 
   Process {
@@ -50,47 +56,54 @@ Function Remove-UnityFileInterface {
 
         Foreach ($i in $ID) {
 
-          # Determine input and convert to UnityFileInterface object
-          Switch ($ID.GetType().Name)
+          # Determine input and convert to object if necessary
+          Switch ($i.GetType().Name)
           {
             "String" {
-              $FileInterface = get-UnityFileInterface -Session $Sess -ID $ID
-              $FileInterfaceID = $FileInterface.id
-              $FileInterfaceName = $FileInterface.Name
-            }
-            "UnityFileInterface" {
-              Write-Verbose "Input object type is $($ID.GetType().Name)"
-              $FileInterfaceID = $ID.id
-              If ($FileInterface = Get-UnityFileInterface -Session $Sess -ID $FileInterfaceID) {
-                        $FileInterfaceName = $ID.name
+              $Object = get-UnityFileInterface -Session $Sess -ID $i
+              $ObjectID = $Object.id
+              If ($Object.Name) {
+                $ObjectName = $Object.Name
+              } else {
+                $ObjectName = $ObjectID
               }
             }
-          }
+            "$TypeName" {
+              Write-Verbose "Input object type is $($i.GetType().Name)"
+              $ObjectID = $i.id
+              If ($Object = Get-UnityFileInterface -Session $Sess -ID $ObjectID) {
+                If ($Object.Name) {
+                  $ObjectName = $Object.Name
+                } else {
+                  $ObjectName = $ObjectID
+                }          
+              }
+            }
+          } # End Switch
 
-          If ($FileInterfaceID) {
-            #Building the URI
-            $URI = 'https://'+$sess.Server+'/api/instances/fileInterface/'+$FileInterfaceID
-            Write-Verbose "URI: $URI"
+          If ($ObjectID) {
+            
+            #Building the URL
+            $URI = $URI -replace '<id>',$ObjectID
 
-            if ($pscmdlet.ShouldProcess($FileInterfaceID,"Delete File Interface")) {
+            $URL = 'https://'+$sess.Server+$URI
+            Write-Verbose "URL: $URL"
+
+            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
               #Sending the request
-              $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'DELETE'
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
             }
 
-            If ($request.StatusCode -eq '204') {
+            If ($request.StatusCode -eq $StatusCode) {
 
-              Write-Verbose "File Interface with ID: $id has been deleted"
+              Write-Verbose "$Type with ID $ObjectID has been deleted"
 
-            }
+            } # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Information -MessageData "File Interface $FileInterfaceID does not exist on the array $($sess.Name)"
-          }
-        }
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
-      }
-    }
-  }
-
-  End {}
-}
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+          } # End If ($ObjectID)
+        } # End Foreach ($i in $ID)
+      } # End If ($Sess.TestConnection()) 
+    } # End Foreach ($sess in $session)
+  } # End Process
+} # End Function
