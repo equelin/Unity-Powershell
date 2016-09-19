@@ -62,6 +62,9 @@ Task Build -Depends Test {
     # Load the module, read the exported functions, update the psd1 FunctionsToExport
     Set-ModuleFunctions
 
+
+    # Remove because of this: https://github.com/RamblingCookieMonster/PSDeploy/issues/59
+    <#
     # Bump the module version
     Try
     {
@@ -72,6 +75,7 @@ Task Build -Depends Test {
     {
         "Failed to update version for '$env:BHProjectName': $_.`nContinuing with existing version"
     }
+    #>
 }
 
 Task Deploy -Depends Build {
