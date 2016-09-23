@@ -198,9 +198,9 @@ Function Set-UnityVMwareLUN {
             Write-Verbose $Json 
 
             #Building the URL
-            $URI = $URI -replace '<id>',$UnitystorageResource.id
+            $FinalURI = $URI -replace '<id>',$UnitystorageResource.id
 
-            $URL = 'https://'+$sess.Server+$URI
+            $URL = 'https://'+$sess.Server+$FinalURI
             Write-Verbose "URL: $URL"
 
             #Sending the request

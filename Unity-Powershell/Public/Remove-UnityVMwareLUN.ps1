@@ -86,9 +86,9 @@ Function Remove-UnityVMwareLUN {
             $UnityStorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
 
             #Building the URL
-            $URI = $URI -replace '<id>',$UnityStorageResource.id
+            $FinalURI = $URI -replace '<id>',$UnityStorageResource.id
 
-            $URL = 'https://'+$sess.Server+$URI
+            $URL = 'https://'+$sess.Server+$FinalURI
             Write-Verbose "URL: $URL"
 
             if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {

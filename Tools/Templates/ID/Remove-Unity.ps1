@@ -1,10 +1,10 @@
-Function Remove-UnityFileDNSServer {
+Function Remove-UnitySMTPServer {
 
   <#
       .SYNOPSIS
-      Delete a file DNS Server.
+      Delete SMTP Server.
       .DESCRIPTION
-      Delete a file DNS Server.
+      Delete SMTP Server.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -13,26 +13,27 @@ Function Remove-UnityFileDNSServer {
       .PARAMETER Session
       Specify an UnitySession Object.
       .PARAMETER ID
-      File DNS ID or Object.
+      Management interface ID or Object.
       .PARAMETER Confirm
-      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. 
+      If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Remove-UnityFileDnsServer -ID 'dns_1'
+      Remove-UnitySMTPServer -ID 'default' #########################################
 
-      Delete the file DNS server with ID 'dns_1'
+      Delete the SMTP server with ID 'default' #########################################
       .EXAMPLE
-      Get-UnityFileDnsServer | Remove-UnityFileDnsServer
+      Get-UnitySMTPServer -Name 'default' | Remove-UnitySMTPServer #########################################
 
-      Delete all the file DNS Servers
+      Delete the SMTP server with ID 'default'. SMTP server informations are provided by the Get-UnitySMTPServer through the pipeline. #########################################
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'File DNS ID or Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'SMTP Server ID or Object')] #########################################
     $ID
   )
 
@@ -40,10 +41,10 @@ Function Remove-UnityFileDNSServer {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
     # Variables
-    $URI = '/api/instances/fileDNSServer/<id>'
-    $Type = 'File DNS Server'
-    $TypeName = 'UnityFileDnsServer'
-    $StatusCode = 204
+    $URI = '/api/instances/smtpServer/<id>' #########################################
+    $Type = 'SMTP Server' #########################################
+    $TypeName = 'UnitySMTPServer' #########################################
+    $StatusCode = 204 #########################################
   }
 
   Process {
@@ -60,7 +61,7 @@ Function Remove-UnityFileDNSServer {
           Switch ($i.GetType().Name)
           {
             "String" {
-              $Object = get-UnityFileDNSServer -Session $Sess -ID $i
+              $Object = get-UnitySMTPServer -Session $Sess -ID $i
               $ObjectID = $Object.id
               If ($Object.Name) {
                 $ObjectName = $Object.Name
@@ -71,7 +72,7 @@ Function Remove-UnityFileDNSServer {
             "$TypeName" {
               Write-Verbose "Input object type is $($i.GetType().Name)"
               $ObjectID = $i.id
-              If ($Object = Get-UnityFileDNSServer -Session $Sess -ID $ObjectID) {
+              If ($Object = Get-UnitySMTPServer -Session $Sess -ID $ObjectID) {
                 If ($Object.Name) {
                   $ObjectName = $Object.Name
                 } else {
@@ -84,9 +85,9 @@ Function Remove-UnityFileDNSServer {
           If ($ObjectID) {
             
             #Building the URL
-            $FinalURI = $URI -replace '<id>',$ObjectID
+            $URI = $URI -replace '<id>',$ObjectID
 
-            $URL = 'https://'+$sess.Server+$FinalURI
+            $URL = 'https://'+$sess.Server+$URI
             Write-Verbose "URL: $URL"
 
             if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {

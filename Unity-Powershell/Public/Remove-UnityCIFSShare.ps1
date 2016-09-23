@@ -82,7 +82,7 @@ Function Remove-UnityCIFSShare {
 
           If ($ObjectID) {
 
-            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | Where-Object {($_.filesystem.id -like $Object.filesystem.id)}
+            $UnityStorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.filesystem.id -like $Object.filesystem.id)}
 
             #### REQUEST BODY
 
@@ -106,9 +106,9 @@ Function Remove-UnityCIFSShare {
             Write-Verbose $Json 
 
             #Building the URL
-            $URI = $URI -replace '<id>',($UnityStorageRessource.id)
+            $FinalURI = $URI -replace '<id>',$UnityStorageResource.id
 
-            $URL = 'https://'+$sess.Server+$URI
+            $URL = 'https://'+$sess.Server+$FinalURI
             Write-Verbose "URL: $URL"
 
             if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {

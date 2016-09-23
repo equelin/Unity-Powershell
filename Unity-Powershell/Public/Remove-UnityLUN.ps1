@@ -83,12 +83,12 @@ Function Remove-UnityLUN {
 
           If ($ObjectID) {
 
-            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
+            $UnityStorageResource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
 
             #Building the URL
-            $URI = $URI -replace '<id>',$UnityStorageRessource.id
+            $FinalURI = $URI -replace '<id>',$UnityStorageResource.id
 
-            $URL = 'https://'+$sess.Server+$URI
+            $URL = 'https://'+$sess.Server+$FinalURI
             Write-Verbose "URL: $URL"
 
             if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
