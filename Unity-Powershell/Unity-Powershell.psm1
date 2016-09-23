@@ -653,7 +653,48 @@ Class UnityIscsiPortal {
   [IpProtocolVersionEnum]$ipProtocolVersion
 }
 
+Class UnityAlertConfig {
+  [string]$id
+  [LocaleEnum]$locale
+  [bool]$isThresholdAlertsEnabled
+  [SeverityEnum]$minEmailNotificationSeverity
+  [string[]]$destinationEmails
+  [SeverityEnum]$minSNMPTrapNotificationSeverity
+}
+
+Class UnityNfsServer {
+  [string]$id
+  [string]$hostName
+  $nasServer
+  $fileInterfaces
+  [bool]$nfsv4Enabled
+  [bool]$isSecureEnabled
+  [KdcTypeEnum]$kdcType
+  [string]$servicePrincipalName
+  [bool]$isExtendedCredentialsEnabled
+  [Datetime]$credentialsCacheTTL
+}
+
 #Custom Enum
+
+Enum KdcTypeEnum {
+  Custom = 0
+  Unix = 1
+  Windows = 2
+}
+
+Enum LocaleEnum {
+  en_US = 0
+  es_AR = 1
+  de_DE = 2
+  fr_FR = 3
+  it_IT = 4
+  ja_JP = 5
+  ko_KR = 6
+  pt_BR = 7
+  ru_RU = 8
+  zh_CN = 9
+}
 
 Enum HostLUNAccessEnum {
   NoAccess = 0

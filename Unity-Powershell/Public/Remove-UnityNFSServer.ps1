@@ -1,10 +1,10 @@
-Function Remove-UnityFileDNSServer {
+Function Remove-UnityNFSServer {
 
   <#
       .SYNOPSIS
-      Delete a file DNS Server.
+      Delete NFS Server.
       .DESCRIPTION
-      Delete a file DNS Server.
+      Delete NFS Server.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -13,26 +13,27 @@ Function Remove-UnityFileDNSServer {
       .PARAMETER Session
       Specify an UnitySession Object.
       .PARAMETER ID
-      File DNS ID or Object.
+      NFS Server ID or Object.
       .PARAMETER Confirm
-      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. 
+      If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Remove-UnityFileDnsServer -ID 'dns_1'
+      Remove-UnityNFSServer -ID 'default' 
 
-      Delete the file DNS server with ID 'dns_1'
+      Delete the NFS Server with ID 'default' 
       .EXAMPLE
-      Get-UnityFileDnsServer | Remove-UnityFileDnsServer
+      Get-UnityNFSServer -Name 'default' | Remove-UnityNFSServer 
 
-      Delete all the file DNS Servers
+      Delete the NFS Server with ID 'default'. NFS Server informations are provided by the Get-UnityNFSServer through the pipeline. 
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'File DNS ID or Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'NFS Server ID or Object')] 
     $ID
   )
 
@@ -40,10 +41,10 @@ Function Remove-UnityFileDNSServer {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
     # Variables
-    $URI = '/api/instances/fileDNSServer/<id>'
-    $Type = 'File DNS Server'
-    $TypeName = 'UnityFileDnsServer'
-    $StatusCode = 204
+    $URI = '/api/instances/nfsServer/<id>' 
+    $Type = 'NFS Server' 
+    $TypeName = 'UnityNFSServer' 
+    $StatusCode = 204 
   }
 
   Process {
@@ -60,7 +61,7 @@ Function Remove-UnityFileDNSServer {
           Switch ($i.GetType().Name)
           {
             "String" {
-              $Object = get-UnityFileDNSServer -Session $Sess -ID $i
+              $Object = get-UnityNFSServer -Session $Sess -ID $i
               $ObjectID = $Object.id
               If ($Object.Name) {
                 $ObjectName = $Object.Name
@@ -71,7 +72,7 @@ Function Remove-UnityFileDNSServer {
             "$TypeName" {
               Write-Verbose "Input object type is $($i.GetType().Name)"
               $ObjectID = $i.id
-              If ($Object = Get-UnityFileDNSServer -Session $Sess -ID $ObjectID) {
+              If ($Object = Get-UnityNFSServer -Session $Sess -ID $ObjectID) {
                 If ($Object.Name) {
                   $ObjectName = $Object.Name
                 } else {

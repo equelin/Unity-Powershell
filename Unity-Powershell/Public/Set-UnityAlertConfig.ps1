@@ -1,10 +1,10 @@
-Function Set-UnitySMTPServer {
+Function Set-UnityAlertConfig {
 
   <#
       .SYNOPSIS
-      Modifies SMTP Server.
+      Modifies Alert Config.
       .DESCRIPTION
-      Modifies SMTP Server.
+      Modifies Alert Config.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -13,17 +13,25 @@ Function Set-UnitySMTPServer {
       .PARAMETER Session
       Specify an UnitySession Object.
       .PARAMETER ID
-      SMTP Server ID or Object.
-      .PARAMETER address
-      IP address of the SMTP server.
+      Config ALert ID or Object.
+      .PARAMETER alertLocale
+      Language in which the system sends email alerts.
+      .PARAMETER isThresholdAlertsEnabled
+      Whether pool space usage related alerts will be sent.
+      .PARAMETER minEmailNotificationSeverity
+      Minimum severity level for email alerts.
+      .PARAMETER minSNMPTrapNotificationSeverity
+      Minimum severity level for SNMP trap alerts.
+      .PARAMETER destinationEmails
+      List of emails to receive alert notifications.
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Set-UnitySMTPServer -ID 'default' -Address smtp.example.com
+      Set-UnityAlertConfig -destinationEmails 'mail@example.com'
 
-      Modifies the default SMTP Server
+      Modifies the default Alert Config
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
@@ -32,19 +40,27 @@ Function Set-UnitySMTPServer {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID of the SMTP Server')]
-    [String[]]$ID,
-    [Parameter(Mandatory = $true,HelpMessage = 'IP address of the SMTP server.')]
-    [String]$address
+    [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID of the Alert Config')]
+    [String[]]$ID = '0',
+    [Parameter(Mandatory = $false,HelpMessage = 'Language in which the system sends email alerts.')]
+    [LocaleEnum]$alertLocale,
+    [Parameter(Mandatory = $false,HelpMessage = 'Whether pool space usage related alerts will be sent.')]
+    [bool]$isThresholdAlertsEnabled,
+    [Parameter(Mandatory = $false,HelpMessage = 'Minimum severity level for email alerts.')]
+    [SeverityEnum]$minEmailNotificationSeverity,
+    [Parameter(Mandatory = $false,HelpMessage = 'Minimum severity level for SNMP trap alerts.')]
+    [SeverityEnum]$minSNMPTrapNotificationSeverity,
+    [Parameter(Mandatory = $false,HelpMessage = 'List of emails to receive alert notifications.')]
+    [string[]]$destinationEmails
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
     # Variables
-    $URI = '/api/instances/smtpServer/<id>/action/modify'
-    $Type = 'SMTP Server'
-    $TypeName = 'UnitySMTPServer'
+    $URI = '/api/instances/alertConfig/<id>/action/modify'
+    $Type = 'Alert Config' 
+    $TypeName = 'UnityAlertConfig'
     $StatusCode = 204
   }
 
@@ -62,7 +78,7 @@ Function Set-UnitySMTPServer {
           Switch ($i.GetType().Name)
           {
             "String" {
-              $Object = get-UnitySMTPServer -Session $Sess -ID $i
+              $Object = get-UnityAlertConfig -Session $Sess -ID $i
               $ObjectID = $Object.id
               If ($Object.Name) {
                 $ObjectName = $Object.Name
@@ -73,7 +89,7 @@ Function Set-UnitySMTPServer {
             "$TypeName" {
               Write-Verbose "Input object type is $($i.GetType().Name)"
               $ObjectID = $i.id
-              If ($Object = Get-UnitySMTPServer -Session $Sess -ID $ObjectID) {
+              If ($Object = Get-UnityAlertConfig -Session $Sess -ID $ObjectID) {
                 If ($Object.Name) {
                   $ObjectName = $Object.Name
                 } else {
@@ -90,7 +106,29 @@ Function Set-UnitySMTPServer {
             # Creation of the body hash
             $body = @{}
 
-            $body["address"] = $address
+            If ($PSBoundParameters.ContainsKey('alertLocale')) {
+              $body["alertLocale"] = $alertLocale
+            }
+
+            If ($PSBoundParameters.ContainsKey('isThresholdAlertsEnabled')) {
+              $body["isThresholdAlertsEnabled"] = $isThresholdAlertsEnabled
+            }
+
+            If ($PSBoundParameters.ContainsKey('minEmailNotificationSeverity')) {
+              $body["minEmailNotificationSeverity"] = $minEmailNotificationSeverity
+            }
+
+            If ($PSBoundParameters.ContainsKey('minSNMPTrapNotificationSeverity')) {
+              $body["minSNMPTrapNotificationSeverity"] = $minSNMPTrapNotificationSeverity
+            }
+
+            If ($PSBoundParameters.ContainsKey('destinationEmails')) {
+              $body['destinationEmails'] = @()
+
+              Foreach ($email in $destinationEmails) {
+                $body["destinationEmails"] += $email
+              }
+            }
 
             ####### END BODY - Do not edit beyond this line
 
@@ -113,7 +151,7 @@ Function Set-UnitySMTPServer {
 
               Write-Verbose "$Type with ID $ObjectID has been modified"
 
-              Get-UnitySMTPServer -Session $Sess -id $ObjectID
+              Get-UnityAlertConfig -Session $Sess -id $ObjectID
 
             }  # End If ($request.StatusCode -eq $StatusCode)
           } else {

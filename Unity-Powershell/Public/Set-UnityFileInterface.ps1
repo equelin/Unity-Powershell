@@ -169,9 +169,9 @@ Function Set-UnityFileInterface {
             Write-Verbose $Json 
 
             #Building the URL
-            $URI = $URI -replace '<id>',$ObjectID
+            $FinalURI = $URI -replace '<id>',$ObjectID
 
-            $URL = 'https://'+$sess.Server+$URI
+            $URL = 'https://'+$sess.Server+$FinalURI
             Write-Verbose "URL: $URL"
 
             #Sending the request

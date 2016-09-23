@@ -12,7 +12,7 @@
 RootModule = 'Unity-Powershell.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.8.1'
+ModuleVersion = '0.9.0'
 
 # ID used to uniquely identify this module
 GUID = '586e7e62-9753-4fd6-91b6-89d8d89d69a2'
@@ -90,7 +90,9 @@ FormatsToProcess = @(
 '.\Format\Unity-Powershell.UnityAlert.Format.ps1xml',
 '.\Format\Unity-Powershell.UnityIpInterface.Format.ps1xml',
 '.\Format\Unity-Powershell.UnityEthernetPort.Format.ps1xml',
-'.\Format\Unity-Powershell.UnityIscsiPortal.Format.ps1xml'
+'.\Format\Unity-Powershell.UnityIscsiPortal.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityAlertConfig.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityNfsServer.Format.ps1xml'
 )
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
