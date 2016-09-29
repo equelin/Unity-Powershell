@@ -32,7 +32,7 @@ For example, you can manage Pools with the following commands:
 - Set-UnityPool
 - Remove-UnityPool
 
-Some functions accept pipelining. For axample, if you want to delete all the existing LUNS you can do this:
+Some functions accept pipelining. For example, if you want to delete all the existing LUNS you can do this:
 
 ```powershell
 Get-UnityLUN | Remove-UnityLUN
