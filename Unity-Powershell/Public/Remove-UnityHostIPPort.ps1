@@ -1,10 +1,10 @@
-Function Remove-UnityHost {
+Function Remove-UnityHostIPPort {
 
   <#
       .SYNOPSIS
-      Delete host.
+      Delete a host IP port. 
       .DESCRIPTION
-      Delete host.
+      Delete a host IP port. 
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -13,27 +13,27 @@ Function Remove-UnityHost {
       .PARAMETER Session
       Specify an UnitySession Object.
       .PARAMETER ID
-      Host ID or Object.
+      Host IP Port ID or Object
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. 
       If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Remove-UnityHost -ID 'host_5'
+      Remove-UnityHostIPPort -ID 'HostNetworkAddress_45'
 
-      Delete the host with ID 'host_5'
+      Delete the host with ID 'HostNetworkAddress_45'
       .EXAMPLE
-      Get-UnityHost -ID 'host_5' | Remove-UnityHost
+      Get-UnityHostIPPort -ID 'HostNetworkAddress_45' | Remove-UnityHostIPPort
     
-      Delete the host with ID 'host_5'. host informations are provided by the Get-UnityHost through the pipeline.
+      Delete the host with ID 'HostNetworkAddress_45'. host informations are provided by the Get-UnityHostIPPort through the pipeline.
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Host ID or Object')]
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Host IP Port ID or Object')]
     $ID
   )
 
@@ -41,9 +41,9 @@ Function Remove-UnityHost {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
     # Variables
-    $URI = '/api/instances/host/<id>'
-    $Type = 'Host'
-    $TypeName = 'UnityHost'
+    $URI = '/api/instances/hostIPPort/<id>'
+    $Type = 'Host IP Port'
+    $TypeName = 'UnityHostIPPort'
     $StatusCode = 204
   }
 
@@ -61,7 +61,7 @@ Function Remove-UnityHost {
           Switch ($i.GetType().Name)
           {
             "String" {
-              $Object = get-UnityHost -Session $Sess -ID $i
+              $Object = get-UnityHostIPPort -Session $Sess -ID $i
               $ObjectID = $Object.id
               If ($Object.Name) {
                 $ObjectName = $Object.Name
@@ -72,7 +72,7 @@ Function Remove-UnityHost {
             "$TypeName" {
               Write-Verbose "Input object type is $($i.GetType().Name)"
               $ObjectID = $i.id
-              If ($Object = Get-UnityHost -Session $Sess -ID $ObjectID) {
+              If ($Object = Get-UnityHostIPPort -Session $Sess -ID $ObjectID) {
                 If ($Object.Name) {
                   $ObjectName = $Object.Name
                 } else {

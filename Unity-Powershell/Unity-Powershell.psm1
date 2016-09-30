@@ -697,7 +697,24 @@ Class UnityNFSShare {
   $hostAccesses
 }
 
+Class UnityHostIPPort {
+  [string]$id
+  [string]$name
+  [HostPortTypeEnum]$type
+  [string]$address
+  [string]$netmask
+  [Uint64]$v6PrefixLength
+  [bool]$isIgnored
+  $host
+}
+
 #Custom Enum
+
+Enum HostPortTypeEnum {
+  IPv4 = 0
+  IPv6 = 1
+  NetworkName = 2
+}
 
 Enum NFSTypeEnum {
   Nfs_Share = 1

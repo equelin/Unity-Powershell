@@ -169,7 +169,7 @@ Function Set-UnityVMwareLUN {
                     }
                   }
                 } else {
-                  Write-Warning -Message 'The existing host access parameters will be overwritten by the new settings. It could result to data unavailibility. Use the -Append parameter to add the new settings to the existing configuration. '
+                  Write-Warning -Message 'The existing host access parameters will be overwritten by the new settings. It could result to data unavailibility. Use the -Append parameter to add the new settings to the existing configuration.'
                 }
 
                 $lunParameters["hostAccess"] = $hostAccess

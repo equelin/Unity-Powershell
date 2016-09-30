@@ -1,10 +1,10 @@
-Function Remove-UnityHost {
+Function Set-UnityHost {
 
   <#
       .SYNOPSIS
-      Delete host.
+      Modify a host configuration. 
       .DESCRIPTION
-      Delete host.
+      Modify a host configuration. 
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -12,21 +12,21 @@ Function Remove-UnityHost {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specify an UnitySession Object.
-      .PARAMETER ID
-      Host ID or Object.
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. 
-      If the value is $false, the cmdlet runs without asking for user confirmation.
+      If the value is $false, the cmdlet runs without asking for Host confirmation.
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
+      .PARAMETER ID
+      Host ID or Object.
       .EXAMPLE
-      Remove-UnityHost -ID 'host_5'
+      Set-UnityHost -ID 'Host_21' -Name HOST01
 
-      Delete the host with ID 'host_5'
+      Change the name of the host with ID 'Host_21'
       .EXAMPLE
-      Get-UnityHost -ID 'host_5' | Remove-UnityHost
-    
-      Delete the host with ID 'host_5'. host informations are provided by the Get-UnityHost through the pipeline.
+      Get-UnityHost -ID 'Host_21' | Set-UnityHost -Name HOST01
+
+      Change the name of the host with ID 'Host_21'. The Host's information are provided by the Get-UnityHost through the pipeline.
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
@@ -34,14 +34,26 @@ Function Remove-UnityHost {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Host ID or Object')]
-    $ID
+    [String[]]$ID,
+
+    #Host Name. (Applies to manually-created hosts only.)
+    [Parameter(Mandatory = $false,Position = 1,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Host Name. (Applies to manually-created hosts only.)')]
+    [String]$Name,
+
+    #Host Description
+    [Parameter(Mandatory = $false,HelpMessage = 'Host Description')]
+    [String]$Description,
+
+    #Operating system running on the host. (Applies to manually-created hosts only.)
+    [Parameter(Mandatory = $false,HelpMessage = 'Operating system running on the host. (Applies to manually-created hosts only.)')]
+    [string]$osType
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
     # Variables
-    $URI = '/api/instances/host/<id>'
+    $URI = '/api/instances/host/<id>/action/modify'
     $Type = 'Host'
     $TypeName = 'UnityHost'
     $StatusCode = 204
@@ -80,26 +92,52 @@ Function Remove-UnityHost {
                 }          
               }
             }
-          } # End Switch
+          }
 
           If ($ObjectID) {
-            
+
+            #### REQUEST BODY 
+
+            # Creation of the body hash
+            $body = @{}
+
+            # Name parameter
+            If ($PSBoundParameters.ContainsKey('name')) {
+                  $body["name"] = $name
+            }
+
+            If ($PSBoundParameters.ContainsKey('description')) {
+                  $body["description"] = $description
+            }
+
+            If ($PSBoundParameters.ContainsKey('osType')) {
+                  $body["osType"] = $osType
+            }
+
+            ####### END BODY - Do not edit beyond this line
+
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
             #Building the URL
             $FinalURI = $URI -replace '<id>',$ObjectID
 
             $URL = 'https://'+$sess.Server+$FinalURI
             Write-Verbose "URL: $URL"
 
-            if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
-              #Sending the request
-              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
+            #Sending the request
+            If ($pscmdlet.ShouldProcess($Sess.Name,"Modify $Type $ObjectName")) {
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
             }
 
             If ($request.StatusCode -eq $StatusCode) {
 
-              Write-Verbose "$Type with ID $ObjectID has been deleted"
+              Write-Verbose "$Type with ID $ObjectID has been modified"
 
-            } # End If ($request.StatusCode -eq $StatusCode)
+              Get-UnityHost -Session $Sess -id $ObjectID
+
+            }  # End If ($request.StatusCode -eq $StatusCode)
           } else {
             Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
           } # End If ($ObjectID)
