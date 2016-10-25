@@ -32,7 +32,7 @@ Function New-UnityNFSShare {
       Hosts with no access to the NFS share or its snapshots, as defined by the host resource type.
       .PARAMETER readOnlyHosts
       Hosts with read-only access to the NFS share and its snapshots, as defined by the host resource type.
-      .PARAMETER rootAccessHosts
+      .PARAMETER readWriteHosts
       Hosts with read-write access to the NFS share and its snapshots, as defined by the host resource type.
       .PARAMETER rootAccessHosts
       Hosts with root access to the NFS share and its snapshots, as defined by the host resource type.

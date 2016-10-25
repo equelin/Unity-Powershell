@@ -40,7 +40,7 @@ Function New-UnityVMwareNFS {
       Hosts with no access to the VMware NFS LUN or its snapshots, as defined by the host resource type.
       .PARAMETER readOnlyHosts
       Hosts with read-only access to the VMware NFS LUN and its snapshots, as defined by the host resource type.
-      .PARAMETER rootAccessHosts
+      .PARAMETER readWriteHosts
       Hosts with read-write access to the VMware NFS LUN and its snapshots, as defined by the host resource type.
       .PARAMETER rootAccessHosts
       Hosts with root access to the VMware NFS LUN and its snapshots, as defined by the host resource type.
