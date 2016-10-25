@@ -166,7 +166,7 @@ Function New-UnityNFSShare {
                 
                   $nfsShareParameters["noAccessHosts"] = @()
 
-                  foreach ($h in $readWriteHosts) {
+                  foreach ($h in $noAccessHosts) {
 
                         $HostParam = @{}
                         $HostParam['id'] = $h
@@ -180,7 +180,7 @@ Function New-UnityNFSShare {
                 
                   $nfsShareParameters["readOnlyHosts"] = @()
 
-                  foreach ($h in $readWriteHosts) {
+                  foreach ($h in $readOnlyHosts) {
 
                         $HostParam = @{}
                         $HostParam['id'] = $h
