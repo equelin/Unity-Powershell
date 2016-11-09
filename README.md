@@ -179,4 +179,4 @@ For testing purpose you can query all the ressources of the array with the comma
 
 Copyright 2016 Erwan Quelin and the community.
 
-Licensed under the MIT License
+Licensed under the MIT License.
