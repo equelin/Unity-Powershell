@@ -22,7 +22,7 @@ Function Disable-UnityFastCache {
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
-    $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
+    [UnitySession[]]$session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
   )
 
   Begin {
