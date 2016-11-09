@@ -58,7 +58,7 @@ Function Connect-Unity {
       [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity password')]
       [SecureString]$Password,
       [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity credentials')]
-      [System.Management.Automation.CredentialAttribute()]$Credentials,
+      [PSCredential]$Credentials,
       [Parameter(Mandatory = $false,HelpMessage = 'Trust all certs ?')]
       [Bool]$TrustAllCerts = $True
   )

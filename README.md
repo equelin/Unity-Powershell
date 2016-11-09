@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/y6w9s01j9ddqnsbi/branch/master?svg=true)](https://ci.appveyor.com/api/projects/status/y6w9s01j9ddqnsbi/branch/master?svg=true) [![GitHub version](https://badge.fury.io/gh/equelin%2FUnity-Powershell.svg)](https://badge.fury.io/gh/equelin%2FUnity-Powershell)
+[![Build status](https://ci.appveyor.com/api/projects/status/y6w9s01j9ddqnsbi/branch/master?svg=true)](https://ci.appveyor.com/project/equelin/unity-powershell) [![GitHub version](https://badge.fury.io/gh/equelin%2FUnity-Powershell.svg)](https://badge.fury.io/gh/equelin%2FUnity-Powershell)
 
 # Unity-Powershell
 
@@ -7,17 +7,17 @@ Unity-Powershell is a member of the DevHigh5 program from [{code} by Dell EMC(tm
 
 ![](./Medias/Unity-Powershell-Demo-01.gif)
 
-With this module (version 0.8.0) you can manage:
+With this module (version 0.10.0) you can manage:
 
 - System (DNS,NTP...)
 - Pools (Virtual and physical deployment)
 - Fast Cache (Physical deployment only)
 - LUN (block)
-- VMware LUN (block)
+- VMware LUN (block and NFS)
 - NASServer
 - Filesystem
-- CIFS Server
-- CIFS Shares
+- CIFS Server and Shares
+- NFS Server and Shares
 - vCenter and ESXi servers
 - iSCSI parameters
 
@@ -32,7 +32,7 @@ For example, you can manage Pools with the following commands:
 - Set-UnityPool
 - Remove-UnityPool
 
-Some functions accept pipelining. For axample, if you want to delete all the existing LUNS you can do this:
+Some functions accept pipelining. For example, if you want to delete all the existing LUNS you can do this:
 
 ```powershell
 Get-UnityLUN | Remove-UnityLUN

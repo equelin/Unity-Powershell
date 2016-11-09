@@ -17,9 +17,9 @@ Function New-UnityNFSServer {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE 
-      New-UnityNFSServer -address 'smtp.example.com' -type 'default' 
+      New-UnityNFSServer -nasServer 'nas_15' -hostName 'NFS01'
 
-      Create a new default NFS Server.
+      Create a new NFS Server.
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]

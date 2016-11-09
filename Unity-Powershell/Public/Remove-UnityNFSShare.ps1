@@ -1,49 +1,45 @@
-Function Remove-UnityHost {
+Function Remove-UnityNFSShare {
 
   <#
       .SYNOPSIS
-      Delete host.
+      Deletes NFS share.
       .DESCRIPTION
-      Delete host.
+      Deletes NFS share.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
-      Specify an UnitySession Object.
-      .PARAMETER ID
-      Host ID or Object.
+      SpeNFS an UnitySession Object.
       .PARAMETER Confirm
-      If the value is $true, indicates that the cmdlet asks for confirmation before running. 
-      If the value is $false, the cmdlet runs without asking for user confirmation.
+      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
-      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
+      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.      
       .EXAMPLE
-      Remove-UnityHost -ID 'host_5'
+      Remove-UnityNFSShare -ID 'NFSShare_2'
 
-      Delete the host with ID 'host_5'
-      .EXAMPLE
-      Get-UnityHost -ID 'host_5' | Remove-UnityHost
-    
-      Delete the host with ID 'host_5'. host informations are provided by the Get-UnityHost through the pipeline.
+      Delete the NFS share with id 'NFSShare_2'
   #>
 
-  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
+    #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Host ID or Object')]
+
+    #NFS Share ID or Object.
+    [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'NFS Share ID or Object.')]
     $ID
   )
 
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
-
+    
     # Variables
-    $URI = '/api/instances/host/<id>'
-    $Type = 'Host'
-    $TypeName = 'UnityHost'
+    $URI = '/api/instances/storageResource/<id>/action/modifyFilesystem'
+    $Type = 'Share NFS'
+    $TypeName = 'UnityNFSShare'
     $StatusCode = 204
   }
 
@@ -61,7 +57,7 @@ Function Remove-UnityHost {
           Switch ($i.GetType().Name)
           {
             "String" {
-              $Object = get-UnityHost -Session $Sess -ID $i
+              $Object = get-UnityNFSShare -Session $Sess -ID $i
               $ObjectID = $Object.id
               If ($Object.Name) {
                 $ObjectName = $Object.Name
@@ -72,7 +68,7 @@ Function Remove-UnityHost {
             "$TypeName" {
               Write-Verbose "Input object type is $($i.GetType().Name)"
               $ObjectID = $i.id
-              If ($Object = Get-UnityHost -Session $Sess -ID $ObjectID) {
+              If ($Object = Get-UnityNFSShare -Session $Sess -ID $ObjectID) {
                 If ($Object.Name) {
                   $ObjectName = $Object.Name
                 } else {
@@ -83,28 +79,52 @@ Function Remove-UnityHost {
           } # End Switch
 
           If ($ObjectID) {
-            
+
+            $UnityStorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.filesystem.id -like $Object.filesystem.id)}
+
+            #### REQUEST BODY
+
+            # Creation of the body hash
+            $body = @{}
+
+            $body["nfsShareDelete"] = @()
+
+              $nfsShareDeleteParameters = @{}
+                $nfsShareDeleteParameters["nfsShare"] = @{}
+                  $nfsShareParameters = @{}
+                  $nfsShareParameters['id'] = $ObjectID
+                $nfsShareDeleteParameters["nfsShare"] = $nfsShareParameters
+
+            $body["nfsShareDelete"] += $nfsShareDeleteParameters
+
+            ####### END BODY - Do not edit beyond this line
+
+            #Show $body in verbose message
+            $Json = $body | ConvertTo-Json -Depth 10
+            Write-Verbose $Json 
+
             #Building the URL
-            $FinalURI = $URI -replace '<id>',$ObjectID
+            $FinalURI = $URI -replace '<id>',$UnityStorageResource.id
 
             $URL = 'https://'+$sess.Server+$FinalURI
             Write-Verbose "URL: $URL"
 
             if ($pscmdlet.ShouldProcess($Sess.Name,"Delete $Type $ObjectName")) {
               #Sending the request
-              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'DELETE'
+              $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
             }
-
+            
             If ($request.StatusCode -eq $StatusCode) {
 
               Write-Verbose "$Type with ID $ObjectID has been deleted"
 
             } # End If ($request.StatusCode -eq $StatusCode)
           } else {
-            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"
+            Write-Warning -Message "$Type with ID $i does not exist on the array $($sess.Name)"          
           } # End If ($ObjectID)
         } # End Foreach ($i in $ID)
       } # End If ($Sess.TestConnection()) 
     } # End Foreach ($sess in $session)
   } # End Process
 } # End Function
+  

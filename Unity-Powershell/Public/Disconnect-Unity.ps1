@@ -27,7 +27,7 @@ Function Disconnect-Unity {
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'EMC Unity Session')]
-    [Array]$session = $global:DefaultUnitySession
+    [UnitySession[]]$session = $global:DefaultUnitySession
   )
   Begin {
     Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
