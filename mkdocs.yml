@@ -4,4 +4,4 @@ theme: readthedocs
 pages:
   - Home: index.md
   - Functions References:
-    - Connect-Unity: .\References\Connect-Unity.md
+    - Connect-Unity: References/Connect-Unity.md
