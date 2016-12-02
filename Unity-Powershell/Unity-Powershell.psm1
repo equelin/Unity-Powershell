@@ -710,7 +710,107 @@ Class UnityHostIPPort {
   $host
 }
 
+Class UnitySnap {
+  [string]$id
+  [string]$name
+  [string]$description
+  $storageResource
+  $lun
+  $snapGroup
+  $parentSnap
+  [datetime]$creationTime
+  [datetime]$expirationTime
+  [SnapCreatorTypeEnum]$creatorType
+  $creatorUser
+  $creatorSchedule
+  [bool]$isSystemSnap
+  [bool]$isModifiable
+  [string]$attachedWWN
+  [FilesystemSnapAccessTypeEnum]$accessType
+  [bool]$isReadOnly
+  [datetime]$lastWritableTime
+  [bool]$isModified
+  [bool]$isAutoDelete
+  [SnapStateEnum]$state
+  [Uint64]$size
+  $ioLimitPolicy
+}
+
+Class UnitySnapSchedule {
+  [string]$id
+  [string]$name
+  [bool]$isDefault
+  [bool]$isModified
+  [ScheduleVersionEnum]$version
+  [UnitySnapScheduleRule[]]$rules
+  $storageResources  
+}
+
+Class UnitySnapScheduleRule {
+  [string]$id
+  [ScheduleTypeEnum]$type
+  $minute
+  $hours
+  [DayOfWeekEnum[]]$daysOfWeek
+  $daysOfMonth
+  $interval
+  [bool]$isAutoDelete
+  $retentionTime
+  [FilesystemSnapAccessTypeEnum]$accessType
+}
+
 #Custom Enum
+
+Enum DayOfWeekEnum {
+  Sunday = 1
+  Monday = 2
+  Tuesday = 3
+  Wednesday = 4
+  Thursday = 5
+  Friday = 6
+  Saturday = 7
+}
+
+Enum ScheduleTypeEnum {
+  N_HOURS_AT_MM = 0
+  DAY_AT_HHMM = 1
+  N_DAYS_AT_HHMM = 2
+  SELDAYS_AT_HHMM = 3
+  NTH_DAYOFMONTH_AT_HHMM = 4
+  UNSUPPORTED = 5
+}
+
+Enum ScheduleVersionEnum {
+  Legacy = 1
+  Simple = 2
+}
+
+Enum SnapCreatorTypeEnum {
+  NONE = 0
+  SCHEDULED = 1
+  USER_CUSTOM = 2
+  USER_DEFAULT = 3
+  EXTERNAL_VSS = 4
+  EXTERNAL_NDMP = 5
+  EXTERNAL_RESTORE = 6
+  EXTERNAL_REPLICATIONMANAGER = 8
+  REPV2 = 9
+  INBAND = 11
+}
+
+Enum FilesystemSnapAccessTypeEnum {
+  Checkpoint = 1
+  Protocol = 2
+}
+
+Enum SnapStateEnum {
+  Ready = 2
+  Faulted = 3
+  Offline = 6
+  Invalid = 7
+  Initializing = 8
+  Destroying = 9
+}
 
 Enum HostPortTypeEnum {
   IPv4 = 0
