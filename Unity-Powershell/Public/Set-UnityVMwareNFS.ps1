@@ -20,8 +20,6 @@ Function Set-UnityVMwareNFS {
       ID of a protection schedule to apply to the filesystem
       .PARAMETER isSnapSchedulePaused
       Is assigned snapshot schedule is paused ? (Default is false)
-      .PARAMETER isThinEnabled
-      Indicates whether to enable thin provisioning for file system. Default is $True
       .PARAMETER Size
       Filesystem Size
       .PARAMETER hostIOSize
@@ -72,7 +70,7 @@ Function Set-UnityVMwareNFS {
     [Parameter(Mandatory = $false,HelpMessage = 'Typical write I/O size from the host to the file system')]
     [HostIOSizeEnum]$hostIOSize,
 
-    ##fastVPParameterseters
+    ##fastVPParameters
     [Parameter(Mandatory = $false,HelpMessage = 'VMware NFS LUN tiering policy')]
     [TieringPolicyEnum]$tieringPolicy,
 

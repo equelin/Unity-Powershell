@@ -25,6 +25,8 @@ Function Set-UnityVMwareLUN {
       New description of the VMware VMFS datastore.
       .PARAMETER Size
       New LUN size. The size parameter can be greater than the current LUN size in this case the LUN is expanded.
+      .PARAMETER fastVPParameters
+      FAST VP settings for the storage resource
       .PARAMETER snapSchedule
       Snapshot schedule settings for the VMware VMFS datastore, as defined by the snapScheduleParameters.
       .PARAMETER host
@@ -56,23 +58,31 @@ Function Set-UnityVMwareLUN {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID or LUN Object')]
-    $ID,
+    [Object[]]$ID,
     [Parameter(Mandatory = $false,HelpMessage = 'New Name of the LUN')]
     [String]$Name,
     [Parameter(Mandatory = $false,HelpMessage = 'New LUN Description')]
     [String]$Description,
+
+    # lunParameters
     [Parameter(Mandatory = $false,HelpMessage = 'New LUN Size in Bytes')]
     [uint64]$Size,
+    [Parameter(Mandatory = $false,HelpMessage = 'FAST VP settings for the storage resource')]
+    [TieringPolicyEnum]$fastVPParameters,
+
+    # snapScheduleParameters
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
     [String]$snapSchedule,
+    [Parameter(Mandatory = $false,HelpMessage = 'Is assigned snapshot schedule is paused ? (Default is false)')]
+    [bool]$isSnapSchedulePaused = $false,
+
+    # hostParameters
     [Parameter(Mandatory = $false,HelpMessage = 'Host to grant access to LUN')]
     [String[]]$host,
     [Parameter(Mandatory = $false,HelpMessage = 'Append Host access to existing configuration')]
     [Switch]$append,
     [Parameter(Mandatory = $false,HelpMessage = 'Host access mask')]
-    [HostLUNAccessEnum]$accessMask = 'Production',
-    [Parameter(Mandatory = $false,HelpMessage = 'Is assigned snapshot schedule is paused ? (Default is false)')]
-    [bool]$isSnapSchedulePaused = $false
+    [HostLUNAccessEnum]$accessMask = 'Production'
   )
 
   Begin {
@@ -137,12 +147,19 @@ Function Set-UnityVMwareLUN {
             }
 
             # lunParameters parameter
-            If (($PSBoundParameters.ContainsKey('size')) -or ($PSBoundParameters.ContainsKey('host'))) {
+            If (($PSBoundParameters.ContainsKey('size')) -or ($PSBoundParameters.ContainsKey('host')) -or ($PSBoundParameters.ContainsKey('fastVPParameters'))) {
               $body["lunParameters"] = @{}
               $lunParameters = @{}
             
               If ($PSBoundParameters.ContainsKey('Size')) {
                 $lunParameters["size"] = $($Size)
+              }
+
+              If ($PSBoundParameters.ContainsKey('fastVPParameters')) {
+                $lunParameters["fastVPParameters"] = @{}
+                $fastVPParam = @{}
+                $fastVPParam['tieringPolicy'] = $fastVPParameters
+                $lunParameters["fastVPParameters"] = $fastVPParam
               }
 
               If ($PSBoundParameters.ContainsKey('host')) {

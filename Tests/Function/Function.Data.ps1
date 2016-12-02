@@ -26,6 +26,15 @@ $Data.function3 = @{
     )
 }
 
+$Data.function4 = @{
+    Name = 'Get-UnityVMwareLUN'
+    Parameters = @(
+        @{'Name' = 'Session'; 'type' = 'UnitySession[]'},
+        @{'Name' = 'Name'; 'type' = 'String[]'},
+        @{'Name' = 'ID'; 'type' = 'String[]'}
+    )
+}
+
 $Data.function1000 = @{
     Name = 'Update-UnityvCenter'
     Parameters = @(
