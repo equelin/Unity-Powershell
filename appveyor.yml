@@ -1,23 +1,44 @@
-# See http://www.appveyor.com/docs/appveyor-yml for many more options
+#---------------------------------# 
+#      environment configuration  # 
+#---------------------------------# 
+version: 1.0.{build}
+os: WMF 5
+install:
+  - ps: Import-Module .\AppVeyor\Functions\AppVeyor-Util.psm1 | Out-Null
+  - ps: . .\AppVeyor\install.ps1
 
-#Publish to PowerShell Gallery with this key
 environment:
   NuGetApiKey:
     secure: UIr9SZkDLqMe2EjAP2CBmvomalY6sRAenwlLYR3fRDdyUhB1/RO7nsvYFRGM36RD
+  GHToken:
+    secure: 5jmXah8zuXr+gjrG1WkD1uZ/jk9q7W+foC793X8//rJN5vdye5tice7j83mPuuwU
+  ModuleName: PSDummy
 
-# Allow WMF5 (i.e. PowerShellGallery functionality)
-os: WMF 5
+#---------------------------------# 
+#      build configuration        # 
+#---------------------------------# 
+build: off
 
-# Skip on updates to the readme.
-# We can force this by adding [skip ci] or [ci skip] anywhere in commit message 
-skip_commits:
-  message: /updated readme.*|update readme.*s/
+#---------------------------------# 
+#      test configuration         # 
+#---------------------------------# 
+test_script: 
+  - ps: . .\AppVeyor\test.ps1
 
-build: false
+#---------------------------------# 
+#      deployment configuration   # 
+#---------------------------------# 
+deploy_script: 
+  - ps: . .\AppVeyor\deploy.ps1
 
-#Kick off the CI/CD pipeline
-test_script:
-  - ps: . .\build.ps1
-
-#disable builds on new tags 
+#Skip build when pushing a new tags
 skip_tags: true
+
+#GitHub Pull Request notifications
+notifications:
+  - provider: GitHubPullRequest
+    auth_token:
+      secure: 5jmXah8zuXr+gjrG1WkD1uZ/jk9q7W+foC793X8//rJN5vdye5tice7j83mPuuwU
+    template: "{{#passed}}:white_check_mark:{{/passed}}{{#failed}}:x:{{/failed}} [Build {{&projectName}} {{buildVersion}} {{status}}]({{buildUrl}}) (commit {{commitUrl}} by @{{&commitAuthorUsername}})"
+
+

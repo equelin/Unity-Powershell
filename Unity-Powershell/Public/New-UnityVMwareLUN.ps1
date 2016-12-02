@@ -20,6 +20,8 @@ Function New-UnityVMwareLUN {
       Description of the VMware VMFS datastore.
       .PARAMETER Size
       LUN Size.
+      .PARAMETER fastVPParameters
+      FAST VP settings for the storage resource
       .PARAMETER snapSchedule
       Snapshot schedule settings for the VMware VMFS datastore, as defined by the snapScheduleParameters.
       .PARAMETER isThinEnabled
@@ -50,6 +52,8 @@ Function New-UnityVMwareLUN {
     [String[]]$Name,
     [Parameter(Mandatory = $false,HelpMessage = 'VMware LUN Description')]
     [String]$Description,
+
+    # lunParameters
     [Parameter(Mandatory = $true,HelpMessage = 'VMware LUN Pool ID')]
     [String]$Pool,
     [Parameter(Mandatory = $true,HelpMessage = 'VMware LUN Size in Bytes')]
@@ -60,6 +64,10 @@ Function New-UnityVMwareLUN {
     [HostLUNAccessEnum]$accessMask = 'Production',
     [Parameter(Mandatory = $false,HelpMessage = 'Is Thin enabled on VMware LUN ? (Default is true)')]
     [bool]$isThinEnabled = $true,
+    [Parameter(Mandatory = $false,HelpMessage = 'FAST VP settings for the storage resource')]
+    [TieringPolicyEnum]$fastVPParameters,
+
+    # snapScheduleParameters
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
     [String]$snapSchedule,
     [Parameter(Mandatory = $false,HelpMessage = 'Is assigned snapshot schedule is paused ? (Default is false)')]
@@ -101,6 +109,13 @@ Function New-UnityVMwareLUN {
         $poolParameters["id"] = "$($Pool)"
         $lunParameters["pool"] = $poolParameters
         $lunParameters["size"] = $($Size)
+
+        If ($PSBoundParameters.ContainsKey('fastVPParameters')) {
+          $lunParameters["fastVPParameters"] = @{}
+          $fastVPParam = @{}
+          $fastVPParam['tieringPolicy'] = $fastVPParameters
+          $lunParameters["fastVPParameters"] = $fastVPParam
+        }
 
         If ($PSBoundParameters.ContainsKey('host')) {
         
