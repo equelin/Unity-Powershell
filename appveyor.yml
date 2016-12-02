@@ -14,6 +14,12 @@ environment:
     secure: 5jmXah8zuXr+gjrG1WkD1uZ/jk9q7W+foC793X8//rJN5vdye5tice7j83mPuuwU
   ModuleName: PSDummy
 
+skip_commits:
+  files:
+    - docs/*
+    - mkdocs.yml
+    - README.md
+
 #---------------------------------# 
 #      build configuration        # 
 #---------------------------------# 
