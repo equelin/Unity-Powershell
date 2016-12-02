@@ -47,15 +47,8 @@ Else
     You are in a known build system (Current: $ENV:BHBuildSystem)
     You are committing to the master branch (Current: $ENV:BHBranchName)
     The module version is greater than the latest GitHub release (Current: $ENV:BHModuleVersion GitHub:$env:BHGitHubLatestReleaseVersion)
-    The module version is greater than the latest PSGallery version (Current: $ENV:BHModuleVersion GitHub:$env:BHPSGalleryLatestModuleVersion)
+    The module version is greater than the latest PSGallery version (Current: $ENV:BHModuleVersion PSGallery:$env:BHPSGalleryLatestModuleVersion)
 "@
 
     Add-AppVeyorLog -Message 'Skipping deployment' -Category 'Warning' -Details $Details
-    <#
-    Write-Host "[$env:BHBuildSystem]-[$env:BHProjectName] - Skipping deployment: To deploy, ensure that..." -ForegroundColor Magenta
-    Write-Host "[$env:BHBuildSystem]-[$env:BHProjectName] - You are in a known build system (Current: $ENV:BHBuildSystem)" -ForegroundColor Magenta
-    Write-Host "[$env:BHBuildSystem]-[$env:BHProjectName] - You are committing to the master branch (Current: $ENV:BHBranchName)" -ForegroundColor Magenta
-    Write-Host "[$env:BHBuildSystem]-[$env:BHProjectName] - The module version is greater than the latest GitHub release (Current: $ENV:BHModuleVersion GitHub:$env:BHGitHubLatestReleaseVersion)" -ForegroundColor Magenta
-    Write-Host "[$env:BHBuildSystem]-[$env:BHProjectName] - The module version is greater than the latest PSGallery version (Current: $ENV:BHModuleVersion GitHub:$env:BHPSGalleryLatestModuleVersion)" -ForegroundColor Magenta
-    #>
 }
