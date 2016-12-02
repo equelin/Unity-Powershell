@@ -14,11 +14,10 @@ environment:
     secure: 5jmXah8zuXr+gjrG1WkD1uZ/jk9q7W+foC793X8//rJN5vdye5tice7j83mPuuwU
   ModuleName: PSDummy
 
-skip_commits:
+#Build will be started only if one of the modified files was inside the Unity-Powershell folder
+only_commits:
   files:
-    - docs/*
-    - mkdocs.yml
-    - README.md
+    - Unity-Powershell/
 
 #---------------------------------# 
 #      build configuration        # 
