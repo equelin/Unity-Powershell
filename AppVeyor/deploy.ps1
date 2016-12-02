@@ -8,6 +8,11 @@ $env:BHModuleVersion -gt $env:BHGitHubLatestReleaseVersion -and
 $env:BHModuleVersion -gt $env:BHPSGalleryLatestModuleVersion
 )
 {
+
+    # Load the module, read the exported functions, update the psd1 FunctionsToExport
+    Add-AppVeyorLog -Message 'Update the psd1 FunctionsToExport' -Category 'Information'
+    Set-ModuleFunctions
+
     $Params = @{
         Path = "$ProjectRoot\AppVeyor\PSDeploy\PSGalleryModule.PSDeploy.ps1"
         Force = $true

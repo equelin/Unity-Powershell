@@ -1,0 +1,7 @@
+site_name: Unity-Powershell Documentation
+repo_url: https://github.com/equelin/Unity-Powershell
+theme: readthedocs
+pages:
+  - Home: index.md
+  - Functions References:
+    - Connect-Unity: .\References\Connect-Unity.md
