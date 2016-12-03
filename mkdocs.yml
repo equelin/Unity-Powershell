@@ -3,7 +3,9 @@ repo_url: https://github.com/equelin/Unity-Powershell
 theme: readthedocs
 pages:
   - Home: index.md
-  - Installation: installation.md
+  - Introduction:
+    - Prerequisites: prerequisites.md
+    - Installation: installation.md
   - Functions References:
     - Connect-Unity: References/Connect-Unity.md
     - Disable-UnityFastCache: References/Disable-UnityFastCache.md
