@@ -59,13 +59,12 @@ The same user and password is used.
 ### -------------------------- EXEMPLE 4 --------------------------
 ```
 $IP = '192.168.0.1'
-```
-
 $Username = 'admin'
 $Password = 'Password123#'
 $Secpasswd = ConvertTo-SecureString $Password -AsPlainText -Force
 $Credentials = New-Object System.Management.Automation.PSCredential($Username,$secpasswd)
 Connect-Unity -Server $IP -Credentials $Credentials
+```
 
 Connects to the arrays with the IP 192.168.0.1 and using powershell credentials
 
