@@ -2,10 +2,9 @@
 
 Welcome to the documentation page of Unity-Powershell! 
 
-Unity-Powershell is a PowerShell module for managing EMC Unity arrays (physical or virtual).
-Unity-Powershell is a member of the DevHigh5 program from [{code} by Dell EMC(tm)](https://github.com/codedellemc/codedellemc.github.io/wiki/DevHigh5-Program-Overview-and-FAQ).
+Unity-Powershell is a PowerShell module for managing EMC Unity arrays (physical or virtual). Unity-Powershell is a member of the DevHigh5 program from [{code} by Dell EMC(tm)](https://github.com/codedellemc/codedellemc.github.io/wiki/DevHigh5-Program-Overview-and-FAQ).
 
-### functionalities
+### Functionalities
 
 With this module (version 0.11.0) you can manage:
 
@@ -24,11 +23,13 @@ With this module (version 0.11.0) you can manage:
 
 More functionalities will be added later.
 
-# Usage
+### Usage
 
-This module try to mimic VMware PowerCLI usage. All resources management functions are available with the powershell's verbs GET, NEW, SET, REMOVE. 
+This module try to mimic VMware PowerCLI usage. All resources management functions are available with the powershell's verbs `GET`, `NEW`, `SET` and `REMOVE`. 
+
 For example, you can manage Pools with the following commands:
-- Get-UnityPool
-- New-UnityPool
-- Set-UnityPool
-- Remove-UnityPool
+
+- `Get-UnityPool`
+- `New-UnityPool`
+- `Set-UnityPool`
+- `Remove-UnityPool`

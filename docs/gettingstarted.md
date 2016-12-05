@@ -23,6 +23,7 @@ Now that you are connected to an Unity, you can run commands to retrieve informa
 ### Get informations from the array
 
 All the commands to retrieve informations start with the verb `Get` like `Get-UnityStoragePool` or `Get-UnityVMwareLUN`.
+
 For example, if you want to list all the existing VMware LUN you can run this command:
 
 ```Powershell
@@ -52,9 +53,10 @@ sv_2 DATASTORE01 @{id=pool_1} True          Autotier_High 10737418240 28221440  
 
 As you can see in the above commands, you can use regular expressions.
 
-### Create a new item
+### Creation of a new item
 
 Now that we can get data from our array, we may want to configure it. We might want to create a new LUN or a user. All the commands that could be used to create an item starts with the verb `New` like `New-UnityVmwareLUN` or `New-UnityUSer`.
+
 You can run the next command if you want to create a VMWare LUN on the pool 'pool_1, named DATASTORE02 and with a size of 10 GB:
 
 ```Powershell
@@ -69,7 +71,7 @@ Id   Name        Pool         IsThinEnabled TieringPolicy SizeTotal   SizeAlloca
 sv_4 DATASTORE03 @{id=pool_1} True          Autotier_High 10737418240 0             VMwareISCSI
 ```
 
-### Modify an item
+### Modification of an item
 
 The configuration of almost all items can be modified with the commands started with the verb `Set` like `Set-VMwareUnityLUN` or `Set-UnityUser`.
 To modify an item you'll have to know its ID or alternatively, you can use powershell's pipelining possibilities.
@@ -93,6 +95,28 @@ Id   Name        Pool         IsThinEnabled TieringPolicy SizeTotal   SizeAlloca
 --   ----        ----         ------------- ------------- ---------   ------------- ----
 sv_4 DATASTORE03 @{id=pool_1} True          Autotier_High 21474836480 0             VMwareISCSI
 ```
+
+### Deletion of an item
+
+If you need to delete an item you can look at commands that starts with the verb `Remove`. Please be aware that this kind of operations can lead to data unavailability...
+
+As well as the `Set` commands, you can specify which item you want to delete by providing is ID or by using pipelining functionalities.
+
+Delete the VMware LUN by providing is ID:
+
+```Powershell
+> Remove-UnityVMwareLUN -ID sv_4
+```
+
+Delete the VMware LUN with pipelining:
+
+```Powershell
+> Get-UnityVMwareLUN -Name DATASTORE03 | Remove-UnityVMwareLUN
+```
+
+### Disconnection from the array
+
+You can close the connection by using the command `Disconnect-Unity`.
 
 
 
