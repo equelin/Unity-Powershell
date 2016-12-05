@@ -1,8 +1,10 @@
 # Installation
 
-Unity-Powershell is available on the Powershell Gallery. It can be easily installed from there.
+### Powershell Gallery (Recommended method)
 
-* Install the module
+Unity-Powershell is available on the Powershell Gallery. It can be easily installed from there with some powershell commands.
+
+* Install the module from the gallery
 ``` Powershell
 Install-Module Unity-Powershell -Scope CurrentUser
 ```
@@ -17,7 +19,9 @@ Import-Module Unity-Powershell
 Get-Command -Module Unity-Powershell
 ```
 
-Alternatively you can download the module from GitHub
+### Manual installation
+
+Alternatively you can download the module from GitHub.
 
 * Download the repository
 * Unblock the zip
