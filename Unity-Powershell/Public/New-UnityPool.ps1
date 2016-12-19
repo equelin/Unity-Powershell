@@ -4,7 +4,7 @@ Function New-UnityPool {
       .SYNOPSIS
       Creates a new storage pool.
       .DESCRIPTION
-      Creates a new storage pool. Storage pools are the groups of disks on which you create storage resources.
+      Creates a new storage pool. Storage pools are the groups of disks on which you create storage resources like LUN or filesystems.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -43,9 +43,9 @@ Function New-UnityPool {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      New-UnityPool -Name 'POOL01' -virtualDisk @{"id"='vdisk_1';"tier"='Performance'},@{"id"='vdisk_2';"tier"='Performance'}
+      New-UnityPool -Name 'POOL01' -virtualDisk @{"id"='vdisk_1';"tier"='Extreme_Performance'},@{"id"='vdisk_2';"tier"='Capacity'}
 
-      Create pool named 'POOL01' with virtual disks 'vdisk_1' and 'vdisk_2'. Virtual disks are assigned to the performance tier. Apply to Unity VSA only.
+      Create pool named 'POOL01' with virtual disks 'vdisk_1' and 'vdisk_2'. Virtual disks are assigned to the Extreme Performance and Capacity tier. Apply to Unity VSA only.
       .EXAMPLE
       New-UnityPool -Name 'POOL01' -raidGroup @{"id"='dg_11';"numDisks"= 15; 'raidType'='RAID5'; 'stripeWidth'='5'}
 

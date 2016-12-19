@@ -24,6 +24,36 @@ Export-ModuleMember -Function $Public.Basename
 
 [UnitySession[]]$global:DefaultUnitySession = @()
 
+# Welcome screen
+write-host ""
+write-host "        Welcome to Unity-Powershell!"
+write-host ""
+write-host " Log in to an EMC Unity:  " -NoNewline
+write-host "Connect-Unity" -foregroundcolor yellow
+write-host " To find out what commands are available, type:  " -NoNewline
+write-host "Get-Command -Module Unity-Powershell" -foregroundcolor yellow
+write-host " To get help for a specific command, type:                   " -NoNewLine
+write-host "get-help " -NoNewLine -foregroundcolor yellow
+Write-Host "[verb]" -NoNewLine -foregroundcolor red
+Write-Host "-Unity" -NoNewLine -foregroundcolor yellow
+Write-Host "[noun]" -NoNewLine -foregroundcolor red
+Write-Host " (Get-Help Get-UnityVMwareLUN)" -foregroundcolor yellow
+write-host " To get extended help for a specific command, type:          " -NoNewLine
+write-host "get-help " -NoNewLine -foregroundcolor yellow
+Write-Host "[verb]" -NoNewLine -foregroundcolor red
+Write-Host "-Unity" -NoNewLine -foregroundcolor yellow
+Write-Host "[noun]" -NoNewLine -foregroundcolor red
+Write-Host " -full" -NoNewLine -foregroundcolor yellow
+Write-Host " (Get-Help Get-UnityVMwareLUN -Full)" -foregroundcolor yellow
+write-host ""
+write-host " If you need further help, please consult one of the following:" -ForegroundColor Green
+write-host ""
+Write-host "  * Online documentation at http://unity-powershell.readthedocs.io/en/latest/"
+Write-host "  * Online Issues Tracker at https://github.com/equelin/Unity-Powershell/issues"
+write-host ""
+write-host " Licensed under the MIT License. (C) Copyright 2016 Erwan Quelin and the community."
+write-host ""
+
 #Custom Classes
 
 Class UnitySession {
