@@ -22,8 +22,8 @@ Function New-UnityVMwareLUN {
       LUN Size.
       .PARAMETER fastVPParameters
       FAST VP settings for the storage resource
-      .PARAMETER snapSchedule
-      Snapshot schedule settings for the VMware VMFS datastore, as defined by the snapScheduleParameters.
+      .PARAMETER isCompressionEnabled
+      Indicates whether to enable inline compression for the LUN. Default is True
       .PARAMETER isThinEnabled
       Is Thin enabled? (Default is true)
       .PARAMETER host
@@ -41,7 +41,11 @@ Function New-UnityVMwareLUN {
       .EXAMPLE
       New-UnityVMwareLUN -Name 'DATASTORE01' -Pool 'pool_1' -Size 10GB -host 'Host_12' -accessMask 'Production'
 
-      Create LUN named 'LUN01' on pool 'pool_1' and with a size of '10GB', grant production access to 'Host_12'
+      Create LUN named 'DATASTORE01' on pool 'pool_1' and with a size of '10GB', grant production access to 'Host_12'
+      .EXAMPLE
+      for($i=1; $i -le 10; $i++){New-UnityVMwareLUN -Name "DATASTORE0$i" -Size 2TB -Pool 'pool_1' -host (Get-UnityHost).id}
+
+      Create 10 datastores on pool 'pool_1' and with a size of '2TB', grant production access to all existing hosts.
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
@@ -66,6 +70,8 @@ Function New-UnityVMwareLUN {
     [bool]$isThinEnabled = $true,
     [Parameter(Mandatory = $false,HelpMessage = 'FAST VP settings for the storage resource')]
     [TieringPolicyEnum]$fastVPParameters,
+    [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether to enable inline compression for the LUN. Default is True')]
+    [bool]$isCompressionEnabled,
 
     # snapScheduleParameters
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
@@ -115,6 +121,10 @@ Function New-UnityVMwareLUN {
           $fastVPParam = @{}
           $fastVPParam['tieringPolicy'] = $fastVPParameters
           $lunParameters["fastVPParameters"] = $fastVPParam
+        }
+
+        If ($PSBoundParameters.ContainsKey('isCompressionEnabled')) {
+          $lunParameters["isCompressionEnabled"] = $isCompressionEnabled
         }
 
         If ($PSBoundParameters.ContainsKey('host')) {

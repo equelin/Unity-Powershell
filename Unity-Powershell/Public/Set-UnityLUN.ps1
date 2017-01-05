@@ -25,8 +25,10 @@ Function Set-UnityLUN {
       New description of the LUN.
       .PARAMETER Size
       New LUN size. The size parameter can be greater than the current LUN size in this case the LUN is expanded.
-      .PARAMETER snapSchedule
-      Snapshot schedule settings for the LUN, as defined by the snapScheduleParameters.
+      .PARAMETER fastVPParameters
+      FAST VP settings for the storage resource
+      .PARAMETER isCompressionEnabled
+      Indicates whether to enable inline compression for the LUN. Default is True
       .PARAMETER host
       List of host to grant access to LUN.
       .PARAMETER accessMask
@@ -57,18 +59,28 @@ Function Set-UnityLUN {
     [String]$Name,
     [Parameter(Mandatory = $false,HelpMessage = 'New LUN Description')]
     [String]$Description,
+
+    # lunParameters
     [Parameter(Mandatory = $false,HelpMessage = 'New LUN Size in Bytes')]
     [uint64]$Size,
+    [Parameter(Mandatory = $false,HelpMessage = 'FAST VP settings for the storage resource')]
+    [TieringPolicyEnum]$fastVPParameters,
+    [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether to enable inline compression for the LUN. Default is True')]
+    [bool]$isCompressionEnabled,
+
+    # snapScheduleParameters
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
     [String]$snapSchedule,
+    [Parameter(Mandatory = $false,HelpMessage = 'Is assigned snapshot schedule is paused ? (Default is false)')]
+    [bool]$isSnapSchedulePaused = $false,
+
+    # hostParameters
     [Parameter(Mandatory = $false,HelpMessage = 'Host to grant access to LUN')]
     [String[]]$host,
     [Parameter(Mandatory = $false,HelpMessage = 'Append Host access to existing configuration')]
     [Switch]$append,
     [Parameter(Mandatory = $false,HelpMessage = 'Host access mask')]
-    [HostLUNAccessEnum]$accessMask = 'Production',
-    [Parameter(Mandatory = $false,HelpMessage = 'Is assigned snapshot schedule is paused ? (Default is false)')]
-    [bool]$isSnapSchedulePaused = $false
+    [HostLUNAccessEnum]$accessMask = 'Production'
   )
 
   Begin {
@@ -133,12 +145,23 @@ Function Set-UnityLUN {
             }
 
             # lunParameters parameter
-            If (($PSBoundParameters.ContainsKey('size')) -or ($PSBoundParameters.ContainsKey('host'))) {
+            If (($PSBoundParameters.ContainsKey('size')) -or ($PSBoundParameters.ContainsKey('host')) -or ($PSBoundParameters.ContainsKey('fastVPParameters')) -or ($PSBoundParameters.ContainsKey('isCompressionEnabled'))) {
               $body["lunParameters"] = @{}
               $lunParameters = @{}
             
               If ($PSBoundParameters.ContainsKey('Size')) {
                 $lunParameters["size"] = $($Size)
+              }
+
+              If ($PSBoundParameters.ContainsKey('fastVPParameters')) {
+                $lunParameters["fastVPParameters"] = @{}
+                $fastVPParam = @{}
+                $fastVPParam['tieringPolicy'] = $fastVPParameters
+                $lunParameters["fastVPParameters"] = $fastVPParam
+              }
+
+              If ($PSBoundParameters.ContainsKey('isCompressionEnabled')) {
+                $lunParameters["isCompressionEnabled"] = $isCompressionEnabled
               }
 
               If ($PSBoundParameters.ContainsKey('host')) {
@@ -158,14 +181,20 @@ Function Set-UnityLUN {
 
                 If ($PSBoundParameters.ContainsKey('append')) {
 
-                  foreach ($h in $LUN.hostAccess) {
+                  foreach ($h in $Object.hostAccess) {
 
                     if (-not ($hostAccess.host.id -contains $h.host.id)) {
-                      $hostAccess += $h
+                      $blockHostAccessParam = @{}
+                      $blockHostAccessParam['host'] = @{}
+                        $HostParam = @{}
+                        $HostParam['id'] = $h.host.id
+                      $blockHostAccessParam['host'] = $HostParam
+                      $blockHostAccessParam['accessMask'] = $h.accessMask
+                      $hostAccess += $blockHostAccessParam
                     }
                   }
                 } else {
-                  Write-Warning -Message 'The existing host access parameters will be overwritten by the new settings. It could result to data unavailibility. Use the -Append parameter to add the new settings to the existing configuration. '
+                  Write-Warning -Message 'The existing host access parameters will be overwritten by the new settings. It could result to data unavailibility. Use the -Append parameter to add the new settings to the existing configuration.'
                 }
 
                 $lunParameters["hostAccess"] = $hostAccess

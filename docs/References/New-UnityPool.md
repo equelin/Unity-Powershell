@@ -31,18 +31,18 @@ New-UnityPool [-session <Object>] [-Name] <String[]> [-Description <String>] -vi
 
 ## DESCRIPTION
 Creates a new storage pool.
-Storage pools are the groups of disks on which you create storage resources.
+Storage pools are the groups of disks on which you create storage resources like LUN or filesystems.
 You need to have an active session with the array.
 
 ## EXAMPLES
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-New-UnityPool -Name 'POOL01' -virtualDisk @{"id"='vdisk_1';"tier"='Performance'},@{"id"='vdisk_2';"tier"='Performance'}
+New-UnityPool -Name 'POOL01' -virtualDisk @{"id"='vdisk_1';"tier"='Extreme_Performance'},@{"id"='vdisk_2';"tier"='Capacity'}
 ```
 
 Create pool named 'POOL01' with virtual disks 'vdisk_1' and 'vdisk_2'.
-Virtual disks are assigned to the performance tier.
+Virtual disks are assigned to the Extreme Performance and Capacity tier.
 Apply to Unity VSA only.
 
 ### -------------------------- EXEMPLE 2 --------------------------

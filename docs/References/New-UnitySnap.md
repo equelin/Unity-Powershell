@@ -11,18 +11,10 @@ Creates a new snapshot.
 
 ## SYNTAX
 
-### RaidGroup (Default)
 ```
-New-UnitySnap [-session <UnitySession[]>] [-name <String>] [-Description <String>] [-isAutoDelete <Boolean>]
- [-retentionDuration <UInt64>] [-isReadOnly <Boolean>] [-filesystemAccessType <FilesystemSnapAccessTypeEnum>]
- [-WhatIf] [-Confirm]
-```
-
-### ByName
-```
-New-UnitySnap [-session <UnitySession[]>] -storageResource <Object[]> [-name <String>] [-Description <String>]
- [-isAutoDelete <Boolean>] [-retentionDuration <UInt64>] [-isReadOnly <Boolean>]
- [-filesystemAccessType <FilesystemSnapAccessTypeEnum>] [-WhatIf] [-Confirm]
+New-UnitySnap [[-session] <Object>] [-storageResource] <Object[]> [[-name] <String>] [[-Description] <String>]
+ [[-isAutoDelete] <Boolean>] [[-retentionDuration] <UInt64>] [[-isReadOnly] <Boolean>]
+ [[-filesystemAccessType] <FilesystemSnapAccessTypeEnum>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -55,12 +47,12 @@ Create a snapshot of the VMware NFS volume.
 Specify an UnitySession Object.
 
 ```yaml
-Type: UnitySession[]
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
+Position: 1
 Default value: ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -71,11 +63,11 @@ UnitySnap
 
 ```yaml
 Type: Object[]
-Parameter Sets: ByName
+Parameter Sets: (All)
 Aliases: 
 
 Required: True
-Position: Named
+Position: 2
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
@@ -90,7 +82,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -105,7 +97,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -120,7 +112,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
+Position: 5
 Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -135,7 +127,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
+Position: 6
 Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -150,7 +142,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
+Position: 7
 Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -166,7 +158,7 @@ Aliases:
 Accepted values: Checkpoint, Protocol
 
 Required: False
-Position: Named
+Position: 8
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

@@ -52,6 +52,11 @@ Function Get-UnitystorageResource {
     $URI = '/api/types/storageResource/instances' #URI for the ressource (example: /api/types/lun/instances)
     $TypeName = 'UnitystorageResource'
 
+    Switch ($Session.apiVersion) {
+      '4.0' {$Exception = 'compressionStatus','compressionSizeSaved','compressionPercent','compressionRatio'}
+      'Default' {$Exception = ''}
+    }  
+
     Switch ($Type) {
       'lun' {$Filter = 'type eq 8'}
       'vmwareiscsi' {$Filter = 'type eq 4'}
@@ -67,7 +72,7 @@ Function Get-UnitystorageResource {
       If ($Sess.TestConnection()) {
 
         #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Filter $Filter
+        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Filter $Filter -Exception $Exception -Compact
 
         Write-Verbose "URL: $URL"
 

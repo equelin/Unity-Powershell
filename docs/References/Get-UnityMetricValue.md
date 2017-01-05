@@ -4,42 +4,29 @@ online version: https://github.com/equelin/Unity-Powershell
 schema: 2.0.0
 ---
 
-# Get-UnityVMwareLUN
+# Get-UnityMetricValue
 
 ## SYNOPSIS
-Queries the EMC Unity array to retrieve informations about VMware block LUN.
+Historical values for requested metrics.
 
 ## SYNTAX
 
-### ByID (Default)
 ```
-Get-UnityVMwareLUN [-session <Object>] [-ID <String[]>]
-```
-
-### ByName
-```
-Get-UnityVMwareLUN [-session <Object>] [-Name <String[]>]
+Get-UnityMetricValue [[-session] <Object>] [[-Path] <Object[]>] [[-Count] <Int64>]
 ```
 
 ## DESCRIPTION
-Querries the EMC Unity array to retrieve informations about VMware block LUN.
+Historical values for requested metrics. 
 You need to have an active session with the array.
 
 ## EXAMPLES
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityVMwareLUN
+Get-UnityMetricValue -Path 'sp.*.cpu.summary.utilization'
 ```
 
-Retrieve information about all VMware block LUN
-
-### -------------------------- EXEMPLE 2 --------------------------
-```
-Get-UnityVMwareLUN -Name 'DATASTORE01'
-```
-
-Retrieves information about VMware block LUN named DATASTORE01
+Retrieves information about metrics who's path is 'sp.*.cpu.summary.utilization'
 
 ## PARAMETERS
 
@@ -52,39 +39,40 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
+Position: 1
 Default value: ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-Specifies the object name.
+### -Path
+Stat path for the metric.
+A stat path identifies the metric's location in the stats namespace.
 
 ```yaml
-Type: String[]
-Parameter Sets: ByName
+Type: Object[]
+Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
-Default value: *
+Position: 2
+Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
-### -ID
-Specifies the object ID.
+### -Count
+Specifies the number of samples to display.
 
 ```yaml
-Type: String[]
-Parameter Sets: ByID
+Type: Int64
+Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
-Default value: *
-Accept pipeline input: True (ByPropertyName, ByValue)
+Position: 3
+Default value: 20
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

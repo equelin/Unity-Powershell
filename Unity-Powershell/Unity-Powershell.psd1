@@ -97,7 +97,11 @@ FormatsToProcess = @(
 '.\Format\Unity-Powershell.UnityHostIPPort.Format.ps1xml',
 '.\Format\Unity-Powershell.UnitySnap.Format.ps1xml',
 '.\Format\Unity-Powershell.UnitySnapSchedule.Format.ps1xml',
-'.\Format\Unity-Powershell.UnitySnapScheduleRule.Format.ps1xml'
+'.\Format\Unity-Powershell.UnitySnapScheduleRule.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityMetric.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityMetricRealTimeQuery.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityMetricQueryResult.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityMetricValue.Format.ps1xml'
 )
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess

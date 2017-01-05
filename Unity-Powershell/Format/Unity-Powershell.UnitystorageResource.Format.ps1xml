@@ -2,9 +2,9 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-    <Name>UnitystorageResourceTable</Name>
+    <Name>UnityStorageResourceTable</Name>
     <ViewSelectedBy>
-        <TypeName>UnitystorageResource</TypeName>
+        <TypeName>UnityStorageResource</TypeName>
     </ViewSelectedBy>
     <TableControl>
         <AutoSize/>
@@ -41,9 +41,9 @@
         </TableControl>
     </View>
 <View>
-      <Name>UnitystorageResourceList</Name>
+      <Name>UnityStorageResourceList</Name>
       <ViewSelectedBy>
-        <TypeName>UnitystorageResource</TypeName>
+        <TypeName>UnityStorageResource</TypeName>
       </ViewSelectedBy>
       <ListControl>
         <ListEntries>
@@ -168,6 +168,22 @@
                   <ListItem>
                     <Label>VmwareUUID</Label>
                     <PropertyName>vmwareUUID</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>CompressionStatus</Label>
+                    <PropertyName>compressionStatus</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>CompressionSizeSaved</Label>
+                    <PropertyName>compressionSizeSaved</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>CompressionPercent</Label>
+                    <PropertyName>compressionPercent</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>CompressionRatio</Label>
+                    <PropertyName>compressionRatio</PropertyName>
                 </ListItem>
              </ListItems>
           </ListEntry>

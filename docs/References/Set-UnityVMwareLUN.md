@@ -13,9 +13,9 @@ Modifies VMware block LUN parameters.
 
 ```
 Set-UnityVMwareLUN [-session <Object>] [-ID] <Object[]> [-Name <String>] [-Description <String>]
- [-Size <UInt64>] [-fastVPParameters <TieringPolicyEnum>] [-snapSchedule <String>]
- [-isSnapSchedulePaused <Boolean>] [-host <String[]>] [-append] [-accessMask <HostLUNAccessEnum>] [-WhatIf]
- [-Confirm]
+ [-Size <UInt64>] [-fastVPParameters <TieringPolicyEnum>] [-isCompressionEnabled <Boolean>]
+ [-snapSchedule <String>] [-isSnapSchedulePaused <Boolean>] [-host <String[]>] [-append]
+ [-accessMask <HostLUNAccessEnum>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -128,6 +128,22 @@ Accepted values: Autotier_High, Autotier, Highest, Lowest, No_Data_Movement, Mix
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -isCompressionEnabled
+Indicates whether to enable inline compression for the LUN.
+Default is True
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

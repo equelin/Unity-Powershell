@@ -192,6 +192,22 @@
                     <Label>Wwn</Label>
                     <PropertyName>wwn</PropertyName>
                 </ListItem>
+                <ListItem>
+                    <Label>CompressionSizeSaved</Label>
+                    <PropertyName>compressionSizeSaved</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>CompressionPercent</Label>
+                    <PropertyName>compressionPercent</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>CompressionRatio</Label>
+                    <PropertyName>compressionRatio</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>IsCompressionEnabled</Label>
+                    <PropertyName>isCompressionEnabled</PropertyName>
+                </ListItem>
              </ListItems>
           </ListEntry>
         </ListEntries>

@@ -13,12 +13,12 @@ Refresh vCenter hosts.
 
 ### Refresh (Default)
 ```
-Update-UnityvCenter [-session <UnitySession[]>] [-ID] <String[]> [-Refresh]
+Update-UnityvCenter [-session <Object>] [-ID] <String[]> [-Refresh]
 ```
 
 ### RefreshAll
 ```
-Update-UnityvCenter [-session <UnitySession[]>] [-ID] <String[]> [-RefreshAll]
+Update-UnityvCenter [-session <Object>] [-ID] <String[]> [-RefreshAll]
 ```
 
 ## DESCRIPTION
@@ -40,7 +40,7 @@ Refresh all the hosts managed by this vCenter.
 Specify an UnitySession Object.
 
 ```yaml
-Type: UnitySession[]
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 

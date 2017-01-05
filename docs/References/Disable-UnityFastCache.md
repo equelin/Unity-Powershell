@@ -12,7 +12,7 @@ Disable FAST Cache.
 ## SYNTAX
 
 ```
-Disable-UnityFastCache [[-session] <UnitySession[]>] [-WhatIf] [-Confirm]
+Disable-UnityFastCache [[-session] <Object>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -34,7 +34,7 @@ Disable FAST Cache.
 Specifies an UnitySession Object.
 
 ```yaml
-Type: UnitySession[]
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 

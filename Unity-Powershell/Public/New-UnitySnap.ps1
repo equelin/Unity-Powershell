@@ -44,14 +44,14 @@ Function New-UnitySnap {
       Create a snapshot of the VMware NFS volume.
   #>
 
-  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High',DefaultParameterSetName="RaidGroup")]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
-    [UnitySession[]]$session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
+    $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     
     #UnitySnap
-    [Parameter(Mandatory = $true,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Storage resource ID or object.')]
+    [Parameter(Mandatory = $true,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Storage resource ID or object.')]
     [Object[]]$storageResource,
     [Parameter(Mandatory = $false,HelpMessage = 'Name for the new snapshot')]
     [String]$name,

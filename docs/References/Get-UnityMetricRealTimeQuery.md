@@ -4,42 +4,30 @@ online version: https://github.com/equelin/Unity-Powershell
 schema: 2.0.0
 ---
 
-# Get-UnityVMwareLUN
+# Get-UnityMetricRealTimeQuery
 
 ## SYNOPSIS
-Queries the EMC Unity array to retrieve informations about VMware block LUN.
+Information about real times metric queries.
 
 ## SYNTAX
 
-### ByID (Default)
 ```
-Get-UnityVMwareLUN [-session <Object>] [-ID <String[]>]
-```
-
-### ByName
-```
-Get-UnityVMwareLUN [-session <Object>] [-Name <String[]>]
+Get-UnityMetricRealTimeQuery [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
-Querries the EMC Unity array to retrieve informations about VMware block LUN.
+Information about real times metric queries.
+It represents a query to obtain real-time information for one or more metrics, including a specified sampling frequency. 
 You need to have an active session with the array.
 
 ## EXAMPLES
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityVMwareLUN
+Get-UnityMetricRealTimeQuery
 ```
 
-Retrieve information about all VMware block LUN
-
-### -------------------------- EXEMPLE 2 --------------------------
-```
-Get-UnityVMwareLUN -Name 'DATASTORE01'
-```
-
-Retrieves information about VMware block LUN named DATASTORE01
+Retrieve informations about all queries.
 
 ## PARAMETERS
 
@@ -58,27 +46,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-Specifies the object name.
-
-```yaml
-Type: String[]
-Parameter Sets: ByName
-Aliases: 
-
-Required: False
-Position: Named
-Default value: *
-Accept pipeline input: True (ByPropertyName, ByValue)
-Accept wildcard characters: False
-```
-
 ### -ID
-Specifies the object ID.
+Queries ID.
 
 ```yaml
 Type: String[]
-Parameter Sets: ByID
+Parameter Sets: (All)
 Aliases: 
 
 Required: False

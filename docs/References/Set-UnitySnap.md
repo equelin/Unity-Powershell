@@ -13,29 +13,29 @@ Modifies snapshot parameters.
 
 ### Set (Default)
 ```
-Set-UnitySnap [-session <UnitySession[]>] [-ID] <String[]> [-name <String[]>] [-Description <String>]
+Set-UnitySnap [-session <Object>] [-ID] <String[]> [-name <String[]>] [-Description <String>]
  [-isAutoDelete <Boolean>] [-retentionDuration <UInt64>] [-ioLimitParameters <String>] [-WhatIf] [-Confirm]
 ```
 
 ### Detach
 ```
-Set-UnitySnap [-session <UnitySession[]>] [-ID] <String[]> [-detach] [-WhatIf] [-Confirm]
+Set-UnitySnap [-session <Object>] [-ID] <String[]> [-detach] [-WhatIf] [-Confirm]
 ```
 
 ### Attach
 ```
-Set-UnitySnap [-session <UnitySession[]>] [-ID] <String[]> [-attach] [-copyName <String>] [-WhatIf] [-Confirm]
+Set-UnitySnap [-session <Object>] [-ID] <String[]> [-attach] [-copyName <String>] [-WhatIf] [-Confirm]
 ```
 
 ### Restore
 ```
-Set-UnitySnap [-session <UnitySession[]>] [-ID] <String[]> [-restore] [-copyName <String>] [-WhatIf] [-Confirm]
+Set-UnitySnap [-session <Object>] [-ID] <String[]> [-restore] [-copyName <String>] [-WhatIf] [-Confirm]
 ```
 
 ### Copy
 ```
-Set-UnitySnap [-session <UnitySession[]>] [-ID] <String[]> [-copy] [-numCopies <UInt32>]
- [-copyStartNum <UInt32>] [-copyName <String>] [-WhatIf] [-Confirm]
+Set-UnitySnap [-session <Object>] [-ID] <String[]> [-copy] [-numCopies <UInt32>] [-copyStartNum <UInt32>]
+ [-copyName <String>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -85,7 +85,7 @@ Detach the snapshot with ID '171798691854' so hosts can no longer access it.
 Specify an UnitySession Object.
 
 ```yaml
-Type: UnitySession[]
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 

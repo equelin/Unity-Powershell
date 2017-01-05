@@ -52,7 +52,7 @@ Function Connect-Unity {
       [Parameter(Mandatory = $true,Position = 0,ParameterSetName="ByServer",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'EMC Unity FQDN or IP address')]
       [String[]]$Server,
       [Parameter(Mandatory = $true,ParameterSetName="BySession",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'EMC Unity Session object')]
-      [UnitySession]$Session,
+      $Session,
       [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity username')]
       [String]$Username,
       [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity password')]
@@ -130,10 +130,12 @@ Function Connect-Unity {
 
       # Get informations about the array
       $System = Get-UnitySystem -Session $Sess
+      $BasicSystemInfo = Get-UnityBasicSystemInfo -Session $Sess
 
       $Sess.Name = $System.Name
       $Sess.Model = $System.model
       $Sess.SerialNumber = $System.SerialNumber
+      $Sess.ApiVersion = $BasicSystemInfo.ApiVersion
 
       #Add the UnitySession Object to the $global:DefaultUnitySession array
       $global:DefaultUnitySession += $Sess

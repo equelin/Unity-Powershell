@@ -37,6 +37,11 @@ Function Get-UnityLUNResource {
     $ResultCollection = @()
     $URI = '/api/types/lun/instances' #URI for the ressource (example: /api/types/lun/instances)
     $TypeName = 'UnityLUN'
+
+    Switch ($Session.apiVersion) {
+      '4.0' {$Exception = 'compressionSizeSaved','compressionPercent','compressionRatio','isCompressionEnabled'}
+      'Default' {$Exception = ''}
+    }  
   }
 
   Process {
@@ -45,7 +50,7 @@ Function Get-UnityLUNResource {
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       #Building the URL from Object Type.
-      $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
+      $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Exception $Exception -Compact
 
       Write-Verbose "URL: $URL"
 
@@ -74,7 +79,7 @@ Function Get-UnityLUNResource {
           Foreach ($Result in $ResultCollection) {
 
               # Instantiate object
-              $Object = [UnityLUN]$Result
+              $Object = New-Object -TypeName $TypeName -Property $Result
 
               # Convert to MB
               #$Object.ConvertToMB()

@@ -12,7 +12,7 @@ Disconnects from an EMC Unity Array
 ## SYNTAX
 
 ```
-Disconnect-Unity [[-session] <UnitySession[]>] [-WhatIf] [-Confirm]
+Disconnect-Unity [[-session] <Object>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -45,7 +45,7 @@ Disconnects all the sessions matching the IP of the array 192.168.0.1
 Specifies an UnitySession Object.
 
 ```yaml
-Type: UnitySession[]
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 

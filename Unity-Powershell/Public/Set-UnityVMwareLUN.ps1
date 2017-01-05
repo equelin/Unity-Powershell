@@ -27,6 +27,8 @@ Function Set-UnityVMwareLUN {
       New LUN size. The size parameter can be greater than the current LUN size in this case the LUN is expanded.
       .PARAMETER fastVPParameters
       FAST VP settings for the storage resource
+      .PARAMETER isCompressionEnabled
+      Indicates whether to enable inline compression for the LUN. Default is True
       .PARAMETER snapSchedule
       Snapshot schedule settings for the VMware VMFS datastore, as defined by the snapScheduleParameters.
       .PARAMETER host
@@ -69,7 +71,9 @@ Function Set-UnityVMwareLUN {
     [uint64]$Size,
     [Parameter(Mandatory = $false,HelpMessage = 'FAST VP settings for the storage resource')]
     [TieringPolicyEnum]$fastVPParameters,
-
+    [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether to enable inline compression for the LUN. Default is True')]
+    [bool]$isCompressionEnabled,
+    
     # snapScheduleParameters
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
     [String]$snapSchedule,
@@ -91,7 +95,7 @@ Function Set-UnityVMwareLUN {
     # Variables
     $URI = '/api/instances/storageResource/<id>/action/modifyVmwareLun'
     $Type = 'VMware LUN'
-    $TypeName = 'UnityLun'
+    $TypeName = 'UnityLUN'
     $StatusCode = 204
   }
 
@@ -104,8 +108,8 @@ Function Set-UnityVMwareLUN {
       If ($Sess.TestConnection()) {
 
         Foreach ($i in $ID) {
-
-          Switch ($i.GetType().Name)
+ 
+          Switch -wildcard ($i.GetType().Name)
           {
             "String" {
               $Object = get-UnityVMwareLUN -Session $Sess -ID $i
@@ -116,7 +120,7 @@ Function Set-UnityVMwareLUN {
                 $ObjectName = $ObjectID
               }
             }
-            "$TypeName" {
+            "$TypeName*" {
               Write-Verbose "Input object type is $($i.GetType().Name)"
               $ObjectID = $i.id
               If ($Object = Get-UnityVMwareLUN -Session $Sess -ID $ObjectID) {
@@ -147,7 +151,7 @@ Function Set-UnityVMwareLUN {
             }
 
             # lunParameters parameter
-            If (($PSBoundParameters.ContainsKey('size')) -or ($PSBoundParameters.ContainsKey('host')) -or ($PSBoundParameters.ContainsKey('fastVPParameters'))) {
+            If (($PSBoundParameters.ContainsKey('size')) -or ($PSBoundParameters.ContainsKey('host')) -or ($PSBoundParameters.ContainsKey('fastVPParameters')) -or ($PSBoundParameters.ContainsKey('isCompressionEnabled'))) {
               $body["lunParameters"] = @{}
               $lunParameters = @{}
             
@@ -160,6 +164,10 @@ Function Set-UnityVMwareLUN {
                 $fastVPParam = @{}
                 $fastVPParam['tieringPolicy'] = $fastVPParameters
                 $lunParameters["fastVPParameters"] = $fastVPParam
+              }
+
+              If ($PSBoundParameters.ContainsKey('isCompressionEnabled')) {
+                $lunParameters["isCompressionEnabled"] = $isCompressionEnabled
               }
 
               If ($PSBoundParameters.ContainsKey('host')) {
@@ -179,10 +187,16 @@ Function Set-UnityVMwareLUN {
 
                 If ($PSBoundParameters.ContainsKey('append')) {
 
-                  foreach ($h in $LUN.hostAccess) {
+                  foreach ($h in $Object.hostAccess) {
 
                     if (-not ($hostAccess.host.id -contains $h.host.id)) {
-                      $hostAccess += $h
+                      $blockHostAccessParam = @{}
+                      $blockHostAccessParam['host'] = @{}
+                        $HostParam = @{}
+                        $HostParam['id'] = $h.host.id
+                      $blockHostAccessParam['host'] = $HostParam
+                      $blockHostAccessParam['accessMask'] = $h.accessMask
+                      $hostAccess += $blockHostAccessParam
                     }
                   }
                 } else {
