@@ -35,6 +35,10 @@ pages:
     - Get-UnityItem: References/Get-UnityItem.md
     - Get-UnityLicense: References/Get-UnityLicense.md
     - Get-UnityLUN: References/Get-UnityLUN.md
+    - Get-UnityMetric: References/Get-UnityMetric.md
+    - Get-UnityMetricQueryResult: References/Get-UnityMetricQueryResult.md
+    - Get-UnityMetricRealTimeQuery: References/Get-UnityMetricRealTimeQuery.md
+    - Get-UnityMetricValue: References/Get-UnityMetricValue.md
     - Get-UnityMgmtInterface: References/Get-UnityMgmtInterface.md
     - Get-UnityMgmtInterfaceSettings: References/Get-UnityMgmtInterfaceSettings.md
     - Get-UnityNASServer: References/Get-UnityNASServer.md
@@ -62,6 +66,7 @@ pages:
     - New-UnityHostIPPort: References/New-UnityHostIPPort.md
     - New-UnityiSCSIPortal: References/New-UnityiSCSIPortal.md
     - New-UnityLUN: References/New-UnityLUN.md
+    - New-UnityMetricRealTimeQuery: References/New-UnityMetricRealTimeQuery.md
     - New-UnityMgmtInterface: References/New-UnityMgmtInterface.md
     - New-UnityNASServer: References/New-UnityNASServer.md
     - New-UnityNFSServer: References/New-UnityNFSServer.md

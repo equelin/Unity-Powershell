@@ -1,10 +1,10 @@
-Function Get-UnityPool {
+Function Get-UnityMetric {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about pool.
+      Queries the EMC Unity array to retrieve informations about metrics.
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve informations about pool.
+      Queries the EMC Unity array to retrieve informations about metrics.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -17,13 +17,13 @@ Function Get-UnityPool {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityPool
+      Get-UnityMetric
 
-      Retrieve information about pool
+      Retrieve information about all metrics
       .EXAMPLE
-      Get-UnityPool -Name 'POOL01'
+      Get-UnityMetric -Name 'Read IO time'
 
-      Retrieves information about pool named POOL01
+      Retrieves information about metrics named 'Read IO time'
   #>
 
   [CmdletBinding(DefaultParameterSetName="ByName")]
@@ -41,13 +41,8 @@ Function Get-UnityPool {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/pool/instances' #URI
-    $TypeName = 'UnityPool'
-
-    Switch ($Session.apiVersion) {
-      '4.0' {$Exception = 'compressionSizeSaved','compressionPercent','compressionRatio','hasCompressionEnabledLuns'}
-      'Default' {$Exception = ''}
-    }   
+    $URI = '/api/types/metric/instances' #URI
+    $TypeName = 'UnityMetric'
   }
 
   Process {
@@ -58,7 +53,7 @@ Function Get-UnityPool {
       If ($Sess.TestConnection()) {
 
         #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Exception $Exception -Compact
+        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
 
         Write-Verbose "URL: $URL"
 
@@ -94,6 +89,7 @@ Function Get-UnityPool {
 
               # Output results
               $Object
+
             } # End Foreach ($Result in $ResultCollection)
           } # End If ($ResultsFiltered) 
         } # End If ($Results)

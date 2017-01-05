@@ -12,7 +12,7 @@
 RootModule = 'Unity-Powershell.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.11.1'
+ModuleVersion = '0.12.0'
 
 # ID used to uniquely identify this module
 GUID = '586e7e62-9753-4fd6-91b6-89d8d89d69a2'
@@ -97,7 +97,11 @@ FormatsToProcess = @(
 '.\Format\Unity-Powershell.UnityHostIPPort.Format.ps1xml',
 '.\Format\Unity-Powershell.UnitySnap.Format.ps1xml',
 '.\Format\Unity-Powershell.UnitySnapSchedule.Format.ps1xml',
-'.\Format\Unity-Powershell.UnitySnapScheduleRule.Format.ps1xml'
+'.\Format\Unity-Powershell.UnitySnapScheduleRule.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityMetric.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityMetricRealTimeQuery.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityMetricQueryResult.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityMetricValue.Format.ps1xml'
 )
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess

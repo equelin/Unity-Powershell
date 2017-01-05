@@ -12,7 +12,7 @@ Delete a snapshot schedule.
 ## SYNTAX
 
 ```
-Remove-UnitySnapSchedule [-session <UnitySession[]>] [-ID] <Object[]> [-WhatIf] [-Confirm]
+Remove-UnitySnapSchedule [-session <Object>] [-ID] <Object[]> [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -41,7 +41,7 @@ Delete all existing snapshots schedule.
 Specify an UnitySession Object.
 
 ```yaml
-Type: UnitySession[]
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 

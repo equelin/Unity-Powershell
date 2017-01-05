@@ -1,10 +1,11 @@
-Function Get-UnityPool {
+Function Get-UnityMetricRealTimeQuery {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about pool.
+      Information about real times metric queries.
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve informations about pool.
+      Information about real times metric queries.
+      It represents a query to obtain real-time information for one or more metrics, including a specified sampling frequency. 
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -12,27 +13,19 @@ Function Get-UnityPool {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specifies an UnitySession Object.
-      .PARAMETER Name
-      Specifies the object name.
       .PARAMETER ID
-      Specifies the object ID.
+      Queries ID.
       .EXAMPLE
-      Get-UnityPool
+      Get-UnityMetricRealTimeQuery
 
-      Retrieve information about pool
-      .EXAMPLE
-      Get-UnityPool -Name 'POOL01'
-
-      Retrieves information about pool named POOL01
+      Retrieve informations about all queries.
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByName")]
+  [CmdletBinding(DefaultParameterSetName="ByID")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool Name')]
-    [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Pool ID')]
+    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Queries ID')]
     [String[]]$ID='*'
   )
 
@@ -41,13 +34,8 @@ Function Get-UnityPool {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/pool/instances' #URI
-    $TypeName = 'UnityPool'
-
-    Switch ($Session.apiVersion) {
-      '4.0' {$Exception = 'compressionSizeSaved','compressionPercent','compressionRatio','hasCompressionEnabledLuns'}
-      'Default' {$Exception = ''}
-    }   
+    $URI = '/api/types/metricRealTimeQuery/instances' #URI for the ressource (example: /api/types/lun/instances)
+    $TypeName = 'UnityMetricRealTimeQuery'
   }
 
   Process {
@@ -58,7 +46,7 @@ Function Get-UnityPool {
       If ($Sess.TestConnection()) {
 
         #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Exception $Exception -Compact
+        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
 
         Write-Verbose "URL: $URL"
 
@@ -72,12 +60,9 @@ Function Get-UnityPool {
         If ($Results) {
 
           $ResultsFiltered = @()
-
+          
           # Results filtering
           Switch ($PsCmdlet.ParameterSetName) {
-            'ByName' {
-              $ResultsFiltered += Find-FromFilter -Parameter 'Name' -Filter $Name -Data $Results
-            }
             'ByID' {
               $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
             }

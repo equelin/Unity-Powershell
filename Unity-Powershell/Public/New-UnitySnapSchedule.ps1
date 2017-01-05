@@ -53,7 +53,7 @@ Function New-UnitySnapSchedule {
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
-    [UnitySession[]]$session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
+    $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     
     #UnitySnapSchedule
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Name of new schedule')]

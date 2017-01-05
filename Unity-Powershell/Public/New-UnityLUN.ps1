@@ -20,8 +20,12 @@ Function New-UnityLUN {
       Description of the LUN.
       .PARAMETER Size
       LUN Size.
-      .PARAMETER snapSchedule
-      Snapshot schedule settings for the LUN, as defined by the snapScheduleParameters.
+      .PARAMETER fastVPParameters
+      FAST VP settings for the storage resource
+      .PARAMETER isCompressionEnabled
+      Indicates whether to enable inline compression for the LUN. Default is True
+      .PARAMETER isThinEnabled
+      Is Thin enabled on LUN ? (Default is true)
       .PARAMETER host
       List of host to grant access to LUN.
       .PARAMETER accessMask
@@ -30,10 +34,8 @@ Function New-UnityLUN {
       - Production: Access to production LUNs only. 
       - Snapshot: Access to LUN snapshots only. 
       - Both: Access to both production LUNs and their snapshots.
-      .PARAMETER isThinEnabled
-      Is Thin enabled on LUN ? (Default is true)
       .PARAMETER snapSchedule
-      Snapshot schedule assigned to the storage resource
+      Snapshot schedule settings for the LUN, as defined by the snapScheduleParameters.
       .PARAMETER isSnapSchedulePaused
       Indicates whether the assigned snapshot schedule is paused.
       .PARAMETER Confirm
@@ -54,6 +56,8 @@ Function New-UnityLUN {
     [String[]]$Name,
     [Parameter(Mandatory = $false,HelpMessage = 'LUN Description')]
     [String]$Description,
+
+    # lunParameters
     [Parameter(Mandatory = $true,HelpMessage = 'LUN Pool ID')]
     [String]$Pool,
     [Parameter(Mandatory = $true,HelpMessage = 'LUN Size in Bytes')]
@@ -64,6 +68,12 @@ Function New-UnityLUN {
     [HostLUNAccessEnum]$accessMask = 'Production',
     [Parameter(Mandatory = $false,HelpMessage = 'Is Thin enabled on LUN ? (Default is true)')]
     [bool]$isThinEnabled = $true,
+    [Parameter(Mandatory = $false,HelpMessage = 'FAST VP settings for the storage resource')]
+    [TieringPolicyEnum]$fastVPParameters,
+    [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether to enable inline compression for the LUN. Default is True')]
+    [bool]$isCompressionEnabled,
+
+    # snapScheduleParameters
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the storage resource')]
     [String]$snapSchedule,
     [Parameter(Mandatory = $false,HelpMessage = 'Is assigned snapshot schedule is paused ? (Default is false)')]
@@ -107,6 +117,17 @@ Function New-UnityLUN {
         $poolParameters["id"] = "$($Pool)"
         $lunParameters["pool"] = $poolParameters
         $lunParameters["size"] = $($Size)
+
+        If ($PSBoundParameters.ContainsKey('fastVPParameters')) {
+          $lunParameters["fastVPParameters"] = @{}
+          $fastVPParam = @{}
+          $fastVPParam['tieringPolicy'] = $fastVPParameters
+          $lunParameters["fastVPParameters"] = $fastVPParam
+        }
+
+        If ($PSBoundParameters.ContainsKey('isCompressionEnabled')) {
+          $lunParameters["isCompressionEnabled"] = $isCompressionEnabled
+        }
 
         If ($PSBoundParameters.ContainsKey('host')) {
         

@@ -10,14 +10,16 @@ function Get-URLFromObjectType {
       [parameter(Mandatory = $false, HelpMessage = 'Ressource Filter')]
       [string]$Filter,
       [parameter(Mandatory = $false, HelpMessage = 'Compact the response')]
-      [switch]$Compact
+      [switch]$Compact,
+      [parameter(Mandatory = $false, HelpMessage = 'Exceptions')]
+      [string[]]$Exception = ''
   )
 
   Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
   $object = New-Object $TypeName
 
-  $object  | get-member -type Property | foreach-object {$fields += $_.Name + ','}
+  $object  | get-member -type Property | Where-Object {$Exception -notcontains $_.Name} | foreach-object {$fields += $_.Name + ','}
 
   #Remove last ,
   $fields = $fields -replace '.$'

@@ -28,7 +28,7 @@ Function Update-UnityvCenter {
   Param (
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
-    [UnitySession[]]$session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
+    $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
     #vCenter
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID or Object of a vCenter server')]

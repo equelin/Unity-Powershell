@@ -4,42 +4,29 @@ online version: https://github.com/equelin/Unity-Powershell
 schema: 2.0.0
 ---
 
-# Get-UnityVMwareLUN
+# Get-UnityMetricQueryResult
 
 ## SYNOPSIS
-Queries the EMC Unity array to retrieve informations about VMware block LUN.
+A set of values for one or more metrics for a given period of time.
 
 ## SYNTAX
 
-### ByID (Default)
 ```
-Get-UnityVMwareLUN [-session <Object>] [-ID <String[]>]
-```
-
-### ByName
-```
-Get-UnityVMwareLUN [-session <Object>] [-Name <String[]>]
+Get-UnityMetricQueryResult [[-session] <Object>] [-queryId] <Object[]>
 ```
 
 ## DESCRIPTION
-Querries the EMC Unity array to retrieve informations about VMware block LUN.
+A set of values for one or more metrics for a given period of time.
 You need to have an active session with the array.
 
 ## EXAMPLES
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityVMwareLUN
+Get-UnityMetricQueryResult -queryId 5
 ```
 
-Retrieve information about all VMware block LUN
-
-### -------------------------- EXEMPLE 2 --------------------------
-```
-Get-UnityVMwareLUN -Name 'DATASTORE01'
-```
-
-Retrieves information about VMware block LUN named DATASTORE01
+Retrieve informations about query who's ID is 5.
 
 ## PARAMETERS
 
@@ -52,38 +39,23 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
+Position: 1
 Default value: ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-Specifies the object name.
+### -queryId
+Queries ID or object.
 
 ```yaml
-Type: String[]
-Parameter Sets: ByName
+Type: Object[]
+Parameter Sets: (All)
 Aliases: 
 
-Required: False
-Position: Named
-Default value: *
-Accept pipeline input: True (ByPropertyName, ByValue)
-Accept wildcard characters: False
-```
-
-### -ID
-Specifies the object ID.
-
-```yaml
-Type: String[]
-Parameter Sets: ByID
-Aliases: 
-
-Required: False
-Position: Named
-Default value: *
+Required: True
+Position: 2
+Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```

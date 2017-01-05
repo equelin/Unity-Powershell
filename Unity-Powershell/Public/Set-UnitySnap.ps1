@@ -72,7 +72,7 @@ Function Set-UnitySnap {
     [Parameter(Mandatory = $false,ParameterSetName="Restore",HelpMessage = 'EMC Unity Session')]
     [Parameter(Mandatory = $false,ParameterSetName="Attach",HelpMessage = 'EMC Unity Session')]
     [Parameter(Mandatory = $false,ParameterSetName="Detach",HelpMessage = 'EMC Unity Session')]
-    [UnitySession[]]$session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
+    $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     
     #ID
     [Parameter(Mandatory = $true,Position = 0,ParameterSetName="Set",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Snapshot ID or Object.')]

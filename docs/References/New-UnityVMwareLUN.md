@@ -14,8 +14,8 @@ Creates a Unity VMware block LUN.
 ```
 New-UnityVMwareLUN [-session <Object>] [-Name] <String[]> [-Description <String>] -Pool <String> -Size <UInt64>
  [-host <String[]>] [-accessMask <HostLUNAccessEnum>] [-isThinEnabled <Boolean>]
- [-fastVPParameters <TieringPolicyEnum>] [-snapSchedule <String>] [-isSnapSchedulePaused <Boolean>] [-WhatIf]
- [-Confirm]
+ [-fastVPParameters <TieringPolicyEnum>] [-isCompressionEnabled <Boolean>] [-snapSchedule <String>]
+ [-isSnapSchedulePaused <Boolean>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -29,7 +29,14 @@ You need to have an active session with the array.
 New-UnityVMwareLUN -Name 'DATASTORE01' -Pool 'pool_1' -Size 10GB -host 'Host_12' -accessMask 'Production'
 ```
 
-Create LUN named 'LUN01' on pool 'pool_1' and with a size of '10GB', grant production access to 'Host_12'
+Create LUN named 'DATASTORE01' on pool 'pool_1' and with a size of '10GB', grant production access to 'Host_12'
+
+### -------------------------- EXEMPLE 2 --------------------------
+```
+for($i=1; $i -le 10; $i++){New-UnityVMwareLUN -Name "DATASTORE0$i" -Size 2TB -Pool 'pool_1' -host (Get-UnityHost).id}
+```
+
+Create 10 datastores on pool 'pool_1' and with a size of '2TB', grant production access to all existing hosts.
 
 ## PARAMETERS
 
@@ -176,8 +183,24 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -isCompressionEnabled
+Indicates whether to enable inline compression for the LUN.
+Default is True
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -snapSchedule
-Snapshot schedule settings for the VMware VMFS datastore, as defined by the snapScheduleParameters.
+Snapshot schedule assigned to the storage resource
 
 ```yaml
 Type: String

@@ -24,6 +24,33 @@ Export-ModuleMember -Function $Public.Basename
 
 [UnitySession[]]$global:DefaultUnitySession = @()
 
+# Welcome screen
+write-host ""
+write-host "        Welcome to Unity-Powershell!"
+write-host ""
+write-host " Log in to an EMC Unity:  " -NoNewline
+write-host "Connect-Unity" -foregroundcolor yellow
+write-host " To find out what commands are available, type:  " -NoNewline
+write-host "Get-Command -Module Unity-Powershell" -foregroundcolor yellow
+write-host " To get help for a specific command, type: " -NoNewLine
+write-host "get-help " -NoNewLine -foregroundcolor yellow
+Write-Host "[verb]" -NoNewLine -foregroundcolor red
+Write-Host "-Unity" -NoNewLine -foregroundcolor yellow
+Write-Host "[noun]" -NoNewLine -foregroundcolor red
+Write-Host " (Get-Help Get-UnityVMwareLUN)" -foregroundcolor yellow
+write-host " To get extended help for a specific command, type: " -NoNewLine
+write-host "get-help " -NoNewLine -foregroundcolor yellow
+Write-Host "[verb]" -NoNewLine -foregroundcolor red
+Write-Host "-Unity" -NoNewLine -foregroundcolor yellow
+Write-Host "[noun]" -NoNewLine -foregroundcolor red
+Write-Host " -full" -NoNewLine -foregroundcolor yellow
+Write-Host " (Get-Help Get-UnityVMwareLUN -Full)" -foregroundcolor yellow
+Write-host " Documentation available at http://unity-powershell.readthedocs.io/en/latest/"
+Write-host " Issues Tracker available at https://github.com/equelin/Unity-Powershell/issues"
+write-host ""
+write-host " Licensed under the MIT License. (C) Copyright 2016 Erwan Quelin and the community."
+write-host ""
+
 #Custom Classes
 
 Class UnitySession {
@@ -37,6 +64,7 @@ Class UnitySession {
   [string]$Name
   [string]$model
   [string]$SerialNumber
+  [version]$ApiVersion
 
   ## Methods
 
@@ -113,6 +141,10 @@ Class UnityLUN {
   [UInt64]$snapsSizeAllocated
   $hostAccess
   [int]$snapCount
+  [UInt64]$compressionSizeSaved
+  [Uint16]$compressionPercent
+  [Float]$compressionRatio
+  [bool]$isCompressionEnabled
 
   ## Methods
 
@@ -160,6 +192,10 @@ Class UnityPool {
   [UInt64]$metadataSizeUsed
   [UInt64]$snapSizeUsed
   [Uint16]$rebalanceProgress
+  [UInt64]$compressionSizeSaved
+  [Uint16]$compressionPercent
+  [Float]$compressionRatio
+  [bool]$hasCompressionEnabledLuns
 
   ## Methods
 
@@ -217,9 +253,9 @@ Class UnityBasicSystemInfo {
   [string]$id
   [string]$model
   [string]$name
-  [string]$softwareVersion
-  [string]$apiVersion
-  [string]$earliestApiVersion
+  [version]$softwareVersion
+  [version]$apiVersion
+  [version]$earliestApiVersion
 }
 
 Class UnityFeature {
@@ -273,6 +309,10 @@ Class UnityStorageResource {
   $hostVVolDatastore
   $luns
   $virtualVolumes
+  [CompressionStatusEnum]$compressionStatus
+  [UInt64]$compressionSizeSaved
+  [Uint16]$compressionPercent
+  [Float]$compressionRatio
 
   ## Methods
 
@@ -675,8 +715,6 @@ Class UnityNfsServer {
   [Datetime]$credentialsCacheTTL
 }
 
-#Custom Enum
-
 Class UnityNFSShare {
   [string]$id
   [NFSTypeEnum]$type
@@ -759,7 +797,56 @@ Class UnitySnapScheduleRule {
   [FilesystemSnapAccessTypeEnum]$accessType
 }
 
+Class UnityMetric {
+  [string]$id
+  [string]$name
+  [string]$path
+  [MetricType]$type
+  [string]$description
+  [bool]$isHistoricalAvailable
+  [bool]$isRealtimeAvailable
+  [string]$unitDisplayString
+}
+
+Class UnityMetricRealTimeQuery {
+  [string]$id
+  [string[]]$paths
+  [Uint32]$interval
+  $maximumSamples
+  [datetime]$expiration
+}
+
+Class UnityMetricQueryResult {
+  $queryId
+  [string]$path
+  [datetime]$timestamp
+  $values
+}
+
+Class UnityMetricValue {
+  [string]$path
+  [datetime]$timestamp
+  [Uint32]$interval
+  $values
+}
+
 #Custom Enum
+
+Enum CompressionStatusEnum {
+  Disabled = 0
+  Enabled = 1
+  Mixed = 0xffff
+}
+
+Enum MetricType {
+  Counter_32_bits = 2
+  Counter_64_bits = 3
+  Rate = 4
+  Fact = 5
+  Text = 6
+  Virtual_Counter_32_bits = 7
+  Virtual_Counter_64_bits = 8
+}
 
 Enum DayOfWeekEnum {
   Sunday = 1

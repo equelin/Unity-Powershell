@@ -13,7 +13,8 @@ Creates a Unity block LUN.
 
 ```
 New-UnityLUN [-session <Object>] [-Name] <String[]> [-Description <String>] -Pool <String> -Size <UInt64>
- [-host <String[]>] [-accessMask <HostLUNAccessEnum>] [-isThinEnabled <Boolean>] [-snapSchedule <String>]
+ [-host <String[]>] [-accessMask <HostLUNAccessEnum>] [-isThinEnabled <Boolean>]
+ [-fastVPParameters <TieringPolicyEnum>] [-isCompressionEnabled <Boolean>] [-snapSchedule <String>]
  [-isSnapSchedulePaused <Boolean>] [-WhatIf] [-Confirm]
 ```
 
@@ -155,6 +156,38 @@ Aliases:
 Required: False
 Position: Named
 Default value: True
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -fastVPParameters
+FAST VP settings for the storage resource
+
+```yaml
+Type: TieringPolicyEnum
+Parameter Sets: (All)
+Aliases: 
+Accepted values: Autotier_High, Autotier, Highest, Lowest, No_Data_Movement, Mixed
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -isCompressionEnabled
+Indicates whether to enable inline compression for the LUN.
+Default is True
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

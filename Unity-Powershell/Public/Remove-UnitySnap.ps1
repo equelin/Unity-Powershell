@@ -32,7 +32,7 @@ Function Remove-UnitySnap {
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
-    [UnitySession[]]$session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
+    $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'snapshot ID or snapshot Object')]
     [Object[]]$ID
   )

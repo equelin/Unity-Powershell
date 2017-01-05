@@ -13,8 +13,9 @@ Modifies LUN parameters.
 
 ```
 Set-UnityLUN [-session <Object>] [-ID] <String[]> [-Name <String>] [-Description <String>] [-Size <UInt64>]
- [-snapSchedule <String>] [-host <String[]>] [-append] [-accessMask <HostLUNAccessEnum>]
- [-isSnapSchedulePaused <Boolean>] [-WhatIf] [-Confirm]
+ [-fastVPParameters <TieringPolicyEnum>] [-isCompressionEnabled <Boolean>] [-snapSchedule <String>]
+ [-isSnapSchedulePaused <Boolean>] [-host <String[]>] [-append] [-accessMask <HostLUNAccessEnum>] [-WhatIf]
+ [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -108,8 +109,40 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -fastVPParameters
+FAST VP settings for the storage resource
+
+```yaml
+Type: TieringPolicyEnum
+Parameter Sets: (All)
+Aliases: 
+Accepted values: Autotier_High, Autotier, Highest, Lowest, No_Data_Movement, Mixed
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -isCompressionEnabled
+Indicates whether to enable inline compression for the LUN.
+Default is True
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -snapSchedule
-Snapshot schedule settings for the LUN, as defined by the snapScheduleParameters.
+Snapshot schedule assigned to the storage resource
 
 ```yaml
 Type: String
@@ -119,6 +152,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -isSnapSchedulePaused
+Indicates whether the assigned snapshot schedule is paused.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -170,21 +218,6 @@ Accepted values: NoAccess, Production, Snapshot, Both, Mixed
 Required: False
 Position: Named
 Default value: Production
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -isSnapSchedulePaused
-Indicates whether the assigned snapshot schedule is paused.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -192,9 +192,25 @@
                     <Label>StorageResourceType</Label>
                     <PropertyName>storageResourceType</PropertyName>
                 </ListItem>
-                  <ListItem>
+                <ListItem>
                     <Label>Tiers</Label>
                     <PropertyName>tiers</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>CompressionSizeSaved</Label>
+                    <PropertyName>compressionSizeSaved</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>CompressionPercent</Label>
+                    <PropertyName>compressionPercent</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>CompressionRatio</Label>
+                    <PropertyName>compressionRatio</PropertyName>
+                </ListItem>
+                <ListItem>
+                    <Label>HasCompressionEnabledLuns</Label>
+                    <PropertyName>hasCompressionEnabledLuns</PropertyName>
                 </ListItem>
              </ListItems>
           </ListEntry>

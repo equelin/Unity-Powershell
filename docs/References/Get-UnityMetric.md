@@ -4,42 +4,42 @@ online version: https://github.com/equelin/Unity-Powershell
 schema: 2.0.0
 ---
 
-# Get-UnityVMwareLUN
+# Get-UnityMetric
 
 ## SYNOPSIS
-Queries the EMC Unity array to retrieve informations about VMware block LUN.
+Queries the EMC Unity array to retrieve informations about metrics.
 
 ## SYNTAX
 
-### ByID (Default)
+### ByName (Default)
 ```
-Get-UnityVMwareLUN [-session <Object>] [-ID <String[]>]
+Get-UnityMetric [-session <Object>] [-Name <String[]>]
 ```
 
-### ByName
+### ByID
 ```
-Get-UnityVMwareLUN [-session <Object>] [-Name <String[]>]
+Get-UnityMetric [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
-Querries the EMC Unity array to retrieve informations about VMware block LUN.
+Queries the EMC Unity array to retrieve informations about metrics.
 You need to have an active session with the array.
 
 ## EXAMPLES
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityVMwareLUN
+Get-UnityMetric
 ```
 
-Retrieve information about all VMware block LUN
+Retrieve information about all metrics
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnityVMwareLUN -Name 'DATASTORE01'
+Get-UnityMetric -Name 'Read IO time'
 ```
 
-Retrieves information about VMware block LUN named DATASTORE01
+Retrieves information about metrics named 'Read IO time'
 
 ## PARAMETERS
 

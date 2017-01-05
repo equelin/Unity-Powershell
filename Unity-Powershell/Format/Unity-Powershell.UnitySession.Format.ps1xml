@@ -103,6 +103,10 @@
                     <Label>Websession</Label>
                     <PropertyName>Websession</PropertyName>
                 </ListItem>
+                <ListItem>
+                    <Label>ApiVersion</Label>
+                    <PropertyName>apiVersion</PropertyName>
+                </ListItem>
              </ListItems>
           </ListEntry>
         </ListEntries>

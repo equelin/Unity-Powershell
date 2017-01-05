@@ -12,10 +12,10 @@ Creates a new snapshot schedule.
 ## SYNTAX
 
 ```
-New-UnitySnapSchedule [-session <UnitySession[]>] [-name] <String[]> -type <ScheduleTypeEnum>
- [-minute <UInt32>] [-hours <UInt32[]>] [-daysOfWeek <DayOfWeekEnum[]>] [-daysOfMonth <UInt32>]
- [-interval <UInt32>] [-isAutoDelete <Boolean>] [-retentionTime <UInt64>]
- [-accessType <FilesystemSnapAccessTypeEnum>] [-WhatIf] [-Confirm]
+New-UnitySnapSchedule [-session <Object>] [-name] <String[]> -type <ScheduleTypeEnum> [-minute <UInt32>]
+ [-hours <UInt32[]>] [-daysOfWeek <DayOfWeekEnum[]>] [-daysOfMonth <UInt32>] [-interval <UInt32>]
+ [-isAutoDelete <Boolean>] [-retentionTime <UInt64>] [-accessType <FilesystemSnapAccessTypeEnum>] [-WhatIf]
+ [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -38,7 +38,7 @@ Snap every 12 hours, at 30 minutes past the hour.
 Specify an UnitySession Object.
 
 ```yaml
-Type: UnitySession[]
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 

@@ -4,36 +4,29 @@ online version: https://github.com/equelin/Unity-Powershell
 schema: 2.0.0
 ---
 
-# Remove-UnitySnap
+# New-UnityMetricRealTimeQuery
 
 ## SYNOPSIS
-Delete a snapshot.
+Creates a new metrics real-time query.
 
 ## SYNTAX
 
 ```
-Remove-UnitySnap [-session <Object>] [-ID] <Object[]> [-WhatIf] [-Confirm]
+New-UnityMetricRealTimeQuery [[-session] <Object>] [-paths] <Object> [-interval] <UInt64> [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
-Delete a snapshot.
-You need to have an active session with the array.
+Creates a new metrics real-time query.
+After you create this query, the results are available whith the command Get-UnityMetricQueryResult
 
 ## EXAMPLES
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Remove-UnitySnap -ID '171798691854'
+New-UnityMetricRealTimeQuery -paths sp.*.cpu.uptime -interval 60
 ```
 
-Delete the snapshot with ID '171798691854'
-
-### -------------------------- EXEMPLE 2 --------------------------
-```
-Get-UnitySnap | Remove-UnitySnap
-```
-
-Delete all existing snapshots.
+Create a new query to gather statisitics about 'sp.*.cpu.uptime'.
 
 ## PARAMETERS
 
@@ -46,25 +39,39 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
+Position: 1
 Default value: ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ID
-ID of the snapshot or snapshot Object.
-ID need to be surounded by quote like this '171798691854'.
+### -paths
+Metric stat paths associated with the query.
 
 ```yaml
-Type: Object[]
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 
 Required: True
-Position: 1
+Position: 2
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -interval
+Sampling frequency for the query in seconds.
+
+```yaml
+Type: UInt64
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: 3
+Default value: 0
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -84,7 +91,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
-If the value is $true, indicates that the cmdlet asks for confirmation before running. 
+If the value is $true, indicates that the cmdlet asks for confirmation before running.
 If the value is $false, the cmdlet runs without asking for user confirmation.
 
 ```yaml
