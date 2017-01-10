@@ -7,6 +7,7 @@ pages:
     - Prerequisites: prerequisites.md
     - Installation: installation.md
     - Getting Started: gettingstarted.md
+  - FAQ: FAQ.md
   - Functions References:
     - Connect-Unity: References/Connect-Unity.md
     - Disable-UnityFastCache: References/Disable-UnityFastCache.md
