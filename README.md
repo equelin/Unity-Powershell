@@ -5,7 +5,6 @@
 
 Last release: [![GitHub version](https://badge.fury.io/gh/equelin%2FUnity-Powershell.svg)](https://github.com/equelin/Unity-Powershell/releases/latest)
 
-
 # Unity-Powershell
 
 This is a PowerShell module for managing EMC Unity arrays (physical or virtual).
