@@ -1,4 +1,10 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/y6w9s01j9ddqnsbi/branch/master?svg=true)](https://ci.appveyor.com/project/equelin/unity-powershell) [![GitHub version](https://badge.fury.io/gh/equelin%2FUnity-Powershell.svg)](https://badge.fury.io/gh/equelin%2FUnity-Powershell) [![Documentation Status](https://readthedocs.org/projects/unity-powershell/badge/?version=latest)](http://unity-powershell.readthedocs.io/en/latest/?badge=latest)
+| Branch | AppVeyor | Docs |
+| ------ | -------- | ---- |
+| master | [![Build status](https://ci.appveyor.com/api/projects/status/y6w9s01j9ddqnsbi/branch/master?svg=true)](https://ci.appveyor.com/project/equelin/unity-powershell) | [![Documentation Status](https://readthedocs.org/projects/unity-powershell/badge/?version=latest)](http://unity-powershell.readthedocs.io/en/latest/?badge=latest) |
+| develop | [![Build status](https://ci.appveyor.com/api/projects/status/y6w9s01j9ddqnsbi/branch/develop?svg=true)](https://ci.appveyor.com/project/equelin/unity-powershell) | [![Documentation Status](https://readthedocs.org/projects/unity-powershell/badge/?version=develop)](http://unity-powershell.readthedocs.io/en/develop/?badge=latest) |
+
+Last release: [![GitHub version](https://badge.fury.io/gh/equelin%2FUnity-Powershell.svg)](https://github.com/equelin/Unity-Powershell/releases/latest)
+
 
 # Unity-Powershell
 
@@ -7,7 +13,7 @@ Unity-Powershell is a member of the DevHigh5 program from [{code} by Dell EMC(tm
 
 ![](./Medias/Unity-Powershell-Demo-01.gif)
 
-With this module (version 0.11.0) you can manage:
+With this module (version 0.12.0) you can manage:
 
 - System (DNS,NTP...),
 - Pools (Virtual and physical deployment),
@@ -20,7 +26,8 @@ With this module (version 0.11.0) you can manage:
 - NFS Server and Shares,
 - vCenter and ESXi servers,
 - iSCSI parameters,
-- Snapshots and snapshots schedules.
+- Snapshots and snapshots schedules,
+- Performance metrics.
 
 More functionalities will be added later.
 
