@@ -101,7 +101,8 @@ FormatsToProcess = @(
 '.\Format\Unity-Powershell.UnityMetric.Format.ps1xml',
 '.\Format\Unity-Powershell.UnityMetricRealTimeQuery.Format.ps1xml',
 '.\Format\Unity-Powershell.UnityMetricQueryResult.Format.ps1xml',
-'.\Format\Unity-Powershell.UnityMetricValue.Format.ps1xml'
+'.\Format\Unity-Powershell.UnityMetricValue.Format.ps1xml',
+'.\Format\Unity-Powershell.UnityHostInitiator.Format.ps1xml'
 )
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
