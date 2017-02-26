@@ -830,7 +830,49 @@ Class UnityMetricValue {
   $values
 }
 
+class UnityHostInitiator {
+  [string]$id
+  [UnityHealth]$health
+  [HostInitiatorTypeEnum]$type
+  $parentHost
+  [bool]$isIgnored
+  [string]$nodeWWN
+  [string]$portWWN
+  [string]$chapUserName
+  [bool]$isChapSecretEnabled
+  [array]$paths
+  [IscsiTypeEnum]$iscsiType
+  [bool]$isBound
+  [HostInitiatorSourceTypeEnum]$sourceType
+}
+
 #Custom Enum
+
+Enum HostInitiatorSourceTypeEnum {
+  Unknown = 0
+  HP_Autotresspass = 2
+  Open_Native = 3
+  SGI = 9
+  HP_No_Autotresspass = 10
+  Dell = 19
+  Fujitsu_Siemens = 22
+  Clariion_Array_CMI = 25
+  Tru64 = 28
+  RecoverPoint = 31
+}
+
+Enum IscsiTypeEnum {
+  ISCSI_TYPE_UNKNOWN = 0
+  ISCSI_TYPE_HARDWARE = 1
+  ISCSI_TYPE_SOFTWARE = 2
+  ISCSI_TYPE_DEPENDENT = 3
+}
+
+Enum HostInitiatorTypeEnum {
+  Unknown = 0
+  FC = 1
+  ISCSI = 2
+}
 
 Enum CompressionStatusEnum {
   Disabled = 0
