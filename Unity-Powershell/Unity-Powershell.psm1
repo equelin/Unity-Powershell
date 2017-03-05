@@ -1,27 +1,34 @@
+# To enable debugging - Import-Module path\to\Module -ArgumentList $true
+
+param (
+    [bool]$DebugModule = $false
+)
 
 #Get Class, public and private function definition files
 $Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue )
 $Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue )
 
-#Dot source the files
+#Dot source the files - idea from https://becomelotr.wordpress.com/2017/02/13/expensive-dot-sourcing/
 Foreach($import in @($Public + $Private))
 {
-    Try
-    {
-        Write-Verbose "Import file: $($import.fullname)"
-        . $import.fullname
+  If ($DebugModule) {
+    Write-Verbose "Import file in debug mode: $($import.fullname)"
+    . $import.fullname
+  } Else {
+    Try {
+      Write-Verbose "Import file: $($import.fullname)"
+      $ExecutionContext.InvokeCommand.InvokeScript($false, ([scriptblock]::Create([io.file]::ReadAllText($import))), $null, $null)
     }
-    Catch
-    {
-        Write-Error -Message "Failed to import file $($import.fullname): $_"
+    Catch {
+      Write-Error -Message "Failed to import file $($import.fullname): $_"
     }
+  }
 }
 
 # Export public functions
 Export-ModuleMember -Function $Public.Basename
 
 #Variable initialization
-
 [UnitySession[]]$global:DefaultUnitySession = @()
 
 # Welcome screen
