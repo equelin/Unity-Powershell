@@ -36,12 +36,7 @@ Function Get-UnityLUNResource {
     #Initialazing variables
     $ResultCollection = @()
     $URI = '/api/types/lun/instances' #URI for the ressource (example: /api/types/lun/instances)
-    $TypeName = 'UnityLUN'
-
-    Switch ($Session.apiVersion) {
-      '4.0' {$Exception = 'compressionSizeSaved','compressionPercent','compressionRatio','isCompressionEnabled'}
-      'Default' {$Exception = ''}
-    }  
+    $TypeName = 'UnityLUN' 
   }
 
   Process {
@@ -50,7 +45,7 @@ Function Get-UnityLUNResource {
       Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       #Building the URL from Object Type.
-      $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Exception $Exception -Compact
+      $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Compact
 
       Write-Verbose "URL: $URL"
 

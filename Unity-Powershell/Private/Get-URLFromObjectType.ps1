@@ -2,7 +2,7 @@ function Get-URLFromObjectType {
   [CmdletBinding()]
   Param (
       [parameter(Mandatory = $true, HelpMessage = "IP/FQDN of the array")]
-      [string]$Server,
+      [UnitySession]$Session,
       [Parameter(Mandatory = $true,HelpMessage = 'URI')]
       [string]$URI,
       [parameter(Mandatory = $true, HelpMessage = 'Type associated to the item')]
@@ -17,14 +17,14 @@ function Get-URLFromObjectType {
 
   Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-  $object = New-Object $TypeName
+  $type = $TypeName -replace 'Unity',''
 
-  $object  | get-member -type Property | Where-Object {$Exception -notcontains $_.Name} | foreach-object {$fields += $_.Name + ','}
+  ($Session.types | where-object {$_.name -eq $type}).Attributes | foreach-object {$fields += $_.Name + ','}
 
   #Remove last ,
   $fields = $fields -replace '.$'
 
-  $URL = 'https://'+$Server+$URI+'?fields='+$fields
+  $URL = 'https://'+$($Session.Server)+$URI+'?fields='+$fields
 
   If ($Filter) {
     $URL = $URL + '&filter=' + $Filter

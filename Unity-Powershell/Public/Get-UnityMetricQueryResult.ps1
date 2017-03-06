@@ -67,7 +67,7 @@ Function Get-UnityMetricQueryResult {
             $Filter = 'queryId EQ '+$ObjectID
 
             #Building the URL from Object Type.
-            $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact -Filter $Filter
+            $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Compact -Filter $Filter
 
             Write-Verbose "URL: $URL"
 

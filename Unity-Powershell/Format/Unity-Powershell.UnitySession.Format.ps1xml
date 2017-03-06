@@ -107,6 +107,10 @@
                     <Label>ApiVersion</Label>
                     <PropertyName>apiVersion</PropertyName>
                 </ListItem>
+                <ListItem>
+                    <Label>Types</Label>
+                    <PropertyName>types</PropertyName>
+                </ListItem>
              </ListItems>
           </ListEntry>
         </ListEntries>
