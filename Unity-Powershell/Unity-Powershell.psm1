@@ -72,6 +72,7 @@ Class UnitySession {
   [string]$model
   [string]$SerialNumber
   [version]$ApiVersion
+  $Attributes
 
   ## Methods
 
@@ -107,11 +108,14 @@ Class UnitySystem {
   [string]$name
   [string]$model
   [string]$serialNumber
+  [string]$systemUUID
+  [string]$licenseActivationKey
   [string]$internalModel
   [string]$platform
   [string]$macAddress
   [bool]$isEULAAccepted
   [bool]$isUpgradeComplete
+  [SPModelNameEnum[]]$supportedUpgradeModels
 }
 
 Class UnityUser {

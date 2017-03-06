@@ -17,9 +17,9 @@ function Get-URLFromObjectType {
 
   Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
 
-  $object = New-Object $TypeName
+  $type = $TypeName -replace 'Unity',''
 
-  $object  | get-member -type Property | Where-Object {$Exception -notcontains $_.Name} | foreach-object {$fields += $_.Name + ','}
+  ($types.entries.content | where-object {$_.name -eq $type}).Attributes | foreach-object {$fields += $_.Name + ','}
 
   #Remove last ,
   $fields = $fields -replace '.$'

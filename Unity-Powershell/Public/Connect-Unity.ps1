@@ -103,7 +103,7 @@ Function Connect-Unity {
 
 
     foreach ($srv in $Server) {
-      #Initialazing Cookies Container
+      #Initializing Cookies Container
       $Cookies = New-Object -TypeName System.Net.CookieContainer
 
       $result = Get-UnityAuth -Server $srv -EncodedPassword $EncodedPassword -Cookies $Cookies
@@ -131,11 +131,13 @@ Function Connect-Unity {
       # Get informations about the array
       $System = Get-UnitySystem -Session $Sess
       $BasicSystemInfo = Get-UnityBasicSystemInfo -Session $Sess
+      $Types = Get-UnityItem -URI '/api/types' -Session $Sess
 
       $Sess.Name = $System.Name
       $Sess.Model = $System.model
       $Sess.SerialNumber = $System.SerialNumber
       $Sess.ApiVersion = $BasicSystemInfo.ApiVersion
+      $Sess.Attributes = $Types.entries.content | where-object {$_.name -notlike '*Enum'}
 
       #Add the UnitySession Object to the $global:DefaultUnitySession array
       $global:DefaultUnitySession += $Sess
