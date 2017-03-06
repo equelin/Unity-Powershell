@@ -108,8 +108,8 @@
                     <PropertyName>apiVersion</PropertyName>
                 </ListItem>
                 <ListItem>
-                    <Label>Attributes</Label>
-                    <PropertyName>attributes</PropertyName>
+                    <Label>Types</Label>
+                    <PropertyName>types</PropertyName>
                 </ListItem>
              </ListItems>
           </ListEntry>

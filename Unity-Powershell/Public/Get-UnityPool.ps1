@@ -42,12 +42,7 @@ Function Get-UnityPool {
     #Initialazing variables
     $ResultCollection = @()
     $URI = '/api/types/pool/instances' #URI
-    $TypeName = 'UnityPool'
-
-    Switch ($Session.apiVersion) {
-      '4.0' {$Exception = 'compressionSizeSaved','compressionPercent','compressionRatio','hasCompressionEnabledLuns'}
-      'Default' {$Exception = ''}
-    }   
+    $TypeName = 'UnityPool'  
   }
 
   Process {
@@ -58,7 +53,7 @@ Function Get-UnityPool {
       If ($Sess.TestConnection()) {
 
         #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Exception $Exception -Compact
+        $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Compact
 
         Write-Verbose "URL: $URL"
 

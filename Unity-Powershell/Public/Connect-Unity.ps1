@@ -125,19 +125,19 @@ Function Connect-Unity {
         Write-Verbose "Add cookie: $($cookie.Name) to WebSession"
         $Websession.Cookies.Add($cookie);
       }
-
       $Sess.Websession = $Websession
+
+      # Get types definitions from API
+      $Types = Get-UnityItem -URI '/api/types' -Session $Sess
+      $Sess.Types = $Types.entries.content | where-object {$_.name -notlike '*Enum'}
 
       # Get informations about the array
       $System = Get-UnitySystem -Session $Sess
       $BasicSystemInfo = Get-UnityBasicSystemInfo -Session $Sess
-      $Types = Get-UnityItem -URI '/api/types' -Session $Sess
-
       $Sess.Name = $System.Name
       $Sess.Model = $System.model
       $Sess.SerialNumber = $System.SerialNumber
       $Sess.ApiVersion = $BasicSystemInfo.ApiVersion
-      $Sess.Attributes = $Types.entries.content | where-object {$_.name -notlike '*Enum'}
 
       #Add the UnitySession Object to the $global:DefaultUnitySession array
       $global:DefaultUnitySession += $Sess

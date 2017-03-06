@@ -72,7 +72,7 @@ Class UnitySession {
   [string]$model
   [string]$SerialNumber
   [version]$ApiVersion
-  $Attributes
+  [Object[]]$Types
 
   ## Methods
 
