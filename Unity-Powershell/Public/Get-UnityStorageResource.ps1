@@ -67,7 +67,7 @@ Function Get-UnitystorageResource {
       If ($Sess.TestConnection()) {
 
         #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Compact
+        $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Filter $Filter -Compact
 
         Write-Verbose "URL: $URL"
 

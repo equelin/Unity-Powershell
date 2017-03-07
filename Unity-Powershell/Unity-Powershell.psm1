@@ -132,9 +132,9 @@ Class Unitylun {
 
   #Properties
 
-  [Int]$metadataSizeAllocated #Size of pool space allocated for the LUN's metadata.  
+  [UInt64]$metadataSizeAllocated #Size of pool space allocated for the LUN's metadata.  
   [String]$snapWwn #World Wide Name of the Snap Mount Point.  
-  [Int]$snapsSize #Size of the LUN snapshots.  
+  [UInt64]$snapsSize #Size of the LUN snapshots.  
   [String]$id #Unique identifier of the LUN.  
   [UnityHealth]$health #Health information for the LUN, as defined by the health resource type.  
   [String]$name #Name of the LUN.  
@@ -481,10 +481,10 @@ Class Unityfilesystem {
   [String]$name #File system name unique to the NAS server.  
   [String]$description #File system description.  
   [FilesystemTypeEnum]$type #File system type.  
-  [Long]$sizeTotal #File system size that the system presents to the host or end user.  
-  [Long]$sizeUsed #Size of used space in the file system by the user files.  
-  [Long]$sizeAllocated #Size of pool space allocated for the file system: <ul> <li>For a thin-provisioned file system, this as a rule is less than the value of the sizeTotal attribute and slightly greater than or equal to the value of the sizeUsed attribute.</li> <li>For a not thin-provisioned file system, this is approximately equal to the value of the attribute sizeTotal.</lki> </ul> This measurement does not include space reserved for snapshots.  
-  [Long]$minSizeAllocated #<ul> <li>For a thin-provisioned file system, this is the minimum allocated size to which the file system can be auto-shrunk.</li> <li>This attribute does not apply for a thick-provisioned file system</li> </ul> This measurement does not include space reserved for snapshots.  
+  [UInt64]$sizeTotal #File system size that the system presents to the host or end user.  
+  [UInt64]$sizeUsed #Size of used space in the file system by the user files.  
+  [UInt64]$sizeAllocated #Size of pool space allocated for the file system: <ul> <li>For a thin-provisioned file system, this as a rule is less than the value of the sizeTotal attribute and slightly greater than or equal to the value of the sizeUsed attribute.</li> <li>For a not thin-provisioned file system, this is approximately equal to the value of the attribute sizeTotal.</lki> </ul> This measurement does not include space reserved for snapshots.  
+  [UInt64]$minSizeAllocated #<ul> <li>For a thin-provisioned file system, this is the minimum allocated size to which the file system can be auto-shrunk.</li> <li>This attribute does not apply for a thick-provisioned file system</li> </ul> This measurement does not include space reserved for snapshots.  
   [Bool]$isReadOnly #Indicates whether the file system is read-only. Values are: <ul> <li>true - File system is read-only.</li> <li>false - File system is read-write.</li> </ul>  
   [Bool]$isThinEnabled #Indicates whether the file system is thin-provisioned. Values are: <ul> <li>true - File system is thin-provisioned.</li> <li>false - File system is thick-provisoned.</li> </ul>  
   [Object]$storageResource #Storage resource to which the file system belongs, as defined by the storageResource.  
@@ -494,28 +494,28 @@ Class Unityfilesystem {
   [Object]$nasServer #NAS server that provides network connectivity to the file system from the hosts.  
   [Bool]$isCIFSNotifyOnWriteEnabled #(SMB (also known as CIFS) file systems) Indicates whether notifications on file writes are enabled on the file system. Values are: <ul> <li>true - Notifications on file writes are enabled on the file system.</li> <li>false - Notifications on file writes are disabled on the file system.</li> </ul>  
   [Bool]$isCIFSNotifyOnAccessEnabled #(SMB (also known as CIFS) file systems) Indicates whether notifications on file access are enabled on the file system. Values are: <ul> <li>true - Notifications on file access are enabled on the file system.</li> <li>false - Notifications on file access are disabled on the file system.</li> </ul>  
-  [Int]$cifsNotifyOnChangeDirDepth #(SMB (also known as CIFS) file systems) Lowest directory level to which the enabled notifications apply, if any.  
+  [UInt16]$cifsNotifyOnChangeDirDepth #(SMB (also known as CIFS) file systems) Lowest directory level to which the enabled notifications apply, if any.  
   [DedupStateEnum]$dedupState #File system deduplication state.  
   [String[]]$dedupExcludePaths #Paths excluded from deduplication.  
   [String[]]$dedupExcludeExtensions #File extensions excluded from deduplication.  
   [Bool]$isDedupRunning #Indicates whether deduplication is running on the file system. Values are: <ul> <li>true - Deduplication is running on the file system.</li> <li>false - Deduplication is not running on the file system.</li> </ul>  
   [DateTime]$dedupLastScan #Date and time of the last full deduplication scan of the file system.  
-  [Int]$dedupOriginalSizeUsed #File system size without deduplication.  
-  [Int]$dedupSizeUsed #File system size with deduplication.  
-  [Int]$dedupSizeSaved #Size of pool space saved by deduplication.  
-  [Int]$dedupPercentSaved #Percentage of space saved by deduplication.  
-  [Int]$dedupNumFilesTotal #Total number of regular and deduplicated files in the file system, as detected in last successful deduplication scan.  
-  [Int]$dedupNumFilesDeduped #Number of deduplicated files in the file system, as detected by the last successful deduplication scan.  
-  [Int]$dedupNumFilesScanned #(Applies when deduplication is enabled and running.) Number of files scanned so far in the deduplication scan of the file system.  
-  [Int]$dedupNumFileRecalled #(Applies when deduplication is enabled and running.) Number of files recalled during the latest deduplication process.  
-  [Int]$dedupProgress #(Applies when deduplication is enabled.) Percent of the deduplication process that was completed.  
+  [UInt64]$dedupOriginalSizeUsed #File system size without deduplication.  
+  [UInt64]$dedupSizeUsed #File system size with deduplication.  
+  [UInt64]$dedupSizeSaved #Size of pool space saved by deduplication.  
+  [UInt64]$dedupPercentSaved #Percentage of space saved by deduplication.  
+  [UInt64]$dedupNumFilesTotal #Total number of regular and deduplicated files in the file system, as detected in last successful deduplication scan.  
+  [UInt64]$dedupNumFilesDeduped #Number of deduplicated files in the file system, as detected by the last successful deduplication scan.  
+  [UInt64]$dedupNumFilesScanned #(Applies when deduplication is enabled and running.) Number of files scanned so far in the deduplication scan of the file system.  
+  [UInt64]$dedupNumFileRecalled #(Applies when deduplication is enabled and running.) Number of files recalled during the latest deduplication process.  
+  [UInt16]$dedupProgress #(Applies when deduplication is enabled.) Percent of the deduplication process that was completed.  
   [TieringPolicyEnum]$tieringPolicy #(Applies if a FAST VP license is installed.) FAST VP tiering policy for the file system.  
   [FSSupportedProtocolEnum]$supportedProtocols #Protocols supported by the file system.  
-  [Long]$metadataSize #Size of file system metadata.  
-  [Long]$metadataSizeAllocated #Size of pool space allocated for file system metadata.  
-  [Int[]]$perTierSizeUsed #Sizes of space allocations by the file system on the tiers of multi-tier storage pool. This list will have the same length as the tiers list on this file system's pool, and the entries will correspond to those tiers. <br> Multi-tier storage pools can be created on a system with the FAST VP license installed.  
-  [Long]$snapsSize #Size of space used by file system snapshots.  
-  [Long]$snapsSizeAllocated #Size of pool space allocated for file system snapshots.  
+  [UInt64]$metadataSize #Size of file system metadata.  
+  [UInt64]$metadataSizeAllocated #Size of pool space allocated for file system metadata.  
+  [UInt64[]]$perTierSizeUsed #Sizes of space allocations by the file system on the tiers of multi-tier storage pool. This list will have the same length as the tiers list on this file system's pool, and the entries will correspond to those tiers. <br> Multi-tier storage pools can be created on a system with the FAST VP license installed.  
+  [UInt64]$snapsSize #Size of space used by file system snapshots.  
+  [UInt64]$snapsSizeAllocated #Size of pool space allocated for file system snapshots.  
   [Int]$snapCount #Number of file system snapshots.  
   [Bool]$isSMBCA #Indicates whether or not SMB 3.0 is enabled. Values are: <ul> <li>true - SMB 3.0 is enabled.</li> <li>false - SMB 3.0 is disabled.</li> </ul>  
   [AccessPolicyEnum]$accessPolicy #Access policies which are supported by file system.  
