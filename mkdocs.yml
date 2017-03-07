@@ -29,6 +29,7 @@ pages:
     - Get-UnityFileInterface: References/Get-UnityFileInterface.md
     - Get-UnityFilesystem: References/Get-UnityFilesystem.md
     - Get-UnityHost: References/Get-UnityHost.md
+    - Get-UnityHostInitiator: References/Get-UnityHostInitiator.md
     - Get-UnityHostIPPort: References/Get-UnityHostIPPort.md
     - Get-UnityIpInterface: References/Get-UnityIpInterface.md
     - Get-UnityIPPort: References/Get-UnityIPPort.md

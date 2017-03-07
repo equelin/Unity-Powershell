@@ -1,39 +1,40 @@
-Function Get-UnityCIFSShare {
+Function Get-UnityHostInitiator {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about CIFS Share.
+      View details about host initiators.
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve informations about CIFS Share.
+      View details about host initiators on the system.
       You need to have an active session with the array.
       .NOTES
-      Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
+      Written by Erwan Quélin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specifies an UnitySession Object.
-      .PARAMETER Name
-      Specifies the object name.
       .PARAMETER ID
       Specifies the object ID.
+      .PARAMETER PortWWN
+      Specifies the port WWN.
       .EXAMPLE
-      Get-UnityCIFSShare
+      Get-UnityHostInitiator
 
-      Retrieve information about CIFS Share
+      Retrieve information about all hosts
+
       .EXAMPLE
-      Get-UnityCIFSShare -Name 'SHARE01'
+      Get-UnityHostInitiator -ID 'Host_67'
 
-      Retrieves information about CIFS Share named SHARE01
+      Retrieves information about host initiator named 'Host_67'
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByName")]
+  [CmdletBinding(DefaultParameterSetName="ByID")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'CIFS Share Name')]
-    [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'CIFS Share ID')]
-    [String[]]$ID='*'
+    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Host Initiator ID')]
+    [String[]]$ID='*',
+    [Parameter(Mandatory = $false,ParameterSetName="ByPortWwn",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Initiator Port WWN')]
+    [String[]]$PortWWN='*'    
   )
 
   Begin {
@@ -41,8 +42,8 @@ Function Get-UnityCIFSShare {
 
     #Initialazing variables
     $ResultCollection = @()
-    $URI = '/api/types/cifsShare/instances' #URI
-    $TypeName = 'UnityCIFSShare'
+    $URI = '/api/types/hostInitiator/instances' #URI
+    $TypeName = 'UnityHostInitiator'
   }
 
   Process {
@@ -70,11 +71,11 @@ Function Get-UnityCIFSShare {
           
           # Results filtering
           Switch ($PsCmdlet.ParameterSetName) {
-            'ByName' {
-              $ResultsFiltered += Find-FromFilter -Parameter 'Name' -Filter $Name -Data $Results
-            }
-            'ByID' {
+            'ById' {
               $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
+            }
+            'ByPortWwn' {
+              $ResultsFiltered += Find-FromFilter -Parameter 'PortWWN' -Filter $PortWWN -Data $Results
             }
           }
 
@@ -84,8 +85,17 @@ Function Get-UnityCIFSShare {
 
             Foreach ($Result in $ResultCollection) {
 
+              $object = $null
               # Instantiate object
-              $Object = New-Object -TypeName $TypeName -Property $Result
+              try
+              {
+                $Object = New-Object -TypeName $TypeName -Property $Result
+                
+              }
+              catch
+              {
+                throw $_
+              }
 
               # Output results
               $Object

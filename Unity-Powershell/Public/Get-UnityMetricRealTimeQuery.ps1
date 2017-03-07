@@ -46,7 +46,7 @@ Function Get-UnityMetricRealTimeQuery {
       If ($Sess.TestConnection()) {
 
         #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
+        $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Compact
 
         Write-Verbose "URL: $URL"
 
