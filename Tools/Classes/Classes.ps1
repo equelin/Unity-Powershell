@@ -611,14 +611,14 @@ Class Unitydisk {
   [Object]$diskGroup #Disk group is the group that the disk belongs to and as defined by the diskGroup resource type.  
   [Int]$rpm #Revolutions Per Minute (RPMs).  
   [Bool]$isSED #Indicates whether the disk is a Self-Encrypting Drive (SED). <ul> <li> true - Disk is a SED. </li> <li>false - Disk is not a SED.</li> </ul>  
-  [Int]$currentSpeed #Current speed.  
-  [Int]$maxSpeed #Maximum speed.  
+  [Long]$currentSpeed #Current speed.  
+  [Long]$maxSpeed #Maximum speed.  
   [Object]$pool #Pool that the disk belongs, as defined by the pool resource type.  
   [Bool]$isInUse #Indicates whether the disk contains user-written data. Values are: <ul> <li> true - Disk contains user-written data.</li> <li>false - Disk does not contain user-written data.</li> </ul>  
   [Bool]$isFastCacheInUse #(Applies if FAST Cache is supported on the system and the corresponding license is installed.) Indicates whether the disk is used by the FAST Cache. Values are: <ul> <li> true - Disk is used by the FAST Cache.</li> <li>false - Disk is not used by the FAST Cache.</li> </ul>  
-  [Int]$size #Usable capacity.  
-  [Int]$rawSize #Raw (unformatted) capacity.  
-  [Int]$vendorSize #Vendor capacity of the disk as written on the disk label.  
+  [Long]$size #Usable capacity.  
+  [Long]$rawSize #Raw (unformatted) capacity.  
+  [Long]$vendorSize #Vendor capacity of the disk as written on the disk label.  
   [String]$wwn #World Wide Name (WWN) of the disk.  
   [DiskTechnologyEnum]$diskTechnology #Disk technology.  
   [Object]$parentDae #Parent Disk Array Enclosure (DAE) of the disk as defined by the dae resource type.  
@@ -1149,10 +1149,10 @@ Class Unityfilesystem {
   [String]$name #File system name unique to the NAS server.  
   [String]$description #File system description.  
   [FilesystemTypeEnum]$type #File system type.  
-  [Int]$sizeTotal #File system size that the system presents to the host or end user.  
-  [Int]$sizeUsed #Size of used space in the file system by the user files.  
-  [Int]$sizeAllocated #Size of pool space allocated for the file system: <ul> <li>For a thin-provisioned file system, this as a rule is less than the value of the sizeTotal attribute and slightly greater than or equal to the value of the sizeUsed attribute.</li> <li>For a not thin-provisioned file system, this is approximately equal to the value of the attribute sizeTotal.</lki> </ul> This measurement does not include space reserved for snapshots.  
-  [Int]$minSizeAllocated #<ul> <li>For a thin-provisioned file system, this is the minimum allocated size to which the file system can be auto-shrunk.</li> <li>This attribute does not apply for a thick-provisioned file system</li> </ul> This measurement does not include space reserved for snapshots.  
+  [Long]$sizeTotal #File system size that the system presents to the host or end user.  
+  [Long]$sizeUsed #Size of used space in the file system by the user files.  
+  [Long]$sizeAllocated #Size of pool space allocated for the file system: <ul> <li>For a thin-provisioned file system, this as a rule is less than the value of the sizeTotal attribute and slightly greater than or equal to the value of the sizeUsed attribute.</li> <li>For a not thin-provisioned file system, this is approximately equal to the value of the attribute sizeTotal.</lki> </ul> This measurement does not include space reserved for snapshots.  
+  [Long]$minSizeAllocated #<ul> <li>For a thin-provisioned file system, this is the minimum allocated size to which the file system can be auto-shrunk.</li> <li>This attribute does not apply for a thick-provisioned file system</li> </ul> This measurement does not include space reserved for snapshots.  
   [Bool]$isReadOnly #Indicates whether the file system is read-only. Values are: <ul> <li>true - File system is read-only.</li> <li>false - File system is read-write.</li> </ul>  
   [Bool]$isThinEnabled #Indicates whether the file system is thin-provisioned. Values are: <ul> <li>true - File system is thin-provisioned.</li> <li>false - File system is thick-provisoned.</li> </ul>  
   [Object]$storageResource #Storage resource to which the file system belongs, as defined by the storageResource.  
@@ -1180,11 +1180,11 @@ Class Unityfilesystem {
   [TieringPolicyEnum]$tieringPolicy #(Applies if a FAST VP license is installed.) FAST VP tiering policy for the file system.  
   [TieringPolicyEnum]$tieringPolicy #(Applies if a FAST VP license is installed.) FAST VP tiering policy for the file system.  
   [FSSupportedProtocolEnum]$supportedProtocols #Protocols supported by the file system.  
-  [Int]$metadataSize #Size of file system metadata.  
-  [Int]$metadataSizeAllocated #Size of pool space allocated for file system metadata.  
+  [Long]$metadataSize #Size of file system metadata.  
+  [Long]$metadataSizeAllocated #Size of pool space allocated for file system metadata.  
   [Int[]]$perTierSizeUsed #Sizes of space allocations by the file system on the tiers of multi-tier storage pool. This list will have the same length as the tiers list on this file system's pool, and the entries will correspond to those tiers. <br> Multi-tier storage pools can be created on a system with the FAST VP license installed.  
-  [Int]$snapsSize #Size of space used by file system snapshots.  
-  [Int]$snapsSizeAllocated #Size of pool space allocated for file system snapshots.  
+  [Long]$snapsSize #Size of space used by file system snapshots.  
+  [Long]$snapsSizeAllocated #Size of pool space allocated for file system snapshots.  
   [Int]$snapCount #Number of file system snapshots.  
   [Bool]$isSMBCA #Indicates whether or not SMB 3.0 is enabled. Values are: <ul> <li>true - SMB 3.0 is enabled.</li> <li>false - SMB 3.0 is disabled.</li> </ul>  
   [AccessPolicyEnum]$accessPolicy #Access policies which are supported by file system.  
@@ -1973,13 +1973,13 @@ Class Unitylun {
   [String]$name #Name of the LUN.  
   [String]$description #Description of the LUN.  
   [LUNTypeEnum]$type #Type of the LUN.  
-  [Int]$sizeTotal #LUN size that the system presents to the host or end user.  
-  [Int]$sizeUsed #Used size is not applicable to LUN and this value is not set.  
-  [Int]$sizeAllocated #Size of space actually allocated in the pool for the LUN: <ul> <li>For thin-provisioned LUNs this as a rule is less than the sizeTotal attribute until the LUN is not fully populated with user data.</li> <li>For not thin-provisioned LUNs this is approximately equal to the sizeTotal.</li> </ul>  
-  [Int]$compressionSizeSaved #Storage element saved space by inline compression  
-  [Int]$compressionPercent #Percent compression rate  
+  [UInt64]$sizeTotal #LUN size that the system presents to the host or end user.  
+  [UInt64]$sizeUsed #Used size is not applicable to LUN and this value is not set.  
+  [UInt64]$sizeAllocated #Size of space actually allocated in the pool for the LUN: <ul> <li>For thin-provisioned LUNs this as a rule is less than the sizeTotal attribute until the LUN is not fully populated with user data.</li> <li>For not thin-provisioned LUNs this is approximately equal to the sizeTotal.</li> </ul>  
+  [UInt64]$compressionSizeSaved #Storage element saved space by inline compression  
+  [Uint16]$compressionPercent #Percent compression rate  
   [Float]$compressionRatio #compression ratio  
-  [Int[]]$perTierSizeUsed #Sizes of space allocations by the LUN on the tiers of multi-tier storage pool. This list will have the same length as the tiers list on this LUN's pool, and the entries will correspond to those tiers. <br> Multi-tier storage pools can be created on a system with the FAST VP license installed.  
+  [Object[]]$perTierSizeUsed #Sizes of space allocations by the LUN on the tiers of multi-tier storage pool. This list will have the same length as the tiers list on this LUN's pool, and the entries will correspond to those tiers. <br> Multi-tier storage pools can be created on a system with the FAST VP license installed.  
   [Bool]$isThinEnabled #Indicates whether thin provisioning is enabled. <ul> <li>true - The LUN is thin provisioned.</li> <li>false - The LUN is not thin provisioned.</li> </ul>  
   [Bool]$isCompressionEnabled #True if compression is enabled  
   [Object]$storageResource #The storage resource with which LUN is associated.  
@@ -1992,8 +1992,8 @@ Class Unitylun {
   [Object]$snapSchedule #Snapshot schedule for the LUN, as defined by the snapSchedule. This value is not set if the LUN is not associated with a snapshot schedule.  
   [Bool]$isSnapSchedulePaused #(Applies if the LUN has an associated snap schedule.) Indicates whether the snapshot schedule for the LUN is paused. Valid values are: <ul> <li>true - Snapshot schedule for the LUN is paused.</li> <li>false - Snapshot schedule for the LUN is active.</li> </ul>  
   [Object]$ioLimitPolicy #I/O limit policy that applies to the LUN, as defined by the ioLimitPolicy resource type.  
-  [Int]$metadataSize #Size of the LUN metadata.  
-  [Int]$snapsSizeAllocated #Size of pool space allocated for snapshots of the LUN.  
+  [UInt64]$metadataSize #Size of the LUN metadata.  
+  [UInt64]$snapsSizeAllocated #Size of pool space allocated for snapshots of the LUN.  
   [Object[]]$hostAccess #Host access permissions for the LUN.  
   [Int]$snapCount #Number of snapshots of the LUN.  
   [Object]$moveSession #The moveSession associated with the current lun
@@ -2333,7 +2333,7 @@ Class UnitynasServer {
   [Object]$homeSP #Storage Processor on which the NAS Server is intended to run.  
   [Object]$currentSP #Storage Processor on which the NAS server is currently running.  
   [Object]$pool #Storage pool that stores the NAS server's configuration metadata, as defined by the pool resource type.  
-  [Int]$sizeAllocated #Amount of storage pool space used for NAS server configuration.  
+  [Long]$sizeAllocated #Amount of storage pool space used for NAS server configuration.  
   [Object]$tenant #Tenant to which the NAS Server belongs.  
   [Bool]$isReplicationEnabled #Indicates whether a replication session is enabled for the NAS server. The NAS server can't be deleted while replication session is enabled. Values are: <ul> <li> true - Replication session is enabled. </li> <li> false - Replication session is disabled. </li> </ul>  
   [Bool]$isReplicationDestination #Indicates whether the NAS server is a replication destination. Values are: <ul> <li>true - NAS server is a replication destination.</li> <li>false - NAS server is a not a replication destination.</li> </ul>  
@@ -3262,7 +3262,7 @@ Class Unitysnap {
   [Bool]$isModified #Indicates if the snapshot may have changed since it was created. Values are: <ul> <li>true - Snapshot is or was attached or it was created with protocol access.</li> <li>false - Snapshot was never attached or it was created with checkpoint access.</li> </ul>  
   [Bool]$isAutoDelete #Indicates if this snapshot can be automatically deleted by the system per threshold settings. Values are: <ul> <li>true - Snapshot can be automatically deleted by the system per threshold settings.</li> <li>false - Snapshot cannot be deleted automatically.</li> </ul>  
   [SnapStateEnum]$state #The snapshot state in Snapshot state enum.  
-  [Int]$size #Size of the storage resource when the snapshot was created (LUN snapshots only).  
+  [Uint64]$size #Size of the storage resource when the snapshot was created (LUN snapshots only).  
   [Object]$ioLimitPolicy #IO limit policy that applies to the snapshot, as defined by the ioLimitPolicy resource type.  
   [Object[]]$hostAccess #(LUN, LUN Group and VMware VMFS datastore snapshots only). Host access permissions for snapshot, as defined by the snapHostAccess resource type. Value is set only if snapshot is attached to dynamic Snapshot Mount Point.  
 
@@ -3494,25 +3494,25 @@ Class UnitystorageResource {
   [StorageResourceTypeEnum]$type #Storage resource type.  
   [Bool]$isReplicationDestination #Indicates whether the storage resource is a replication destination. Valid values are: <ul> <li>true - Storage resource is a replication destination.</li> <li>false - Storage resource is not a replication destination.</li> </ul>  
   [ReplicationTypeEnum]$replicationType #Replication type.  
-  [Int]$sizeTotal #Storage resource size that the system presents to the host or end user.  
-  [Int]$sizeUsed #Size of the storage resource space consumed by the host. Applicable only for file system based storage resource. Indicates the size of file system space occupied by user files.  
-  [Int]$sizeAllocated #Size of space actually allocated in the pool for the storage resource: <ul> <li>For all thin-provisioned resources, this can be less than the sizeTotal attribute. For a thin-provisioned file system, this can be greater than or equal to the value of the sizeUsed attribute </li> <li>For non-thin provisioned resources, this is approximately equal to the value of the sizeTotal attribute.</li> </ul>  
+  [UInt64]$sizeTotal #Storage resource size that the system presents to the host or end user.  
+  [UInt64]$sizeUsed #Size of the storage resource space consumed by the host. Applicable only for file system based storage resource. Indicates the size of file system space occupied by user files.  
+  [UInt64]$sizeAllocated #Size of space actually allocated in the pool for the storage resource: <ul> <li>For all thin-provisioned resources, this can be less than the sizeTotal attribute. For a thin-provisioned file system, this can be greater than or equal to the value of the sizeUsed attribute </li> <li>For non-thin provisioned resources, this is approximately equal to the value of the sizeTotal attribute.</li> </ul>  
   [ThinStatusEnum]$thinStatus #Indicates whether the storage resource is thin-provisioned, not thin-provisioned, or mixed.  
   [CompressionStatusEnum]$compressionStatus #Compression status for the storage resource.  
-  [Int]$compressionSizeSaved #Storage resource saved space by inline compression  
-  [Int]$compressionPercent #Percent compression rate  
+  [UInt64]$compressionSizeSaved #Storage resource saved space by inline compression  
+  [Uint16]$compressionPercent #Percent compression rate  
   [Float]$compressionRatio #compression ratio  
   [ESXFilesystemMajorVersionEnum]$esxFilesystemMajorVersion #(Applies to VMware VMFS storage resource type only.) VMFS major version.  
   [ESXFilesystemBlockSizeEnum]$esxFilesystemBlockSize #(Applies to VMware VMFS storage resource type only.) VMFS block size. Only applies to storage resources with VMFS major version 3.  
   [Object]$snapSchedule #Snapshot schedule for the storage resource, as defined by the snapSchedule This value is not set if the storage resource is not associated with a snapshot schedule.  
   [Bool]$isSnapSchedulePaused #(Applies if the storage resource has an associated snap schedule.) Indicates whether the snapshot schedule for the storage resource is paused. Valid values are: <ul> <li>true - Snapshot schedule for the storage resource is paused.</li> <li>false - Snapshot schedule for the storage resource is active.</li> </ul>  
   [TieringPolicyEnum]$relocationPolicy #(Applies if FAST VP is supported on the system and the corresponding license is installed.) FAST VP tiering policy for the storage resource.  
-  [Int[]]$perTierSizeUsed #Sizes of space allocations by the storage resource per tiers of the multi-tier storage pool. Multi-tier storage pools can be created on the system when the FAST VP license is installed.  
+  [Object[]]$perTierSizeUsed #Sizes of space allocations by the storage resource per tiers of the multi-tier storage pool. Multi-tier storage pools can be created on the system when the FAST VP license is installed.  
   [Object[]]$blockHostAccess #Host access permissions for a block storage resource types, as defined by the blockHostAccess resource type.  
-  [Int]$metadataSize #Size of the storage resource metadata.  
-  [Int]$metadataSizeAllocated #Size of pool space allocated for the storage resource metadata.  
-  [Int]$snapsSizeTotal #Size of the storage resource snapshots.  
-  [Int]$snapsSizeAllocated #Size of pool space allocated for storage resource snapshots.  
+  [UInt64]$metadataSize #Size of the storage resource metadata.  
+  [UInt64]$metadataSizeAllocated #Size of pool space allocated for the storage resource metadata.  
+  [UInt64]$snapsSizeTotal #Size of the storage resource snapshots.  
+  [UInt64]$snapsSizeAllocated #Size of pool space allocated for storage resource snapshots.  
   [Int]$snapCount #Number of storage resource snapshots.  
   [String]$vmwareUUID #VMware UUID of the VVol datastore assigned by VMware ESX hypervisor (Applies to VMware VVol datastore resources only.).  
   [Object[]]$pools #List of pools associated with this storage resource. LUNs in a consistency group storage resource can be allocated from different pools.  

@@ -124,38 +124,46 @@ Class UnityUser {
   $role
 }
 
-Class UnityLUN {
-  [string]$id
-  [UnityHealth]$health
-  [string]$name
-  [string]$description
-  [LUNTypeEnum]$type
-  [UInt64]$sizeTotal
-  [UInt64]$sizeUsed
-  [UInt64]$sizeAllocated
-  $perTierSizeUsed
-  [bool]$isThinEnabled
-  $storageResource
-  $pool
-  [string]$wwn
-  [TieringPolicyEnum]$tieringPolicy
-  $defaultNode
-  [bool]$isReplicationDestination
-  $currentNode
-  $snapSchedule
-  [bool]$isSnapSchedulePaused
-  $ioLimitPolicy
-  [UInt64]$metadataSize
-  [UInt64]$metadataSizeAllocated
-  [string]$snapWwn
-  [UInt64]$snapsSize
-  [UInt64]$snapsSizeAllocated
-  $hostAccess
-  [int]$snapCount
-  [UInt64]$compressionSizeSaved
-  [Uint16]$compressionPercent
-  [Float]$compressionRatio
-  [bool]$isCompressionEnabled
+<#
+  Name: Unitylun
+  Description: A LUN (block storage) type storage resource, which may be a LUN in a consistency group, a standalone LUN, or a VMWare VMFS LUN. Management of LUNs is performed via the storageResource object.  
+#>
+Class Unitylun {
+
+  #Properties
+
+  [Int]$metadataSizeAllocated #Size of pool space allocated for the LUN's metadata.  
+  [String]$snapWwn #World Wide Name of the Snap Mount Point.  
+  [Int]$snapsSize #Size of the LUN snapshots.  
+  [String]$id #Unique identifier of the LUN.  
+  [UnityHealth]$health #Health information for the LUN, as defined by the health resource type.  
+  [String]$name #Name of the LUN.  
+  [String]$description #Description of the LUN.  
+  [LUNTypeEnum]$type #Type of the LUN.  
+  [UInt64]$sizeTotal #LUN size that the system presents to the host or end user.  
+  [UInt64]$sizeUsed #Used size is not applicable to LUN and this value is not set.  
+  [UInt64]$sizeAllocated #Size of space actually allocated in the pool for the LUN: <ul> <li>For thin-provisioned LUNs this as a rule is less than the sizeTotal attribute until the LUN is not fully populated with user data.</li> <li>For not thin-provisioned LUNs this is approximately equal to the sizeTotal.</li> </ul>  
+  [UInt64]$compressionSizeSaved #Storage element saved space by inline compression  
+  [Uint16]$compressionPercent #Percent compression rate  
+  [Float]$compressionRatio #compression ratio  
+  [Object[]]$perTierSizeUsed #Sizes of space allocations by the LUN on the tiers of multi-tier storage pool. This list will have the same length as the tiers list on this LUN's pool, and the entries will correspond to those tiers. <br> Multi-tier storage pools can be created on a system with the FAST VP license installed.  
+  [Bool]$isThinEnabled #Indicates whether thin provisioning is enabled. <ul> <li>true - The LUN is thin provisioned.</li> <li>false - The LUN is not thin provisioned.</li> </ul>  
+  [Bool]$isCompressionEnabled #True if compression is enabled  
+  [Object]$storageResource #The storage resource with which LUN is associated.  
+  [Object]$pool #The pool in which the LUN is allocated.  
+  [String]$wwn #The world wide name of the LUN.  
+  [TieringPolicyEnum]$tieringPolicy #(Applies if FAST VP is supported on the system and the corresponding license is installed.) FAST VP tiering policy for the LUN.  
+  [NodeEnum]$defaultNode #The storage processor that is the default owner of this LUN.  
+  [Bool]$isReplicationDestination #Indicates whether the LUN is a replication destination. Valid values are: <ul> <li>true - LUN is a replication destination.</li> <li>false - LUN is not a replication destination.</li> </ul>  
+  [NodeEnum]$currentNode #The storage processor that is the current owner of this LUN.  
+  [Object]$snapSchedule #Snapshot schedule for the LUN, as defined by the snapSchedule. This value is not set if the LUN is not associated with a snapshot schedule.  
+  [Bool]$isSnapSchedulePaused #(Applies if the LUN has an associated snap schedule.) Indicates whether the snapshot schedule for the LUN is paused. Valid values are: <ul> <li>true - Snapshot schedule for the LUN is paused.</li> <li>false - Snapshot schedule for the LUN is active.</li> </ul>  
+  [Object]$ioLimitPolicy #I/O limit policy that applies to the LUN, as defined by the ioLimitPolicy resource type.  
+  [UInt64]$metadataSize #Size of the LUN metadata.  
+  [UInt64]$snapsSizeAllocated #Size of pool space allocated for snapshots of the LUN.  
+  [Object[]]$hostAccess #Host access permissions for the LUN.  
+  [Int]$snapCount #Number of snapshots of the LUN.  
+  [Object]$moveSession #The moveSession associated with the current lun
 
   ## Methods
 
@@ -289,41 +297,49 @@ Class UnityLicense {
   $feature
 }
 
-Class UnityStorageResource {
-  [string]$id
-  [UnityHealth]$health
-  [string]$name
-  [string]$description
-  [StorageResourceTypeEnum]$type
-  [bool]$isReplicationDestination
-  [ReplicationTypeEnum]$replicationType
-  [UInt64]$sizeTotal
-  [UInt64]$sizeUsed
-  [UInt64]$sizeAllocated
-  [ThinStatusEnum]$thinStatus
-  [ESXFilesystemMajorVersionEnum]$esxFilesystemMajorVersion
-  [ESXFilesystemBlockSizeEnum]$esxFilesystemBlockSize
-  $snapSchedule
-  [bool]$isSnapSchedulePaused
-  [TieringPolicyEnum]$relocationPolicy
-  $perTierSizeUsed
-  $blockHostAccess
-  [UInt64]$metadataSize
-  [UInt64]$metadataSizeAllocated
-  [UInt64]$snapsSizeTotal
-  [UInt64]$snapsSizeAllocated
-  [Int]$snapCount
-  [string]$vmwareUUID
-  $pools
-  $datastores
-  $filesystem
-  $hostVVolDatastore
-  $luns
-  $virtualVolumes
-  [CompressionStatusEnum]$compressionStatus
-  [UInt64]$compressionSizeSaved
-  [Uint16]$compressionPercent
-  [Float]$compressionRatio
+<#
+  Name: UnitystorageResource
+  Description: Information about storage resources in the storage system. <br/> <br/> A storage resource<b><i> </i></b>is a specific type of storage entity allocated in the storage system for a particular kind of host or application. The storage system provides the following types of storage resources: <ul> <li>LUNs</li> <li>Consistency groups</li> <li>File systems accessed via NFS and/or CIFS shares.</li> <li>VMware NFS datastores</li> <li>VMware VMFS datastores</li> <li>VVol (file)</li> <li>VVol (block)</li> </ul> All types of storage resource types can be divided into two major groups: <ul> <li>Block (or LUN based) storage resources: LUNs, consistency groups, VMware VMFS datastores, VVol (block).</li> <li>File system based storage resources: File systems, VMware NFS datastores, VVol (file).</li> </ul> In order to create a storage resource, there must be at least one pool configured on the system. For information about configuring pools, see the help topic for the pool. To provision file system based storage resource there must be at least one nasServer configured on the system.  
+#>
+Class UnitystorageResource {
+
+  #Properties
+
+  [String]$description #Storage resource description.  
+  [UnityHealth]$health #Health information for the storage resource, as defined by the health type.  
+  [String]$name #Name of the storage resource.  
+  [String]$id #Unique identifier of the storage resource.  
+  [StorageResourceTypeEnum]$type #Storage resource type.  
+  [Bool]$isReplicationDestination #Indicates whether the storage resource is a replication destination. Valid values are: <ul> <li>true - Storage resource is a replication destination.</li> <li>false - Storage resource is not a replication destination.</li> </ul>  
+  [ReplicationTypeEnum]$replicationType #Replication type.  
+  [UInt64]$sizeTotal #Storage resource size that the system presents to the host or end user.  
+  [UInt64]$sizeUsed #Size of the storage resource space consumed by the host. Applicable only for file system based storage resource. Indicates the size of file system space occupied by user files.  
+  [UInt64]$sizeAllocated #Size of space actually allocated in the pool for the storage resource: <ul> <li>For all thin-provisioned resources, this can be less than the sizeTotal attribute. For a thin-provisioned file system, this can be greater than or equal to the value of the sizeUsed attribute </li> <li>For non-thin provisioned resources, this is approximately equal to the value of the sizeTotal attribute.</li> </ul>  
+  [ThinStatusEnum]$thinStatus #Indicates whether the storage resource is thin-provisioned, not thin-provisioned, or mixed.  
+  [CompressionStatusEnum]$compressionStatus #Compression status for the storage resource.  
+  [UInt64]$compressionSizeSaved #Storage resource saved space by inline compression  
+  [Uint16]$compressionPercent #Percent compression rate  
+  [Float]$compressionRatio #compression ratio  
+  [ESXFilesystemMajorVersionEnum]$esxFilesystemMajorVersion #(Applies to VMware VMFS storage resource type only.) VMFS major version.  
+  [ESXFilesystemBlockSizeEnum]$esxFilesystemBlockSize #(Applies to VMware VMFS storage resource type only.) VMFS block size. Only applies to storage resources with VMFS major version 3.  
+  [Object]$snapSchedule #Snapshot schedule for the storage resource, as defined by the snapSchedule This value is not set if the storage resource is not associated with a snapshot schedule.  
+  [Bool]$isSnapSchedulePaused #(Applies if the storage resource has an associated snap schedule.) Indicates whether the snapshot schedule for the storage resource is paused. Valid values are: <ul> <li>true - Snapshot schedule for the storage resource is paused.</li> <li>false - Snapshot schedule for the storage resource is active.</li> </ul>  
+  [TieringPolicyEnum]$relocationPolicy #(Applies if FAST VP is supported on the system and the corresponding license is installed.) FAST VP tiering policy for the storage resource.  
+  [Object[]]$perTierSizeUsed #Sizes of space allocations by the storage resource per tiers of the multi-tier storage pool. Multi-tier storage pools can be created on the system when the FAST VP license is installed.  
+  [Object[]]$blockHostAccess #Host access permissions for a block storage resource types, as defined by the blockHostAccess resource type.  
+  [UInt64]$metadataSize #Size of the storage resource metadata.  
+  [UInt64]$metadataSizeAllocated #Size of pool space allocated for the storage resource metadata.  
+  [UInt64]$snapsSizeTotal #Size of the storage resource snapshots.  
+  [UInt64]$snapsSizeAllocated #Size of pool space allocated for storage resource snapshots.  
+  [Int]$snapCount #Number of storage resource snapshots.  
+  [String]$vmwareUUID #VMware UUID of the VVol datastore assigned by VMware ESX hypervisor (Applies to VMware VVol datastore resources only.).  
+  [Object[]]$pools #List of pools associated with this storage resource. LUNs in a consistency group storage resource can be allocated from different pools.  
+  [Object[]]$datastores #The datastores associated with the current storageResource
+  [Object]$filesystem #The filesystem associated with the current storageResource
+  [Object[]]$hostVVolDatastore #The hostVVolDatastores associated with the current storageResource
+  [Object[]]$luns #The luns associated with the current storageResource
+  [Object[]]$moves #The moveSessions associated with the current storageResource
+  [Object[]]$virtualVolumes #The virtualVolumes associated with the current storageResource
 
   ## Methods
 
@@ -362,28 +378,43 @@ Class UnityNTPServer {
   [string[]]$addresses
 }
 
-Class UnityNasServer {
-  [string]$id
-  [string]$name
-  [UnityHealth]$health
-  $homeSP
-  $currentSP
-  $pool
-  [long]$sizeAllocated
-  [bool]$isReplicationEnabled
-  [bool]$isReplicationDestination
-  [ReplicationTypeEnum]$replicationType
-  [string]$defaultUnixUser
-  [string]$defaultWindowsUser
-  [NasServerUnixDirectoryServiceEnum]$currentUnixDirectoryService
-  [bool]$isMultiProtocolEnabled
-  [bool]$isWindowsToUnixUsernameMappingEnabled
-  [bool]$allowUnmappedUser
-  $cifsServer
-  $preferredInterfaceSettings
-  $fileDNSServer
-  $fileInterface
-  $virusChecker
+<#
+  Name: UnitynasServer
+  Description: Information about the NAS server in the storage system. <br/> <br/> NAS Servers are software components used to transfer data and provide the connection ports for hosts to access file-level storage resources. NAS servers are independent from each other. <br/> <br/> NAS Servers access data on available drives making it available to network hosts via specific protocols (NFS/SMB/FTP/SFTP). Storage system supports NAS Servers for managing file-level storage resources, such as VMware NFS datastores or file systems. <br/> Before you can provision a file-level storage resource, a NAS Server must be created with the necessary sharing protocols enabled. When NAS Servers are created, you can specify the storage pool and owning SP - either SPA or SPB. <br/> In the storage systems, NAS Servers can leverage the Link Aggregation functionality to create a highly available environment. Once a link aggregated port group is available, you create or modify NAS Server network interfaces to leverage the available port group. Because NAS Servers are accessible through only one SP at a time, they will fail over to the other SP when there is an SP failure event.  
+#>
+Class UnitynasServer {
+
+  #Properties
+
+  [String]$id #Unique identifier of the nasServer instance.  
+  [String]$name #User-specified name of the NAS server.  
+  [UnityHealth]$health #Health information for the NAS server, as defined by the health resource type.  
+  [Object]$homeSP #Storage Processor on which the NAS Server is intended to run.  
+  [Object]$currentSP #Storage Processor on which the NAS server is currently running.  
+  [Object]$pool #Storage pool that stores the NAS server's configuration metadata, as defined by the pool resource type.  
+  [Long]$sizeAllocated #Amount of storage pool space used for NAS server configuration.  
+  [Object]$tenant #Tenant to which the NAS Server belongs.  
+  [Bool]$isReplicationEnabled #Indicates whether a replication session is enabled for the NAS server. The NAS server can't be deleted while replication session is enabled. Values are: <ul> <li> true - Replication session is enabled. </li> <li> false - Replication session is disabled. </li> </ul>  
+  [Bool]$isReplicationDestination #Indicates whether the NAS server is a replication destination. Values are: <ul> <li>true - NAS server is a replication destination.</li> <li>false - NAS server is a not a replication destination.</li> </ul>  
+  [Bool]$isMigrationDestination #Indicates whether the NAS server is a migration destination. It can't be modified by client. Values are: <ul> <li>true - NAS server is a migration destination.</li> <li>false - NAS server is a not a migration destination.</li> </ul>  
+  [ReplicationTypeEnum]$replicationType #Replication type.  
+  [String]$defaultUnixUser #Default Unix user name to use for an unmapped Windows user. This value only applies when the value of allowUnmappedUser is true.  
+  [String]$defaultWindowsUser #Default Windows user name to use for an unmapped Unix user. This value only applies when the value of allowUnmappedUser is true.  
+  [NasServerUnixDirectoryServiceEnum]$currentUnixDirectoryService #Unix Directory Service used to look up users and hosts.  
+  [Bool]$isMultiProtocolEnabled #Indicates whether multiprotocol sharing mode is enabled. This mode enables simultaneous file access for Windows and Unix users. Values are: <ul> <li> true - Multiprotocol sharing mode is enabled. </li> <li> false - Multiprotocol sharing mode is disabled. </li> </ul>  
+  [Bool]$isWindowsToUnixUsernameMappingEnabled #Indicates whether a Unix to/from Windows user name mapping is enabled. Values are: <ul> <li> true - Unix to/from Windows user name mapping is enabled. </li> <li> false - Unix to/from Windows user name mapping is disabled. </li> </ul>  
+  [Bool]$allowUnmappedUser #Indicates whether an unmappped user can access the NAS server as a default user. Values are: <ul> <li> true - Allow access for unmapped users. </li> <li> false - Disallow access for unmapped users. </li> </ul>  
+  [Bool]$isPacketReflectEnabled #Indicates whether the reflection of outbound (reply) packets through the same interface that inbound (request) packets entered is enabled. Values are: <ul> <li> true - (Default) Packet Reflect is enabled. </li> <li> false - Packet Reflect is disabled. </li> </ul>  
+  [Object[]]$cifsServer #The cifsServers associated with the current nasServer
+  [Object]$fileDNSServer #The fileDNSServer associated with the current nasServer
+  [Object]$eventPublisher #The fileEventsPublisher associated with the current nasServer
+  [Object[]]$fileInterface #The fileInterfaces associated with the current nasServer
+  [Object]$nfsServer #The nfsServer associated with the current nasServer
+  [Object]$preferredInterfaceSettings #The preferredInterfaceSettings associated with the current nasServer
+  [Object]$virusChecker #The virusChecker associated with the current nasServer
+
+  #Methods
+
 }
 
 Class UnityIpPort {
@@ -441,40 +472,64 @@ Class UnityCifsServer {
   [string[]]$smbProtocolVersions
 }
 
-Class UnityFilesystem {
-  [string]$id
-  [UnityHealth]$health
-  [string]$name
-  [string]$description
-  [FilesystemTypeEnum]$type
-  [long]$sizeTotal
-  [long]$sizeUsed
-  [long]$sizeAllocated
-  [bool]$isReadOnly
-  [bool]$isThinEnabled
-  $storageResource
-  [bool]$isCIFSSyncWritesEnabled
-  $pool
-  [bool]$isCIFSOpLocksEnabled
-  $nasServer
-  [bool]$isCIFSNotifyOnWriteEnabled
-  [bool]$isCIFSNotifyOnAccessEnabled
-  [int]$cifsNotifyOnChangeDirDepth
-  [TieringPolicyEnum]$tieringPolicy
-  [FSSupportedProtocolEnum]$supportedProtocols
-  [long]$metadataSize
-  [long]$metadataSizeAllocated
-  $perTierSizeUsed
-  [long]$snapsSize
-  [long]$snapsSizeAllocated
-  [int]$snapCount
-  [bool]$isSMBCA
-  [AccessPolicyEnum]$accessPolicy
-  [FSFormatEnum]$format
-  [HostIOSizeEnum]$hostIOSize
-  [ResourcePoolFullPolicyEnum]$poolFullPolicy
-  $cifsShare
-  $nfsShare
+Class Unityfilesystem {
+
+  #Properties
+
+  [String]$id #Unique identifier of the file system.  
+  [UnityHealth]$health #Health information for the file system, as defined by the health resource type.  
+  [String]$name #File system name unique to the NAS server.  
+  [String]$description #File system description.  
+  [FilesystemTypeEnum]$type #File system type.  
+  [Long]$sizeTotal #File system size that the system presents to the host or end user.  
+  [Long]$sizeUsed #Size of used space in the file system by the user files.  
+  [Long]$sizeAllocated #Size of pool space allocated for the file system: <ul> <li>For a thin-provisioned file system, this as a rule is less than the value of the sizeTotal attribute and slightly greater than or equal to the value of the sizeUsed attribute.</li> <li>For a not thin-provisioned file system, this is approximately equal to the value of the attribute sizeTotal.</lki> </ul> This measurement does not include space reserved for snapshots.  
+  [Long]$minSizeAllocated #<ul> <li>For a thin-provisioned file system, this is the minimum allocated size to which the file system can be auto-shrunk.</li> <li>This attribute does not apply for a thick-provisioned file system</li> </ul> This measurement does not include space reserved for snapshots.  
+  [Bool]$isReadOnly #Indicates whether the file system is read-only. Values are: <ul> <li>true - File system is read-only.</li> <li>false - File system is read-write.</li> </ul>  
+  [Bool]$isThinEnabled #Indicates whether the file system is thin-provisioned. Values are: <ul> <li>true - File system is thin-provisioned.</li> <li>false - File system is thick-provisoned.</li> </ul>  
+  [Object]$storageResource #Storage resource to which the file system belongs, as defined by the storageResource.  
+  [Bool]$isCIFSSyncWritesEnabled #(SMB (also known as CIFS) file systems) Indicates whether the synchronous writes option is enabled on the file system. Values are: <ul> <li>true - Synchronous writes option is enabled on the file system.</li> <li>false - Synchronous writes option is disabled on the file system.</li> </ul>  
+  [Object]$pool #Storage pool in which file system is allocated, as defined by the pool object.  
+  [Bool]$isCIFSOpLocksEnabled #(SMB (also known as CIFS) file systems) Indicates whether opportunistic file locking is enabled on the file system. Values are: <ul> <li>true - Opportunistic file locking is enabled on the file system.</li> <li>false - Opportunistic file locking is disabled on the file system.</li> </ul>  
+  [Object]$nasServer #NAS server that provides network connectivity to the file system from the hosts.  
+  [Bool]$isCIFSNotifyOnWriteEnabled #(SMB (also known as CIFS) file systems) Indicates whether notifications on file writes are enabled on the file system. Values are: <ul> <li>true - Notifications on file writes are enabled on the file system.</li> <li>false - Notifications on file writes are disabled on the file system.</li> </ul>  
+  [Bool]$isCIFSNotifyOnAccessEnabled #(SMB (also known as CIFS) file systems) Indicates whether notifications on file access are enabled on the file system. Values are: <ul> <li>true - Notifications on file access are enabled on the file system.</li> <li>false - Notifications on file access are disabled on the file system.</li> </ul>  
+  [Int]$cifsNotifyOnChangeDirDepth #(SMB (also known as CIFS) file systems) Lowest directory level to which the enabled notifications apply, if any.  
+  [DedupStateEnum]$dedupState #File system deduplication state.  
+  [String[]]$dedupExcludePaths #Paths excluded from deduplication.  
+  [String[]]$dedupExcludeExtensions #File extensions excluded from deduplication.  
+  [Bool]$isDedupRunning #Indicates whether deduplication is running on the file system. Values are: <ul> <li>true - Deduplication is running on the file system.</li> <li>false - Deduplication is not running on the file system.</li> </ul>  
+  [DateTime]$dedupLastScan #Date and time of the last full deduplication scan of the file system.  
+  [Int]$dedupOriginalSizeUsed #File system size without deduplication.  
+  [Int]$dedupSizeUsed #File system size with deduplication.  
+  [Int]$dedupSizeSaved #Size of pool space saved by deduplication.  
+  [Int]$dedupPercentSaved #Percentage of space saved by deduplication.  
+  [Int]$dedupNumFilesTotal #Total number of regular and deduplicated files in the file system, as detected in last successful deduplication scan.  
+  [Int]$dedupNumFilesDeduped #Number of deduplicated files in the file system, as detected by the last successful deduplication scan.  
+  [Int]$dedupNumFilesScanned #(Applies when deduplication is enabled and running.) Number of files scanned so far in the deduplication scan of the file system.  
+  [Int]$dedupNumFileRecalled #(Applies when deduplication is enabled and running.) Number of files recalled during the latest deduplication process.  
+  [Int]$dedupProgress #(Applies when deduplication is enabled.) Percent of the deduplication process that was completed.  
+  [TieringPolicyEnum]$tieringPolicy #(Applies if a FAST VP license is installed.) FAST VP tiering policy for the file system.  
+  [FSSupportedProtocolEnum]$supportedProtocols #Protocols supported by the file system.  
+  [Long]$metadataSize #Size of file system metadata.  
+  [Long]$metadataSizeAllocated #Size of pool space allocated for file system metadata.  
+  [Int[]]$perTierSizeUsed #Sizes of space allocations by the file system on the tiers of multi-tier storage pool. This list will have the same length as the tiers list on this file system's pool, and the entries will correspond to those tiers. <br> Multi-tier storage pools can be created on a system with the FAST VP license installed.  
+  [Long]$snapsSize #Size of space used by file system snapshots.  
+  [Long]$snapsSizeAllocated #Size of pool space allocated for file system snapshots.  
+  [Int]$snapCount #Number of file system snapshots.  
+  [Bool]$isSMBCA #Indicates whether or not SMB 3.0 is enabled. Values are: <ul> <li>true - SMB 3.0 is enabled.</li> <li>false - SMB 3.0 is disabled.</li> </ul>  
+  [AccessPolicyEnum]$accessPolicy #Access policies which are supported by file system.  
+  [FSRenamePolicyEnum]$folderRenamePolicy #Rename policies which are supported by file system. These policy choices control whether directory can be renamed from NFS or SMB clients if at least one file is opened in the directory or in one of its children directory.  
+  [FSLockingPolicyEnum]$lockingPolicy #Locking policies which are supported by file system. These policy choices control whether the NFSv4 range locks must be honored. Because NFSv3 is advisory by design, this policy allows specifying whether the NFSv4 locking feature behaves like NFSv3 in order to be backward compatibilty with applications expecting an advisory locking scheme.  
+  [FSFormatEnum]$format #File system format.  
+  [HostIOSizeEnum]$hostIOSize #Typical write I/O size from the host to the file system.  
+  [ResourcePoolFullPolicyEnum]$poolFullPolicy #File system behavior to follow when pool is full and a write to this filesystem is attempted.  
+  [Object]$fileEventSettings #Indicates whether File Event Service is enabled for some protocols on the filesystem.  
+  [Object[]]$cifsShare #The cifsShares associated with the current filesystem
+  [Object[]]$nfsShare #The nfsShares associated with the current filesystem
+
+  #Methods
+
 }
 
 Class UnityCIFSShare {
@@ -536,38 +591,49 @@ Class UnityraidGroupCache {
   $disks
 }
 
-Class UnityDisk {
-  [string]$id
-  [UnityHealth]$health
-  [bool]$needsReplacement
-  $parent
-  [int]$slotNumber
-  [int]$busId
-  [string]$name
-  [string]$manufacturer
-  [string]$model
-  [string]$version
-  [string]$emcPartNumber
-  [string]$emcSerialNumber
-  [TierTypeEnum]$tierType
-  $diskGroup
-  [int]$rpm
-  [bool]$isSED
-  [long]$currentSpeed
-  [long]$maxSpeed
-  $pool
-  [bool]$isInUse
-  [bool]$isFastCacheInUse
-  [long]$size
-  [long]$rawSize
-  [long]$vendorSize
-  [string]$wwn
-  [DiskTechnologyEnum]$diskTechnology
-  $parentDae
-  $parentDpe
-  [string]$bank
-  [int]$bankSlotNumber
-  [string]$bankSlot
+<#
+  Name: Unitydisk
+  Description: Information about the disks's attributes in the storage system. <br/> <br/>  
+#>
+Class Unitydisk {
+
+  #Properties
+
+  [String]$id #Unique identifier of the disk instance.  
+  [UnityHealth]$health #Health information of the disk instance as defined by the health resource type.  
+  [Bool]$needsReplacement #Indicates whether disk replacement is needed. Values are: <ul> <li> true - Disk replacment is needed.</li> <li>false - No disk replacement is needed.</li> </ul>  
+  [Object]$parent #Resource type and unique identifier for the disk's parent enclosure.  
+  [Int]$slotNumber #Slot where the disk is located in the parent enclosure.  
+  [DateTime]$estimatedEOL #Estimated remaning life of disk, based on past use. Applies only to flash disks.  
+  [Int]$busId #Identifier of the bus used by the disk.  
+  [String]$name #Disk name. Modifiable for virtual disks only.  
+  [String]$manufacturer #Disk manufacturer.  
+  [String]$model #Manufacturer model number.  
+  [String]$version #Manufacturer version number.  
+  [String]$emcPartNumber #EMC part number.  
+  [String]$emcSerialNumber #EMC serial number.  
+  [TierTypeEnum]$tierType #Disk type.  
+  [Object]$diskGroup #Disk group is the group that the disk belongs to and as defined by the diskGroup resource type.  
+  [Int]$rpm #Revolutions Per Minute (RPMs).  
+  [Bool]$isSED #Indicates whether the disk is a Self-Encrypting Drive (SED). <ul> <li> true - Disk is a SED. </li> <li>false - Disk is not a SED.</li> </ul>  
+  [Long]$currentSpeed #Current speed.  
+  [Long]$maxSpeed #Maximum speed.  
+  [Object]$pool #Pool that the disk belongs, as defined by the pool resource type.  
+  [Bool]$isInUse #Indicates whether the disk contains user-written data. Values are: <ul> <li> true - Disk contains user-written data.</li> <li>false - Disk does not contain user-written data.</li> </ul>  
+  [Bool]$isFastCacheInUse #(Applies if FAST Cache is supported on the system and the corresponding license is installed.) Indicates whether the disk is used by the FAST Cache. Values are: <ul> <li> true - Disk is used by the FAST Cache.</li> <li>false - Disk is not used by the FAST Cache.</li> </ul>  
+  [Long]$size #Usable capacity.  
+  [Long]$rawSize #Raw (unformatted) capacity.  
+  [Long]$vendorSize #Vendor capacity of the disk as written on the disk label.  
+  [String]$wwn #World Wide Name (WWN) of the disk.  
+  [DiskTechnologyEnum]$diskTechnology #Disk technology.  
+  [Object]$parentDae #Parent Disk Array Enclosure (DAE) of the disk as defined by the dae resource type.  
+  [Object]$parentDpe #Parent Disk Processor Enclosure (DPE) of the disk, as defined by the dpe resource type.  
+  [String]$bank #Bank where the disk is located in the parent enclosure.  
+  [Int]$bankSlotNumber #Bank slot where the disk is located in the parent enclosure.  
+  [String]$bankSlot #Combination of the bank and slot name where the disk is located in the parent enclosure.  
+
+  #Methods
+
 }
 
 Class UnityHealth {
@@ -578,29 +644,39 @@ Class UnityHealth {
   [System.Array]$resolutions
 }
 
-Class UnityHost {
-  [string]$id
-  [UnityHealth]$health
-  [string]$name
-  [string]$description
-  [HostTypeEnum]$type
-  [string]$osType
-  [string]$hostUUID
-  [string]$hostPushedUUID
-  [string]$hostPolledUUID
-  [DateTime]$lastPollTime
-  [HostManageEnum]$autoManageType
-  [HostRegistrationTypeEnum]$registrationType
-  $hostContainer
-  [array]$fcHostInitiators
-  [array]$iscsiHostInitiators
-  [array]$hostIPPorts
-  [array]$storageResources
-  [array]$hostLUNs
-  [array]$datastores
-  [array]$nfsShareAccesses
-  [array]$hostVVolDatastore
-  [array]$vms
+<#
+  Name: Unityhost
+  Description: Information about host configuration on a storage system. A host's configuration is the logical connection through which the host or application can access storage resources. <br/> <br/>  
+#>
+Class Unityhost {
+
+  #Properties
+
+  [Object]$hostContainer #(Applies to VCenter server and ESX host configurations only.) Identifier of the parent host container, as defined by the hostContainer resource type.  
+  [String]$id #Unique identifier of the host instance.  
+  [UnityHealth]$health #Health information for the host, as defined by the health resource type.  
+  [String]$name #Host name: <ul> <li>For an automatically-managed ESX server through vCenter, this is the display name in the vCenter GUI.</li> <li>For a manually-created host, this is the host name entered by the user.</li> </ul>  
+  [String]$description #Host description.  
+  [HostTypeEnum]$type #Type of host configuration.  
+  [String]$osType #Operating system running on the host.  
+  [String]$hostUUID #(Applies to VCenter server and ESX host configurations only.) Universal Unique Identifier (UUID) of the host.  
+  [String]$hostPushedUUID #(Applies to VCenter server and ESX host configurations only.) Pushed UUID of the host.  
+  [String]$hostPolledUUID #(Applies to VCenter server and ESX host configurations only.) Polled UUID of the host.  
+  [DateTime]$lastPollTime #(Applies to hosts on ESX servers only.) Indicates the date and time when the storage array received the host configuration data from the ESX server.  
+  [HostManageEnum]$autoManageType #Indicates how the host is managed.  
+  [HostRegistrationTypeEnum]$registrationType #Indicates how initiators are registered to the host.  
+  [Object[]]$fcHostInitiators #Identifiers of the Fibre Channel initiators associated with the host, as defined by the hostInitiator resource type.  
+  [Object[]]$iscsiHostInitiators #Identifiers of the iSCSI initiators associated with the host, as defined by the hostInitiator resource type.  
+  [Object[]]$hostIPPorts #Identifiers of the network ports associated with the host, as defined by the hostIPPort resource type.  
+  [Object[]]$storageResources #Identifiers of the storage resources used by the host, as defined by the storageResource resource type.  
+  [Object[]]$hostLUNs #(Applies to iSCSI and Fibre Channel host configurations only.) Identifiers of the LUNs accessible by the host, as defined by the hostLUN resource type.  
+  [Object]$tenant #Information about the tenant to which the host is assigned.  
+  [Object[]]$datastores #The datastores associated with the current host
+  [Object[]]$hostVVolDatastore #The hostVVolDatastores associated with the current host
+  [Object[]]$vms #The vms associated with the current host
+
+  #Methods
+
 }
 
 Class UnityHostContainer {
@@ -704,13 +780,20 @@ Class UnityIscsiPortal {
   [IpProtocolVersionEnum]$ipProtocolVersion
 }
 
-Class UnityAlertConfig {
-  [string]$id
-  [LocaleEnum]$locale
-  [bool]$isThresholdAlertsEnabled
-  [SeverityEnum]$minEmailNotificationSeverity
-  [string[]]$destinationEmails
-  [SeverityEnum]$minSNMPTrapNotificationSeverity
+Class UnityalertConfig {
+
+  #Properties
+
+  [String]$id #Unique identifier of the alertConfig instance. This value is always 0, because there is only one occurrence of this resource type.  
+  [LocaleEnum]$locale #Language in which the system sends email alerts.  
+  [Bool]$isThresholdAlertsEnabled #Indicates whether pool space usage percent threshold alerts functionality is enabled, notice that this flag will be ignored and alerts will be sent always when it is thin provisioned and oversubscribed. Values are: <br/> <br/> <ul> <li>true - The pool space usage related alerts will be shown to the user when pool space usage percent reaches the threshold.</li> <br/> <br/> <li>false - The pool space usage related alerts will not be shown to the user when pool space usage percent reaches the threshold.</li> </ul>  
+  [SeverityEnum]$minEmailNotificationSeverity #Minimum severity level for email alerts.  
+  [String]$emailFromAddress #The email from address which is used when sending alert emails.  
+  [String[]]$destinationEmails #A list of emails to receive alert notifications.  
+  [SeverityEnum]$minSNMPTrapNotificationSeverity #Minimum severity level for SNMP trap alerts.  
+
+  #Methods
+
 }
 
 Class UnityNfsServer {
@@ -759,30 +842,42 @@ Class UnityHostIPPort {
   $host
 }
 
-Class UnitySnap {
-  [string]$id
-  [string]$name
-  [string]$description
-  $storageResource
-  $lun
-  $snapGroup
-  $parentSnap
-  [datetime]$creationTime
-  [datetime]$expirationTime
-  [SnapCreatorTypeEnum]$creatorType
-  $creatorUser
-  $creatorSchedule
-  [bool]$isSystemSnap
-  [bool]$isModifiable
-  [string]$attachedWWN
-  [FilesystemSnapAccessTypeEnum]$accessType
-  [bool]$isReadOnly
-  [datetime]$lastWritableTime
-  [bool]$isModified
-  [bool]$isAutoDelete
-  [SnapStateEnum]$state
-  [Uint64]$size
-  $ioLimitPolicy
+<#
+  Name: Unitysnap
+  Description: Information about storage resource snapshots in the storage system.  
+#>
+Class Unitysnap {
+
+  #Properties
+
+  [String]$id #Unique identifier of the snap instance.  
+  [String]$name #Snapshot name.  
+  [String]$description #Snapshot description.  
+  [Object]$storageResource #Storage resource for which the snapshot was taken as defined by the storageResource resource type.  
+  [Object]$lun #For a snapshot of a LUN in a Consistency group, the unique identifier of the source LUN as defined by the lun resource type.  
+  [Object]$snapGroup #For a snapshot of a LUN in a Consistency group, the unique identifier of the snapshot group to which the snapshot belongs, as defined by the snap resource type.  
+  [Object]$parentSnap #For a snapshot of another snapshot, the unique identifier of the parent snapshot, as defined by the snap resource type.  
+  [DateTime]$creationTime #Date and time on which the snapshot was taken.  
+  [DateTime]$expirationTime #Date and time after which the snapshot will expire.  
+  [DateTime]$lastRefreshTime #Date and time of last refresh operation  
+  [SnapCreatorTypeEnum]$creatorType #Type of creator that created this snapshot.  
+  [Object]$creatorUser #For a user-created snapshot, information about the user that created the snapshot, as defined by the user resource type.  
+  [Object]$creatorSchedule #For a schedule-created snapshot, information about the snapshot schedule that created the snapshot, as defined by the snapSchedule resource type.  
+  [Bool]$isSystemSnap #Indicates whether the snapshot is an internal snapshot. Internal snapshots are created by the Replication feature. End user operations are not permitted on internal snapshots. Values are: <ul> <li>true - Snapshot is internal.</li> <li>false - Snapshot is external.</li> </ul>  
+  [Bool]$isModifiable #Indicates whether the snapshot is attached or created with protocol access in a manner making it writable by clients. Values are: <ul> <li>true - Snapshot can be modified.</li> <li>false - Snapshot cannot be modified.</li> </ul> Snapshots of file systems and VMware NFS datastores are modifiable when they are created with protocol access. Snapshots of LUNs and VMware VMFS datastores are modifiable when they are attached.  
+  [String]$attachedWWN #For an attached snapshot, the World Wide Name (WWN) of the attached LUN.  
+  [FilesystemSnapAccessTypeEnum]$accessType #For a file system or VMware NFS datastore snapshot, indicates whether the snapshot has checkpoint or protocol type access.  
+  [Bool]$isReadOnly #Indicates whether the snapshot was created with read-only (checkpoint) access (file system or VMware NFS datastore snapshots only). Values are: <ul> <li>true - Snapshot was created with read-only (checkpoint) access and cannot be modified.</li> <li>false - Snapshot was created with read-write (protocol) access and can be modified.</li> </ul>  
+  [DateTime]$lastWritableTime #If not attached or shared, and was attached or shared in the past, time of last unattach or share deletion.  
+  [Bool]$isModified #Indicates if the snapshot may have changed since it was created. Values are: <ul> <li>true - Snapshot is or was attached or it was created with protocol access.</li> <li>false - Snapshot was never attached or it was created with checkpoint access.</li> </ul>  
+  [Bool]$isAutoDelete #Indicates if this snapshot can be automatically deleted by the system per threshold settings. Values are: <ul> <li>true - Snapshot can be automatically deleted by the system per threshold settings.</li> <li>false - Snapshot cannot be deleted automatically.</li> </ul>  
+  [SnapStateEnum]$state #The snapshot state in Snapshot state enum.  
+  [Uint64]$size #Size of the storage resource when the snapshot was created (LUN snapshots only).  
+  [Object]$ioLimitPolicy #IO limit policy that applies to the snapshot, as defined by the ioLimitPolicy resource type.  
+  [Object[]]$hostAccess #(LUN, LUN Group and VMware VMFS datastore snapshots only). Host access permissions for snapshot, as defined by the snapHostAccess resource type. Value is set only if snapshot is attached to dynamic Snapshot Mount Point.  
+
+  #Methods
+
 }
 
 Class UnitySnapSchedule {
@@ -808,15 +903,27 @@ Class UnitySnapScheduleRule {
   [FilesystemSnapAccessTypeEnum]$accessType
 }
 
-Class UnityMetric {
-  [string]$id
-  [string]$name
-  [string]$path
-  [Int]$type
-  [string]$description
-  [bool]$isHistoricalAvailable
-  [bool]$isRealtimeAvailable
-  [string]$unitDisplayString
+<#
+  Name: Unitymetric
+  Description: One of the following: <ul> <li>Performance measurements for the Unity system.  
+#>
+Class Unitymetric {
+
+  #Properties
+
+  [Int]$id #Unique identifier for the metric instance.  
+  [String]$name #Display name of the metric.  
+  [String]$path #Stat paths for the historical and real-time metrics. A stat path identifies a metric's location in the stats namespace. There are two types of stat paths: <ul> <li> stat paths for historical metrics</li> <li> Stat paths for real-time metrics</i> </ul> <br/> <b>stat paths for historical metrics</b> Use the following URI pattern to retrieve stat paths for all historical metrics: <br/> <br/> <span class=EMCCode>/api/types/metric/instances?compact=true&filter=isHistoricalAvailable eq true </span> <br/> <br/> <b>Stat path for real-time metrics</b> <br/> <br/> Use the following URI pattern to retrieve stat paths for all real-time metrics: <br/> <br/> <span class=EMCCode>/api/types/metric/instances?compact=true&filter=isRealtimeAvailable eq true </span> <br/> <br/> For both historical and real-time quey, the following URI pattern can be used to retrieve stat paths for a group of metrics. In this pattern, %25 is an encoded value for a percent sign (%). <br/> <br/> <span class=EMCCode>/api/types/metric/instances?compact=true&filter=path lk <i>metric-path</i>.%25</span> <br/> <br/> where <i>metric-path</i> is one of the stat paths listed below: <ul> <li>sp.*.blockCache - Counters for cache metrics</li> <li>sp*.cifs - CIFS protocol statistics</li> <li>sp.*.fibreChannel - Fibre Channel statistics</li> <li>sp.*.fs - File system statistics</li> <li>sp.*.ftp - FTP protocol statistics</li> <li>sp.*.http - HTTP protocol statistics</li> <li>sp.*.iscsi - iSCSI protocol statistics</li> <li>sp.*.memory - Memory statistics</li> <li>sp.*.ndmp - NDMP protocal statistics</li> <li>sp.*.cpu - CPU statistics</li> <li>sp.*.net - Network interface and protocol statistics</li> <li>sp.*.nfs - NFS protocol statistics</li> <li>sp.*.ntp - NTP statistics</li> <li>sp.*.physical - Physical device statistics</li> <li>sp.*.replication - Replication statistics</li> <li>sp.*.rpc - RPC statistics</li> <li>sp.*.ssh - SSH statistics</li> <li>sp.*.store - Storage hardware interface statistics</li> <li>sp.*.storage - Storage statistics</li> <li>sp.*.vhdx - Microsoft Hyper-V virtual disks statistics</li> <li>sp.*.virusChecker - Virus checker statistics</li> </ul> <br/> <br/> For example, to retrieve a list of available network performance metrics, you can use the following GET collection request: <br/> <br/> <span class=EMCCode>https://<i>ip-address</i>/api/types/metric/instances?compact=t rue&filter=path lk sp.*.net.%25</span>  
+  [Int]$product #Product that supports the metric. Values are: <ul> <li>0 - VNXe</li> <li>1 - VNX</li> <li>2 - Iomega</li> </ul>  
+  [Int]$type #Type of metric. Values are: <ul> <li>2 - 32 bits counter</li> <li>3 - 64 bits counter</li> <li>4 - rate</li> <li>5 - fact</li> <li>6 - text</li> <li>7 - 32 bits virtual counter</li> <li>8 - 64 bits virtual counter</li> </ul>  
+  [Int]$objectType #Type of object associated with the metric. Values are: <ul> <li>0 - lun</li> <li>1 - sp</li> <li>2 - pool</li> <li>3 - volume</li> <li>4 - filesys</li> <li>5 - port </li> <li>6 - disk</li> <li>7 - cpu</li> <li>8 - dm</li> <li>9 - enclosure</li> <li>10 - tier</li> <li>11 - sg</li> </ul>  
+  [String]$description #Short description of the metric.  
+  [Bool]$isHistoricalAvailable #Indicates whether the metric is available for historical collection: <ul> <li>true - Metric is supported for historical collection. <li>false - Metric is not supported for historical collection. </ul>  
+  [Bool]$isRealtimeAvailable #Indicates whether the metric is supported for real-time collection: <ul> <li> true - Metric is supported for real-time collection. <li>false - Metric is not supported for real-time collection. </ul>  
+  [String]$unitDisplayString #Localized text used to describe the metric unit.  
+
+  #Methods
+
 }
 
 Class UnityMetricRealTimeQuery {
@@ -841,20 +948,31 @@ Class UnityMetricValue {
   $values
 }
 
-class UnityHostInitiator {
-  [string]$id
-  [UnityHealth]$health
-  [HostInitiatorTypeEnum]$type
-  $parentHost
-  [bool]$isIgnored
-  [string]$nodeWWN
-  [string]$portWWN
-  [string]$chapUserName
-  [bool]$isChapSecretEnabled
-  [array]$paths
-  [HostInitiatorIscsiTypeEnum]$iscsiType
-  [bool]$isBound
-  [HostInitiatorSourceTypeEnum]$sourceType
+<#
+  Name: UnityhostInitiator
+  Description: Information about host initiators in the storage system. <br/> <br/> After you create a host configuration for controlling host access to storage on the system, you need to create a host initiator for each host configuration that accesses iSCSI or Fibre Channel (FC) storage. The initiator connects the host to the target iSCSI or FC node on the system. <br/> <br/> Initiator-based registration allows you to register the initiator to a host without having to manage individual paths. By default, when an initiator is registered to a host, all of its paths, including those specified after the registration takes place, are automatically granted access to any storage provisioned for the host. <br/>  
+#>
+Class UnityhostInitiator {
+
+  #Properties
+
+  [String]$id #Unique identifier of the hostInitiator instance.  
+  [UnityHealth]$health #Health information for the host initiator, as defined by the health resource type.  
+  [HostInitiatorTypeEnum]$type #Host initiator type.  
+  [String]$initiatorId #Host initiator name: <ul> <li>For an iSCSI initiator, this is the iSCSI Qualified Name (IQN). </li> <li>For an FC initiator, this is the Worldwide Name (WWN).</li> </ul>  
+  [Object]$parentHost #Information about the host to which the host initiator is assigned, as defined by the host resource type.  
+  [Bool]$isIgnored #Indicates whether the host initiator should be included when storage access is granted to the host. Values are: <ul> <li>true - Do not include the host initiator when storage is granted to the associated host.</li> <li>false - Include the host initiator when storage is granted to the associated host.</li> </ul>  
+  [String]$nodeWWN #(Applies to FC initiators only.) Node Worldwide Name (WWN) of the initiator.  
+  [String]$portWWN #(Applies to FC initiators only.) Port Worldwide Name (WWN) of the initiator.  
+  [String]$chapUserName #(Applies to iSCSI initiators only.) CHAP user name. By default, this is the host initiator's iSCSI Qualified Name (IQN).  
+  [Bool]$isChapSecretEnabled #(Applies to iSCSI initiators only.) Indicates whether CHAP authentication is enabled for the host initiator. Values are: <ul> <li>true - CHAP authentication is enabled.</li> <li>false - CHAP authentication is disabled.</li> </ul>  
+  [Object[]]$paths #Host initiator paths, as defined by the hostInitiatorPath resource type.  
+  [HostInitiatorIscsiTypeEnum]$iscsiType #(Applies to iSCSI initiators only.) iSCSI initiator type.  
+  [Bool]$isBound #(Applies to iSCSI initiators only.) Indicates whether the iSCSI initiator is bound to an IP address. This is only applicable to hardware-dependent adapter devices. Values are: <ul> <li>true - iSCSI initiator is bound to an IP address.</li> <li>false - iSCSI initiator is not bound to an IP address.</li> </ul>  
+  [HostInitiatorSourceTypeEnum]$sourceType #Initiator source type.  
+
+  #Methods
+
 }
 
 #Custom Enum
