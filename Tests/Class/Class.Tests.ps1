@@ -9,32 +9,38 @@ $Module = Get-Module -Name 'Unity-Powershell'
 # Get classes defined by the module
 $ActualClasses = $Module.ImplementingAssembly.DefinedTypes | where-Object IsPublic | Where-Object {$_.Name -notlike '*Enum'}
 
-# Load the references datas
-$APITypes = Get-Content "$here\Data\UnityVSA-4_1.json" | ConvertFrom-Json
+$Datas  = @( Get-ChildItem -Path $here\Data\*.json -ErrorAction SilentlyContinue )
 
-Describe -Name "Testing Class" {
+#Dot source the files - idea from https://becomelotr.wordpress.com/2017/02/13/expensive-dot-sourcing/
+Foreach($Data in $Datas) {
 
-    #Test all classes from module
-    Foreach ($Class in $ActualClasses) {
+    # Load the references datas
+    $APITypes = Get-Content $Data.fullname | ConvertFrom-Json
 
-        #Create an empty object in order to retrieve it's propoerties 
-        $Object = New-Object -TypeName $Class.name
+    Describe -Name "Testing Class against file $($Data.Name)" {
 
-        #Get properties of the object
-        $ObjectProperties = $Object | Get-Member | Where-Object {$_.MemberType -eq 'Property'}
+        #Test all classes from module
+        Foreach ($Class in $ActualClasses) {
 
-        #Remove 'Unity' from the name of the class
-        $APIClassName = ($Class.name) -replace 'Unity',''
+            #Create an empty object in order to retrieve it's propoerties 
+            $Object = New-Object -TypeName $Class.name
 
-        #Find the definition of the class in the API
-        $APIClass = $APITypes.entries.content | Where-Object {$_.Name -eq $APIClassName}
+            #Get properties of the object
+            $ObjectProperties = $Object | Get-Member | Where-Object {$_.MemberType -eq 'Property'}
 
-        Context -Name "Class $($Class.name)" {
+            #Remove 'Unity' from the name of the class
+            $APIClassName = ($Class.name) -replace 'Unity',''
 
-            foreach ($Attribute in $APIClass.attributes.name) {
+            #Find the definition of the class in the API
+            $APIClass = $APITypes.entries.content | Where-Object {$_.Name -eq $APIClassName}
 
-                It -Name "Attribute $Attribute is defined" {
-                    $ObjectProperties.Name -contains $Attribute | Should Be $True
+            Context -Name "Class $($Class.name)" {
+
+                foreach ($Attribute in $APIClass.attributes.name) {
+
+                    It -Name "Attribute $Attribute is defined" {
+                        $ObjectProperties.Name -contains $Attribute | Should Be $True
+                    }
                 }
             }
         }
