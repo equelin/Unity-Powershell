@@ -138,6 +138,7 @@ Function Connect-Unity {
       $Sess.Model = $System.model
       $Sess.SerialNumber = $System.SerialNumber
       $Sess.ApiVersion = $BasicSystemInfo.ApiVersion
+      $Sess.SoftwareVersion = $BasicSystemInfo.SoftwareVersion
 
       #Add the UnitySession Object to the $global:DefaultUnitySession array
       $global:DefaultUnitySession += $Sess

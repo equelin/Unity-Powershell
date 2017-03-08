@@ -23,7 +23,7 @@ Function New-UnityVMwareLUN {
       .PARAMETER fastVPParameters
       FAST VP settings for the storage resource
       .PARAMETER isCompressionEnabled
-      Indicates whether to enable inline compression for the LUN. Default is True
+      Indicates whether to enable inline compression for the LUN. Default is True on supported arrays
       .PARAMETER isThinEnabled
       Is Thin enabled? (Default is true)
       .PARAMETER host
@@ -125,6 +125,8 @@ Function New-UnityVMwareLUN {
 
         If ($PSBoundParameters.ContainsKey('isCompressionEnabled')) {
           $lunParameters["isCompressionEnabled"] = $isCompressionEnabled
+        } else {
+          $lunParameters["isCompressionEnabled"] = Test-CompressionUnsupported -Session $Sess -Pool $Pool
         }
 
         If ($PSBoundParameters.ContainsKey('host')) {
