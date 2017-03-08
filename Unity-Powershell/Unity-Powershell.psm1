@@ -72,6 +72,7 @@ Class UnitySession {
   [string]$model
   [string]$SerialNumber
   [version]$ApiVersion
+  [version]$SoftwareVersion
   [Object[]]$Types
 
   ## Methods
@@ -228,6 +229,15 @@ Class UnityPool {
     $this.metadataSizeUsed = $this.metadataSizeUsed / 1MB
     $this.snapSizeUsed = $this.snapSizeUsed / 1MB
   }
+
+  [Bool] isExtremePerformance () {
+
+    $ExtremePerformance = ($This.tiers | Where-Object {$_.tierType -eq 'Extreme_Performance'}).isUsed()
+    $Performance = ($This.tiers | Where-Object {$_.tierType -eq 'Performance'}).isUsed()
+    $Capacity = ($This.tiers | Where-Object {$_.tierType -eq 'Capacity'}).isUsed()
+
+    Return ($ExtremePerformance -and (-not $Performance) -and (-not $Capacity))
+  }
 }
 
 Class UnityPoolFASTVP {
@@ -264,8 +274,15 @@ Class UnityPoolTier {
   [UInt64]$sizeMovingUp
   [UInt64]$sizeMovingWithin
   [String]$name
-  $poolUnits
+  [Object[]]$poolUnits
   [Int]$diskCount
+
+  ## Methods
+
+  [Bool] isUsed () {
+    return ($this.sizeTotal -gt 0)
+  }
+
 }
 
 Class UnityBasicSystemInfo {
