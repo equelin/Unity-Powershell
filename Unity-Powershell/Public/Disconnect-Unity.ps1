@@ -66,5 +66,8 @@ Function Disconnect-Unity {
     }
   }
 
-  End {}
+  End {
+    ## update the Windows PowerShell titlebar with a bit of info about the Unity array(s) to which the PowerShell session is connected
+    Update-TitleBarForUnityConnection
+  }
 }

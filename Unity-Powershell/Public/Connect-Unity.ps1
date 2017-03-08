@@ -23,7 +23,7 @@ Function Connect-Unity {
       .PARAMETER Credentials
       Credentials object of type [System.Management.Automation.PSCredential]
       .PARAMETER TrustAllCerts
-      Specifies if 
+      Specifies if
       .EXAMPLE
       Connect-Unity -Server 192.168.0.1
 
@@ -149,6 +149,9 @@ Function Connect-Unity {
 
   }
 
-  End {}
+  End {
+    ## update the Windows PowerShell titlebar with a bit of info about the Unity array(s) to which the PowerShell session is connected
+    Update-TitleBarForUnityConnection
+  }
 
 }
