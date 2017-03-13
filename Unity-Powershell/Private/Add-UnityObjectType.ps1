@@ -9,7 +9,7 @@ function Add-UnityObjectType {
     [string]$TypeName
   )
 
-  Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+  Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
   #Building the result collection (Add type)
   Foreach ($D in $Data) {

@@ -78,7 +78,7 @@ Function New-UnityNFSShare {
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     ## Variables
     $URI = '/api/instances/storageResource/<id>/action/modifyFilesystem'
@@ -91,7 +91,7 @@ Function New-UnityNFSShare {
 
     Foreach ($sess in $session) {
 
-      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       If ($Sess.TestConnection()) {
 

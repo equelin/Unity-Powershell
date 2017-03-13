@@ -5,7 +5,7 @@ Function Test-UnityConnection {
     [Array]$session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
   )
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
   }
 
   Process {

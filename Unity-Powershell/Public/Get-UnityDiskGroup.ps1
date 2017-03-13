@@ -5,6 +5,7 @@ Function Get-UnityDiskGroup {
       View details about disk groups on the system.
       .DESCRIPTION
       View details about disk groups on the system.
+      Physical deployment only.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -26,21 +27,20 @@ Function Get-UnityDiskGroup {
       Retrieves information about disk groups names '200 GB SAS Flash 2'
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByName")]
+  [CmdletBinding(DefaultParameterSetName="Name")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Disk group Name')]
-    [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Disk group ID')]
-    [String[]]$ID='*'
+    [Parameter(Mandatory = $false,ParameterSetName="Name",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Disk group Name')]
+    [String[]]$Name,
+    [Parameter(Mandatory = $false,ParameterSetName="ID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Disk group ID')]
+    [String[]]$ID
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     #Initialazing variables
-    $ResultCollection = @()
     $URI = '/api/types/diskGroup/instances' #URI
     $TypeName = 'UnityDiskGroup'
   }
@@ -48,51 +48,18 @@ Function Get-UnityDiskGroup {
   Process {
     Foreach ($sess in $session) {
 
-      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      If ($Sess.TestConnection()) {
+      # Test if the Unity is a virtual appliance
+      If ($Sess.isUnityVSA()) {
 
-        #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Compact
+        Write-Warning -Message "This functionnality is not supported on the Unity VSA ($($Sess.Name))"
+        
+      } else {
 
-        Write-Verbose "URL: $URL"
+        Get-UnityItemByKey -Session $Sess -URI $URI -Typename $Typename -Key $PsCmdlet.ParameterSetName -Value $PSBoundParameters[$PsCmdlet.ParameterSetName]
 
-        #Sending the request
-        $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
-
-        #Formating the result. Converting it from JSON to a Powershell object
-        $Results = ($request.content | ConvertFrom-Json).entries.content
-
-        #Building the result collection (Add ressource type)
-        If ($Results) {
-
-          $ResultsFiltered = @()
-          
-          # Results filtering
-          Switch ($PsCmdlet.ParameterSetName) {
-            'ByName' {
-              $ResultsFiltered += Find-FromFilter -Parameter 'Name' -Filter $Name -Data $Results
-            }
-            'ByID' {
-              $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
-            }
-          }
-
-          If ($ResultsFiltered) {
-            
-            $ResultCollection = ConvertTo-Hashtable -Data $ResultsFiltered
-
-            Foreach ($Result in $ResultCollection) {
-
-              # Instantiate object
-              $Object = New-Object -TypeName $TypeName -Property $Result
-
-              # Output results
-              $Object
-            } # End Foreach ($Result in $ResultCollection)
-          } # End If ($ResultsFiltered) 
-        } # End If ($Results)
-      } # End If ($Sess.TestConnection()) 
+      } # End If ($Sess.isUnityVSA())
     } # End Foreach ($sess in $session)
   } # End Process
 } # End Function

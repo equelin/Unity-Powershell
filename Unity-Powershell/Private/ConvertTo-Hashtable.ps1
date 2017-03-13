@@ -5,7 +5,7 @@ function ConvertTo-Hashtable {
     $Data
   )
 
-  Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+  Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
   #Building the result collection
   Foreach ($D in $Data) {

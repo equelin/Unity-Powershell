@@ -13,7 +13,7 @@ Create a host configuration.
 
 ```
 New-UnityHost [-session <Object>] [-Name] <String[]> [-type <HostTypeEnum>] [-Description <String>]
- [-osType <String>] [-WhatIf] [-Confirm]
+ [-osType <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -68,7 +68,7 @@ Type of host configuration.
 Type: HostTypeEnum
 Parameter Sets: (All)
 Aliases: 
-Accepted values: Unknown, HostManual, Subnet, NetGroup, RPA, HostAuto
+Accepted values: Unknown, HostManual, Subnet, NetGroup, RPA, HostAuto, VNXSanCopy
 
 Required: False
 Position: Named
@@ -137,6 +137,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -15,27 +15,30 @@ Modifies snapshot parameters.
 ```
 Set-UnitySnap [-session <Object>] [-ID] <String[]> [-name <String[]>] [-Description <String>]
  [-isAutoDelete <Boolean>] [-retentionDuration <UInt64>] [-ioLimitParameters <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Detach
 ```
-Set-UnitySnap [-session <Object>] [-ID] <String[]> [-detach] [-WhatIf] [-Confirm]
+Set-UnitySnap [-session <Object>] [-ID] <String[]> [-detach] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Attach
 ```
 Set-UnitySnap [-session <Object>] [-ID] <String[]> [-attach] [-copyName <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Restore
 ```
 Set-UnitySnap [-session <Object>] [-ID] <String[]> [-restore] [-copyName <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Copy
 ```
 Set-UnitySnap [-session <Object>] [-ID] <String[]> [-copy] [-numCopies <UInt32>] [-copyStartNum <UInt32>]
- [-copyName <String>] [-WhatIf] [-Confirm]
+ [-copyName <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -326,6 +329,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
