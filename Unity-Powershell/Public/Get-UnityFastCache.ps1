@@ -25,19 +25,18 @@ Function Get-UnityFastCache {
       Retrieves information about disk groups names '200 GB SAS Flash 2'
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByID")]
+  [CmdletBinding(DefaultParameterSetName="ID")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Fast Cache ID')]
-    [String[]]$ID='*'
+    [Parameter(Mandatory = $false,ParameterSetName="ID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Fast Cache ID')]
+    [String[]]$ID
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     #Initialazing variables
-    $ResultCollection = @()
     $URI = '/api/types/fastCache/instances' #URI
     $TypeName = 'UnityFastCache'
   }
@@ -45,54 +44,17 @@ Function Get-UnityFastCache {
   Process {
     Foreach ($sess in $session) {
 
-      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       # Test if the Unity is a virtual appliance
       If ($Sess.isUnityVSA()) {
+
         Write-Warning -Message "This functionnality is not supported on the Unity VSA ($($Sess.Name))"
+
       } else {
 
-        If ($Sess.TestConnection()) {
-
-          #Building the URL from Object Type.
-          $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Compact
-
-          Write-Verbose "URL: $URL"
-
-          #Sending the request
-          $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
-
-          #Formating the result. Converting it from JSON to a Powershell object
-          $Results = ($request.content | ConvertFrom-Json).entries.content
-
-          #Building the result collection (Add ressource type)
-          If ($Results) {
-
-            $ResultsFiltered = @()
-            
-            # Results filtering
-            Switch ($PsCmdlet.ParameterSetName) {
-              'ByID' {
-                $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
-              }
-            }
-
-            If ($ResultsFiltered) {
-              
-              $ResultCollection = ConvertTo-Hashtable -Data $ResultsFiltered
-
-              Foreach ($Result in $ResultCollection) {
-
-                # Instantiate object
-                $Object = New-Object -TypeName $TypeName -Property $Result
-
-                # Output results
-                $Object
-              } # End Foreach ($Result in $ResultCollection)
-            } # End If ($ResultsFiltered) 
-          } # End If ($Results)
-        } # End If ($Sess.TestConnection()) 
-      } #End If ($Sess.isUnityVSA())
+        Get-UnityItemByKey -Session $Sess -URI $URI -Typename $Typename -Key $PsCmdlet.ParameterSetName -Value $PSBoundParameters[$PsCmdlet.ParameterSetName]
+      } # End If ($Sess.isUnityVSA())
     } # End Foreach ($sess in $session)
   } # End Process
 } # End Function

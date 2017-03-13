@@ -4,42 +4,42 @@ online version: https://github.com/equelin/Unity-Powershell
 schema: 2.0.0
 ---
 
-# Get-UnityHostInitiator
+# Get-UnityHost
 
 ## SYNOPSIS
-View details about host initiator configuration on the system.
+View details about host configuration on the system.
 
 ## SYNTAX
 
-### ByID
+### Name (Default)
 ```
-Get-UnityHostInitiator [-session <Object>] [-ID <String[]>]
+Get-UnityHost [-session <Object>] [-Name <String[]>] [<CommonParameters>]
 ```
 
-### ByPortWwn
+### ID
 ```
-Get-UnityHostInitiator [-session <Object>] [-PortWWN <String[]>]
+Get-UnityHost [-session <Object>] [-ID <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-View details about host initiator configuration on the system.
+View details about host configuration on the system.
 You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityHostInitiator
-```
-
-Retrieve information about all hosts initiators
-
-### -------------------------- EXAMPLE 2 --------------------------
-```
-Get-UnityHostInitiator -PortWWN "*00:12:55" 
+Get-UnityHost
 ```
 
-Retrieves information about the host initiator with a PortWWN ending in '00:12:55'.
+Retrieve information about all hosts
+
+### -------------------------- EXEMPLE 2 --------------------------
+```
+Get-UnityHost -Name 'ESX01'
+```
+
+Retrieves information about host named 'ESX01'
 
 ## PARAMETERS
 
@@ -58,12 +58,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ID
-Specifies the object ID.
+### -Name
+Specifies the object name.
 
 ```yaml
 Type: String[]
-Parameter Sets: ByID
+Parameter Sets: Name
 Aliases: 
 
 Required: False
@@ -73,36 +73,27 @@ Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
-### -PortWWN
-Specifies the port WWN.
+### -ID
+Specifies the object ID.
 
 ```yaml
 Type: String[]
-Parameter Sets: ByPortWwn
-Aliases:
+Parameter Sets: ID
+Aliases: 
 
 Required: False
 Position: Named
 Default value: *
-Accept pipeline input: True (ByValue, ByPropertyName)
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
 
-```yaml
-[String[]]
-```
-
-Accepts Id or PortWWN on the pipeline.
-
 ## OUTPUTS
-
-```yaml
-[Object[]]
-```
-
-Returns an Object array with elements of type [UnitHostInitiator].
 
 ## NOTES
 Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE

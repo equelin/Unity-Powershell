@@ -30,7 +30,7 @@ Function Disconnect-Unity {
     $session = $global:DefaultUnitySession
   )
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
   }
 
   Process {

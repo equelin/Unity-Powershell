@@ -26,21 +26,20 @@ Function Get-UnityFilesystem {
       Retrieves information about filesystem named FS01
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByName")]
+  [CmdletBinding(DefaultParameterSetName="Name")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem Name')]
-    [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem ID')]
-    [String[]]$ID='*'
+    [Parameter(Mandatory = $false,ParameterSetName="Name",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem Name')]
+    [String[]]$Name,
+    [Parameter(Mandatory = $false,ParameterSetName="ID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem ID')]
+    [String[]]$ID
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     #Initialazing variables
-    $ResultCollection = @()
     $URI = '/api/types/filesystem/instances' #URI
     $TypeName = 'UnityFilesystem'
   }
@@ -48,51 +47,10 @@ Function Get-UnityFilesystem {
   Process {
     Foreach ($sess in $session) {
 
-      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "[$($MyInvocation.MyCommand)] Processing Session: $($Session.Server) with SessionId: $($Session.SessionId)"
 
-      If ($Sess.TestConnection()) {
+      Get-UnityItemByKey -Session $Sess -URI $URI -Typename $Typename -Key $PsCmdlet.ParameterSetName -Value $PSBoundParameters[$PsCmdlet.ParameterSetName]
 
-        #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Compact
-
-        Write-Verbose "URL: $URL"
-
-        #Sending the request
-        $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'GET'
-
-        #Formating the result. Converting it from JSON to a Powershell object
-        $Results = ($request.content | ConvertFrom-Json).entries.content
-
-        #Building the result collection (Add ressource type)
-        If ($Results) {
-
-          $ResultsFiltered = @()
-          
-          # Results filtering
-          Switch ($PsCmdlet.ParameterSetName) {
-            'ByName' {
-              $ResultsFiltered += Find-FromFilter -Parameter 'Name' -Filter $Name -Data $Results
-            }
-            'ByID' {
-              $ResultsFiltered += Find-FromFilter -Parameter 'ID' -Filter $ID -Data $Results
-            }
-          }
-
-          If ($ResultsFiltered) {
-            
-            $ResultCollection = ConvertTo-Hashtable -Data $ResultsFiltered
-
-            Foreach ($Result in $ResultCollection) {
-
-              # Instantiate object
-              $Object = New-Object -TypeName $TypeName -Property $Result
-
-              # Output results
-              $Object
-            } # End Foreach ($Result in $ResultCollection)
-          } # End If ($ResultsFiltered) 
-        } # End If ($Results)
-      } # End If ($Sess.TestConnection()) 
     } # End Foreach ($sess in $session)
   } # End Process
 } # End Function

@@ -12,7 +12,7 @@ Test email alert notification by sending a test alert to all configured email de
 ## SYNTAX
 
 ```
-Test-UnityEmailAlert [-session <Object>] [[-ID] <String[]>]
+Test-UnityEmailAlert [-session <Object>] [[-ID] <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -59,6 +59,9 @@ Default value: 0
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

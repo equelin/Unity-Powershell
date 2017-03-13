@@ -11,7 +11,7 @@ function Send-UnityRequest {
       [array]$body
   )
 
-  Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+  Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
   # Request
   If (($Method -eq 'GET') -or ($type -eq 'DELETE')) {

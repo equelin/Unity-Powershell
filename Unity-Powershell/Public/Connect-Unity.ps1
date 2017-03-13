@@ -64,7 +64,7 @@ Function Connect-Unity {
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
     if ($TrustAllCerts) {
       Unblock-UnityCerts
     }

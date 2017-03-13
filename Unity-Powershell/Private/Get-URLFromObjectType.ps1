@@ -15,7 +15,7 @@ function Get-URLFromObjectType {
       [string[]]$Exception = ''
   )
 
-  Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+  Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
   $type = $TypeName -replace 'Unity',''
 

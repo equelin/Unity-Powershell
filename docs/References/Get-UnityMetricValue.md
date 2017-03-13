@@ -12,7 +12,7 @@ Historical values for requested metrics.
 ## SYNTAX
 
 ```
-Get-UnityMetricValue [[-session] <Object>] [[-Path] <Object[]>] [[-Count] <Int64>]
+Get-UnityMetricValue [[-session] <Object>] [[-Path] <Object[]>] [[-Count] <Int64>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -75,6 +75,9 @@ Default value: 20
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

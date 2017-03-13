@@ -13,7 +13,7 @@ Add the vCenter credentials and optionally discovers any ESXi host managed by th
 
 ```
 New-UnityvCenter [-session <Object>] [-Address] <String[]> -Username <String> -Password <String>
- [-Description <String>] [-ImportHosts] [-WhatIf] [-Confirm]
+ [-Description <String>] [-ImportHosts] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -154,6 +154,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
