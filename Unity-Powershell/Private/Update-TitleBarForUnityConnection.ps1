@@ -4,7 +4,7 @@
 function Update-TitleBarForUnityConnection {
 	$strOrigWindowTitle = $host.ui.RawUI.WindowTitle
 	## the window titlebar text without the "connected to.." Unity info
-	$strWinTitleWithoutOldXmsConnInfo = $strOrigWindowTitle -replace "(; )?Connected to( \d+)? Unity.+", ""
+	$strWinTitleWithoutOldUnityConnInfo = $strOrigWindowTitle -replace "(; )?Connected to( \d+)? Unity.+", ""
 	## the number of Unity servers to which still connected
 	$intNumConnectedUnityServers = ($Global:DefaultUnitySession | Measure-Object).Count
 	$strNewWindowTitle = "{0}{1}{2}" -f $strWinTitleWithoutOldUnityConnInfo, $(if ((-not [System.String]::IsNullOrEmpty($strWinTitleWithoutOldUnityConnInfo)) -and ($intNumConnectedUnityServers -gt 0)) {"; "}), $(
