@@ -15,6 +15,7 @@ Modifies Alert Config.
 Set-UnityAlertConfig [-session <Object>] [[-ID] <String[]>] [-alertLocale <LocaleEnum>]
  [-isThresholdAlertsEnabled <Boolean>] [-minEmailNotificationSeverity <SeverityEnum>]
  [-minSNMPTrapNotificationSeverity <SeverityEnum>] [-destinationEmails <String[]>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -69,7 +70,7 @@ Language in which the system sends email alerts.
 Type: LocaleEnum
 Parameter Sets: (All)
 Aliases: 
-Accepted values: en_US, es_AR, de_DE, fr_FR, it_IT, ja_JP, ko_KR, pt_BR, ru_RU, zh_CN
+Accepted values: en_US, es_AR, de_DE, fr_FR, ja_JP, ko_KR, pt_BR, ru_RU, zh_CN
 
 Required: False
 Position: Named
@@ -170,6 +171,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

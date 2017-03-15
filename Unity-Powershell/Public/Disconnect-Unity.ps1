@@ -30,7 +30,7 @@ Function Disconnect-Unity {
     $session = $global:DefaultUnitySession
   )
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
   }
 
   Process {
@@ -66,5 +66,8 @@ Function Disconnect-Unity {
     }
   }
 
-  End {}
+  End {
+    ## update the Windows PowerShell titlebar with a bit of info about the Unity array(s) to which the PowerShell session is connected
+    Update-TitleBarForUnityConnection
+  }
 }

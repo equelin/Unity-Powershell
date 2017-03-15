@@ -15,7 +15,7 @@ Creates a new snapshot schedule.
 New-UnitySnapSchedule [-session <Object>] [-name] <String[]> -type <ScheduleTypeEnum> [-minute <UInt32>]
  [-hours <UInt32[]>] [-daysOfWeek <DayOfWeekEnum[]>] [-daysOfMonth <UInt32>] [-interval <UInt32>]
  [-isAutoDelete <Boolean>] [-retentionTime <UInt64>] [-accessType <FilesystemSnapAccessTypeEnum>] [-WhatIf]
- [-Confirm]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -246,6 +246,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

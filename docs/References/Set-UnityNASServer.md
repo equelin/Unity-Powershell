@@ -15,7 +15,7 @@ Modifies NAS Server parameters.
 Set-UnityNASServer [-session <Object>] [-ID] <String[]> [-Name <String>] [-homeSP <Object>]
  [-isReplicationDestination <Boolean>] [-UnixDirectoryService <NasServerUnixDirectoryServiceEnum>]
  [-isMultiProtocolEnabled <Boolean>] [-allowUnmappedUser <Boolean>] [-defaultUnixUser <Object>]
- [-defaultWindowsUser <Object>] [-WhatIf] [-Confirm]
+ [-defaultWindowsUser <Object>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -126,7 +126,7 @@ Valid values are:
 Type: NasServerUnixDirectoryServiceEnum
 Parameter Sets: (All)
 Aliases: 
-Accepted values: None, NIS, LDAP
+Accepted values: None, NIS, LDAP, LocalThenNIS, LocalThenLDAP
 
 Required: False
 Position: Named
@@ -229,6 +229,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -15,7 +15,7 @@ Modifies NFS share.
 Set-UnityNFSShare [-session <Object>] [-ID] <String[]> [-description <String>] [-isReadOnly <Boolean>]
  [-defaultAccess <NFSShareDefaultAccessEnum>] [-minSecurity <NFSShareSecurityEnum>] [-noAccessHosts <String[]>]
  [-readOnlyHosts <String[]>] [-readWriteHosts <String[]>] [-rootAccessHosts <String[]>] [-append] [-WhatIf]
- [-Confirm]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -233,6 +233,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

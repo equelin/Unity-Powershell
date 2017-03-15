@@ -14,13 +14,13 @@ Connects to an EMC Unity Array
 ### ByServer (Default)
 ```
 Connect-Unity [-Server] <String[]> [-Username <String>] [-Password <SecureString>]
- [-Credentials <PSCredential>] [-TrustAllCerts <Boolean>]
+ [-Credentials <PSCredential>] [-TrustAllCerts <Boolean>] [<CommonParameters>]
 ```
 
 ### BySession
 ```
 Connect-Unity -Session <Object> [-Username <String>] [-Password <SecureString>] [-Credentials <PSCredential>]
- [-TrustAllCerts <Boolean>]
+ [-TrustAllCerts <Boolean>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -161,6 +161,9 @@ Default value: True
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
