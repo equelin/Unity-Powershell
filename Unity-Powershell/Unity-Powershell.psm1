@@ -55,7 +55,7 @@ Write-Host " (Get-Help Get-UnityVMwareLUN -Full)" -foregroundcolor yellow
 Write-host " Documentation available at http://unity-powershell.readthedocs.io/en/latest/"
 Write-host " Issues Tracker available at https://github.com/equelin/Unity-Powershell/issues"
 write-host ""
-write-host " Licensed under the MIT License. (C) Copyright 2016 Erwan Quelin and the community."
+write-host " Licensed under the MIT License. (C) Copyright 2016-2017 Erwan Quelin and the community."
 write-host ""
 
 #Custom Classes
