@@ -34,6 +34,8 @@ Function Set-UnitySnap {
       Copy a snapshot.
       .PARAMETER restore
       Restore the snapshot to the associated storage resource. 
+      .PARAMETER refresh
+      Refresh the snapshot to the associated storage resource. 
       .PARAMETER attach
       Attach the snapshot so hosts can access it. Attaching a snapshot makes the snapshot accessible to configured hosts for restoring files and data.
       .PARAMETER detach
@@ -59,9 +61,13 @@ Function Set-UnitySnap {
 
       Attach the snapshot with ID '171798691854' so hosts can access it.'
       .EXAMPLE
-      Set-UnitySnap -ID '171798691854' -Dettach
+      Set-UnitySnap -ID '171798691854' -Detach
 
       Detach the snapshot with ID '171798691854' so hosts can no longer access it.
+      .EXAMPLE
+      Set-UnitySnap -ID '171798691854' -Refresh
+
+      Refreshes snapshot with ID '171798691854' with the latest data from the parent LUN.
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High',DefaultParameterSetName="Set")]
@@ -72,6 +78,7 @@ Function Set-UnitySnap {
     [Parameter(Mandatory = $false,ParameterSetName="Restore",HelpMessage = 'EMC Unity Session')]
     [Parameter(Mandatory = $false,ParameterSetName="Attach",HelpMessage = 'EMC Unity Session')]
     [Parameter(Mandatory = $false,ParameterSetName="Detach",HelpMessage = 'EMC Unity Session')]
+    [Parameter(Mandatory = $false,ParameterSetName="Refresh",HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     
     #ID
@@ -80,6 +87,7 @@ Function Set-UnitySnap {
     [Parameter(Mandatory = $true,Position = 0,ParameterSetName="Restore",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Snapshot ID or Object.')]
     [Parameter(Mandatory = $true,Position = 0,ParameterSetName="Attach",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Snapshot ID or Object.')]
     [Parameter(Mandatory = $true,Position = 0,ParameterSetName="Detach",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Snapshot ID or Object.')]
+    [Parameter(Mandatory = $true,Position = 0,ParameterSetName="Refresh",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Snapshot ID or Object.')]
     [String[]]$ID,
 
     # Set
@@ -114,10 +122,15 @@ Function Set-UnitySnap {
     [Parameter(Mandatory = $true,ParameterSetName="Detach",HelpMessage = 'Detach the snapshot so hosts can no longer access it.')]
     [switch]$detach,
 
-    # Copy, Restore & Attach
+    # Refresh
+    [Parameter(Mandatory = $true,ParameterSetName="Refresh",HelpMessage = 'Refresh the snapshot data from the parent volume.')]
+    [switch]$refresh,
+
+    # Copy, Restore, Refresh & Attach
     [Parameter(Mandatory = $false,ParameterSetName="Copy",HelpMessage = 'Base name for the new snapshot copies.')]
     [Parameter(Mandatory = $false,ParameterSetName="Restore",HelpMessage = 'Name of the backup snapshot created before the restore operation occurs.')]
     [Parameter(Mandatory = $false,ParameterSetName="Attach",HelpMessage = 'Name of the backup snapshot created before the attach operation occurs.')]
+    [Parameter(Mandatory = $false,ParameterSetName="Refresh",HelpMessage = 'Name of the backup snapshot created before the attach operation occurs.')]
     [String]$copyName
   )
 
@@ -145,6 +158,10 @@ Function Set-UnitySnap {
       'Detach' {
         $URI = '/api/instances/snap/<id>/action/detach'
         $StatusCode = 204
+      }
+      'Refresh' {
+        $URI = '/api/instances/snap/<id>/action/refresh'
+        $StatusCode = 200
       }
     }
     
@@ -243,6 +260,11 @@ Function Set-UnitySnap {
                 }
               }
               'Attach' {
+                If ($PSBoundParameters.ContainsKey('copyName')) {
+                  $body["copyName"] = $copyName
+                }
+              }
+              'Refresh' {
                 If ($PSBoundParameters.ContainsKey('copyName')) {
                   $body["copyName"] = $copyName
                 }
