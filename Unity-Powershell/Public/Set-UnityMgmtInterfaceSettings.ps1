@@ -44,7 +44,7 @@ Function Set-UnityMgmtInterfaceSettings {
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     # Variables
     $URI = '/api/instances/mgmtInterfaceSettings/0/action/modify'
@@ -56,7 +56,7 @@ Function Set-UnityMgmtInterfaceSettings {
 
     Foreach ($sess in $session) {
 
-      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       If ($Sess.TestConnection()) {
 

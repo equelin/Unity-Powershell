@@ -26,25 +26,25 @@ Function Get-UnityVMwareNFS {
       Retrieves information about VMware NFS LUN named DATASTORE01
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByID")]
+  [CmdletBinding(DefaultParameterSetName="ID")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByName",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN Name')]
+    [Parameter(Mandatory = $false,ParameterSetName="Name",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN Name')]
     [String[]]$Name='*',
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN ID')]
+    [Parameter(Mandatory = $false,ParameterSetName="ID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware LUN ID')]
     [String[]]$ID='*'
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     #Initialazing variables
     $ResultCollection = @()
 
     Foreach ($sess in $session) {
 
-      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "[$($MyInvocation.MyCommand)] Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       If ($Sess.TestConnection()) {
 
@@ -54,8 +54,6 @@ Function Get-UnityVMwareNFS {
           $ResultCollection += Get-UnityFilesystem -Session $Sess -ID $StorageResource.filesystem.id
         } 
 
-      } else {
-        Write-Information -MessageData "You are no longer connected to EMC Unity array: $($Sess.Server)"
       }
     }
   }
@@ -64,16 +62,18 @@ Function Get-UnityVMwareNFS {
     #Filter results
     If ($ResultCollection) {
       Switch ($PsCmdlet.ParameterSetName) {
-        'ByName' {
+        'Name' {
           Foreach ($N in $Name) {
-            Write-Verbose "Return result(s) with the filter: $($N)"
+            Write-Debug -Message "[$($MyInvocation.MyCommand)] Return result(s) with the filter: $($N)"
             Write-Output $ResultCollection | Where-Object {$_.Name -like $N}
+            Write-Debug -Message "[$($MyInvocation.MyCommand)] Found $($ResultCollection.Count) item(s)"
           }
         }
-        'ByID' {
+        'ID' {
           Foreach ($I in $ID) {
-            Write-Verbose "Return result(s) with the filter: $($I)"
+            Write-Debug -Message "[$($MyInvocation.MyCommand)] Return result(s) with the filter: $($I)"
             Write-Output $ResultCollection | Where-Object {$_.Id -like $I}
+            Write-Debug -Message "[$($MyInvocation.MyCommand)] Found $($ResultCollection.Count) item(s)"            
           }
         }
       } #End Switch

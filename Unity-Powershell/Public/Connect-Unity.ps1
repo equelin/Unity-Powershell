@@ -23,7 +23,7 @@ Function Connect-Unity {
       .PARAMETER Credentials
       Credentials object of type [System.Management.Automation.PSCredential]
       .PARAMETER TrustAllCerts
-      Specifies if 
+      Specifies if
       .EXAMPLE
       Connect-Unity -Server 192.168.0.1
 
@@ -64,7 +64,7 @@ Function Connect-Unity {
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
     if ($TrustAllCerts) {
       Unblock-UnityCerts
     }
@@ -103,7 +103,7 @@ Function Connect-Unity {
 
 
     foreach ($srv in $Server) {
-      #Initialazing Cookies Container
+      #Initializing Cookies Container
       $Cookies = New-Object -TypeName System.Net.CookieContainer
 
       $result = Get-UnityAuth -Server $srv -EncodedPassword $EncodedPassword -Cookies $Cookies
@@ -125,17 +125,20 @@ Function Connect-Unity {
         Write-Verbose "Add cookie: $($cookie.Name) to WebSession"
         $Websession.Cookies.Add($cookie);
       }
-
       $Sess.Websession = $Websession
+
+      # Get types definitions from API
+      $Types = Get-UnityItem -URI '/api/types' -Session $Sess
+      $Sess.Types = $Types.entries.content | where-object {$_.name -notlike '*Enum'}
 
       # Get informations about the array
       $System = Get-UnitySystem -Session $Sess
       $BasicSystemInfo = Get-UnityBasicSystemInfo -Session $Sess
-
       $Sess.Name = $System.Name
       $Sess.Model = $System.model
       $Sess.SerialNumber = $System.SerialNumber
       $Sess.ApiVersion = $BasicSystemInfo.ApiVersion
+      $Sess.SoftwareVersion = $BasicSystemInfo.SoftwareVersion
 
       #Add the UnitySession Object to the $global:DefaultUnitySession array
       $global:DefaultUnitySession += $Sess
@@ -147,6 +150,9 @@ Function Connect-Unity {
 
   }
 
-  End {}
+  End {
+    ## update the Windows PowerShell titlebar with a bit of info about the Unity array(s) to which the PowerShell session is connected
+    Update-TitleBarForUnityConnection
+  }
 
 }

@@ -28,7 +28,7 @@ Function Get-UnitySession {
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
   }
 
   Process {

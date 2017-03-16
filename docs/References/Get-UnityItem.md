@@ -12,7 +12,7 @@ Queries the EMC Unity array to retrieve informations about a specific item.
 ## SYNTAX
 
 ```
-Get-UnityItem [[-session] <Object>] [-URI] <String> [-JSON]
+Get-UnityItem [[-session] <Object>] [-URI] <String> [-JSON] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -86,6 +86,9 @@ Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

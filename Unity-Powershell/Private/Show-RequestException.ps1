@@ -5,7 +5,7 @@ Function Show-RequestException {
     $Exception
   )
 
-  Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+  Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
   #Exception catch when there's a connectivity problem with the array
   If ($Exception.Exception.InnerException) {

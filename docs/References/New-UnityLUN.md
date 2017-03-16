@@ -15,7 +15,7 @@ Creates a Unity block LUN.
 New-UnityLUN [-session <Object>] [-Name] <String[]> [-Description <String>] -Pool <String> -Size <UInt64>
  [-host <String[]>] [-accessMask <HostLUNAccessEnum>] [-isThinEnabled <Boolean>]
  [-fastVPParameters <TieringPolicyEnum>] [-isCompressionEnabled <Boolean>] [-snapSchedule <String>]
- [-isSnapSchedulePaused <Boolean>] [-WhatIf] [-Confirm]
+ [-isSnapSchedulePaused <Boolean>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -252,6 +252,9 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

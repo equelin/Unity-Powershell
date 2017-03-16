@@ -51,7 +51,7 @@ Function Set-UnitySystem {
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     # Variables
     $URI = '/api/instances/system/<id>/action/modify'
@@ -64,7 +64,7 @@ Function Set-UnitySystem {
 
     Foreach ($sess in $session) {
 
-      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       If ($Sess.TestConnection()) {
 

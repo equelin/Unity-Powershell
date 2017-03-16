@@ -23,7 +23,7 @@ Function New-UnityLUN {
       .PARAMETER fastVPParameters
       FAST VP settings for the storage resource
       .PARAMETER isCompressionEnabled
-      Indicates whether to enable inline compression for the LUN. Default is True
+      Indicates whether to enable inline compression for the LUN. Default is True on compatible arrays
       .PARAMETER isThinEnabled
       Is Thin enabled on LUN ? (Default is true)
       .PARAMETER host
@@ -81,7 +81,7 @@ Function New-UnityLUN {
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     ## Variables
     $URI = '/api/types/storageResource/action/createLun'
@@ -92,7 +92,7 @@ Function New-UnityLUN {
   Process {
     Foreach ($sess in $session) {
 
-      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       Foreach ($n in $Name) {
 
@@ -127,6 +127,8 @@ Function New-UnityLUN {
 
         If ($PSBoundParameters.ContainsKey('isCompressionEnabled')) {
           $lunParameters["isCompressionEnabled"] = $isCompressionEnabled
+        } else {
+          $lunParameters["isCompressionEnabled"] = Test-CompressionUnsupported -Session $Sess -Pool $Pool
         }
 
         If ($PSBoundParameters.ContainsKey('host')) {

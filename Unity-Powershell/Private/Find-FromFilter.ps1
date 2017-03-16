@@ -1,4 +1,4 @@
-function Find-FromFilter {
+Function Find-FromFilter {
     [CmdletBinding()]
     Param (
     [parameter(Mandatory = $true)]
@@ -10,13 +10,14 @@ function Find-FromFilter {
     )
 
     Process {
-        Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+        Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
         Foreach ($F in $Filter) {
-            Write-Verbose "Filtering result(s) on parameter $Parameter withe value $F"
-            $Data | Where-Object {$_."$Parameter" -like $F}
+            Write-Debug -Message "[$($MyInvocation.MyCommand)] Filtering result(s) on parameter $Parameter with value $F"
+            $Result = $Data | Where-Object {$_."$Parameter" -like $F}
+            Write-Debug -Message "[$($MyInvocation.MyCommand)] Found $($Result.Count) item(s)"
+
+            $Result
         }
     }
-
-
 }

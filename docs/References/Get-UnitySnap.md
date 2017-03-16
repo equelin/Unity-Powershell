@@ -11,14 +11,14 @@ Queries the EMC Unity array to retrieve informations about snapshots.
 
 ## SYNTAX
 
-### ByName (Default)
+### Name (Default)
 ```
-Get-UnitySnap [-session <Object>] [-Name <String[]>]
+Get-UnitySnap [-session <Object>] [-Name <String[]>] [<CommonParameters>]
 ```
 
-### ByID
+### ID
 ```
-Get-UnitySnap [-session <Object>] [-ID <String[]>]
+Get-UnitySnap [-session <Object>] [-ID <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -63,7 +63,7 @@ Specifies the object name.
 
 ```yaml
 Type: String[]
-Parameter Sets: ByName
+Parameter Sets: Name
 Aliases: 
 
 Required: False
@@ -78,7 +78,7 @@ Specifies the object ID.
 
 ```yaml
 Type: String[]
-Parameter Sets: ByID
+Parameter Sets: ID
 Aliases: 
 
 Required: False
@@ -87,6 +87,9 @@ Default value: *
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

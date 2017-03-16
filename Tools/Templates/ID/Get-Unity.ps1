@@ -20,19 +20,19 @@ Function Get-UnitySMTPServer {
       Retrieve informations about all the SMTP servers.#########################################
   #>
 
-  [CmdletBinding(DefaultParameterSetName="ByID")]
+  [CmdletBinding(DefaultParameterSetName="ID")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ByID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'SMTP Server ID')] #########################################
-    [String[]]$ID='*'
+    [Parameter(Mandatory = $false,ParameterSetName="ID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'SMTP Server ID')] #########################################
+    [String[]]$ID
   )
 
   Begin {
-    Write-Verbose "Executing function: $($MyInvocation.MyCommand)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     #Initialazing variables
-    $ResultCollection = @()
+    $
     $URI = '/api/types/smtpServer/instances' #########################################
     $TypeName = 'UnitySmtpServer' #########################################
   }
@@ -40,12 +40,12 @@ Function Get-UnitySMTPServer {
   Process {
     Foreach ($sess in $session) {
 
-      Write-Verbose "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       If ($Sess.TestConnection()) {
 
         #Building the URL from Object Type.
-        $URL = Get-URLFromObjectType -Server $sess.Server -URI $URI -TypeName $TypeName -Compact
+        $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Compact
 
         Write-Verbose "URL: $URL"
 
