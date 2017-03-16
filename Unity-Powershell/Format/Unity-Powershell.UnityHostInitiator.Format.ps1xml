@@ -2,9 +2,9 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-    <Name>UnityHostInitiatorTable</Name>
+    <Name>UnityhostInitiatorTable</Name>
     <ViewSelectedBy>
-        <TypeName>UnityHostInitiator</TypeName>
+        <TypeName>UnityhostInitiator</TypeName>
     </ViewSelectedBy>
     <TableControl>
         <AutoSize/>
@@ -48,53 +48,65 @@
         </TableControl>
     </View>
 <View>
-      <Name>UnityHostInitiatorList</Name>
+      <Name>UnityhostInitiatorList</Name>
       <ViewSelectedBy>
-        <TypeName>UnityHostInitiator</TypeName>
+        <TypeName>UnityhostInitiator</TypeName>
       </ViewSelectedBy>
       <ListControl>
         <ListEntries>
           <ListEntry>
             <ListItems>
                   <ListItem>
-                    <Label>Address</Label>
-                    <PropertyName>address</PropertyName>
-                </ListItem>
-                  <ListItem>
-                    <Label>Description</Label>
-                    <PropertyName>description</PropertyName>
+                    <Label>ChapUserName</Label>
+                    <PropertyName>chapUserName</PropertyName>
                 </ListItem>
                   <ListItem>
                     <Label>Health</Label>
                     <PropertyName>health</PropertyName>
                 </ListItem>
                   <ListItem>
-                    <Label>Hosts</Label>
-                    <PropertyName>hosts</PropertyName>
-                </ListItem>
-                  <ListItem>
                     <Label>Id</Label>
                     <PropertyName>id</PropertyName>
                 </ListItem>
                   <ListItem>
-                    <Label>LastPollTime</Label>
-                    <PropertyName>lastPollTime</PropertyName>
+                    <Label>InitiatorId</Label>
+                    <PropertyName>initiatorId</PropertyName>
                 </ListItem>
                   <ListItem>
-                    <Label>Name</Label>
-                    <PropertyName>name</PropertyName>
+                    <Label>IsBound</Label>
+                    <PropertyName>isBound</PropertyName>
                 </ListItem>
                   <ListItem>
-                    <Label>Port</Label>
-                    <PropertyName>port</PropertyName>
+                    <Label>IsChapSecretEnabled</Label>
+                    <PropertyName>isChapSecretEnabled</PropertyName>
                 </ListItem>
                   <ListItem>
-                    <Label>ProductName</Label>
-                    <PropertyName>productName</PropertyName>
+                    <Label>IscsiType</Label>
+                    <PropertyName>iscsiType</PropertyName>
                 </ListItem>
                   <ListItem>
-                    <Label>ProductVersion</Label>
-                    <PropertyName>productVersion</PropertyName>
+                    <Label>IsIgnored</Label>
+                    <PropertyName>isIgnored</PropertyName>
+                </ListItem>
+                  <ListItem>
+                    <Label>NodeWWN</Label>
+                    <PropertyName>nodeWWN</PropertyName>
+                </ListItem>
+                  <ListItem>
+                    <Label>ParentHost</Label>
+                    <PropertyName>parentHost</PropertyName>
+                </ListItem>
+                  <ListItem>
+                    <Label>Paths</Label>
+                    <PropertyName>paths</PropertyName>
+                </ListItem>
+                  <ListItem>
+                    <Label>PortWWN</Label>
+                    <PropertyName>portWWN</PropertyName>
+                </ListItem>
+                  <ListItem>
+                    <Label>SourceType</Label>
+                    <PropertyName>sourceType</PropertyName>
                 </ListItem>
                   <ListItem>
                     <Label>Type</Label>
@@ -107,4 +119,3 @@
     </View>
     </ViewDefinitions>
 </Configuration>
-
