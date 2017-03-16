@@ -12,7 +12,7 @@
 RootModule = 'Unity-Powershell.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.12.0'
+ModuleVersion = '0.13.0'
 
 # ID used to uniquely identify this module
 GUID = '586e7e62-9753-4fd6-91b6-89d8d89d69a2'
@@ -24,7 +24,7 @@ Author = 'Erwan Quelin'
 #CompanyName = 'Unknown'
 
 # Copyright statement for this module
-Copyright = 'Licensed under the MIT License (c) 2016 Erwan Quelin. https://github.com/equelin/Unity-Powershell/blob/master/LICENSE'
+Copyright = 'Licensed under the MIT License (c) 2016-2017 Erwan Quelin. https://github.com/equelin/Unity-Powershell/blob/master/LICENSE'
 
 # Description of the functionality provided by this module
 Description = 'Powershell module for working with EMC Unity array'
