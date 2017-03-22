@@ -41,6 +41,12 @@ Set-UnitySnap [-session <Object>] [-ID] <String[]> [-copy] [-numCopies <UInt32>]
  [-copyName <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
+### Refresh
+```
+Set-UnitySnap [-session <Object>] [-ID] <String[]> -refresh [-copyName <String>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
+```
+
 ## DESCRIPTION
 Modifies snapshot parameters.
 You need to have an active session with the array.
