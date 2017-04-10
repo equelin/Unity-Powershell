@@ -15,6 +15,8 @@ Function Get-UnitySsc {
       Specifies an UnitySession Object.
       .PARAMETER ID
       Specifies the object ID.
+      .PARAMETER Name
+      Specifies the object name.
       .EXAMPLE
       Get-UnitySsc
 
