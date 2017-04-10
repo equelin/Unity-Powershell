@@ -1,9 +1,3 @@
----
-external help file: Unity-Powershell-help.xml
-online version: https://github.com/equelin/Unity-Powershell
-schema: 2.0.0
----
-
 # Set-UnitySystem
 
 ## SYNOPSIS
@@ -13,7 +7,7 @@ Modifies Unity storage system.
 
 ```
 Set-UnitySystem [-session <Object>] [[-ID] <String>] [-name <String>] [-isUpgradeCompleted <Boolean>]
- [-isEulaAccepted <Boolean>] [-isAutoFailbackEnabled <Boolean>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-isEulaAccepted <Boolean>] [-isAutoFailbackEnabled <Boolean>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -151,9 +145,6 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -1,9 +1,3 @@
----
-external help file: Unity-Powershell-help.xml
-online version: https://github.com/equelin/Unity-Powershell
-schema: 2.0.0
----
-
 # Set-UnityvCenter
 
 ## SYNOPSIS
@@ -14,13 +8,13 @@ Modifies an existing vCenter and optionally discovers any ESXi host managed by t
 ### Set (Default)
 ```
 Set-UnityvCenter [-session <Object>] -ID <Object> [-NewAddress <String>] [-NewUsername <String>]
- [-NewPassword <String>] [-Description <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-NewPassword <String>] [-Description <String>] [-WhatIf] [-Confirm]
 ```
 
 ### ImportHosts
 ```
 Set-UnityvCenter [-session <Object>] -ID <Object> -Username <String> -Password <String> [-ImportHosts]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -214,9 +208,6 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

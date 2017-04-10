@@ -1,6 +1,8 @@
 site_name: Unity-Powershell Documentation
 repo_url: https://github.com/equelin/Unity-Powershell
+site_author: Erwan Quelin
 theme: readthedocs
+copyright: "Unity-Powershell is licensed under the <a href='https://github.com/equelin/Unity-Powershell/blob/master/LICENSE'>MIT license</a>"
 pages:
   - Home: index.md
   - Introduction:
@@ -18,9 +20,12 @@ pages:
     - Get-UnityBasicSystemInfo: References/Get-UnityBasicSystemInfo.md
     - Get-UnityCIFSServer: References/Get-UnityCIFSServer.md
     - Get-UnityCIFSShare: References/Get-UnityCIFSShare.md
+    - Get-UnityDae: References/Get-UnityDae.md
     - Get-UnityDisk: References/Get-UnityDisk.md
     - Get-UnityDiskGroup: References/Get-UnityDiskGroup.md
     - Get-UnityDNSServer: References/Get-UnityDNSServer.md
+    - Get-UnityDpe: References/Get-UnityDpe.md
+    - Get-UnityEncryption: References/Get-UnityEncryption.md
     - Get-UnityESXi: References/Get-UnityESXi.md
     - Get-UnityEthernetPort: References/Get-UnityEthernetPort.md
     - Get-UnityFastCache: References/Get-UnityFastCache.md
@@ -53,6 +58,9 @@ pages:
     - Get-UnitySMTPServer: References/Get-UnitySMTPServer.md
     - Get-UnitySnap: References/Get-UnitySnap.md
     - Get-UnitySnapSchedule: References/Get-UnitySnapSchedule.md
+    - Get-UnitySsc: References/Get-UnitySsc.md
+    - Get-UnitySsd: References/Get-UnitySsd.md
+    - Get-UnityStorageProcessor: References/Get-UnityStorageProcessor.md
     - Get-UnitystorageResource: References/Get-UnitystorageResource.md
     - Get-UnitySystem: References/Get-UnitySystem.md
     - Get-UnityUser: References/Get-UnityUser.md
@@ -133,3 +141,4 @@ pages:
     - Test-UnityUCAlert: References/Test-UnityUCAlert.md
     - Test-UnityUIAlert: References/Test-UnityUIAlert.md
     - Update-UnityvCenter: References/Update-UnityvCenter.md
+

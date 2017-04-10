@@ -1,9 +1,3 @@
----
-external help file: Unity-Powershell-help.xml
-online version: https://github.com/equelin/Unity-Powershell
-schema: 2.0.0
----
-
 # Get-UnityLUN
 
 ## SYNOPSIS
@@ -13,12 +7,12 @@ Queries the EMC Unity array to retrieve informations about block LUN.
 
 ### Name (Default)
 ```
-Get-UnityLUN [-session <Object>] [-Name <String[]>] [<CommonParameters>]
+Get-UnityLUN [-session <Object>] [-Name <String[]>]
 ```
 
 ### ID
 ```
-Get-UnityLUN [-session <Object>] [-ID <String[]>] [<CommonParameters>]
+Get-UnityLUN [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -87,9 +81,6 @@ Default value: *
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

@@ -18,7 +18,7 @@ Function Format-Type {
 
     Process {
         Switch -Wildcard ($Type) {
-            'Integer' {$output = 'Int'}
+            'Integer' {$output = 'Object'}
             'Boolean' {$output = 'Bool'}
             'String' {$output = 'String'}
             'List<*>' {

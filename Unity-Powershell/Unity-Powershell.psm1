@@ -5,8 +5,8 @@ param (
 )
 
 #Get Class, public and private function definition files
-$Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue )
-$Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue )
+$Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\ -Recurse -ErrorAction SilentlyContinue | Where-Object {$_.name -like '*.ps1'})
+$Private = @( Get-ChildItem -Path $PSScriptRoot\Private\ -Recurse -ErrorAction SilentlyContinue | Where-Object {$_.name -like '*.ps1'})
 
 #Dot source the files - idea from https://becomelotr.wordpress.com/2017/02/13/expensive-dot-sourcing/
 Foreach($import in @($Public + $Private))
@@ -17,7 +17,7 @@ Foreach($import in @($Public + $Private))
   } Else {
     Try {
       Write-Verbose "Import file: $($import.fullname)"
-      $ExecutionContext.InvokeCommand.InvokeScript($false, ([scriptblock]::Create([io.file]::ReadAllText($import))), $null, $null)
+      $ExecutionContext.InvokeCommand.InvokeScript($false, ([scriptblock]::Create([io.file]::ReadAllText($import.fullname))), $null, $null)
     }
     Catch {
       Write-Error -Message "Failed to import file $($import.fullname): $_"
@@ -3568,6 +3568,3131 @@ Enum VVolTypeEnum {
   Swap = 2 #Swap VVol type.  
   Memory = 3 #Memory VVol type.  
   Other = 99 #Other VVol type.  
+}
+
+
+
+###Classes added automatically
+
+#START
+<#
+  Name: UnityaclUser
+  Description: A user associated with a CIFS share level ACL.  
+#>
+Class UnityaclUser {
+
+  #Properties
+
+  [String]$id #Unique instance id.  
+  [String]$sid #Windows user id.  
+  [String]$domainName #Windows domain name.  
+  [String]$userName #User name.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityaffectedResource
+  Description: affectedResource is a resource entity affected by a job instance.  
+#>
+Class UnityaffectedResource {
+
+  #Properties
+
+  [String]$resource #The resource name of the referenced instance (for GUI navigation).  
+  [String]$id #The id of the referenced instance.  
+  [String]$name #The name of the reference instance, if applicable.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityalertConfigSNMPTarget
+  Description: Information about the Simple Network Management Protocol (SNMP) destinations used by alerts. <br/> The system uses SNMP to transfer system alerts as traps to an SNMP destination host. Traps are asynchronous messages that notify the SNMP destination when system and user events occur.  
+#>
+Class UnityalertConfigSNMPTarget {
+
+  #Properties
+
+  [String]$id #Unique identifier of the alertConfigSNMPTarget instance.  
+  [Object]$address #Host address and port for the SNMP destination. The default UDP port number is 162.  
+  [SNMPVersionEnum]$version #SNMP version used to send the traps or informs.  
+  [String]$username #Username used to access the SNMP destination.  
+  [SNMPAuthProtocolEnum]$authProto #Protocol used to authenticate access to the SNMP destination.  
+  [SNMPPrivacyProtocolEnum]$privacyProto #Protocol used to enable privacy on the SNMP destination. The privacy protocol encrypts the SNMP packets.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitybaseRequest
+  Description: This object is used to represent a generic POST request action. It contains different set of strongly typed properties for different concrete actions.  
+#>
+Class UnitybaseRequest {
+
+  #Properties
+
+
+  #Methods
+
+}
+
+<#
+  Name: UnitybaseResponse
+  Description: This is used to represent a generic method response. It contains different set of strongly typed properties for different actions.  
+#>
+Class UnitybaseResponse {
+
+  #Properties
+
+
+  #Methods
+
+}
+
+<#
+  Name: UnityblockHostAccess
+  Description: Host access settings for the storage resource. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnityblockHostAccess {
+
+  #Properties
+
+  [Object]$host #Host associated with the storage resource, as defined by the host resource type.  
+  [HostLUNAccessEnum]$accessMask #Host access permissions.  
+  [BlockHostAccessEnum]$productionAccess #Production LUN(s) access mask.  
+  [BlockHostAccessEnum]$snapshotAccess #Snapshot LUN(s) access mask.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityblockHostAccessParam
+  Description: Host access settings for changing host access of LUNs. <br/> <br/> This resource type is embedded in the lunParameters embedded type.  
+#>
+Class UnityblockHostAccessParam {
+
+  #Properties
+
+  [Object]$host #Host to grant access to LUN, as defined by host type.  
+  [HostLUNAccessEnum]$accessMask #Host access mask.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycandidateSoftwareVersion
+  Description: Information about system software upgrades and language packs uploaded to the storage system and available to install.  
+#>
+Class UnitycandidateSoftwareVersion {
+
+  #Properties
+
+  [String]$id #Unique identifier of the candidateSoftwareVersion instance.  
+  [String]$version #Version of the candidate software.  
+  [Object]$revision #Revision number of the candidate software.  
+  [DateTime]$releaseDate #Release date of the candidate software.  
+  [UpgradeTypeEnum]$type #Type of the candidate software.  
+  [Bool]$rebootRequired #Package requires reboot of bo5th SPs, one at a time, with services remaining available.  
+  [Bool]$canPauseBeforeReboot #Package can utilize the 'pause' feature allowing the user to choose their disruptive window.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycapabilityProfile
+  Description: An object representing VASA 2.0 SPBM capability profile. Capability profiles can be queried, created, modified and deleted via the REST API. Capability profiles can then be queried via VASA 2.0 API by vSphere environment and leveraged for policy based provisioning of virtual volumes.  
+#>
+Class UnitycapabilityProfile {
+
+  #Properties
+
+  [String]$id #Unique identifier of the capability profile.  
+  [String]$vmwareUUID #Automatically generated unique identifier of the capability profile exposed via VASA 2.0 protocol. It will conform to RFC 3151 section 1.1.  
+  [String]$name #The name of the capability profile.  
+  [String]$description #Capability profile description.  
+  [Object]$pool #The storage pool the capability profile is associated with.  
+  [DiskTierEnum[]]$driveTypes #Supported drive types for the capability profile.  
+  [FastCacheStateEnum[]]$fastCacheStates #Supported fast cache states for the capability profile.  
+  [RaidTypeEnum[]]$raidTypes #Supported RAID types for the capability profile.  
+  [SpaceEfficiencyEnum[]]$spaceEfficiencies #Supported space efficiency choices for the capability profile.  
+  [TieringPolicyEnum[]]$tieringPolicies #Supported tiering policies for the capability profile.  
+  [ServiceLevelEnum[]]$serviceLevels #Supported service level for the capability profile.  
+  [String[]]$usageTags #Associated usage tags for the capability profile.  
+  [Bool]$inUse #Whether any virtual volumes have been created using this capability profile.  
+  [UnityHealth]$health #Health information for the capability profile, as defined by the health resource type.  
+  [Object[]]$virtualVolumes #The virtualVolumes associated with the current capabilityProfile
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycapabilityProfileRecommendation
+  Description: An entity representing a recommendation for a VASA 2.0 SPBM capability profile.  
+#>
+Class UnitycapabilityProfileRecommendation {
+
+  #Properties
+
+  [DiskTierEnum[]]$driveTypes #List of drive types for individual capabilities.  
+  [FastCacheStateEnum[]]$fastCacheStates #List of fast cache states for individual capabilities.  
+  [RaidTypeEnum[]]$raidTypes #List of RAID types for individual capabilities.  
+  [SpaceEfficiencyEnum[]]$spaceEfficiencies #List of space efficiencies for individual capabilities.  
+  [TieringPolicyEnum[]]$tieringPolicies #List of tiering policies for individual capabilities.  
+  [ServiceLevelEnum[]]$serviceLevels #List of service levels for individual capabilities.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycertificateScope
+  Description: Scope of the certificate: <ul> <li>If the certificate scope is global, the attribute values are blank.</li> <li>If the certificate scope is local, the scope is defined by one attribute value (for queries) or one argument value (for create and import operations). For example, if the scope of the certificate is NAS server nas01, the value of the nasServer attribute would be nas01, and all other attributes would be blank.</li> </ul> <p> For information about which scopes apply to which services, see the help topic for the ServiceTypeEnum.  
+#>
+Class UnitycertificateScope {
+
+  #Properties
+
+  [Object]$nasServer #NAS Server with which the certificate is associated.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycifsFilesystemParameters
+  Description: Settings for a SMB (also known as CIFS) file system.. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitycifsFilesystemParameters {
+
+  #Properties
+
+  [Bool]$isCIFSSyncWritesEnabled #Indicates whether the CIFS synchronous writes option is enabled for the file system. Values are: <ul> <li>true - CIFS synchronous writes option is enabled.</li> <li>false - CIFS synchronous writes option is disabled.</li> </ul>  
+  [Bool]$isCIFSOpLocksEnabled #Indicates whether opportunistic file locks are enabled for the file system. Values are: <ul> <li>true - CIFS opportunistic file locks are enabled.</li> <li>false - CIFS opportunistic file locks are disabled.</li> </ul>  
+  [Bool]$isCIFSNotifyOnWriteEnabled #Indicates whether the system generates a notification when the file system is written to. Values are: <ul> <li>true - System generates a notification when the file system is written to.</li> <li>false - System does not generate a notification when the file system is written to.</li> </ul>  
+  [Bool]$isCIFSNotifyOnAccessEnabled #Indicates whether the system generates a notification when a user accesses the file system. Values are: <ul> <li>true - System generates a notification when a user accesses the file system.</li> <li>false - System does not generate a notification when a user accesses the file system.</li> </ul>  
+  [Object]$cifsNotifyOnChangeDirDepth #Indicates the lowest directory level to which the enabled notifications apply, if any.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycifsShareACE
+  Description: Access Control Entry (ACE) settings for CIFS shares. <br/> <br/> This resource type is embedded in the storageResource type.  
+#>
+Class UnitycifsShareACE {
+
+  #Properties
+
+  [String]$sid #Domain user or group Security Identifier (SID).  
+  [ACEAccessTypeEnum]$accessType #ACE type. Set this value to <b>None</b> to remove the ACE for a SID from a CIFS share.  
+  [ACEAccessLevelEnum]$accessLevel #ACE level.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycifsShareCreate
+  Description: (Applies to SMB (also known as CIFS) file shares.) Parameters used for creating a CIFS share when creating or modifying a file system. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitycifsShareCreate {
+
+  #Properties
+
+  [String]$path #Local path to a location within a file system. <br/> <br/> <font color=#0f0f0f>By default, the system creates a share to the root of the file system (top-most directory) at file system creation time. </font>This path specifies the unique location of the file system on the storage system. CIFS shares allow you to create multiple network shares with the same local path. You can specify different host-side access controls for different users, while setting up network shares within the file system to access common content. <br/> <br/> If you want the CIFS network shares within the same file system to access different content, you must first create a share to the root of the file system. Then, you can connect from a Windows host, create additional directories from Windows, and create corresponding network shares using the REST API, Unisphere GUI, or Unisphere CLI.  
+  [String]$name #Name of the CIFS share unique to NAS server.  
+  [Object]$cifsServer #CIFS server to use for CIFS share creation, as defined by the cifsServer type.  
+  [Object]$cifsShareParameters #CIFS share settings, as defined by the cifsShareParameters type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycifsShareDelete
+  Description: Parameters used for deleting a CIFS share when modifying a file system. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitycifsShareDelete {
+
+  #Properties
+
+  [Object]$cifsShare #CIFS share to delete, as defined by the cifsShare type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycifsShareModify
+  Description: Parameters used for modifying a CIFS share when modifying a file system. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitycifsShareModify {
+
+  #Properties
+
+  [Object]$cifsShare #CIFS share to modify, as defined by the cifsShare type.  
+  [Object]$cifsShareParameters #CIFS share settings, as defined by the cifsShareParameters type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycifsShareParameters
+  Description: Settings for a CIFS share. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitycifsShareParameters {
+
+  #Properties
+
+  [String]$description #CIFS share description.  
+  [Bool]$isReadOnly #Indicates whether the CIFS share is read-only. Values are: <ul> <li>true - CIFS share is read-only.</li> <li>false - CIFS share is read-write.</li> </ul>  
+  [Bool]$isEncryptionEnabled #Indicates whether CIFS encryption for Server Message Block (SMB) 3.0 is enabled for the CIFS share. Values are: <ul> <li>true - CIFS encryption for SMB 3.0 is enabled. <li>false - CIFS encryption for SMB 3.0 is disabled. </ul>  
+  [Bool]$isContinuousAvailabilityEnabled #Indicates whether continuous availability for SMB 3.0 is enabled for the CIFS share. Values are: <ul> <li>true - Continuous availability for SMB 3.0 is enabled for the CIFS share. <li>false - Continuous availability for SMB 3.0 is disabled for the CIFS share. </ul>  
+  [Bool]$isACEEnabled #Indicates whether the CIFS share access-level permissions are enabled. Values are: <ul> <li>true - CIFS share access-level permissions are enabled. <li>false - CIFS share access-level permissions are disabled. </ul>  
+  [Object[]]$addACE #Users, domain users, or group Security Identifiers (SIDs), and associated access-level permissions, to add to the access list, as defined by cifsShareACE resource type.  
+  [String[]]$deleteACE #Users, domain users, or group Security Identifiers (SIDs) to remove from the access list.  
+  [Bool]$isABEEnabled #Enumerate file with read access and directories with list access in folder listings. Values are: <ul> <li> true - Enumerating is enabled. </li> <li> false - Enumerating is disabled. </li> </ul>  
+  [Bool]$isBranchCacheEnabled #Branch Cache optimizes traffic between the NAS server and Branch Office Servers. Values are: <ul> <li> true - Branch Cache is enabled. </li> <li> false - Branch Cache is disabled. </li> </ul>  
+  [CifsShareOfflineAvailabilityEnum]$offlineAvailability #Offline Files store a version of the shared resources on the client computer in the file system cache, a reserved portion of disk space, which the client computer can access even when it is disconnected from the network.  
+  [String]$umask #The default UNIX umask for new files created on the share.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitycompressionParameters
+  Description: Inline compression settings for the storage resource. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitycompressionParameters {
+
+  #Properties
+
+  [Bool]$isCompressionEnabled #Indicates whether inline compression is enabled or disabled for the storage resource. Values are: <ul> <li>true - (default)inline compression is enabled.</li> <li>false - inline compression is disabled.</li> </ul>  
+  [Object]$compressionSizeSaved #Storage resource saved space by inline compression  
+  [Object]$compressionPercent #Percent compression rate  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityconfigCaptureResult
+  Description: Information about Configuration Capture results in the storage system. <br/> <br/> Configuration Capture is a service feature which creates a snapshot of the current system configuration. It captures all of the necessary data for business intelligence analysis, helping diagnose issues. <br/> <br/>  
+#>
+Class UnityconfigCaptureResult {
+
+  #Properties
+
+  [String]$id #Unique identifier of the configCaptureResult instance.  
+  [String]$name #File name of the configCaptureResult instance.  
+  [DateTime]$creationTime #Date and time when the configCaptureResult file was created.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unitycrl
+  Description: Information about all Certificate Revocation Lists (CRLs) installed on the storage system. The CRL format is described in RFC 5280.  
+#>
+Class Unitycrl {
+
+  #Properties
+
+  [String]$id #Unique identifier of the crl instance.  
+  [ServiceTypeEnum]$service #Service with which the CRL is associated.  
+  [Object]$scope #Scope of the CRL.  
+  [Object]$version #CRL version.  
+  [String]$crlNumber #CRL number. This is equivalent to a serial number for the CRL.  
+  [SignatureAlgoTypeEnum]$signatureAlgorithm #CRL signature algorithm.  
+  [String]$issuer #Name of the CRL issuer.  
+  [DateTime]$thisUpdate #Date and time when the CRL was issued.  
+  [DateTime]$nextUpdate #Date and time when the next CRL will be issued.  
+  [Object[]]$certificates #List of revoked certificates.  
+  [String]$deltaCRLIndicator #Delta CRL indicator. The value of this attribute is based on the delta CRL extension, which is a CRL number. This value can be blank.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unitydae
+  Description: Information about Disk Array Enclosure (DAE) components in the storage system.  
+#>
+Class Unitydae {
+
+  #Properties
+
+  [String]$id #Unique identifier of the dae instance.  
+  [UnityHealth]$health #Health information for the DAE, as defined by the health resource type.  
+  [Bool]$needsReplacement #Indicates whether the DAE needs replacement. Values are: <ul> <li>true - DAE needs replacement.</li> <li>false - DAE does not need replacement.</li> </ul>  
+  [Object]$parent #Resource type and unique identifier of the DAE's parent enclosure.  
+  [Object]$slotNumber #The enclosure number or position where the DAE is located on the bus.  
+  [String]$name #DAE name.  
+  [String]$manufacturer #Manufacturer of the DAE.  
+  [String]$model #Manufacturer's model number for the DAE.  
+  [String]$emcPartNumber #EMC part number for the DAE.  
+  [String]$emcSerialNumber #EMC serial number for the DAE.  
+  [String]$vendorPartNumber #Vendor part number for the DAE.  
+  [String]$vendorSerialNumber #Vendor serial number for the DAE.  
+  [EnclosureTypeEnum]$enclosureType #DAE enclosure type.  
+  [Object]$busId #Identifier of the bus used by the DAE.  
+  [DiskTypeEnum[]]$driveTypes #Disk type of the disks in the DAE.  
+  [Object]$currentPower #Current amount of power used by the DAE.  
+  [Object]$avgPower #Average amount of power used by the DAE. The system uses a one hour window of 30-second samples to determine this value.  
+  [Object]$maxPower #Maximum amount of power used by the DAE. The system uses a one hour window of 30-second samples to determine this value.  
+  [Object]$currentTemperature #Current temperature of the DAE.  
+  [Object]$avgTemperature #Average temperature of the DAE. The system uses a one hour window of 30-second samples to determine this value.  
+  [Object]$maxTemperature #Maximum temperature of the DAE. The system uses a one hour window of 30-second samples to determine this value.  
+  [Object]$currentSpeed #Current speed of the DAE SAS disk connection.  
+  [Object]$maxSpeed #Maximum speed of the DAE SAS disk connection. The system uses a one hour window of 30-second samples to determine this value.  
+  [Object]$parentSystem #Parent system of the Disk Array Enclosure (DAE).  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitydataCollectionResult
+  Description: Information about Data Collection results in the storage system. <br/> <br/> Data Collection is a service feature used for gathering system logs, customer configurations, system statistics and runtime data from storage system. <br/> <br/>  
+#>
+Class UnitydataCollectionResult {
+
+  #Properties
+
+  [String]$id #Unique identifier of the dataCollectionResult instance.  
+  [String]$name #File name of the dataCollectionResult instance.  
+  [DateTime]$creationTime #Date and time when the dataCollectionResult file was created.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unitydatastore
+  Description: Represents a VMware Datastore.  
+#>
+Class Unitydatastore {
+
+  #Properties
+
+  [String]$id #Unique instance id.  
+  [Object]$storageResource #storageResource that hosts the datastore.  
+  [String]$name #Friendly name of datastore displayed on vCenter.  
+  [DatastoreTypeEnum]$format #Format of datastore.  
+  [Object]$host #The host that owns this datastore.  
+  [Object]$sizeTotal #Size of the datastore in bytes reported by vCenter. Could be different from size of the associated storage resource.  
+  [Object]$sizeUsed #Used size of the datastore (in bytes) as reported by vCenter. This may be different from the used size of the associated storage resource. For VMware VMFS datastores, this provides information about the actual hosted file system allocation size.  
+  [Object[]]$vmDisks #The vmDisks associated with the current datastore
+  [Object[]]$vms #The vms associated with the current datastore
+
+  #Methods
+
+}
+
+<#
+  Name: UnitydhsmConnection
+  Description: When doing cloud archiving, the Cloud Tiering Applicance (a.k.a CTA) is responsible for moving the local data to cloud. On the other direction, when we need to bring the data back to local, DHSM server will read the data back via a pipe so called dhsm connection. This class represents this dhsm connection @author wangt23  
+#>
+Class UnitydhsmConnection {
+
+  #Properties
+
+  [String]$id #Unique instance id.  
+  [DhsmConnectionModeEnum]$mode #Mode of the connection.  
+  [RecallPolicyEnum]$readPolicy #The read policy when Unity recall data from secondary storage. <ul> <li>full-recalls the whole file to Unity on read request before the data is returned.</li> <li>passthrough-retrieves data without recalling the data to Unity</li> <li>partial-recalls only the blocks required to satisfy the client read request.</li> <li>none-specifies no override</li> </ul>  
+  [String]$secondaryUrl #Url of the secondary storage. If secondary storage is NFS or CIFS, this URL should point to them directly. If the secondary is cloud or Centera, this Url should point to CTA.  
+  [Object]$secondaryPort #Port of the secondary storage server, only applicable when secondary url points to CTA.  
+  [Object]$localPort #Local port of the DHSM connections  
+  [String]$secondaryUsername #Defines the username the storage array uses if HTTP digest authentication is required by the secondary storage.  
+  [Object]$timeout #Connection timeout when the connection is established to the secondary storage. If recall does not return within the timeout, the NAS server will try another DhsmConnection.  
+  [Object]$filesystem #File system on which the connection is created.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitydhsmServer
+  Description: Information about the ASA/DHSM server of a NAS server. You can configure one ASA/DHSM server per NAS server. <br/> <br/> ASA stands for Advanced Storage Access. ASA allows VMware administrators to manage appropriately configured host configurations by taking advantage of advanced file operations that optimize NFS storage utilization. Once ASA is enabled on the NAS server, EMC's VSI Unified Storage Management tool can be utilized for the following: <ul> <li>Simplifying the process of creating NFS datastores,</li> <li>Compressing virtual machines in NFS datastores,</li> <li>Reducing the amount of storage consumed by virtual machines by using compression and Fast Clone technologies. The cloning functions include fast clones (thin copy/snaps) of Virtual Machine Disk (VMDF) files and full clones (full copy) of Virtual Machine Disk (VMDF) files.</li> </ul>  
+#>
+Class UnitydhsmServer {
+
+  #Properties
+
+  [String]$id #Unique identifier of the dhsmServer instance  
+  [Object]$nasServer #NAS server that is configured with these DHSM settings.  
+  [String]$username #User name for authentication to the DHSM/ASA server.  
+  [Bool]$isHTTPSEnabled #Require SSL (HTTPS) for DHSM requests to this DHSM server.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitydiskParameters
+  Description: Disk settings (disk ID and tier) to add a disk to a storage pool.  
+#>
+Class UnitydiskParameters {
+
+  #Properties
+
+  [Object]$disk #Disk identifier.  
+  [Object]$tier #Storage tier to which the disk should be assigned.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unitydpe
+  Description: Information about Disk Processor Enclosures (DPEs) in the storage system.  
+#>
+Class Unitydpe {
+
+  #Properties
+
+  [String]$id #Unique identifier of the dpe instance.  
+  [UnityHealth]$health #Health information for the DPE, as defined by the health resource type.  
+  [Bool]$needsReplacement #Indicates whether the DPE needs replacement. Values are: <ul> <li>true - DPE needs replacement.</li> <li>false - DPE does not need replacement.</li> </ul>  
+  [Object]$parent #Resource type and unique identifier of the DPE's parent enclosure.  
+  [Object]$slotNumber #The enclosure number or position where the DPE is located on the bus.  
+  [String]$name #DPE name.  
+  [String]$manufacturer #Manufacturer of the DPE.  
+  [String]$model #Manufacturer's model number for the DPE.  
+  [String]$emcPartNumber #EMC part number for the DPE.  
+  [String]$emcSerialNumber #EMC serial number for the DPE.  
+  [String]$vendorPartNumber #Vendor part number for the DPE.  
+  [String]$vendorSerialNumber #Vendor serial number for the DPE.  
+  [EnclosureTypeEnum]$enclosureType #DPE enclosure type.  
+  [Object]$busId #Identifier of the SAS bus used by the DPE.  
+  [DiskTypeEnum[]]$driveTypes #Disk type of the disks in the DPE.  
+  [Object]$currentPower #Current amount of power used by the DPE.  
+  [Object]$avgPower #Average amount of power used by the DPE. The system uses a one hour window of 30-second samples to determine this value.  
+  [Object]$maxPower #Maximum amout of power used by the DPE. The system uses a one hour window of 30-second samples to determine this value.  
+  [Object]$currentTemperature #Current temperature of the DPE.  
+  [Object]$avgTemperature #Average temperature of the DPE. The system uses a one hour window of 30-second samples to determine this value.  
+  [Object]$maxTemperature #Maximum temperature of the DPE. The system uses a one hour window of 30-second samples to determine this value.  
+  [Object]$currentSpeed #Current speed of the DPE SAS disk connection.  
+  [Object]$maxSpeed #Maximum speed of the DPE SAS disk connection. The system uses a one hour window of 30-second samples to determine this value.  
+  [Object]$parentSystem #Parent system of the Disk Processor Enclosure (DPE).  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityelementImport
+  Description: Member element import details in an import session.  
+#>
+Class UnityelementImport {
+
+  #Properties
+
+  [Object]$srcElement #Source element of the element import  
+  [Object]$targetElement #Target element of the element import  
+  [UnityHealth]$health #Health information for the import element, as defined by the health resource type.  
+  [Object]$syncProgress #Import sync progress details.  
+  [ImportStateEnum]$state #State of element import.  
+  [Object]$targetImportIf #Target replication interface for nas import data transfer between source system and target system.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unityencryption
+  Description: Information about the data encryption of the storage system. <br/> <br/>  
+#>
+Class Unityencryption {
+
+  #Properties
+
+  [String]$id #Unique identifier of the encryption instance.  
+  [EncryptionModeEnum]$encryptionMode #Encryption mode of the array. At present only Controller Based Encryption (CBE) mode is supported.  
+  [EncryptionStatusEnum]$encryptionStatus #Encryption status.  
+  [Float]$encryptionPercentage #Percentage of storage (in-place data) encrypted on the array. The percentage value will range from 0.00 to 100. Once the encryption is activated on the array, encryption percentage will not dip as the new data is written because the new data will be encrypted on the fly.  
+  [KeyManagerBackupKeysStatusEnum]$keyManagerBackupKeyStatus #Key store back up status.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityesrsParam
+  Description: Information about the EMC Remote Support (ESRS) configuration<br/> <br/> Unity Remote Support is enabled with the EMC&#8217;s leading remote support platform: EMC Secure Remote Support (ESRS). ESRS is a remote monitoring and support feature that provides authorized personnel with EMC remote access capabilities to storage systems via a secure and encrypted tunnel. The secure tunnel that ESRS establishes between the storage system and systems on the EMC network can be used to transfer files out to the storage system or back to EMC.<br/> <br/> ESRS provides the following features in providing an end-to-end remote support solution:<br/> <br/> <ul> <li>Automation - IP based connection enables fast remote diagnosis and repair of potential problems before an impact to business operations is noticed.</li> <li>Authentication - Advanced security features such as AES 256-bit encryption and RSA digital certificates ensure data privacy.</li> <li>Authorization - Customizable policies that you control include the ability to allow or deny remote support sessions.</li> <li>Audit - Detailed audit capabilities enable compliance with regulatory and internal business requirements.</li> </ul> <br/> ESRS offers two remote support solutions:<br/> <ul> <li>Integrated solution, which uses ESRS Virtual Edition (ESRS V3) technology integrated into the storage system to connect with EMC</li> <li>Centralized solution, which uses the ESRS Virtual Edition (ESRS V3) to connect with EMC</li> </ul> <br/> Setting up Remote Support requires: <br/> <ul> <li>An installed EMC Support license</li> <li>Valid support credentials</li> <li>A configured DNS server</li> </ul> <br/> For information about ESRS components and setup, go to the support website.<br/> Note that all proxy configuration for integrated support is now available from the supportProxy object. These properties proxyIsEnabled,proxyStatus,proxyAddress,proxyIsHTTP,proxyUserName are deprecated and will be removed in a future release. <br/> <br/> <b>Examples</b> <br/> <br/> <html> <head> <style> div.examplebox { background-color: #eff5fa; width: 600px; padding: 5px; border: 2px solid black; } </style> </head> <body> <br/> <b>Series operations need to perform to enable Integrated Remote Support</b><br/> <br/> Step 1: Accept EULA. The EULA must be accepted before any other configurations. <div class="examplebox"> <p> POST /api/instances/esrsParam/0/action/modify <br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;isEsrsVeEulaAccepted&quot; : &quot;true&quot;<br/> }<br/> </p> </div> <br/> <br/> Step 2: Update contact infomation in systemInformation object. EMC will use this information to contact end user when errors detected. <div class="examplebox"> <p> POST /api/instances/systemInformation/0/action/modify <br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;contactFirstName&quot; : &quot;Jill&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;contactLastName&quot; : &quot;Valentine&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;contactCompany&quot; : &quot;Umbrella Corporation&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;contactEmail&quot; : &quot;jill.valentine@umbrella.com&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;contactPhone&quot; : &quot;111-111-1111&quot;<br/> }<br/> </p> </div> <br/> <br/> Step 3: Set proxy server if the user wants to configure Integrated Remote Support with a proxy server. This step can be skipped if user doesn't want to use proxy server. <div class="examplebox"> <p> POST /api/instances/supportProxy/0/action/modify <br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;isEnabled&quot; : &quot;true&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;address&quot; : &quot;10.105.221.123:1080&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;protocol&quot; : &quot;1&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;username&quot; : &quot;darthv&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;password&quot; : &quot;password&quot;<br/> }<br/> </p> </div> <br/> <br/> Step 4: Validate Network connectivity between Integrated Remote Support client and EMC servers. <div class="examplebox"> <p> POST /api/instances/esrsParam/0/action/checkNetwork <br/> { <br/> }<br/> </p> </div> <br/> <br/> Following steps are try to get the available sites for the current system, select the correct one and set it into Integrated Remote Support client.<br/> Step 5: Request for an access code. This access code will be used later to get the available sites. <div class="examplebox"> <p> POST /api/instances/esrsParam/0/action/requestAccessCode <br/> { <br/> }<br/> </p> </div> <br/> <br/> Step 6: Get the available sites with the access code. <div class="examplebox"> <p> POST /api/instances/esrsParam/0/action/getAvailableSites <br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;accessCode&quot; : &quot;243857&quot;<br/> }<br/> </p> </div> <br/> <br/> Step 7: Set siteId. Select the correct site id from the returned sites in previous request. <div class="examplebox"> <p> POST /api/instances/esrsParam/0/action/modify <br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;siteId&quot; : &quot;324546&quot;<br/> }<br/> </p> </div> <br/> <br/> Now, Integration Remote Support is enabled. <br/> <br/> <b>Disabling Integrated Remote Support</b><br/> <br/> If a proxy server or Policy Manager are enabled, they will automatically be disabled.<br/> <br/> <div class="examplebox"> <p> POST /api/instances/esrsParam/0/action/modify <br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;enabled&quot; : &quot;false&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;isCentralized&quot; : &quot;false&quot;<br/> }<br/> </p> </div> <br/> <br/> <b>Checking the Integrated Remote Support status</b><br/> <br/> <div class="examplebox"> <p> GET /api/types/esrsParam/instances?fields=enabled,isCentralized <br/> <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;content&quot;:<br/> &nbsp;&nbsp;&nbsp;&nbsp;{<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;isCentralized&quot; : &quot;false&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;status&quot; : 2<br/> &nbsp;&nbsp;&nbsp;&nbsp;}<br/> <br/> </p> </div> <br/> <br/> <b>Checking the Integrated Remote Support configuration</b><br/> <br/> <div class="examplebox"> <p> GET /api/types/esrsParam/instances?fields=enabled,isCentralized,status, statusDescription::@enum(status)<br/> <br/> Sample response:<br/> <br/> &quot;content&quot;:<br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;enabled&quot; : &quot;true&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;isCentralized&quot; : &quot;false&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;status&quot; : &quot;2&quot;<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;statusDescription&quot; : &quot;connected&quot;<br/> }<br/> <br/> The statusDescription attribute is a calculated attribute that translates the normalized status value into a user friendly string.<br/> </p> </div> <br/> <br/> <b>Enabling Centralized Remote Support</b><br/> <br/> <div class="examplebox"> <p> POST /api/instances/esrsParam/0/action/modify <br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;enabled&quot; : &quot;true&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;isCentralized&quot; : &quot;true&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;esrsVeAddress&quot; : &quot;10.105.221.123&quot;<br/> }<br/> </p> </div> <br/> <br/> <b>Modifying the Centralized Remote Support appliance</b><br/> <br> This example disconnects the storage system from the current ESRS VE appliance and reconnects it to a new one.<br/> <br/> <div class="examplebox"> <p> POST /api/instances/esrsParam/0/action/modify <br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;enabled&quot; : &quot;true&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;isCentralized&quot; : &quot;true&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;esrsVeAddress&quot; : &quot;myveserver.acme.com:2135&quot;<br/> }<br/> </p> </div> <br/> <br/> <b>Disabling Centralized Remote Support</b><br/> <br/> <div class="examplebox"> <p> POST /api/instances/esrsParam/0/action/modify <br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;enabled&quot; : &quot;false&quot;<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;isCentralized&quot; : &quot;true&quot;,<br/> }<br/> </p> </div> </body> </html> <br/> <br/> * <br/> <br/> <b>Switching between Integrated and Centralized Remote Support</b><br/> <br/> This example assumes that Integrated Remote Support is enabled. It will be disabled before the Centralized Remote Support is enabled.<br/> <br/> <div class="examplebox"> <p> POST /api/instances/esrsParam/0/action/modify <br/> { <br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;enabled&quot; : &quot;true&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;isCentralized&quot; : &quot;true&quot;,<br/> &nbsp;&nbsp;&nbsp;&nbsp;&quot;esrsVeAddress&quot; : &quot;10.105.221.123&quot;<br/> }<br/> </p> </div>  
+#>
+Class UnityesrsParam {
+
+  #Properties
+
+  [String]$id #Unique identifier of the Remote Support instance.<br/> <br/> --eng This value is always 0, because at any given time there can only one remote support solution enabled.  
+  [Bool]$enabled #Indicates whether Remote Support is enabled<br/> <br/> Values are:<br/> <ul> <li>true - Remote Support is enabled.</li> <li>false - Remote Support is disabled.</li> </ul> <br/> See <i>isCentralized</i> to view the type of Remote Support.  
+  [Bool]$isCentralized #Indicates the type of Remote Support that is configured<br/> <br/> Values are:<br/> <ul> <li>true - Centralized Remote Support is configured</li> <li>false - Integrated Remote Support is configured</li> </ul> <br/> This attribute is not valid if <i>enabled</i> is <i>false</i>.  
+  [EsrsStatusEnum]$status #Remote Support status  
+  [Object]$esrsVeAddress #Centralized Remote Support ESRS VE appliance.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityesxDatastore
+  Description: Information about the ESX datastores used for configuring the metrics service.  
+#>
+Class UnityesxDatastore {
+
+  #Properties
+
+
+  #Methods
+
+}
+
+<#
+  Name: Unityevent
+  Description: Information about the events reported by the storage system. <br/> <br/> The system monitors and reports on a variety of system events. It collects the events and writes them to the user log, which contains a record for each event. <br/> <br/> The health and alert providers promote some events to be alerts, which are usually events that require attention from the system administrator. For information about alerts, see the Help topic for the alert resource type. <br/> <br/> <b>In the username attribute, is the value N/A or blank if a user did not cause the event or the account is unavailable?</b>  
+#>
+Class Unityevent {
+
+  #Properties
+
+  [String]$id #Unique identifier of the event instance.  
+  [NodeEnum]$node #Storage Processor that generated the event.  
+  [DateTime]$creationTime #<ol> <li>Date and time when the event was created.</li> </ol>  
+  [SeverityEnum]$severity #Severity of the event.  
+  [String]$messageId #Identifier of the message, without arguments or localization.  
+  [String[]]$arguments #Arguments in the event message.  
+  [String]$message #Localized description of the event's cause or effects.  
+  [String]$username #If a user caused the event, and the user account still exists, the user associated with the event.  
+  [EventCategoryEnum]$category #Event category.  
+  [String]$source #System component that caused the event. This information is intended for service personnel.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfastVP
+  Description: System FAST VP settings. FAST VP allows performing automatic data relocation between tiers and rebalancing within a tier to improve storage performance. Currently there three types of relocations supported: <br/> <li>Scheduled relocations</li> <li>Manual relocations</li> <li>Rebalancing</li> <br/> Scheduled relocations are started according the schedule defined in this resource. Individual pools can be included to or excluded from the scheduled relocation process. <br/> Manual relocations can be performed on demand for each particular pool. <br/> Rebalancing is performed automatically on a pool extend event. <br/> The FAST VP object represents the status of scheduled relocation processes and allows to view or modify the scheduled relocation parameters. It also provides a means to pause or resume all the FAST VP relocation and rebalancing processes currently running on the system.  
+#>
+Class UnityfastVP {
+
+  #Properties
+
+  [String]$id #Unique instance id.  
+  [FastVPStatusEnum]$status #FAST VP status. The possible values are "Active" or "Paused".  
+  [FastVPRelocationRateEnum]$relocationRate #Relocation Rate to perform scheduled relocations.  
+  [Bool]$isScheduleEnabled #Indicates whether FAST VP scheduled relocations are enabled.  
+  [DayOfWeekEnum[]]$scheduleDays #Days of week to run scheduled relocations.  
+  [DateTime]$scheduleStartTime #Time of day to start scheduled relocation.  
+  [DateTime]$scheduleEndTime #Time of day at which scheduled relocation should end.  
+  [Object]$sizeMovingDown #Current estimate of the amount of data that the next scheduled relocation will move to a lower tier.  
+  [Object]$sizeMovingUp #Current estimate of the amount of data that the next scheduled relocation will move to a higher tier.  
+  [Object]$sizeMovingWithin #Current estimate of the amount of data that the next scheduled relocation will rebalance within a tier.  
+  [DateTime]$relocationDurationEstimate #Based on current amounts of data to move, this is the current estimate of how long a scheduled relocation would take.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfastVPParameters
+  Description: FAST VP settings for the storage resource. <br/> (Applies if FAST VP is supported on the system and the corresponding license is installed.) <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnityfastVPParameters {
+
+  #Properties
+
+  [TieringPolicyEnum]$tieringPolicy #FAST VP tiering policy for the storage resource.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileDNSServerSourceParameters
+  Description: For replication destination NAS servers, information about the corresponding source NAS server's DNS settings. <br/>  
+#>
+Class UnityfileDNSServerSourceParameters {
+
+  #Properties
+
+  [Object[]]$addresses #List of IP addresses of DNS servers of the source NAS server  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileEventSettings
+  Description: File Event Service supported protocols.  
+#>
+Class UnityfileEventSettings {
+
+  #Properties
+
+  [Bool]$isCIFSEnabled #Indicates whether file access over CIFS protocol will trigger sending events to the CEPA server.  
+  [Bool]$isNFSEnabled #Indicates whether file access over NFSv3 or NFSv4 protocols will trigger sending events to the CEPA server.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileEventsPool
+  Description: File Event Service pool is a pool of remote File Event Service servers (machines that run VEE and are capable to handle event notificatons from the NAS Server). NAS Server can have one or several (up to three) File Event Service pools. The File Event Service pool servers are responsible for: - maintaining a topology and state mapping of all consumer applications - delivering event type and associated event metadata through the publishing agent API <br/> <br/>  
+#>
+Class UnityfileEventsPool {
+
+  #Properties
+
+  [String]$id #Unique identifier of the File Event Service Pool instance.  
+  [Object]$eventsPublisher #Associated File Event Service identifier.  
+  [String]$name #Name assigned to the set of Windows servers where File Event Service software is installed.  
+  [Object[]]$servers #Addresses of the File Event Service servers.  
+  [Object[]]$sourceServers #For replication destination NAS servers, the list of File Event Service servers from the corresponding source NAS server.  
+  [FileEventTypesEnum[]]$preEvents #The list of pre-events. The NAS server sends request event notification to CEPA server before such event occurs and processes the response.  
+  [FileEventTypesEnum[]]$postEvents #The list of post-evenets. The NAS server sends notification after such event occrus.  
+  [FileEventTypesEnum[]]$postErrorEvents #The list of post-error events. The NAS server sends notification if such event generates an error.  
+  [ReplicationPolicyEnum]$replicationPolicy #Replication policy of the Events Pool.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileEventsPublisher
+  Description: File Event Service is a mechanism whereby applications can register to receive event notification and context from sources such as VNX(e). File Event Service is a part of VNX Event Enabler Framework (VEE). VEE provides the working environment for the CAVA and CEPA (Common Event Publishing Agent) facilities. The event publishing agent delivers to the application both event notification and associated context in one message. Context may consist of file metadata or directory metadata needed to decide business policy. The CEPA sub-facilities include: - Auditing.A mechanism for delivering post-events to registered consumer applications in a synchronous manner. Events are delivered individually in real-time. - CQM.A mechanism for delivering pre-events to registered consumer applications in a synchronous manner. Events are delivered individually in real-time, allowing the consumer application to exercise business policy on the event. - VCAPS.A mechanism for delivering post-events in asynchronous mode. The delivery cadence is based on a time period or a number of events. - MessageExchange.A mechanism for delivering post-events in asynchronous mode, when needed, without consumer use of the CEPA API. Events are published from CEPA to the RabbitMQ CEE_Events exchange. A consumer application creates a queue for itself in the exchange from which it can retrieve events. <br/> <br/>  
+#>
+Class UnityfileEventsPublisher {
+
+  #Properties
+
+  [String]$id #Unique identifier of the File Event Service instance.  
+  [Object]$nasServer #Associated NAS server identifier.  
+  [Bool]$isEnabled #State of File Event Servce is currently enabled.  
+  [UnityHealth]$health #Health information for the File Event Service, as defined by the health resource type.  
+  [DateTime]$heartbeat #Time interval to scan each CEPA server (in seconds) for online/offline status.  
+  [DateTime]$timeout #Timeout in ms while attempting to send event to a CEPA server to determine that is offline.  
+  [FileEventsPublisherFTLevelTypeEnum]$postEventPolicy #The fault tolerance policy for handling post-events.  
+  [Bool]$denyAccessWhenAllServersOffline #Behaviour when the File Event Service server did not answer. Values are: <ul> <li> false - indicates that nothing changes with I/O in case of File Event Service server is offline. </li> <li> true - indicates that all I/O is denied in case of File Event Service server is offline. </li> </ul>  
+  [String]$username #Name of a Windows user allowing Events Publishing to connect to CEPA servers. To ensure that a secure connection (via Microsoft RPC protocol) is used disable HTTP by setting isHttpEnabled to false.  
+  [Bool]$isHttpEnabled #Indicates whether connection to CEPA servers via HTTP is enabled. Default is true (enabled). When enabled, connection via HTTP is attempted first. If HTTP connection is disabled, or the connection fails, then connection through MSRPC is attempted if all CEPP server(s) are defined by FQDN. The SMB account of the NAS server in the AD comain is used to make the connection via MSRPC. Note that HTTP connections should only be used on secure networks, as it is neither SSL nor authenticated.  
+  [Object]$port #When HTTP is used to connect to the CEPA server(s), the port number to use. Default port number is 12228.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileInterfaceSourceParameters
+  Description: For an interface on a nasServers that is a replication destinations, this object contains the settings for corresponding interface on the source nasServer.  
+#>
+Class UnityfileInterfaceSourceParameters {
+
+  #Properties
+
+  [Object]$ipAddress #IP address of the network interface of the source NAS server  
+  [Object]$netmask #IPv4 netmask for the network interface of the source NAS server.  
+  [Object]$v6PrefixLength #IPv6 prefix length for the network interface of the source NAS server.  
+  [Object]$gateway #IPv4 or IPv6 gateway address for the network interface of the source NAS server.  
+  [Object]$vlanId #Virtual Local Area Network (VLAN) identifier for the network interface of the source NAS server.  
+  [Object]$ipPort #Physical port or link aggregation of the network interface of the source NAS server.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileKerberosServer
+  Description: Information about the Kerberos service used by the storage system for secure connections. You can configure one Kerberos settings object per NAS server. <br/> Kerberos is a distributed authentication service designed to provide strong authentication with secret-key cryptography. It works on the basis of "tickets" that allow nodes communicating over a non-secure network to prove their identity in a secure manner. When configured to act as a secure NFS server, the NAS server uses the RPCSEC_GSS security framework and Kerberos authentication protocol to verify users and services. You can configure a secure NFS environment for a multiprotocol NAS server or one that supports Unix-only shares. In this environment, user access to NFS file systems is granted based on Kerberos principal names. <br/>  
+#>
+Class UnityfileKerberosServer {
+
+  #Properties
+
+  [String]$id #Unique identifier of the Kerberos instance.  
+  [Object]$nasServer #NAS server that is configured with these Kerberos settings.  
+  [String]$realm #Kerberos Realm.  
+  [String[]]$addresses #Fully Qualified domain names of the Kerberos Key Distribution Center (KDC) servers.  
+  [Object]$portNumber #KDC servers TCP port. Default: 88.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileLDAPServer
+  Description: The LDAP settings object for the NAS Server. You can configure one LDAP settings object per NAS server. <br/> The Lightweight Directory Access Protocol (LDAP) is an application protocol for querying and modifying directory services running on TCP/IP networks. LDAP provides central management for network authentication and authorization operations by helping to centralize user and group management across the network. NAS server can use LDAP as a Unix Directory Service to map users, retrieve netgroups, and build a Unix credential. When an initial LDAP configuration is applied, the system checks for the type of LDAP server. It can be an Active Directory schema, iPlanet schema, or an RFC 2307 schema.  
+#>
+Class UnityfileLDAPServer {
+
+  #Properties
+
+  [String]$id #Unique identifier of the ldapServer instance.  
+  [Object]$nasServer #NAS server that is configured with these LDAP settings.  
+  [String]$authority #Name of the LDAP authority. Base Distinguished Name (BDN) of the root of the LDAP directory tree. The system uses the DN to bind to the LDAP service and locate in the LDAP directory tree to begin a search for information. <br/> <br/> The base DN can be expressed as a fully-qualified domain name or in X.509 format by using the attribute dc=. For example, if the fully-qualified domain name is mycompany.com, the base DN is expressed as dc=mycompany,dc=com.  
+  [String]$profileDN #For an iPlanet LDAP server, specifies the DN of the entry with the configuration profile.  
+  [Object[]]$serverAddresses #IP addresses of the associated LDAP servers.  
+  [Object]$portNumber #The TCP/IP port used by the NAS server to connect to the LDAP servers. Default value for LDAP is 389 and LDAPS is 636.  
+  [AuthenticationTypeEnum]$authenticationType #Type of authentication for the LDAP server.  
+  [LDAPProtocolEnum]$protocol #Type of LDAP protocol.  
+  [Bool]$verifyServerCertificate #Indicates whether Certification Authority certificate is used to verify the LDAP server certificate for secure SSL connections. Values are: <ul> <li> true - verifies LDAP server's certificate. </li> <li> false - doesn't verify LDAP server's certificate. </li> </ul>  
+  [String]$bindDN #Bind Distinguished Name (DN) to be used when binding.  
+  [Bool]$isCifsAccountUsed #Indicates whether CIFS authentication is used to authenticate to the LDAP server. Values are: <ul> <li> true - Indicates that the CIFS settings are used for Kerberos authentication. </li> <li> false - Indicates that Kerberos uses its own settings. </li> </ul>  
+  [String]$principal #Specifies the principal name for Kerberos authentication.  
+  [String]$realm #Specifies the realm name for Kerberos authentication.  
+  [SchemeTypeEnum]$schemeType #LDAP server scheme type.  
+  [ReplicationPolicyEnum]$replicationPolicy #Indicates the status of the LDAP servers addresses list in the NAS server operating as a replication destination. When a replicated LDAP servers list is created on the source NAS server, it is automatically synchronized to the destination.  
+  [Object]$sourceParameters #For replication destination NAS servers, information about the corresponding source NAS server's LDAP settings.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileLDAPServerSourceParameters
+  Description: For replication destination NAS servers, information about the corresponding source NAS server's LDAP settings. <br/>  
+#>
+Class UnityfileLDAPServerSourceParameters {
+
+  #Properties
+
+  [Object[]]$addresses #List of IP addresses of LDAP servers of the source NAS server  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileNDMPServer
+  Description: The NDMP server for the NAS Server. You can configure one NDMP server per NAS server. <br/> The Network Data Management Protocol (NDMP) provides a standard for backing up file servers on a network. NDMP allows centralized applications to back up file servers that run on various platforms and platform versions. NDMP reduces network congestion by isolating control path traffic from data path traffic, which permits centrally managed and monitored local backup operations. Storage systems support NDMP v2-v4 over the network. Direct-attach NDMP is not supported. This means that the tape drives need to be connected to a media server, and the NAS server communicates with the media server over the network. NDMP has an advantage when using multiprotocol file systems because it backs up the Windows ACLs as well as the UNIX security information.  
+#>
+Class UnityfileNDMPServer {
+
+  #Properties
+
+  [String]$id #Unique instance id.  
+  [Object]$nasServer #NAS server that is configured with these NDMP settings.  
+  [String]$username #User name for accessing the NDMP server.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileNISServer
+  Description: The NIS settings object for the NAS Server. You can configure one NIS settings object per NAS server. <br/> The Network Information Service (NIS) consists of a directory service protocol for maintaining and distributing system configuration information, such as user and group information, hostnames etc.  
+#>
+Class UnityfileNISServer {
+
+  #Properties
+
+  [String]$id #Unique identifier of the nisServer instance.  
+  [Object]$nasServer #NAS server that is configured with these NIS settings.  
+  [Object[]]$addresses #Prioritized list of one to ten NIS server IP addresses for the domain.  
+  [String]$domain #Name of the NIS server domain.  
+  [ReplicationPolicyEnum]$replicationPolicy #Indicates the status of the NIS servers addresses list in the NAS server operating as a replication destination. When a replicated NIS servers list is created on the source NAS server, it is automatically synchronized to the destination.  
+  [Object]$sourceParameters #For replication destination NAS servers, information about the corresponding source NAS server's NIS settings.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfileNISServerSourceParameters
+  Description: For replication destination NAS servers, information about the corresponding source NAS server's NIS settings. <br/>  
+#>
+Class UnityfileNISServerSourceParameters {
+
+  #Properties
+
+  [Object[]]$addresses #List of IP addresses of NIS servers of the source NAS server  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfilesystemImportParameters
+  Description: Settings to import a file system.  
+#>
+Class UnityfilesystemImportParameters {
+
+  #Properties
+
+  [String]$sourceFilesystemId #Source file system id.  
+  [Object]$targetPool #Target pool.  
+  [Bool]$importAsVMwareDatastore #Indicates whether to import this file system as VMware datastore. Values are: <ul> <li>true - Import this file system as VMware datastore, which results in vmwarefs storage resource type.</li> <li>false - Do not import this file system as VMware datastore, which results in filesystem storage resource type.</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfilesystemParameters
+  Description: Settings for a file system. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnityfilesystemParameters {
+
+  #Properties
+
+  [Object]$nasServer #NAS server that provides network connectivity to the share from the hosts. The NAS server parameter is required in creation request and must not be passed in modification requests.  
+  [FSSupportedProtocolEnum]$supportedProtocols #(Applies to create operations only.) Sharing protocols supported by the file system.  
+  [Object]$pool #Storage pool to create the file system. The pool is required in creation requests and must not be passed in modification requests.  
+  [Bool]$isFLREnabled #(Applies to create operations only.) Indicates whether File Level Retention (FLR) is enabled for the file system. Values are: <ul> <li>true - FLR is enabled for the file system.</li> <li>false - FLR is disabled for the file system.</li> </ul>  
+  [Bool]$isThinEnabled #(Applies to create operations only.) Indicates whether to enable thin provisioning for file system. Values are: <ul> <li>true - Enable thin provisioning.</li> <li>false - Disable thin provisioning.</li> </ul> <b>Note:</b> If you enable thin provisioning for a file system, you cannot disable it later.  
+  [Object]$size #Size of the file system.  
+  [HostIOSizeEnum]$hostIOSize #Typical write I/O size from the host to the file system.  
+  [Object]$sizeAllocated #Allocated size of the file system.  
+  [Object]$minSizeAllocated #Minimum size allocated of the file system.  
+  [Object]$fastVPParameters #(Applies if FAST VP is supported on the system and the corresponding license is installed.) FAST VP settings for the file system, as defined by the fastVPParameters.  
+  [Bool]$isCacheDisabled #Indicates whether caching is disabled. Values are: <ul> <li>true - Caching is disabled.</li> <li>false - Caching is enabled.</li> </ul>  
+  [Object]$deduplication #Deduplication settings for the file system, as defined by the deduplicationParameters resource type.  
+  [AccessPolicyEnum]$accessPolicy #Access policy.  
+  [FSRenamePolicyEnum]$folderRenamePolicy #File system folder rename policies. These policy choices control whether directory can be renamed from NFS or SMB clients if at least one file is opened in the directory or in one of its children directory.  
+  [FSLockingPolicyEnum]$lockingPolicy #Locking policy.  
+  [ResourcePoolFullPolicyEnum]$poolFullPolicy #Behavior to follow when pool is full and a write to this filesystem is attempted. Values are: <ul> <li>Delete_All_Snaps - All snaps to the File System will be marked for deletion to free up space.</li> <li>Fail_Writes - Writes to the File System will fail.</li> </ul>  
+  [Object]$fileEventSettings #Indicates whether File Event Service is enabled for some protocols on the filesystem.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityfloatOrValueMap
+  Description: A single floating point value that corresponds to the element in the metric or another mapping of a string to floatOrValueMap. This mapping allows for a hierarchical structure of values mapped to the metrics in the metric object.  
+#>
+Class UnityfloatOrValueMap {
+
+  #Properties
+
+
+  #Methods
+
+}
+
+<#
+  Name: UnityftpServer
+  Description: Information about the File Transfer Protocol (FTP) and Secure File Transfer Protocol (SFTP) servers of a NAS server. <br/> <br/> You can configure one FTP server and one SFTP server per NAS server. File Transfer Protocol (FTP) is a standard network protocol used to transfer files from one host to another host over a TCP-based network, such as the Internet. For secure transmission that encrypts the username, password, and content, FTP is secured with SSH (SFTP). <br/> <br/> You can activate an FTP server and SFTP server independently on each NAS server. The FTP and SFTP clients are authenticated using credentials defined on a Unix name server (such as an NIS server or a LDAP server) or a Windows domain. Windows user names need to be entered using the 'username@domain' or 'domain\username' formats. Each FTP and SFTP must have a home directory defined in the name server that must be accessible on the NAS server. FTP allows also clients to connect as anonymous users. <br/>  
+#>
+Class UnityftpServer {
+
+  #Properties
+
+  [String]$id #Unique identifier of the ftpServer instance.  
+  [Object]$nasServer #NAS server that is configured with the FTP server.  
+  [Bool]$isFtpEnabled #Indicates whether the FTP server is enabled on the NAS server specified in the nasServer attribute. Values are: <ul> <li> true - FTP server is enabled on the specified NAS server.</li> <li> false - FTP server is disabled on the specified NAS server.</li> </ul>  
+  [Bool]$isSftpEnabled #Indicates whether the SFTP server is enabled on the NAS server specified in the nasServer attribute. Values are: <ul> <li> true - SFTP server is enabled on the specified NAS server.</li> <li> false - SFTP server is disabled on the specified NAS server.</li> </ul>  
+  [Bool]$isCifsUserEnabled #Indicates whether FTP and SFTP clients can be authenticated using a CIFS user name. These user names are defined in a Windows domain controller, and their formats are user@domain or domain\user. Values are: <ul> <li> true - CIFS user names are accepted for authentication.</li> <li> false - CIFS user names are not accepted for authentication.</li> </ul>  
+  [Bool]$isUnixUserEnabled #Indicates whether FTP and SFTP clients can be authenticated using a Unix user name. Unix user names are defined in LDAP or NIS servers. Values are: <ul> <li> true - Unix user names are accepted for authentication.</li> <li> false - Unix user names are not accepted for authentication.</li> </ul>  
+  [Bool]$isAnonymousUserEnabled #Indicates whether FTP clients can be authenticated anonymously. Values are: <ul> <li> true - Anonymous user name is accepted.</li> <li> false - Anonymous user name is not accepted.</li> </ul>  
+  [Bool]$isHomedirLimitEnabled #Indicates whether an FTP or SFTP user's area is limited to his or her home directory.. For information about CIFS home directories, see <i>Using a VNXe3200 System with CIFS File Systems</i>, which is available on the <a href="http://support.emc.com">EMC Online Support</a> website. Values are: <ul> <li> true - An FTP or SFTP user can access his or her own home directory only.</li> <li> false - FTP and SFTP users can access any NAS server directory, according to NAS server permissions.</li> </ul>  
+  [String]$defaultHomedir #(Applies when the value of isHomedirLimitEnabled is false.) Default directory of FTP and SFTP clients who have a home directory that is not defined or accessible. This parameter is an absolute path relative to the root of the NAS server.  
+  [String]$welcomeMsg #Welcome message displayed on the console of FTP and SFTP clients before their authentication. The length of this message is limited to 511 bytes, and the length of each line is limited to 80 bytes.  
+  [String]$motd #Message of the day displayed on the console of FTP clients after their authentication. The length of this message is limited to 511 bytes, and the length of each line is limited to 80 bytes.  
+  [Bool]$isAuditEnabled #Indicates whether the activity of FTP and SFTP clients is tracked in audit files. Values are: <ul> <li> true - FTP/SFTP activity is tracked.</li> <li> false - FTP/SFTP activity is not tracked.</li> </ul>  
+  [String]$auditDir #(Applies when the value of isAuditEnabled is true.) Directory of FTP/SFTP audit files. This parameter is an absolute path relative to the root of the NAS server.  
+  [Object]$auditMaxSize #(Applies when the value of isAuditEnabled is true.) Maximum size of FTP/SFTP audit files.  
+  [String[]]$hostsList #Allowed or denied hosts, depending on the value of the isAllowHost attribute. A host is defined using its IP address. Subnets using CIDR notation are also supported. <ul> <li>If allowed hosts exist, only those hosts and no others can connect to the NAS server through FTP or SFTP.</li> <li>If denied hosts exist, they always have access denied to the NAS server through FTP or SFTP.</li> <li>If the list is empty, there is no restriction to NAS server access through FTP or SFTP based on the host IP.</li> </ul>  
+  [String[]]$usersList #Allowed or denied users, depending on the value of the isAllowUser attribute. <ul> <li>If allowed users exist, only those users and no others can connect to the NAS server through FTP or SFTP.</li> <li>If denied users exist, they have always access denied to the NAS server through FTP or SFTP.</li> <li>If the list is empty, there is no restriction to the NAS server access through FTP or SFTP based on the user name.</li> </ul>  
+  [String[]]$groupsList #Allowed or denied user groups, depending on the value of the isAllowGroup attribute. <ul> <li>If allowed groups exist, only users who are members of these groups and no others can connect to the NAS server through FTP or SFTP.</li> <li>If denied groups exist, all users who are members of those groups have always access denied to the NAS server through FTP or SFTP.</li> <li>If the list is empty, there is no restriction to the NAS server access through FTP or SFTP based on the user group.</li> </ul>  
+  [Bool]$isAllowHost #Indicates whether the hostsList attribute contains allowed or denied hosts. Values are: <ul> <li> true - hostsList contains allowed hosts.</li> <li> false - hostsList contains denied hosts.</li> </ul>  
+  [Bool]$isAllowUser #Indicates whether the usersList attribute contains allowed or denied users. Values are: <ul> <li> true - usersList contains allowed users.</li> <li> false - usersList contains denied users.</li> </ul>  
+  [Bool]$isAllowGroup #Indicates whether the groupsList attribute contains allowed or denied user groups. Values are: <ul> <li> true - groupsList contains allowed user groups.</li> <li> false - groupsList contains denied user groups.</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityhostInitiatorPath
+  Description: Information about host initiator paths in the storage system. Each initiator can be associated with multiple initiator paths. <br/> <br/>  
+#>
+Class UnityhostInitiatorPath {
+
+  #Properties
+
+  [String]$id #Unique identifier of the hostInitiatorPath instance.  
+  [HostInitiatorPathTypeEnum]$registrationType #Indicates how the initiator in the path was registered to the host.  
+  [Bool]$isLoggedIn #Indicates whether the host initiator is logged into the storage system. Values are: <ul> <li>true - Host initiator is logged into the storage system.</li> <li>false - Host initiator is not logged into the storage system.</li> </ul>  
+  [String]$hostPushName #(Applies when the value of the registrationType attribute is set to ESXAuto.) Name of the host that is automatically associated with the initiator path through host push.  
+  [String[]]$sessionIds #(Applies to iSCSI paths only.) Session identifiers in the host initiator path.  
+  [Object]$initiator #Host initiator associated with the host initiator path, as defined by the hostInitiator resource type.  
+  [Object]$iscsiPortal #(Applies to iSCSI paths only.) iSCSI portal, as defined by the iscsiPortal resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityhostLUN
+  Description: Information about the LUNs and LUN snapshots to which a host has access. <br/> <br/>  
+#>
+Class UnityhostLUN {
+
+  #Properties
+
+  [String]$id #Unique identifier of the hostLUN instance.  
+  [Object]$host #Information about the host that has access to the LUN or LUN snapshot, as defined by the host resource type.  
+  [HostLUNTypeEnum]$type #Indicates whether this instance of the hostLUN resource type represents a LUN or LUN snapshot.  
+  [Object]$hlu #Host LUN Identifier (HLU) for the host storage group.  
+  [Object]$lun #(Applies to LUNs only.) LUN, as defined by the lun resource type.  
+  [Object]$snap #(Applies to LUN snapshots only.) LUN snapshot, as defined by the lunSnap resource type.  
+  [Bool]$isReadOnly #Indicates whether the host access to the LUN or LUN snapshot is read-only. Values are: <ul> <li>true - Host access is read-only.</li> <li>false - Host access is read-write.</li> </ul>  
+  [Bool]$isDefaultSnap #(Applies to LUN snapshots only.) Indicates whether this instance of the hostLUN resource type represents a default snapshot. <ul> <li>true - instance represents HLU for default snapshot.</li> <li>false - instance does not represent HLU for default snapshot</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityhostLunModify
+  Description: Parameters used for modifying the HLU of a Host LUN. <br/> <br/> This embedded class type is passed to the ModifyHostLUNs method of the host object.  
+#>
+Class UnityhostLunModify {
+
+  #Properties
+
+  [Object]$hostLUN #Reference to the hostLUN to be modified.  
+  [Object]$hlu #New host LUN ID (HLU) to be assigned to the LUN.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityhostVVolDatastore
+  Description: Information about the VVolDatastore to which a host has access. <br/> <br/>  
+#>
+Class UnityhostVVolDatastore {
+
+  #Properties
+
+  [String]$id #Unique identifier of the hostVVolDatastore instance.  
+  [Object]$storageResource #Information about the VVol Datastore, as defined by the storageResource type.  
+  [Object]$host #Information about the host that has access to the VVol Datastore, as defined by the host resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityimportSyncProgress
+  Description: This embedded type represents the sync progress details for each iteration of synchronization.  
+#>
+Class UnityimportSyncProgress {
+
+  #Properties
+
+  [ImportStageEnum]$syncStage #Import synchronization stage.  
+  [Object]$iteration #Sync iteration number.  
+  [Object]$percentProgress #Sync percent progress.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityinstalledSoftwareVersion
+  Description: Information about installed system software and language packs in the VNXe system.  
+#>
+Class UnityinstalledSoftwareVersion {
+
+  #Properties
+
+  [String]$id #Unique identifier of the installedSoftwareVersion instance.  
+  [String]$version #Version of the installed software.  
+  [Object]$revision #Revision number of the installed software.  
+  [DateTime]$releaseDate #Release date of the installed software.  
+  [Object[]]$languages #List of language pack information included in this release.  
+  [String[]]$hotFixes #List of installed hotfixes for the installed software instance.  
+  [Object[]]$packageVersions #List of relevant package names and the version number of the package.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityinstalledSoftwareVersionLanguage
+  Description: List the language pack information (name, version) installed in the release  
+#>
+Class UnityinstalledSoftwareVersionLanguage {
+
+  #Properties
+
+  [String]$name #Name of the installed software language.  
+  [String]$version #Version of the installed software language.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityinstalledSoftwareVersionPackages
+  Description: List of relevant package information (name, version) installed in the release  
+#>
+Class UnityinstalledSoftwareVersionPackages {
+
+  #Properties
+
+  [String]$name #Name of the installed software package.  
+  [String]$version #Version of the installed software package.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityinterfacePortPair
+  Description: List of source system client interface and target system port pairs used to create a VDM import.  
+#>
+Class UnityinterfacePortPair {
+
+  #Properties
+
+  [String]$sourceInterfaceName #Source interface name of the interface port pair.  
+  [Object]$targetPort #Target port of the interface port pair.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityioLimitParameters
+  Description: IO limit settings for the storage resource. This resource type is embedded in the lunParameter and snap resource types.  
+#>
+Class UnityioLimitParameters {
+
+  #Properties
+
+  [Object]$ioLimitPolicy #IO limit policy that applies to the storage resource, as defined by the ioLimitPolicy resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityioLimitPolicy
+  Description: Set of I/O limit rules that you can apply to a storage resource. On GUI and CLI, ioLimitPolicy and ioLimitRule are combined for now since we only support one I/O limit rule per I/O limit policy.  
+#>
+Class UnityioLimitPolicy {
+
+  #Properties
+
+  [String]$id #Unique identifier of the ioLimitPolicy instance.  
+  [String]$name #I/O limit policy name.  
+  [String]$description #I/O limit policy description.  
+  [Bool]$isShared #Indicates whether the I/O limits defined in the I/O limit policy are shared among all assigned storage resources. Values are: <ul> <li>true - I/O limits are shared. The total I/O of the set of storage resources with this policy is limited.</li> <li>false - (Default) I/O limits are not shared. The I/O limit applies to each storage resource individually.</li> </ul>  
+  [Bool]$isPaused #Indicates whether I/O limit policy is paused. Values are: <ul> <li>true - I/O limit policy is paused.</li> <li>false - (Default) I/O limit policy is not paused.</li> </ul>  
+  [IOLimitPolicyTypeEnum]$type #IO limit policy type.  
+  [Object[]]$ioLimitRules #(DEPRECATED)The references of the rules associated with the I/O limit policy, as defined by the ioLimitRule resource type. Currently, only one rule is supported per policy.  
+  [Object[]]$ioLimitRuleSettings #IO limit rules associated with the I/O limit policy, as defined by the ioLimitRuleSetting resource type. Currently, only one rule is supported per policy.  
+  [Object[]]$luns #LUNs to which the I/O limit policy applies, as defined by the LUN resource type.  
+  [Object[]]$snaps #Snaps to which the I/O limit policy applies, as defined by the snap resource type.  
+  [IOLimitPolicyStateEnum]$state #IO limit policy state.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityioLimitRule
+  Description: (DEPRECATED)Conditions under which the storage system applies I/O limits. On GUI and CLI, ioLimitPolicy and ioLimitRule are combined for now since we only support one I/O limit rule per I/O limit policy.  
+#>
+Class UnityioLimitRule {
+
+  #Properties
+
+  [String]$id #Unique identifier of the ioLimitRule instance.  
+  [String]$name #I/O limit rule name.  
+  [String]$description #I/O limit rule description.  
+  [Object]$maxIOPS #Read/write IOPS limit.  
+  [Object]$maxKBPS #Read/write KB/s limit.  
+  [Object]$maxIOPSDensity #Read/write density-based IOPS limit.  
+  [Object]$maxKBPSDensity #Read/write density-based KB/s limit.  
+  [Object]$burstRate #The percentage of read/write IOPS and/or KBPS over the limits a storage object is allowed to process during a spike in demand.  
+  [DateTime]$burstTime #How long a storage object is allowed to process burst traffic.  
+  [DateTime]$burstFrequency #How often a storage object is allowed to process burst traffic for the duration of burst time  
+  [Object]$ioLimitpolicy #Information about the I/O limit policy to which the I/O limit rule is assigned, as defined by the ioLimitPolicy resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityioLimitRuleSetting
+  Description: Set of Quality of Service (QoS) rules included in the Qos policy.  
+#>
+Class UnityioLimitRuleSetting {
+
+  #Properties
+
+  [String]$id #Unique identifier of the ioLimitRule instance.  
+  [String]$name #I/O limit rule name.  
+  [String]$description #I/O limit rule description.  
+  [Object]$maxIOPS #Read/write IOPS limit.  
+  [Object]$maxKBPS #Read/write KB/s limit.  
+  [Object]$maxIOPSDensity #Read/write density-based IOPS limit.  
+  [Object]$maxKBPSDensity #Read/write density-based KB/s limit.  
+  [Object]$burstRate #The percentage of read/write IOPS and/or KBPS over the limits a storage object is allowed to process during a spike in demand.  
+  [DateTime]$burstTime #How long a storage object is allowed to process burst traffic.  
+  [DateTime]$burstFrequency #How often a storage object is allowed to process burst traffic for the duration of burst time  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityioLimitSetting
+  Description: Global I/O limit settings.  
+#>
+Class UnityioLimitSetting {
+
+  #Properties
+
+  [String]$id #Unique identifier of the ioLimitSetting instance.  
+  [Bool]$isPaused #Indicates whether I/O limits are enabled on the storage resource. Values are: <ul> <li>true - I/O limits paused.</li> <li>false - I/O limits resumed.</li> </ul>  
+  [Object]$activeControlledStorageObjects #number of storage resources and attached snapshots that are current put under I/O limit control  
+  [Object]$maxActiveControlledStorageObjects #maximum number of storage resources and attached snapshots that can be put under I/O limit control  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityiscsiNode
+  Description: Information about the iSCSI nodes in the storage system. An iSCSI node represents a single iSCSI initiator or target. <br/> iSCSI nodes are created automatically on every non-aggregated Ethernet port except of ports used for management access.  
+#>
+Class UnityiscsiNode {
+
+  #Properties
+
+  [String]$id #Unique identifier of the iscsiNode instance.  
+  [String]$name #iSCSI node name.  
+  [Object]$ethernetPort #Ethernet port associated with the iSCSI Node. (Each Ethernet port can be associated with one iSCSI node.)  
+  [String]$alias #Descriptive name of the iSCSI node. This name does not have to be unique.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityiscsiSettings
+  Description: Global ISCSI settings.  
+#>
+Class UnityiscsiSettings {
+
+  #Properties
+
+  [String]$id #Unique instance identifier. This is a singleton resource, so the id is always 0.  
+  [Bool]$isForwardCHAPRequired #If True, the iSCSI storage requires checking of the initiator. Forward CHAP secret, which is set for each initiator, otherwise the iSCSI storage does not require Forward CHAP.  
+  [String]$reverseCHAPUserName #Reverse CHAP user name, empty string indicates that chap is not set yet.  
+  [String]$forwardGlobalCHAPUserName #Forward global CHAP user name, empty string indicates that chap is not set yet.  
+  [Object]$iSNSServer #iSNS server IP address, if configured.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unityjob
+  Description: Information about the jobs in the storage system. <br/> <br/> A job represents one management request, it consists of a series of tasks. <br/> A job could also contain a series of primitive REST API POST requests, each of which maps to a task in the job. Such job is known as "batch request job". <br/> Client can query the job instance to track its progress, results, and details of each task. <br/> <br/> When a job is failed, the system might leave hehind unneeded resources that consume space. You can manually delete any resources that were created for the failed job. <br/>  
+#>
+Class Unityjob {
+
+  #Properties
+
+  [String]$id #Unique identifier of the job instance.  
+  [String]$description #Job description.  
+  [JobStateEnum]$state #Current state of the job.  
+  [DateTime]$stateChangeTime #Date and time of the last state change for the job.  
+  [DateTime]$submitTime #Date and time when the job was submitted.  
+  [DateTime]$startTime #Date and time when the job started.  
+  [DateTime]$endTime #Date and time when the job ended.  
+  [DateTime]$elapsedTime #Amount of time for which the job has been running.  
+  [DateTime]$estRemainTime #Estimated time remaining until the job completes.  
+  [Object]$progressPct #Approximate percentage of the job that has completed.  
+  [Object[]]$tasks #Set of tasks within the job, as defined by the jobTask object.  
+  [Object]$parametersOut #Output parameters and their values of what the job is calling.  
+  [Object]$messageOut #Status messages for job  
+  [Bool]$isJobCancelable #Is job cancelable  
+  [Bool]$isJobCancelled #Is job cancelled  
+  [String]$clientData #User-specified data for the job, provided by the client in the clientData request parameter.  
+  [Object]$affectedResource #Primary resource affected by this job.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityjobTask
+  Description: An embedded task within a job. A job consists a series of tasks. In case of batch request job, each jobTask maps to a primitive REST API POST request. <br/> <br/> For information about jobs, see the Help topic for the job resource type.  
+#>
+Class UnityjobTask {
+
+  #Properties
+
+  [String]$name #Task name.  
+  [String]$description #Description of the task.  
+  [String]$object #Object name of corresponding primitive REST API request if this jobTask belongs to a batch request job.  
+  [String]$action #Name of associated request action if this jobTask belongs to a batch request job.  
+  [JobTaskStateEnum]$state #Current state of the job task.  
+  [Object[]]$messages #Message(s) for this task.  
+  [Object]$parametersIn #Request body of associated request action. This is nearly the same as a primitive REST API POST request body except that it could use "@<step name>.<out parameter name>" notation, which implies using the output value of a previous step as input value.  
+  [Object]$parametersOut #Output parameters and their values of what the associated request action is calling if this jobTask belongs to a batch request job.  
+  [DateTime]$submitTime #Date and time when the jobTask was submitted if this jobTask belongs to a batch request job.  
+  [DateTime]$startTime #Date and time when the jobTask started if this jobTask belongs to a batch request job.  
+  [Object]$affectedResource #Primary resource affected by this task.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityjobTaskRequest
+  Description: The batch job consists of a group of primitive REST API POST requests. Each is considered to be a task of the job. This object is to represent such primitive request. <br/> <br/> For information about jobs, see the Help topic for the job resource type.  
+#>
+Class UnityjobTaskRequest {
+
+  #Properties
+
+  [String]$name #Name of the task. Should be unique within a batch request job.  
+  [String]$description #Description of the task. UTF-8 character message is acceptable.  
+  [DateTime]$submitTime #Date and time when the jobTask was submitted.  
+  [DateTime]$startTime #Date and time when the jobTask started.  
+  [String]$object #Object name of corresponding primitive REST API request.  
+  [String]$action #Name of associated request action.  
+  [Object]$parametersIn #Request body of associated request action. This is nearly the same as a primitive REST API POST request body except that it could use "@<step name>.<out parameter name>" notation, which implies using the output value of a previous step as input value.  
+  [String[]]$dependencies #jobTaskRequest name list. Current REST request will not be posted until the requests in the list are finished.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityldapServer
+  Description: Information about the Lightweight Directory Access Protocol (LDAP) server used by the storage system as an authentication authority for administrative users. You can configure one LDAP server. The system uses the LDAP settings for facilitating access control to Unisphere and the Unisphere CLI, but not for facilitating access control to storage resources. <br/> <br/> LDAP is an application protocol for querying and modifying directory services running on TCP/IP networks. LDAP provides central management for network authentication and authorization operations by helping to centralize user and group management across the network. Integrating the system into an existing LDAP environment provides a way to control user and user group access to the system through Unisphere or the Unisphere CLI. <br/> <br/> After you configure LDAP settings for the system, you can manage users and user groups within the context of an established LDAP directory structure. For example, you can assign access permissions to the Unisphere CLI that are based on existing users and groups. <br/> <br/>  
+#>
+Class UnityldapServer {
+
+  #Properties
+
+  [Object]$timeout #Timeout for establishing a connection to an LDAP server. If the system does not receive a reply from the LDAP server before the specified timeout, it stops sending requests. <br/> <br/> Default value is 30000 (30 seconds).  
+  [String]$id #Unique identifier of the ldapServer instance.  
+  [String]$authority #Name of the LDAP authority.  
+  [Object]$serverAddress #IP address of the LDAP server.  
+  [String]$bindDN #Bind Distinguished Name (DN) of the user to be used when binding; that is, authenticating and setting up the connection to the LDAP Server. For example: Administrator@mycompany.com or cn=Administrator,cn=Users,dc=mycompany,dc=com  
+  [LDAPProtocolEnum]$protocol #Protocol used to connect to the LDAP server.  
+  [String]$userSearchPath #Path used to search for users on the directory server. For example: <br/> <br/> ou=People,dc=lss,dc=emc,dc=com  
+  [String]$groupSearchPath #Path used to search for groups on the directory server. For example: <br/> <br/> uid=name,ou=people,dc=domaincomponent <br/> <br/> or <br/> <br/> dc=domain component  
+  [String]$userIdAttribute #Name of the LDAP attribute whose value indicates the user ID. <br/> <br/> Default value is uid.  
+  [String]$groupNameAttribute #Name of the LDAP attribute whose value indicates the group name. <br/> <br/> Default value is cn.  
+  [String]$userObjectClass #LDAP object class for users. <br/> <br/> Default value is user. <br/> <br/> In Active Directory, groups and users are stored in the same directory path, and are in a class called group.  
+  [String]$groupObjectClass #LDAP object class for groups. <br/> <br/> Default value is group. <br/> <br/> In Active Directory, groups and users are stored in the same directory path and are in a class called group.  
+  [String]$groupMemberAttribute #Name of the LDAP attribute whose value contains the names of group members within a group. <br/> <br/> Default value is member.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitylocalizedMessage
+  Description: List of name value pairs used to embed additional data in an object.  
+#>
+Class UnitylocalizedMessage {
+
+  #Properties
+
+  [String]$locale # 
+  [String]$message # 
+
+  #Methods
+
+}
+
+<#
+  Name: UnityloginSessionInfo
+  Description: Information about a REST API login session.  
+#>
+Class UnityloginSessionInfo {
+
+  #Properties
+
+  [Object]$idleTimeout #Number of seconds after last use until this session expires.  
+  [String]$id #Unique identifier of the loginSessionInfo instance.  
+  [Object]$user #Information about the user logged into this session, as defined by the user resource type.  
+  [Object[]]$roles #List of roles for the user logged into this session, as defined by the role resource type.  
+  [Bool]$isPasswordChangeRequired #Indicates whether the password must be changed in order to use this session created for built-in admin account. <br/> <br/> Values are: <ul> <li>true - Password must be changed.</li> <li>false - Password does not need to be changed.</li> </ul> <br/> For information about changing the password for a local user, see the Help topic for the user resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitylunAdd
+  Description: Parameters used for adding a LUN to a Consistency group. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitylunAdd {
+
+  #Properties
+
+  [Object]$lun #Existing LUN to add to the Consistency group. This LUN should not belong to any other Consistency group.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitylunCreate
+  Description: LUN parameters used for creating a LUN when creating or modifying a Consistency group. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitylunCreate {
+
+  #Properties
+
+  [String]$name #LUN name unque to the storage system.  
+  [String]$description #LUN description.  
+  [Object]$lunParameters #(Required) Settings for the LUN, as defined by the lunParameters resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitylunDelete
+  Description: Parameters used for deleting a LUN when modifying a Consistency group. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitylunDelete {
+
+  #Properties
+
+  [Object]$lun #LUN to remove from the Consistency group and completely delete from the storage system. To remove the LUN from the Consistency group without deletion from the storage system put the LUN into lunRemove object.  
+  [Bool]$forceSnapDeletion #Indicates whether to delete all LUN snapshots along with the LUN. Values are: <ul> <li>true - Delete all LUN snapshots.</li> <li>false - Do not delete LUN snapshots.</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitylunMemberReplication
+  Description: Member lun element pair details in a replication session. Applies to block storage resource replications.  
+#>
+Class UnitylunMemberReplication {
+
+  #Properties
+
+  [ReplicationSessionStatusEnum]$srcStatus #Status of the source element.  
+  [ReplicationSessionNetworkStatusEnum]$networkStatus #Status of the network on which the replication session exists.  
+  [ReplicationSessionStatusEnum]$dstStatus #Status of the destination element in the replication session.  
+  [String]$srcLunId #Unique identifier of the source element in the element pair.  
+  [String]$dstLunId #Unique identifier of the destination element in the element pair.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitylunModify
+  Description: Parameters used for modifying a LUN when modifying a Consistency group. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitylunModify {
+
+  #Properties
+
+  [Object]$lun #LUN to modify.  
+  [String]$name #New name of the LUN unique to the storage system.  
+  [String]$description #New LUN description.  
+  [Object]$lunParameters #Settings for the LUN, as defined by the lunParameters.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitylunParameters
+  Description: Settings for a LUN. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitylunParameters {
+
+  #Properties
+
+  [Object]$pool #(Applies only to create requests.) Storage pool from which to create the LUN.  
+  [Bool]$isThinEnabled #(Applies only for create requests.) Indicates whether to enable thin provisioning for the LUN. Values are: <ul> <li>true - Enable thin provisioning.</li> <li>false - Disable thin provisioning.</li> </ul> <br/> <b>Note:</b> If you enable thin provisioning for a LUN, you cannot disable it later.  
+  [Bool]$isCompressionEnabled #Indicates whether to enable inline compression for the LUN. Values are: <ul> <li>true - Enable compression(default) </li> <li>false - Disable compression </li> </ul>  
+  [Object]$size #LUN size. The size is required in creation requests. In the modification requests the size parameter can be greater than the current LUN size in this case the LUN is expanded. To shrink the LUN size this parameter is less than the current LUN size. To allow shrink operation the parameter forceShrink must be set true.  
+  [Object]$fastVPParameters #(Applies if FAST VP is supported on the system and the corresponding license is installed.) FAST VP settings for the LUN, as defined by the fastVPParameters.  
+  [NodeEnum]$defaultNode #Storage Processor (SP) that owns the LUN. If not specified, the system chooses the default owner automatically.  
+  [Object[]]$hostAccess #Host access settings for the LUN, as defined by the blockHostAccess embedded resource type.  
+  [Object]$ioLimitParameters #IO limit settings for the LUN, as defined by the ioLimitParameters.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitylunRemove
+  Description: Parameters used for removing a LUN from a Consistency group. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitylunRemove {
+
+  #Properties
+
+  [Object]$lun #LUN to remove from the Consistency group. The LUN removed from Consistency group is not deleted from the storage system and simply becomes a standalone LUN not associated with any Consistency group. A LUN removed from one Consistency group then can be added to another Consistency group. To also delete the LUN after removing it, use the deleteLun parameter instead.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unitymessage
+  Description: A message occurrence. This is also the message object returned in the body of non-2xx return code REST responses.  
+#>
+Class Unitymessage {
+
+  #Properties
+
+  [DateTime]$created #Time at which the message occurred.  
+  [SeverityEnum]$severity # 
+  [Object]$errorCode #Error code for this message.  
+  [Object]$httpStatusCode #HTTP status code for this message when returned from a REST API request.  
+  [Object[]]$messages #A list of localized strings for this message, as pairs of (locale, message_string).  
+  [String[]]$messageArgs #Arguments to be filled in error message  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitymetricCollection
+  Description: Information about each metrics collection in the VNXe or Unisphere Central system.  
+#>
+Class UnitymetricCollection {
+
+  #Properties
+
+  [String]$id #Unique identifier of the metricCollection resource type.  
+  [Object]$interval #Interval associated with the metrics collection.  
+  [DateTime]$oldest #Date and time on which the oldest available metric data in the collection was collected.  
+  [Object]$retention #Number of days for which the metric data in the collection will be retained.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitymetricService
+  Description: Information about the metrics service configuration. There is only one occurrence of this resource type.  
+#>
+Class UnitymetricService {
+
+  #Properties
+
+  [Bool]$isHistoricalEnabled #Indicates whether historical metrics collection is enabled: <ul> <li>true - Historical metrics collection is enabled. <li>false - Historical metrics collection is disabled. </ul>  
+  [Object]$id #Unique identifier of the metricService instance to modify. The value of this attribute is always 0, since it is a singleton resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitymoveSession
+  Description: Information about movesession. <br/> <br/> A customer environment is often ever-changing, and as a result the ability to deliver business continuity and flexibility is paramount. The new local LUN migration feature address this concern, by adding the ability to move LUNs and Consistency Groups between Pools on a system. Local LUN migration can be used to rebalance storage resources across Pools when customer activity changes and an individual Pool's usage becomes oversaturated. Another use case for local LUN migration is to provide LUNs with a destination when a Pool is to be decommissioned. By leveraging Unity's Transparent Data Transfer (TDX) engine, host access remains fully online during the migration session.  
+#>
+Class UnitymoveSession {
+
+  #Properties
+
+  [String]$id #Unique identifier of the session.  
+  [Object]$sourceStorageResource #Storage resource to be moved.  
+  [Object]$sourceMemberLun #The LUN being moved when the corresponding storageResource isn't specific enough, i.e. a Consistency Group member LUN or LUN VMFS Datastore.  
+  [Object]$destinationPool #Destination pool for the move.  
+  [UnityHealth]$health #The health of the session.  
+  [Object]$progressPct #The progress of the session expressed as a percentage.  
+  [Object]$currentTransferRate #The current transfer rate of the session in MB/sec.  
+  [Object]$avgTransferRate #The average transfer rate of the session in MB/sec.  
+  [DateTime]$estTimeRemaining #The estimated time remaining based on the current transfer rate.  
+  [MoveSessionStateEnum]$state #The current state of the session. The session state represents the lifecycle of a session.  
+  [MoveSessionStatusEnum]$status #The current session status of the TDX session.  
+  [MoveSessionPriorityEnum]$priority #The priority of this storageResource move relative to other moves.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitynameValuePair
+  Description: List of name value pairs used to embed additional data in an object.  
+#>
+Class UnitynameValuePair {
+
+  #Properties
+
+  [String]$name #Candidate description name.  
+  [String]$value #Candidate description value.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitynfsShareCreate
+  Description: Parameters used for creating an NFS share when creating or modifying a file system. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitynfsShareCreate {
+
+  #Properties
+
+  [String]$path #Local path to a location within the file system. <br/> <br/> With NFS, each share must have a unique local path. <font color=#0f0f0f>By default, the system creates a share to the root of the file system (top-most directory) at file system creation time. </font>This path specifies the unique location of the file system on the storage system. <br/> <br/> Before you can create additional shares within an NFS shared folder, you must create directories within it from a Linux/UNIX host that is connected to the file system. After a directory has been created from a mounted host, you can create a corresponding share and set access permissions accordingly.  
+  [String]$name #Unique name of the NFS share.  
+  [Object]$nfsShareParameters #Common NFS share attributes, as defined by the nfsShareParameters resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitynfsShareDelete
+  Description: Parameters used for deleting an NFS share when modifying a file system. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitynfsShareDelete {
+
+  #Properties
+
+  [Object]$nfsShare #NFS share to delete.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitynfsShareModify
+  Description: Parameters used for modifying an NFS share when modifying a file system. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitynfsShareModify {
+
+  #Properties
+
+  [Object]$nfsShare #NFS share to modify.  
+  [Object]$nfsShareParameters #NFS share settings, as defined by the nfsShareParameters resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitynfsShareParameters
+  Description: Settings for an NFS share. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitynfsShareParameters {
+
+  #Properties
+
+  [String]$description #NFS share description.  
+  [Bool]$isReadOnly #Indicates whether the NFS share is read-only. Values are: <ul> <li>true - NFS share is read-only.</li> <li>false - NFS share is read-write.</li> </ul>  
+  [NFSShareDefaultAccessEnum]$defaultAccess #Default access level for all hosts accessing the NFS share.  
+  [NFSShareSecurityEnum]$minSecurity #Minimal security level that must be provided by a client to mount the NFS share.  
+  [Object[]]$noAccessHosts #Hosts with no access to the NFS share or its snapshots, as defined by the host resource type.  
+  [Object[]]$readOnlyHosts #Hosts with read-only access to the NFS share and its snapshots, as defined by the host resource type.  
+  [Object[]]$readWriteHosts #Hosts with read-write access to the NFS share and its snapshots, as defined by the host resource type.  
+  [Object[]]$rootAccessHosts #Hosts with root access to the NFS share and its snapshots, as defined by the host resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitypingResult
+  Description: Information about ping command result.  
+#>
+Class UnitypingResult {
+
+  #Properties
+
+  [Bool]$result #Ping result. True if accessible, False otherwise.  
+  [Float]$latency #Latency in milliseconds  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitypoolConfiguration
+  Description: System-recommended pool configuration settings. Instances of this resource type contain the output of the pool resource type's RecommendAutoConfiguration operation. <br/>  
+#>
+Class UnitypoolConfiguration {
+
+  #Properties
+
+  [String]$name #Pool name.  
+  [String]$description #Pool description.  
+  [Object]$storageConfiguration #Recommended configuration of the storage tier in the recommended pool, as defined by the storageCapabilityEstimation resource type.  
+  [Object]$alertThreshold #Threshold at which the system will generate notifications about the amount of space remaining in the pool, specified as a percentage with 1% granularity. <br/> <br/> This threshold is based on the percentage of allocated storage in the pool compared to the total pool size.  
+  [Float]$poolSpaceHarvestHighThreshold #(Applies when the automatic deletion of snapshots based on pool space usage is enabled for the system and pool.) <br/> <br/> Pool used space high threshold at which the system will automatically delete snapshots in the pool, specified as a percentage with .01% granularity. <br/> <br/> This threshold is based on the percentage of used space in the pool compared to the total pool size. When the percentage of used space reaches this threshold, the system automatically deletes snapshots in the pool, until a low threshold is reached.  
+  [Float]$poolSpaceHarvestLowThreshold #(Applies when the automatic deletion of snapshots based on pool space usage is enabled for the system and pool.) <br/> <br/> Pool used space low threshold under which the system will stop automatically deleting snapshots in the pool, specified as a percentage with .01% granularity. <br/> <br/> This threshold is based on the percentage of used pool space compared to the total pool size. When the percentage of used space in the pool falls below this threshold, the system stops the automatic deletion of snapshots in the pool, until a high threshold is reached.  
+  [Float]$snapSpaceHarvestHighThreshold #(Applies when the automatic deletion of snapshots based on snapshot space usage is enabled for the system and the pool.) <br/> <br/> Snapshot used space high threshold at which the system will automatically delete snapshots in the pool, specified as a percentage with .01% granularity. <br/> <br/> This threshold is based on the percentage of space used by pool snapshots compared to the total pool size. When the percentage of space used by snapshots reaches this threshold, the system automatically deletes snapshots in the pool, until a low threshold is reached.  
+  [Float]$snapSpaceHarvestLowThreshold #(Applies when the automatic deletion of snapshots based on snapshot space usage is enabled for the system and the pool.) <br/> <br/> Snapshot used space low threshold under which the system will stop automatically delete snapshots in the pool, specified as a percentage with .01% granularity. <br/> <br/> This threshold is based on the percentage of space used by pool snapshots compared to the total pool size. When the percentage of space used by pool snapshots falls below this threshold, the system stops the automatic deletion of snapshots in the pool, until a high threshold is reached.  
+  [Bool]$isFastCacheEnabled #(Applies if a FAST Cache license is installed on the system.) Indicates whether the pool will be used in the FAST Cache. Values are: <ul> <li>true - FAST Cache will be enabled for this pool.</li> <li>false - FAST Cache will be disabled for this pool.</li> </ul>  
+  [Bool]$isFASTVpScheduleEnabled #(Applies if a FAST VP license is installed on the storage system.) Indicates whether to enable scheduled data relocations for the pool. Values are: <ul> <li>true - Enable scheduled data relocations for the pool.</li> <li>false - Disable scheduled data relocations for the pool.</li> </ul>  
+  [Bool]$isDiskTechnologyMixed #Indicates whether the pool contains disks with different disk technologies, such as FLASH, NL-SAS, and SAS. Values are: <ul> <li>true - Pool contains disks with different disk technologies.</li> <li>false - Pool does not contain disks with different disk technologies.</li> </ul>  
+  [Object]$maxSizeLimit #Maximum pool capacity recommended for the storage system.  
+  [Object]$maxDiskNumberLimit #Maximum number of disks recommended for the storage system.  
+  [Bool]$isMaxSizeLimitExceeded #Indicates whether the total size of all recommended pools exceeds that allowed by the storage system. Values are: <ul> <li>true - Total size of all recommended pools exceeds that allowed by the storage system.</li> <li>false - Total size of all recommended pools does not exceed that alllowed by the storage system.</li> <ul>  
+  [Bool]$isMaxDiskNumberLimitExceeded #Indicates whether the total number of disks in the recommended pools exceeds that allowed by the storage system. Values are: <ul> <li>true - Total size of all recommended pools exceeds that allowed by the storage system.</li> <li>false - Total size of all recommended pools does not exceed that alllowed by the storage system.</li> <ul>  
+  [Bool]$isRPMMixed #Indicates whether the pool contains disks with different rotational speeds. Values are: <ul> <li>true - Pool contains disks with different rotational speeds.</li> <li>false - Pool does not contain disks with different rotational speeds.</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitypoolConsumer
+  Description: poolConsumer class is representation of single object that consumes storage inside pools. There are two types of pool consumers: storage resources and NAS servers. NAS servers and storage resource except Consistency groups are always wholly allocated in one and only one storage pool. Consistency group can be allocated in more than one storage pool in case if the LUNs belonging to the group allocated in the different pools. The NAS servers consume space in the pool of constant size which is not changed once NAS server created.  
+#>
+Class UnitypoolConsumer {
+
+  #Properties
+
+  [String]$id #Unique ID of object.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitypoolConsumerAllocation
+  Description: poolConsumerAllocation class represents size of pool's space allocated by the consumer (storageResources or nasServers) inside the pool. Most of consumers are always wholly allocated in one and only one storage pool. The only exception is consistencyGroup storage resource that can contain different LUNs that reside in different pools.  
+#>
+Class UnitypoolConsumerAllocation {
+
+  #Properties
+
+  [Object]$sizeAllocatedTotal #Total space allocated in the storage pool for the consumer object.  
+  [Object]$snapsSizeAllocated #Space allocated in the storage pool for snapshots of the consumer object.  
+  [String]$id #Unique ID of poolConsumerAllocation object.  
+  [Object]$pool #Storage pool reference.  
+  [Object]$consumer #The object allocated in the storage pool.  
+  [PoolConsumerTypeEnum]$consumerType #Type of pool consumer object.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitypoolUnitConfiguration
+  Description: (Applies to virtual deployments only.) Pool unit configuration for particular tier.  
+#>
+Class UnitypoolUnitConfiguration {
+
+  #Properties
+
+  [Object]$poolUnit #Pool Unit identifier.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitypoolUnitParameters
+  Description: Parameters for adding a pool unit to a pool, or modifying a pool unit. At this time, only virtual disk type pool units can be modified.  
+#>
+Class UnitypoolUnitParameters {
+
+  #Properties
+
+  [Object]$poolUnit #Pool unit for which these parameters are being specified. Indeed it is Virtual Disk identifier, but in the future it can be the other pool unit object types allowed.  
+  [String]$name #Pool unit name. Can be used for Virtual Disk modification only.  
+  [TierTypeEnum]$tierType #Tier type. If virtualDisk tier type is unknown it can be specified at the time of adding to pool.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitypotentialHost
+  Description: This class is used to hold discovered hosts of a vCenter or ESX Host.  
+#>
+Class UnitypotentialHost {
+
+  #Properties
+
+  [String]$name #Display name of the discovered ESX server  
+  [String]$serverName #DNS name of ESX server  
+  [String]$description #Description of ESX server  
+  [String]$osName #OS name of ESX server  
+  [String]$osVersion #OS version of ESX server  
+  [String]$uuid #Vendor unique identifier of ESX server  
+  [Object[]]$kernelIPs #Kernel IPs of ESX server  
+  [Object[]]$mgmtIPs #Management IPs of ESX server  
+  [String[]]$fcInitiators #Fibre channel initiators of ESX server  
+  [String[]]$iscsiInitiators #Iscsi initiators of ESX server  
+  [HostContainerPotentialHostMatchConditionEnum[]]$matchedConditions #How the discovered ESX hosts match the existing hosts already known to the array  
+  [Object[]]$matchedHosts #Existing hosts that match the discovered vCenter/ESX Host  
+  [HostContainerPotentialHostMatchConditionEnum[]]$matchedPotentialHostsConditions #How the potential ESX hosts conflict among themseleves  
+  [String[]]$matchedPotentialHosts #The names of the other potential hosts that match this potential host in any way  
+  [HostContainerPotentialHostImportOptionEnum]$importOption #How ESXi server can be imported  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitypreferredInterfaceSettings
+  Description: The preferred interface of NAS server is an interface from which all the non-local outbound connections of this NAS server are initiated. The non-local connections are those which hosts can be accessed from this NAS server interfaces only via some router (gateway). <p/> The preferred interfaces for IPv4 and IPv6 are independent from each other. During the replication, the production interfaces could be activated and deactivated automatically, so the separate preferred interface settings are required for production and backup & DR testing interfaces. For each NAS server, the following preferred interface settings exist: <ol> <li>Production interfaces, IPv4.</li> <li>Production interfaces, IPv6.</li> <li>Backup & DR testing interfaces, IPv4.</li> <li>Backup & DR testing interfaces, IPv6.</li> </ol> <p/> Each of these settings could be set to the explicit interface. If it isn't set, corresponding interface will be selected automatically. <p/> The acting preferred interfaces, one for IPv4 and one for IPv6, are selected among active interfaces by the following rules, ordered by priority (highest first): <ol> <li>Manually selected interfaces have priority over automatically selected ones.</li> <li>Production interfaces have priority over backup and DR testing ones.</li> <li>The interface with the default gateway has priority over one not having one.</li> <li>From the otherwise equal priority interfaces, one with the most routes has the priority.</li> <li>From the otherwise equal priority interfaces, one with the minimal value of IP address (Sic!) has the priority.</li> </ol> <p/> <b>Note: </b>During the replication, on the destination side, only Backup & DR testing interfaces could be active. <p/> For the automatic selection, the interface re-selected each time any of this NAS interfaces or routes are changed. If the interface has been explicitly selected as preferred and then deleted, this type/class group setting (e.g. "Production/IPv6") gets reset to automatic selection. <p/> During the replication, on the destination side, only the production interfaces settings could be overridden. It is controlled by the single flag both for IPv4 and IPv6 interfaces. Note that this flag is independent from the "override" flag of the interface itself. If an interface is explicitly selected as preferred and then overridden, the interface is kept preferred. <p/> The acting preferred interfaces are marked by the corresponding property value, fileInterface.isPreferred == true. To get the list of the acting preferred interfaces of a NAS server, iterate its interface list checking the isPreferred property.  
+#>
+Class UnitypreferredInterfaceSettings {
+
+  #Properties
+
+  [String]$id #Unique identifier of the Preferred Interface Settings object.  
+  [Object]$nasServer #Identifier of the file server instance that uses this Preferred Interface Settings object. Only one Preferred Interface Settings object per file server is supported.  
+  [Object]$productionIpV4 #Requested IPv4 production preferred interface  
+  [Object]$productionIpV6 #Requested IPv6 production preferred interface  
+  [Object]$backupIpV4 #Requested IPv4 backup preferred interface  
+  [Object]$backupIpV6 #Requested IPv6 backup preferred interface  
+  [Object]$sourceParameters #Requested production preferred interfaces of the source NAS server. <p/> On the destination side of the active replication session: <li>The replicated IPv4 and IPv6 production interface settings are returned in the sourceParameters.productionIpV4 and sourceParameters.productionIpV6 fields.</li> <li>Regardless of the replicationPolicy settings, this property returns the replicated settings.</li> Without the active replication session or on the source side of such session: <li>Property is not populated.</li>  
+  [ReplicationPolicyEnum]$replicationPolicy #Acting replication policy of the production preferred interfaces. <p/> On the destination side of the active replication session: <li>"Replicated" means that the settings for the production IPv4 and IPv6 preferred interface settings are replicated from the source side.</li> <li>"Overridden" means that the settings for the production IPv4 and IPv6 preferred interface settings are overridden on the destination side.</li> Without the active replication session or on the source side of such session: <li>Property is not populated.</li>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitypreferredInterfaceSourceParameters
+  Description: Information about preferred interface settings of the source NAS server.  
+#>
+Class UnitypreferredInterfaceSourceParameters {
+
+  #Properties
+
+  [Object]$productionIpV4 #Requested IPv4 production preferred interface of the source NAS server  
+  [Object]$productionIpV6 #Requested IPv6 production preferred interface of the source NAS server  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityquotaConfig
+  Description: A quotaConfig instance represents the quota configuration of either a tree quota or a file system.  
+#>
+Class UnityquotaConfig {
+
+  #Properties
+
+  [String]$id #Unique identifier.  
+  [Object]$filesystem #Associated file system.  
+  [Object]$treeQuota #Associated tree quota. <br> Only available for quota configuration of a tree quota.  
+  [QuotaPolicyEnum]$quotaPolicy #Quota policy.  
+  [Bool]$isUserQuotaEnabled #Whether user quota is enabled. Values are: <ul> <li> true - start tracking usages for all users on a file system or a quota tree, and user quota limits would be enforced. </li> <li> false - stop tracking usages for all users on a file system or a quota tree, and user quota limits will not be enforced. </li> <ul>  
+  [Bool]$isAccessDenyEnabled #Whether access will be denied when the limit is exceeded. Values are: <ul> <li> true - Attempts to allocate additional storage will fail with out of space error, when the quota hard limit is exceeded or the soft limit is exceeded and the grace period is expired. </li> <li> false - Attempts to allocate additional storage will not fail because of quota limits. </li> </ul>  
+  [Object]$gracePeriod #Grace period of soft limits.  
+  [Object]$defaultHardLimit #Default hard limit of user quotas and tree quotas.  
+  [Object]$defaultSoftLimit #Default soft limit of user quotas and tree quotas.  
+  [DateTime]$lastUpdateTimeOfTreeQuotas #When tree quotas within a file system were last successfully updated. <br> The value is null if it is a quotaConfig instance of a quota tree.  
+  [DateTime]$lastUpdateTimeOfUserQuotas #When user quotas within a file system or a quota tree were last successfully updated.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityraidConfiguration
+  Description: Possible RAID configurations for the pool tier. These configurations have the same RAID type (or RAID level) and different stripe widths (or RAID moduluses).  
+#>
+Class UnityraidConfiguration {
+
+  #Properties
+
+  [RaidTypeEnum]$raidType #RAID type (or RAID level) of the RAID configuration.  
+  [Bool]$isDefault #Indicates whether the RAID configuration is the default RAID configuration for the associated storage tier. Values are: <ul> <li>true - RAID configuration is the default RAID configuration for the associated storage tier.</li> <li>false - RAID configuration is not the default RAID configuration for the associated storage tier.</li> </ul>  
+  [Object[]]$stripeWidthConfig #List of supported stripe widths (or RAID moduluses) for the RAID type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityraidGroupParameters
+  Description: Parameters to create RAID group from the disks and add it to the pool. <br/>  
+#>
+Class UnityraidGroupParameters {
+
+  #Properties
+
+  [Object]$dskGroup #Disk Group identifier.  
+  [Object]$numDisks #Number of disks.  
+  [RaidTypeEnum]$raidType #RAID type (or RAID level).  
+  [RaidStripeWidthEnum]$stripeWidth #Stripe width (or RAID modulus).  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityremoteInterface
+  Description: All local and remote replication interfaces from all remote system connection configurations.  
+#>
+Class UnityremoteInterface {
+
+  #Properties
+
+  [String]$id #Unique global identifier of the remoteInterface instance. This is combination of system serial number and the instance id as is from the remote system.  
+  [String]$remoteId #Unique identifier of the remoteInterface instance as is from remote system.  
+  [String]$name #User-specified remote interface name.  
+  [Object]$address #IP address of the remote interface.  
+  [Object]$remoteSystem #Unique identifier of the remote system, as defined by the remoteSystem resource type.  
+  [NodeEnum]$node #SP or node owning this interface.  
+  [ReplicationCapabilityEnum]$capability #This property indicates the capability of the interface for replication sessions Values are: <ul> <li>0 - interface is capable of participating in SYNC replication sessions <li>1 - interface is capable of participating in ASYNC replication sessions <li>2 - interface is capable of participating in both SYNC and ASYNC replication sessions </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityremoteSyslog
+  Description: Configuration information for storage system remote logging. <br/> <br/> When you configure remote logging, you must specify the network address of a host that will receive the log data. The remote host must be accessible from the storage system, and security for the log information must be provided through network access controls or the system security at the remote host. <br/> <br/> By default, the storage system transfers log information on port 514 using the UDP protocol.  
+#>
+Class UnityremoteSyslog {
+
+  #Properties
+
+  [String]$id #Unique identifier of the remoteSyslog instance.  
+  [Object]$address #IP address of the host where the storage system stores the remote log information. By default, the storage system stores log information on port 514.  
+  [IpProtocolTypeEnum]$protocol #Protocol used to transfer messages to the remote log. <br/> <br/> Default protocol is UDP.  
+  [RemoteSyslogFacilityTypeEnum]$facility #Type of information to record in the remote system log. It is recommended that you specify 1 (User-level-Messages) for this value.  
+  [Bool]$enabled #Indicates whether the logging to the remote log is enabled. Values are: <ul> <li>true - Logging to the remote log is enabled.</li> <li>false - Logging to the remote log is disabled.</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityremoteSystem
+  Description: Information about remote storage systems that connect to the system to which you are logged in. The system uses the configuration to access and communicate with the remote system. For example, to use remote replication, create a configuration that specifies the remote system to use as the destination for the replication session.  
+#>
+Class UnityremoteSystem {
+
+  #Properties
+
+  [String]$id #Unique identifier of the remoteSystem instance.  
+  [String]$name #System name as reported by system.name on remote system.  
+  [String]$model #Model name of the remote system.  
+  [String]$serialNumber #Serial number of the remote system.  
+  [UnityHealth]$health #Health information for the remote system, as defined by the health resource type.  
+  [String]$managementAddress #Management IP address of the remote system.  
+  [String[]]$altManagementAddressList #Alternate management IP addresses of the remote system.  
+  [ReplicationCapabilityEnum]$connectionType #Type of the replication connection to the remote system.  
+  [String[]]$syncFcPorts #Fibre channel ports used for synchronous replication.  
+  [String]$username #Username for accessing the remote system.  
+  [Object[]]$localSPAInterfaces #SPA replication interface IP addresses of local system used in remote system connection configuration.  
+  [Object[]]$localSPBInterfaces #SPB replication interface IP addresses of local system used in remote system connection configuration.  
+  [Object[]]$remoteSPAInterfaces #SPA replication interface IP addresses of remote system used in remote system connection configuration.  
+  [Object[]]$remoteSPBInterfaces #SPB replication interface IP addresses of remote system used in remote system connection configuration.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityreplicationInterface
+  Description: Information about replication interfaces in the storage system. These interfaces are used in remote replication connections and sessions for replication data transfer.  
+#>
+Class UnityreplicationInterface {
+
+  #Properties
+
+  [String]$id #Unique identifier of the replicationInterface instance.  
+  [Object]$ipPort #Physical port or link aggregation on the storage processor on which the replication interface is running, as defined by the ipPort resource type.  
+  [UnityHealth]$health #Health of the replication interface, as defined by the health resource type.  
+  [Object]$ipAddress #IP address of the replication interface.  
+  [IpProtocolVersionEnum]$ipProtocolVersion #IP protocol version of the replication interface.  
+  [Object]$netmask #IPv4 netmask for the replication interface, if it uses an IPv4 address.  
+  [Object]$v6PrefixLength #IPv6 prefix length for the replication interface, if it uses an IPv6 address.  
+  [Object]$gateway #IPv4 or IPv6 gateway address for the replication interface.  
+  [Object]$vlanId #Virtual Local Area Network (VLAN) identifier for the replication interface. The interface uses the identifier to accept packets that have matching VLAN tags. <br/> <br/> Values are 0 - 4094. The default is 0, which means that the packets to accept do not have VLAN tags.  
+  [String]$macAddress #MAC address of the virtual Ethernet port used for the replication interface. A physical Ethernet port has a different MAC address.  
+  [String]$name #Replication interface name.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityreplicationParameters
+  Description: Replication settings for the storage resource. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnityreplicationParameters {
+
+  #Properties
+
+  [Bool]$isReplicationDestination #Indicates whether the storage resource is a replication destination. Values are: <ul> <li>true - Storage resource is a replication destination.</li> <li>false - (Default) Storage resource is not a replication destination.</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityreplicationSession
+  Description: Information about replication sessions. <br/> <br/> Replication is a process in which storage data is duplicated either locally or to a remote network device. Replication produces a read-only, point-in-time copy of source data and periodically updates the copy, keeping it consistent with the source data. Replication provides an enhanced level of redundancy in case the main storage backup system fails. As a result, the: <ul> <li>Downtime associated cost of a system failure is minimized. <li>Recovery process from a natural or human-caused disaster is facilitated. </ul> A replication session establishes an end-to-end path for a replication operation between a source and a destination. The replication source and destination may be local or remote. The session establishes the path that the data follows as it moves from source to destination.  
+#>
+Class UnityreplicationSession {
+
+  #Properties
+
+  [String]$id #Unique identifier of the replicationSession instance.  
+  [String]$name #User-specified replication session name.  
+  [ReplicationEndpointResourceTypeEnum]$replicationResourceType #Replication resource type of replication session endpoints.  
+  [ReplicationOpStatusEnum]$status #Replication status of the replication session.  
+  [UnityHealth]$health #Health information for the replication session, as defined by the health resource type.  
+  [Object]$maxTimeOutOfSync #Maximum time to wait before the system syncs the source and destination resources. Value of -1 specifies that automatic sync is not performed.  
+  [ReplicationSessionStatusEnum]$srcStatus #Status of the source end of the session.  
+  [ReplicationSessionNetworkStatusEnum]$networkStatus #Status of the network connection used by the replication session.  
+  [ReplicationSessionStatusEnum]$dstStatus #Status of the destination end of the replication session.  
+  [DateTime]$lastSyncTime #Date and time of the last replication synchronization.  
+  [ReplicationSessionSyncStateEnum]$syncState #Synchronization state between source and destination resource of the replication session.  
+  [Object]$remoteSystem #The remote system to which this replication session is connected, as defined by the remoteSystem resource type.  
+  [ReplicationSessionReplicationRoleEnum]$localRole #Role of the local system in the replication session.  
+  [String]$srcResourceId #Identifier of the source resource in the replication session.  
+  [Object]$srcSPAInterface #SP A interface used on the source system for the replication, if the replication session is a remote session.  
+  [Object]$srcSPBInterface #SP B interface used on the source system for the replication, if the replication session is a remote session.  
+  [String]$dstResourceId #Identifier of the destination resource.  
+  [Object]$dstSPAInterface #SP A interface used on the destination system for the replication, if the replication session is a remote session.  
+  [Object]$dstSPBInterface #SP B interface used on the destination system for the replication, if the replication session is a remote session.  
+  [Object[]]$members #Information about the replication of each member lun in the group.  
+  [Object]$syncProgress #Synchronization completion percentage between source and destination resources of the replication session.  
+  [Object]$currentTransferEstRemainTime #Estimated time left for the replication synchronization to complete.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityresourceInfo
+  Description: This embedded type provided details of a resource.  
+#>
+Class UnityresourceInfo {
+
+  #Properties
+
+  [String]$resId #Identifier of the resource.  
+  [String]$name #Name of the resource.  
+  [Object]$system #System on which the resource exists.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityresourceRef
+  Description: This is used to contain a reference to an instance where the class may vary. <Eng> A property or arg of this type, if mapped to an OSLS property/arg, means that the OSLS value is the instance id (instance name) of the target object. This can be looked up to find the class and id for this interface. </Eng>  
+#>
+Class UnityresourceRef {
+
+  #Properties
+
+  [String]$resource #The class name of the referenced instance.  
+  [String]$id #The id of the referenced instance.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityrevokedCertificate
+  Description: Settings for revoked certificates in the CRL. <br> <br> This resource type is embedded in the crl resource type. The CRL and revoked certificate formats are described in RFC 5280.  
+#>
+Class UnityrevokedCertificate {
+
+  #Properties
+
+  [String]$id #Unique identifier of the revokedCertificate instance.  
+  [String]$serialNumber #Certificate serial number.  
+  [DateTime]$revocationDate #Date and time when the certificate was revoked.  
+  [CRLReasonCodeEnum]$reasonCode #Reason the certificate was revoked.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unityrole
+  Description: Information about the roles in the storage system. Each role identifies a level of authority for accessing and modifying the system.  
+#>
+Class Unityrole {
+
+  #Properties
+
+  [String]$id #Unique identifier of the role instance.  
+  [String]$name #Name used to identify the role. Valid values are: <ul> <li>administrator - Administrator role. Can view status and performance information. Can also modify all storage system settings, including configure new storage hosts and manage local user, LDAP user, and LDAP group accounts.</li> <li>storageadmin - Storage administrator role. Can view status and performance information and can modify most system settings, but cannot configure new storage hosts or manage local user, LDAP user, or LDAP group accounts.</li> <li>vmadmin - VMware administrator role. Can establish a VASA connection from the vCenter to the storage system.</li> <li>operator - Operator role. Can view system settings, status, and performance information, but cannot modify system settings.</li> </ul>  
+  [String]$description #Role description.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityroleMapping
+  Description: Information about role mappings in the storage system. <br/> <br/> Each role mapping associates a local user, LDAP user, or LDAP group with a role, granting that user or group administrative privileges on the system. <br/> <br/> When you create a local user through the REST API, the appropriate role mapping between the new user and the specified role is created implicitly by the storage system. When you create an LDAP user or group through the REST API, you must explicitly specify a role mapping for that user or group by creating a new roleMapping resource. <br/> <br/> For information about creating local users, see the Help topic for the user resource type.  
+#>
+Class UnityroleMapping {
+
+  #Properties
+
+  [String]$id #Unique identifier of the roleMapping instance.  
+  [String]$authorityName #Authority used to authorize the entity. Values are: <ul> <li>Local, for a local user.</li> <li>LDAP server authority name, for an LDAP user or group.</li)> </ul>  
+  [String]$roleName #Role name to associate with the entity specified by the entityName attribute.  
+  [String]$entityName #Local user, LDAP user, or LDAP group name to associate with the role specified by the roleName attribute.  
+  [RoleMappingTypeEnum]$mappingType #Indicates whether the role mapping is for a local user, LDAP user, or LDAP group.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unityroute
+  Description: Manages static IP routes, including creating, modifying, and deleting these routes. <p/> A route determines where to send a packet next so it can reach its final destination. A static route is set explicitly and does not automatically adapt to the changing network infrastructure. A route is defined by an interface, destination IP address range and an IP address of a corresponding gateway. <p/> <b>Note: </b>IP routes connect an interface (IP address) to the larger network through gateways. Without routes, the interface is no longer accessible outside of its immediate subnet. As a result, network shares and exports associated with the interface are no longer available to clients outside their immediate subnet. <p/> Routes can be created only for iSCSI portals.  
+#>
+Class Unityroute {
+
+  #Properties
+
+  [String]$id #Unique identifier of the route instance.  
+  [Object]$ipInterface #Reference to IP interface.  
+  [Object]$iscsiPortal #Reference to iscsiPortal.  
+  [Object]$fileInterface #Reference to file Interface.  
+  [Object]$destination #IP address of the target network node based on the specific route type. Values are: <ul> <li>For a default route, there is no value, because the system will use the specified gateway IP address. <li>For a host route, the value is the IP address. <li>For a subnet route, the value is a subnet IP address. </ul>  
+  [Object]$netmask #IPv4 netmask for the route, if it uses an IPv4 address.  
+  [Object]$v6PrefixLength #IPv6 prefix length for the route, if it uses an IPv6 address.  
+  [Object]$gateway #IP address of the gateway associated with the route.  
+  [UnityHealth]$health #Health of the route. The health can be impaired if the corresponding interface is changed in a manner incompatible with the route. Modify the route to make it consistent with the interface to restore health to normal, or remove the route if no longer needed.  
+  [Bool]$isRouteToExternalServices #Indicates whether this route is used for external services access like DNS, LDAP, NIS etc.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityrpChapSettings
+  Description: CHAP accounts management for RPA cluster. RPA iSCSI ports act as initiators and log into storage targets, meanwhile, storage iSCSI ports act as initiators and log into RPA targets as well. For security reason, forward CHAP is supported on both directions. Outgoing forward CHAP account is used by storage ports to log into RPAs and incoming foward CHAP account is used by storage to authenticate RPA initiators. However, for now incoming forward account is managed by iscsiSettings and it will be moved here in later releases.  
+#>
+Class UnityrpChapSettings {
+
+  #Properties
+
+  [String]$id #Unique instance identifier.  
+  [String]$outgoingForwardChapUsername #Outgoing Forward CHAP user name, null string indicates chap not set.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysecuritySettings
+  Description: All the system level security settings. <br/> Use this resource to enable and disable system level security settings. <br/> The settings include: <br/> <br/> a) FIPS 140-2 <br/> Information about whether the system is working in Federal Information Processing Standard (FIPS) 140-2 mode. <br/> <br/> The storage systems support FIPS 140-2 mode for the RSA BSAFE SSL modules on the storage pocessor that handle client management traffic. Management communication into and out of the system is encrypted using SSL. As a part of this process, the client and the Storage Management Server negotiate a cipher suite to use in the exchange. The use of FIPS 140-2 mode restricts the allowable set of cipher suites that can be selected in the negotiation to those that are sufficiently strong. <br/> <br/> If FIPS 140-2 mode is enabled, you may find that some of your existing clients can no longer communicate with the management ports of the array if they do not support a cipher suite of acceptable strength. <br/> <br/> b) SSO <br/> Information about whether the system is participating in Single Sign On mode. <br/> <br/> In Single Sign On (SSO) mode, Unisphere Central (UC) becomes the authentication server for multiple storage system, thus creating a shared authentication domain where cross-array operations can be performed without re-entering user credentials. <br/> <br/> If SSO is enabled, the system will participate in Single Sign On mode, and authenticate against Unisphere Central previously configured on this array. <br/> <br/> c) TLS 1.0 <br/> Information about whether the Storage Management Server allows SSL communication using the TLS 1.0 protocol. <br/> <br/> Management communication into and out of the Storage Management Server is encrypted using SSL. As a part of this process, the client and the Storage Management Server negotiate a SSL protocol to use. By default, the Storage Management Server supports TLS 1.0, TLS 1.1 and TLS 1.2 protocols for SSL communications. Disabling the TLS 1.0 protocol using this setting means that the Storage Management Server will only support SSL communications using the TLS 1.1 and TLS 1.2 protocols and TLS 1.0 will not be considered a valid protocol. <br/> <br/> Disabling TLS 1.0 may impact existing client applications which are not compatible with TLS 1.1 or TLS 1.2 protocols. In this case, TLS 1.0 support should remain enabled. <br/> <br/>  
+#>
+Class UnitysecuritySettings {
+
+  #Properties
+
+  [String]$id #Unique identifier of the securitySettings instance. The value of this attribute is always 0, because securitySettings is a singleton resource type.  
+  [Bool]$isFIPSEnabled #Indicates whether the system is working in FIPS 140-2 mode. Values are: <ul> <li>true - System is working in FIPS 140-2 mode.</li> <li>false - System is not working in FIPS 140-2 mode.</li> </ul>  
+  [Bool]$isSSOEnabled #Indicates whether the system has SSO enabled or not. Values are: <ul> <li>true - System is participating in SSO</li> <li>false - System is not participating in SSO</li> </ul>  
+  [Bool]$isTLS1Enabled #Indicates whether the system has TLS 1.0 enabled or not. Values are: <ul> <li>true - TLS 1.0 is enabled</li> <li>false - TLS 1.0 is disabled</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityserviceAction
+  Description: Information about storage system service actions. <br/> <br/> Collect Service Information (dataCollection): Collect information about the storage system and save it to a file. Your service provider can use the collected information to analyze the storage system. <br/> <br/> Save Configuration (configCapture): Save details about the configuration settings on the storage system to a file. Your service provider can use this file to assist you with reconfiguring your system after a major system failure or a system reinitialization. <br/> <br/> Restart Management Software (restartMGT): Restart the management software to resolve connection problems between the system and Unisphere. <br/> <br/> Reinitialize (reinitialize): Reset the storage system to the original factory settings. Both SPs must be installed and operating normally be in Service Mode. <br/> <br/> Change Service Password (changeServicePassword): Change the service password for accessing the Service System page. <br/> <br/> Shut Down System (shutdownSystem): The system shut down and power cycle procedures will attempt to resolve problems with your storage system that could not be resolved by rebooting or reimaging the SP. <br/> <br/> Disable SSH/Enable SSH (changeSSHStatus): Disable the Secure Shell (SSH) protocol to block SSH access to the system, or enable the Secure Shell (SSH) protocol to enable access to the system. <br/> <br/> Enter Service Mode (enterServiceModeSPA, enterServiceModeSPB): Stop I/O on the SP so that the SP can enter service mode safely. <br/> <br/> Reboot (rebootSPA, rebootSPB): Reboot the selected SP. Use this service action to attempt to resolve minor problems related to system software or SP hardware components. <br/> <br/> Reimage (rebootSPA, rebootSPB): Reimage the selected SP. Reimaging analyzes the system software on the SP and attempts to correct any problems automatically. <br/> <br/> Reset and Hold(resetAndHoldSPA, resetAndHoldSPB): Reset and hold the selected SP. Use this service task to attempt to reset and hold the SP, so that users can replace the faulty IoModule(s) on that SP. <br/> <br/>  
+#>
+Class UnityserviceAction {
+
+  #Properties
+
+  [String]$id #Unique identifier of the serviceAction instance.  
+  [SvcScopeEnum]$scope #Current service action scope.  
+  [String]$name #Localized service action name.  
+  [String]$description #Localized service action description.  
+  [Bool]$isApplicable #Indicates whether the service action can be executed. Values are: <ul> <li>true - Service action can be executed.</li> <li>false - Service action cannot be executed.</li> </ul>  
+  [String]$applyCondition #Localized description of the condition under which the service action is applicable.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityserviceContract
+  Description: (Applies if EMC Support is available.) Information about service contracts.  
+#>
+Class UnityserviceContract {
+
+  #Properties
+
+  [String]$id #Unique identifier of the serviceContract instance.  
+  [Object]$contractId #Unique service contract identifier.  
+  [String]$contractNumber #Contract number generated for the customer.  
+  [ServiceContractStatusEnum]$contractStatus #Current service contract status.  
+  [String]$levelOfService #Level of service that the service contract provides.  
+  [String]$serviceLineId #Service offering identifier.  
+  [DateTime]$lastUpdated #Date of last service contract renewal.  
+  [DateTime]$productStartDate #Service contract start date.  
+  [DateTime]$productEndDate #Service contract end date.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityserviceInfo
+  Description: Service-related storage system information. You can use this information for servicing the storage system. <br/> <br/>  
+#>
+Class UnityserviceInfo {
+
+  #Properties
+
+  [String]$id #Unique identifier of the serviceInfo instance. Because serviceInfo is a singleton resource type, the value of this field is always 0.  
+  [String]$productName #Product name, for example, Unity400. Usually, it's same as the system.model.  
+  [String]$productSerialNumber #Product serial number. This has the same value as system.serialNumber.  
+  [String]$systemUUID #(Applies to virtual deployments only.) Unique system identifier required to service the storage system.  
+  [Bool]$isSSHEnabled #Indicates whether Secure Shell (SSH) is enabled on the storage system. Values are: <ul> <li>true - SSH is enabled.</li> <li>false - SSH is not enabled.</li> </ul>  
+  [EsrsStatusEnum]$esrsStatus #Indicates ESRS status. This doesn't contain meaningful value and will removed soon  This attribute is obsolete and will be removed in a future release.  Please use esrsParam.status instead.
+  [Object[]]$sps #Storage processor information, as defined by the svcStorageProcessor resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unitysite
+  Description: Description of the physical address or site where EMC thinks this system is currently located. <br/>  
+#>
+Class Unitysite {
+
+  #Properties
+
+  [String]$siteId #Unique identifier of the site instance.  
+  [String]$siteName #Site name.  
+  [String]$siteDescription #Site description.  
+  [String]$address #The address of the site where the system is located.  
+  [String]$state #The state of the site where the system is located.  
+  [String]$country #The country of the site where the system is located.  
+  [String]$countryName #The country name where the system is located.  
+  [String]$city #The city of the site where the system is located.  
+  [Bool]$isCurrentLocation #True, when this is the site at which EMC believes the system is currently residing.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysnapHostAccess
+  Description: Host access settings for snapshot.  
+#>
+Class UnitysnapHostAccess {
+
+  #Properties
+
+  [Object]$host #Host that has access to the snapshot, as defined by the host resource type.  
+  [SnapAccessLevelEnum]$allowedAccess #Access-level permissions for host.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysnapHostAccessParameters
+  Description: Host access settings for snapshot.  
+#>
+Class UnitysnapHostAccessParameters {
+
+  #Properties
+
+  [Object]$host #Host to grant access to snapshot, as defined by host type.  
+  [SnapAccessLevelEnum]$allowedAccess #Access-level permissions for host.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysnapScheduleParameters
+  Description: Snapshot schedule settings for the storage resource. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitysnapScheduleParameters {
+
+  #Properties
+
+  [Object]$snapSchedule #Snapshot schedule assigned to the storage resource, as defined by the snapSchedule type.  
+  [Bool]$isSnapSchedulePaused #Indicates whether the assigned snapshot schedule is paused. Values are: <ul> <li>true - Assigned snapshot schedule is paused.</li> <li>false - Assigned snapshot schedule is not paused.</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysoftwareUpgradeSession
+  Description: Information about a storage system upgrade session. <br/> <br/> Create an upgrade session to upgrade the system software or view existing upgrade sessions. The upgrade session installs an upgrade candidate file that was uploaded to the system. Download the latest upgrade candidate from EMC Online Support website. Use the CLI to upload the upgrade candidate to the system before creating the upgrade session. For information, see the <i>Unisphere CLI User Guide</i>. <br/> <br/> The latest software upgrade candidate contains all available hot fixes. If you have applied hot fixes to your system, the hot fixes are included in the latest upgrade candidate. <br/> <br/> <b>Note: </b>All system components must be healthy prior to upgrading the system software. If any system components are degraded, the software update will fail.  
+#>
+Class UnitysoftwareUpgradeSession {
+
+  #Properties
+
+  [String]$id #Unique identifier for the softwareUpgradeSession instance.  
+  [UpgradeSessionTypeEnum]$type #Type of software to upgrade.  
+  [Object]$candidate #Candidate software to install in the upgrade session, as defined by the candidateSoftwareVersion resource type.  
+  [String]$caption #Caption for this upgrade session.  
+  [UpgradeStatusEnum]$status #Status of the current upgrade session.  
+  [Object[]]$messages #List of upgrade messages.  
+  [DateTime]$creationTime #Date and time when the upgrade session was started.  
+  [DateTime]$elapsedTime #Amount of time for which the upgrade session was running.  
+  [Object]$percentComplete #Percentage of the upgrade that is completed.  
+  [Object[]]$tasks #Current upgrade activity in the upgrade session, as defined by the upgradeTask resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unityssc
+  Description: (Applies to physical deployments only.) Information about System Status Cards (SSCs) in the storage system.  
+#>
+Class Unityssc {
+
+  #Properties
+
+  [String]$id #Unique identifier of the ssc.  
+  [UnityHealth]$health #Health information for the SSC, as defined by the health resource type.  
+  [Bool]$needsReplacement #Indicates whether the SSC needs replacement. Values are: <ul> <li>true - SSC needs replacement.</li> <li>false - SSC does not need replacement.</li> </ul>  
+  [Object]$parent #Resource type and unique identifier for the SSC's parent enclosure.  
+  [Object]$slotNumber #Slot where the SSC is located in the parent enclosure.  
+  [String]$name #SSC name.  
+  [Object]$parentDae #Parent Disk Array Enclosure (DAE) of the SSC.  
+  [String]$manufacturer #Manufacturer of the SSC.  
+  [String]$model #Manufacturer's model number for the SSC.  
+  [String]$emcPartNumber #EMC part number for the SSC.  
+  [String]$emcSerialNumber #EMC serial number for the SSC.  
+  [String]$vendorPartNumber #Vendor part number for the SSC.  
+  [String]$vendorSerialNumber #Vendor serial number for the SSC.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unityssd
+  Description: (Applies to physical deployments only.) Information about internal Flash-based Solid State Disks (SSDs, mSATAs) in the storage system.  
+#>
+Class Unityssd {
+
+  #Properties
+
+  [String]$id #Unique identifier of the ssd.  
+  [UnityHealth]$health #Health information for the SSD, as defined by the health resource type.  
+  [Bool]$needsReplacement #Indicates whether the SSD needs replacement. Values are: <ul> <li>true - SSD needs replacement.</li> <li>false - SSD does not need replacement.</li> </ul>  
+  [Object]$parent #Resource type and unique identifier for the SSD's parent enclosure.  
+  [Object]$slotNumber #Slot where the SSD is located in the parent enclosure.  
+  [String]$name #SSD name.  
+  [String]$manufacturer #Manufacturer of the SSD.  
+  [String]$model #Manufacturer's model number for the SSD.  
+  [String]$firmwareVersion #SSD firmware revision number.  
+  [String]$emcPartNumber #EMC part number for the SSD.  
+  [String]$emcSerialNumber #EMC serial number for the SSD.  
+  [String]$vendorPartNumber #Vendor part number for the SSD  
+  [String]$vendorSerialNumber #Vendor serial number for the SSD.  
+  [Object]$parentStorageProcessor #Parent storage processor of the ssd.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitystatValue
+  Description: A statValue object contains one real-time sample of a single metric. Its JSON representation is the following: statValue {} { values } values pair pair , values pair string : value value float statValue The string in a pair is the ID of an object. The value is the metric value for that object.  
+#>
+Class UnitystatValue {
+
+  #Properties
+
+
+  #Methods
+
+}
+
+<#
+  Name: UnitystorageProcessor
+  Description: Information about Storage Processors (SPs) in the storage system.  
+#>
+Class UnitystorageProcessor {
+
+  #Properties
+
+  [String]$id #Unique identifier of the storageProcessor instance.  
+  [Object]$parent #Resource type and unique identifier for the SP's parent enclosure.  
+  [UnityHealth]$health #Health information for the SP, as defined by the health resource type.  
+  [Bool]$needsReplacement #Indicates whether the SP needs replacement. Values are: <ul> <li>true - SP needs replacement.</li> <li>false - SP does not need replacement.</li> </ul>  
+  [Bool]$isRescueMode #Indicates whether the SP is in Service Mode. Values are: <ul> <li>true - SP is in Service Mode.</li> <li>false - SP is not in Service Mode.</li> </ul>  
+  [String]$model #Manufacturer's model number for the SP.  
+  [Object]$slotNumber #Slot where the SP is located in the parent enclosure.  
+  [String]$name #SP name.  
+  [String]$emcPartNumber #EMC part number for the SP.  
+  [String]$emcSerialNumber #EMC serial number for the SP.  
+  [String]$manufacturer #Manufacturer of the SP.  
+  [String]$vendorPartNumber #Vendor part number for the SP.  
+  [String]$vendorSerialNumber #Vendor serial number for the SP.  
+  [String]$sasExpanderVersion #Version number of the SAS Expander associated with the SP.  
+  [String]$biosFirmwareRevision #Version number of the SP BIOS.  
+  [String]$postFirmwareRevision #Version number of the SP Power-On Self-Test software.  
+  [Object]$memorySize #SP RAM size.  
+  [Object]$parentDpe #Parent Disk Processor Enclosure (DPE) of the storage processor.  
+  [String]$uuid #(Applies to virtual deployments only.) SP UUID.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitystorageResourceCapabilityProfile
+  Description: An association between a capability profile and a datastore-type storage resource, with capacity usage information about virtual volumes provisioned accordingly.  
+#>
+Class UnitystorageResourceCapabilityProfile {
+
+  #Properties
+
+  [String]$id #Unique identifier of the storage resource capability profile.  
+  [Object]$storageResource #The datastore-type storage resource instance.  
+  [Object]$capabilityProfile #Reference to the supported capability profile.  
+  [Bool]$isInUse #True, if any VVol's are provisioned in the storage resource with the given capability profile.  
+  [Object]$sizeUsed #Used size of virtual volumes provisioned in this storage resource (datastore) using this capability profile.  
+  [Object]$sizeAllocated #Storage element allocated size per allocation pool, associated with required capability profile.  
+  [Object]$sizeTotal #The maximum capacity, that could be used by the storage element per allocation pool, associated with required capability profile.  
+  [Object]$logicalSizeUsed #The maximum capacity, that the storage elements of required capability profile are allowed to use from required pool.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitystorageResourceDelete
+  Description: Parameters used for deleting a storage resource when deleting a batch of storage resources. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnitystorageResourceDelete {
+
+  #Properties
+
+  [Object]$storageResource #Storage resource to completely delete from the storage system.  
+  [Bool]$forceSnapDeletion #Indicates whether to delete a storage resource's snapshots along with the storage resource. . Values are: <ul> <li>true - Delete all the storage resource's snapshots.</li> <li>false - Do not delete the storage resource's snapshots.</li> </ul>  
+  [Bool]$forceVVolsDeletion #Indicates whether to delete all VVols of the VVol datastore along with the storage resource. Values are: <ul> <li>true - Delete all VVols of the VVol datastore.</li> <li>false - Do not delete all VVols of the VVol datastore.</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitystorageTier
+  Description: Set of possible RAID configurations that a storage tier can support. (A storage tier is the collection of all disks of a particular type on the storage system.) For example, if you have 11 disks in a tier, you can support R5 (4+1), R5 (8+1), but not R5(12+1). <br/> <br/> Use this resource type to create custom pools. For more information, see the help topic for the pool resource type. <br/> <br/>  
+#>
+Class UnitystorageTier {
+
+  #Properties
+
+  [String]$id #Unique identifier of the storageTier instance.  
+  [TierTypeEnum]$tierType #Tier type.  
+  [Object[]]$raidConfigurations #Possible RAID configurations for the storage tier, as defined by the raidConfiguration embedded object.  
+  [Object]$disksTotal #Total number of disks in the storage system that have the same storage tier type as that specified by the tierType attribute.  
+  [Object]$disksUnused #Total number of unused disks in the storage system that have the same tier type as that specified by the tierType attribute.  
+  [Object]$virtualDisksTotal #Total number of virtual disks in the storage system that have the same tier type as that specified by the tierType attribute.  
+  [Object]$virtualDisksUnused #Total number of unused virtual disks in the storage system that have the same tier type as that specified by the tierType attribute.  
+  [Object]$sizeTotal #Total raw capacity of all physical disks and virtual disks in the storage system that have the same tier type as that specified by the tierType attribute.  
+  [Object]$sizeFree #Total raw capacity of all unused physical disks and virtual disks in the storage system that have the same tier type as that specified by the tierType attribute.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitystorageTierConfiguration
+  Description: Possible disk selections for a storage tier, given a specified storage tier type, RAID type, and stripe width. <br/> <br/> Use this resource type, along with the pool, diskGroup, and storageTier resource types, to create custom pools. For more information, see the help topic for the pool resource type.  
+#>
+Class UnitystorageTierConfiguration {
+
+  #Properties
+
+  [Object]$storageTier #Storage tier for which you want to obtain proposed configurations as defined by the storageCapability resource type.  
+  [Object]$sizeTotal #Maximum usable capacity for the specified storage configuration if all available disks are used for the configuration.  
+  [Object[]]$poolUnitConfigurations #(Applies to virtual deployments only.) List of pool units to use in the storage tier configuration.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitystorageTierExtension
+  Description: Set of RAID configurations for each storage tier that can be used for pool expansion.  
+#>
+Class UnitystorageTierExtension {
+
+  #Properties
+
+  [TierTypeEnum]$tierType #Tier type.  
+  [Object[]]$raidConfigurations #List of RAID configurations that can be used to expand the specified tier type, as defined by the raidConfiguration type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitystripeWidthConfiguration
+  Description: Possible stripe width (or RAID modulus) values for the specified RAID type and tier type.  
+#>
+Class UnitystripeWidthConfiguration {
+
+  #Properties
+
+  [String]$id #Unique identifier of the stripeWidthConfiguration instance. This identifier can be used to find corresponding profile in CLI.  
+  [RaidStripeWidthEnum]$stripeWidth #RAID group stripe width.  
+  [Object]$parityDisks #Number of parity disks.  
+  [Object]$sizePotential #Maximum usable capacity. The system calculates this figure by summing up the capacities of all available disks that have the required disk type, RAID type, and stripe width.  
+  [Bool]$isDefault #Indicates whether the stripe width is the default stripe width for the associated RAID type. Values are: <ul> <li>true - Stripe width is the default stripe width for the associated RAID type.</> <li>false - Stripe width is not the default stripe width for the associated RAID type.</> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysupportAsset
+  Description: Information about the support assets on the main Unisphere Support page and its sub-pages. <br/> <br/>  
+#>
+Class UnitysupportAsset {
+
+  #Properties
+
+  [String]$id #Unique identifier of the supportAsset instance.  
+  [String]$name #Localized support asset name.  
+  [String]$description #Localized support asset description.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysupportProxy
+  Description: Proxy Server settings. <p/> A proxy server is a server that acts as an intermediary for requests from clients seeking resources from other servers. <p/> The system uses the proxy server (if it's enabled) to access EMC web services such as authenticate support credential, get technical advisories, etc.  
+#>
+Class UnitysupportProxy {
+
+  #Properties
+
+  [String]$id #Unique identifier of the support proxy instance. --eng This value is always 0, because at any given time there is only one proxy.  
+  [Bool]$isEnabled #Indicates whether the proxy server is enabled. <br/> Values are: <ul> <li>true - Uses proxy server</li> <li>false - Does not use proxy server</li> </ul>  
+  [ProxyProtocolEnum]$protocol #Protocol used for communication with the proxy Server.  
+  [Object]$address #Support proxy Server. <br/> If a port is not specified the following default ports will be used: <ul> <li>Protocol = http, Default port = 3128</li> <li>Protocol = socks, Default port = 1080</li> </ul>  
+  [String]$username #The user name for proxy server.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysupportService
+  Description: (Applies if EMC Support is available.) Information about the support services associated with customers.  
+#>
+Class UnitysupportService {
+
+  #Properties
+
+  [String]$id #Unique identifier of the supportService instance.  
+  [String]$supportUsername #Username for logging into EMC Support.  
+  [SupportCredentialStatusEnum]$supportCredentialStatus #Status of the support credentials.  
+  [Bool]$isEMCServiced #Indicates whether the customer has a valid EMC self-service support ecosystem license or service contract. <br/> Valid values are: <ul> <li>true - Customer has a valid EMC self-service support ecosystem license or service contract.</li> <li>false - Customer does not have a valid self-service support ecosystem license or service contract. </li> </ul>  
+  [Bool]$isContractReportEnabled #Indicates whether the storage system automatically updates its service contracts list once a week. Values are: <ul> <li>true - System automatically updates its service contracts list once a week.</li> <li> false - System does not automatically update its service contracts list once a week.</li> </ul>  
+  [Bool]$isCloudManagementEnabled #Indicates whether the customer has enabled management by the EMC Cloud Management product. <br/> Valid values are: <ul> <li>true - Customer has enabled Cloud Management.</li> <li>false - Customer has not enabled Cloud Management. </li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysvcCRU
+  Description: Service-related information for the Customer Replaceable Units (CRUs) installed on the storage processors. You can use this information for servicing the CRUs. <br/> <br/>  
+#>
+Class UnitysvcCRU {
+
+  #Properties
+
+  [SvcCRUTypeEnum]$type #CRU type  
+  [String]$serialNumber #CRU serial number.  
+  [String]$partNumber #CRU part number.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysvcStorageProcessor
+  Description: Service-related information for the storage processors on the storage system. You can use this information for servicing the storage processors. There is always one svcStorageProcessor per SP in the system. <br/> <br/>  
+#>
+Class UnitysvcStorageProcessor {
+
+  #Properties
+
+  [SvcScopeEnum]$scope #Scope of the object  
+  [Bool]$isServiceMode #Indicates whether the storage processor is in Service Mode. Values are: <ul> <li>true - SP is in Service Mode.</li> <li>false - SP is in Normal Mode.</li> </ul>  
+  [Bool]$isPrimary #Indicates whether the storage processor is the primary SP. The primary SP is the storage processor on which the management stack runs. Values are: <ul> <li>true - SP is the primary SP. </li> <li>false - SP is not the primary SP. </li> </ul>  
+  [String]$softwareVersion #Software version of the storage processor  
+  [String]$hostName #Host name of the storage processor. This host name corresponds to control path IP on this SP.  
+  [String]$serviceModeReason #Service mode reason (Rescue Reason Code), is a hexadecimal-formatted code. If the storage processor is in service mode, this code indicates why the SP is in Service Mode. <p> If the SP is in Normal Mode, the value of this attribute is null.  
+  [String]$serviceModeReasonHint #Service mode reason hint (Rescue reason hint code), is a hexadecimal-formatted code. If the SP is in Service Mode, this code provides additional information as to why the SP is in Service Mode. <p> If the SP is in Normal Mode, the value of this attribute is null.  
+  [String]$serviceModeRecommendedAction #Localized recommended action in service mode. If the storage processor is in service mode, this message indicates the recommended action the user can take to get the storage processor out of service mode. <p> If the SP is in Normal Mode, the value of this attribute is null.  
+  [String]$status #Localized storage processor status message.  
+  [Object[]]$crus #Customer Replaceable Units (CRUs) that are installed on the storage processor. Usually, there is at least one Solid State Disk (SSD) and one or more SLICs.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysystemCapacity
+  Description: Capacity data for all pools collected for the storage system.  
+#>
+Class UnitysystemCapacity {
+
+  #Properties
+
+  [String]$id #Unique identifier of the systemCapacity instance.  
+  [Object]$sizeFree #Amount of free space available in the pools on the storage system.  
+  [Object]$sizeTotal #Total amount of space (used space plus free space) in the pools on the storage system.  
+  [Object]$sizeUsed #Amount of used space in the pools on the storage system.  
+  [Object]$compressionSizeSaved #Amount of space saved by compression in the pools on the storage system.  
+  [Object]$compressionPercent #Compression enabled increase of storage space expressed as percentage of summary of used and compression saved space size.  
+  [Float]$compressionRatio #compression ratio  
+  [Object]$sizeSubscribed #Size of space requested by the storage resources allocated in all pools for possible future allocations. If this value is greater than the total size, it means pools are oversubscribed.  
+  [Object[]]$tiers #Size information (total, free, used) per tier.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysystemInformation
+  Description: Contact information for storage system.  
+#>
+Class UnitysystemInformation {
+
+  #Properties
+
+  [String]$id #Unique identifier of the systemInformation instance.  
+  [String]$contactFirstName #Contact first name for the storage system.  
+  [String]$contactLastName #Contact last name for the storage system.  
+  [String]$contactCompany #Contact company name for the storage system.  
+  [String]$contactPhone #Phone number for the person who should be contacted by the service provider for service issues.  
+  [String]$contactEmail #Contact email address for the storage system.  
+  [String]$locationName #The physical location of this system within the user's environment. For example: Building C, lab 5, tile C25  
+  [String]$streetAddress #Street address for the storage system.  
+  [String]$city #City where the storage system resides.  
+  [String]$state #State where the storage system resides.  
+  [String]$zipcode #Zip code or postal code where the storage system resides. --eng Zip Code is not currently supported by the ESRS VE system information api  
+  [String]$country #Country where the storage system resides.  
+  [String]$siteId #The ID identifying the site where this system is installed.  
+  [String]$contactMobilePhone #Mobile phone number for the person who should be contacted by the service provider for service issues.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysystemLimit
+  Description: Information about system limits.  
+#>
+Class UnitysystemLimit {
+
+  #Properties
+
+  [String]$id #Unique identifier of the systemLimit instance.  
+  [String]$name #Limit name.  
+  [String]$description #Limit description.  
+  [UnitEnum]$unit #Units of measurement for limit and threshold values.  
+  [Object]$limitValue #Boundary value that cannot be exceeded.  
+  [Object]$thresholdValue #Value at which the system generates alert notifications, if any.  
+  [String[]]$resources #Resource types to which the limit applies.  
+  [Object]$license #License on which the limit depends, if any, as defined by the license resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysystemTierCapacity
+  Description: Capacity data for one tier, collected from all pools.  
+#>
+Class UnitysystemTierCapacity {
+
+  #Properties
+
+  [TierTypeEnum]$tierType #Tier type.  
+  [Object]$sizeFree #Amount of free space available in the tier.  
+  [Object]$sizeTotal #Total amount of space (used space plus free space) in the tier.  
+  [Object]$sizeUsed #Amount of space used by the tier's associated storage resources.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitysystemTime
+  Description: Current system time.  
+#>
+Class UnitysystemTime {
+
+  #Properties
+
+  [String]$id #Unique identifier of the systemTime instance. Because systemTime is a singleton resource type, the value of this field is always 0.  
+  [DateTime]$time #Current system time.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitytechnicalAdvisory
+  Description: Information about the Technical Advisories provided by EMC Support.  
+#>
+Class UnitytechnicalAdvisory {
+
+  #Properties
+
+  [String]$id #Unique identifier of the technicalAdvisory instance.  
+  [String]$knowledgeBaseId #Knowledgebase number for the Technical Advisory.  
+  [String]$description #Description of the Technical Advisory.  
+  [DateTime]$modificationTime #Latest publication date for the Technical Advisory.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unitytenant
+  Description: A tenant is a representation of a datacenter client, who uses an independent network structure and gets the independent and exclusive access to certain storage resources. On the storage array, it corresponds to a NAS server group with an independent IP addressing. At the moment, iSCSI and management resources do not support multi-tenant access. For each tenant a corresponding Linux network namespace is created. In the current design, traffic separation between the tenants is done by the VLANs. Each tenant reserves a group of VLANs, and each VLAN can belong to one tenant maximum. Every tenant gets a name and the Universally Unique Identifier (UUID). The UUID cannot be changed during the tenant life cycle. The asynchronous replication of the NAS servers is allowed only between the servers belonging to the tenants with the same UUID. The NAS servers and VLANs can still belong to no tenant. Such NAS servers and VLANs operate in the Linux base network namespace, together with management and iSCSI interfaces. The control stack of the system does not allow user to log in in the tenant administrator role. All the tenants, NAS servers and VLANs are managed from the single system administrator account. To allow this, the corresponding GUI and CLI modifications are made.  
+#>
+Class Unitytenant {
+
+  #Properties
+
+  [String]$id #Unique identifier of the tenant instance.  
+  [String]$name #User-specified name of the tenant.  
+  [String]$uuid #UUID of the tenant.  
+  [Object[]]$vlans #VLAN IDs assigned to the tenant.  
+  [Object[]]$hosts #The hosts associated with the current tenant
+
+  #Methods
+
+}
+
+<#
+  Name: UnitytracerouteResult
+  Description: Information about traceroute command result.  
+#>
+Class UnitytracerouteResult {
+
+  #Properties
+
+  [Object]$hop #Hop number.  
+  [Object]$ipAddress #IP Address  
+  [Float]$latency #Latency in milliseconds  
+  [Bool]$result #True if accessible, False otherwise.  
+  [String]$raw #Raw string output.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnitytreeQuota
+  Description: A treeQuota instance represents a quota limit applied to a specific directory tree in a file system.  
+#>
+Class UnitytreeQuota {
+
+  #Properties
+
+  [String]$id #Unique identifier of the tree quota instance.  
+  [Object]$filesystem #Associated file system.  
+  [Object]$quotaConfig #Associated quotaConfig instance.  
+  [String]$path #Path relative to the root of the filesystem.  
+  [String]$description #Description of the tree quota.  
+  [QuotaStateEnum]$state #State of the tree quota.  
+  [Object]$hardLimit #Hard limit.  
+  [Object]$softLimit #Soft limit.  
+  [Object]$remainingGracePeriod #The remaining grace period, when the soft limit is exceeded. <br> The value 0 means the grace period has been past.  
+  [Object]$sizeUsed #The size already used.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityupgradeMessage
+  Description: A message occurrence. This is also the message object returned in the body of non-2xx return code REST responses.  
+#>
+Class UnityupgradeMessage {
+
+  #Properties
+
+  [Object[]]$messages #List of localized messages.  
+  [String]$errorCode #Error code for this message.  
+  [SeverityEnum]$severity #Severity level associated with this message.  
+  [Object]$httpStatus #HTTP status code for this message.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityupgradeSession
+  Description: Information about a storage system upgrade session. <br/> <br/> Create or view an upgrade session to upgrade the system software or hardware. <br/> <br/> A hardware upgrade session starts or shows the status of a hardware upgrade. <br/> <br/> A software upgrade session installs an upgrade candidate file that was uploaded to the system. Download the latest upgrade candidate from EMC Online Support website. Use the CLI to upload the upgrade candidate to the system before creating the upgrade session. For information, see the <i>Unisphere CLI User Guide</i>. <br/> <br/> The latest software upgrade candidate contains all available hot fixes. If you have applied hot fixes to your system, the hot fixes are included in the latest upgrade candidate. <br/> <br/> <b>Note: </b>All system components must be healthy prior to upgrading the system software. If any system components are degraded, the software update will fail.  
+#>
+Class UnityupgradeSession {
+
+  #Properties
+
+  [String]$id #Unique identifier for the upgradeSession instance.  
+  [UpgradeSessionTypeEnum]$type #Type of software or hardware upgrade.  
+  [Object]$candidate #Candidate software to install in the upgrade session, as defined by the candidateSoftwareVersion resource type. This value does not exist for a hardware upgrade session.  
+  [String]$caption #Caption for this upgrade session.  
+  [UpgradeStatusEnum]$status #Status of the current upgrade session.  
+  [Object[]]$messages # 
+  [DateTime]$creationTime #Date and time when the upgrade session was started.  
+  [DateTime]$elapsedTime #Amount of time for which the upgrade session was running.  
+  [Object]$percentComplete #Percentage of the upgrade that is completed.  
+  [Object[]]$tasks #Current upgrade activity in the upgrade session, as defined by the upgradeTask resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityupgradeTask
+  Description: Information about the upgrade task currently in progress.  
+#>
+Class UnityupgradeTask {
+
+  #Properties
+
+  [String]$caption #Caption for this task.  
+  [DateTime]$creationTime #Date and time when the upgrade task was started.  
+  [UpgradeStatusEnum]$status #Current status of the upgrade activity.  
+  [UpgradeSessionTypeEnum]$type #Upgrade session type.  
+  [DateTime]$estRemainTime #Estimated time remaining for the upgrade task.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityurServer
+  Description: Information for registering a storage system with Unisphere Central.  
+#>
+Class UnityurServer {
+
+  #Properties
+
+  [Object]$address #IP address of the Unisphere Central server.  
+  [String]$id #Unique identifier of the urServer instance. This value is always 0, because the object is a singleton.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityuserQuota
+  Description: A userQuota instance represents a quota limit applied to a user within a quota tree or a file system.  
+#>
+Class UnityuserQuota {
+
+  #Properties
+
+  [String]$id #Unique identifier of the user quota instance.  
+  [Object]$filesystem #Associated file system.  
+  [Object]$treeQuota #Associated tree quota. Values are: <ul> <li> null - if the user quota is not within a quota tree. </li> <li> treeQuota instance - if the user quota is within a quota tree. </li> </ul>  
+  [Object]$uid #User ID of the user.  
+  [QuotaStateEnum]$state #State of the user quota.  
+  [Object]$hardLimit #Hard limit. <br> The value 0 means no limitations.  
+  [Object]$softLimit #Soft limit. <br> The value 0 means no limitations.  
+  [Object]$remainingGracePeriod #Remaining grace period when the soft limit is exceeded. <br> The grace period of userQuota is set in quotaConfig.  
+  [Object]$sizeUsed #Size already used by the user.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityvirtualDisk
+  Description: Information about the external virtual disks that can be used as storage resources in a storage pool. <br/>  
+#>
+Class UnityvirtualDisk {
+
+  #Properties
+
+  [String]$id #Unique identifier of the virtualDisk instance.  
+  [PoolUnitTypeEnum]$type #Pool unit type. This value is always Virtual_Disk(2).  
+  [UnityHealth]$health #Health information for the virtual disk, as defined by the health resource type.  
+  [String]$name #Virtual disk name.  
+  [String]$wwn #World Wide Name (WWN) of the virtual disk.  
+  [String]$spaScsiId #SPA SCSI ID of the virtual disk, as assigned by the VM to which the disk is attached.  
+  [Object]$rawSize #Raw (unformatted) capacity of the virtual disk.  
+  [Object]$sizeTotal #Usable capacity of the virtual disk.  
+  [TierTypeEnum]$tierType #Virtual disk tier type.  
+  [Object]$pool #Pool to which the virtual disk belongs, as defined by the pool resource type.  
+  [Bool]$isInUse #Indicates whether the virtual disk is in use. The virtual disk is in use when it's consumed by a storage pool or being added to a storage pool. <ul> <li>true - Virtual disk is in use.</li> <li>false - Virtual disk is not in use.</li> </ul>  
+  [Object]$backingStore #The backingStore associated with the current virtualDisk
+
+  #Methods
+
+}
+
+<#
+  Name: UnityvirtualVolume
+  Description: VASA 2.0 virtual volume (VVol).  
+#>
+Class UnityvirtualVolume {
+
+  #Properties
+
+  [String]$id #Unique identifier of the VVol.  
+  [UnityHealth]$health #Health information for the virtual volume.  
+  [String]$name #Virtual volume name.  
+  [VVolTypeEnum]$vvolType #Type of the VVol.  
+  [ReplicaTypeEnum]$replicaType #Replica type of the VVol.  
+  [Object]$parent #For non-base VVols, the parent VVol.  
+  [Object]$storageResource #The datastore-type storage resource in which the VVol is provisioned.  
+  [Object]$pool #Pool associated with the VVol.  
+  [Object]$capabilityProfile #Capability profile associated with this VVol.  
+  [String]$policyProfileName #The name of the VASA Policy Profile that vSphere has associated with this virtual volume.  
+  [Bool]$isCompliant #Indicates whether the is VVol compliant with associated policy profile. true - VVol is compliant. false - VVol is not compliant.  
+  [Bool]$isThinEnabled #True if thin provisioning is enabled.  
+  [Object]$sizeTotal #Logical or addressable size of the object.  
+  [Object]$sizeUsed #The amount of space used by the object from the pool.  
+  [Object[]]$bindings #List of virtualVolumeBinding objects which contain binding information. Empty if virtual volume is not bound.  
+  [String]$vmUUID #VMware UUID of the hosted virtual machine. Helps to identify virtual machine if VMware integration is not set.  
+  [Object]$vm #Reference to the virtual machine hosted on the virtual volume. Always empty if VMware integration not configured.  
+  [Object]$vmDisk #Reference to associated virual machine disk object. Always empty if VMware integration not configured.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityvirtualVolumeBinding
+  Description: VASA 2.0 VVol bindings, showing the connection between the VVol on the storage array and the VMware protocol endpoint.  
+#>
+Class UnityvirtualVolumeBinding {
+
+  #Properties
+
+  [Object]$vmwarePE #VMware protocol endpoint to which the VVol is bound.  
+  [String]$bindingDetails #Export path for Virtual Volumes bound with NFS. Secondary SCSI ID for Virtual Volumes bound with iSCSI.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityvirusChecker
+  Description: Information about the anti-virus service of a NAS server. <br/> <br/> The storage system supports third-party anti-virus servers that perform virus scans and reports back to the storage system. For example, when an SMB client creates, moves, or modifies a file, the NAS server invokes the anti-virus server to scan the file for known viruses. During the scan any access to this file is blocked. If the file does not contain a virus, it is written to the file system. If the file is infected, corrective action (fixed, removed or placed in quarantine) is taken as defined by the anti-virus server. You can optionally set up the service to scan the file on read access based on last access of the file compared to last update of the third-party anti-virus date. <br/> A virusChecker object is created each time the anti-virus service is enabled on a NAS server. A configuration file (named viruschecker.conf) needs to be uploaded on the NAS server before enabling the anti-virus service.  
+#>
+Class UnityvirusChecker {
+
+  #Properties
+
+  [String]$id #Unique instance id.  
+  [Object]$nasServer #NAS server that is configured with these anti-virus settings.  
+  [Bool]$isEnabled #Indicates whether the anti-virus service is enabled on this NAS server. Value are: <ul> <li>true - Anti-virus service is enabled. Each file created or modified by an SMB client is scanned by the third-party anti-virus servers. If a virus is detected, the access to the file system is denied. If third-party anti-virus servers are not available, according the policy, the access to the file systems is denied to prevent potential viruses propagation.</li> <li>false - Anti-virus service is disabled. File systems of the NAS servers are available for access without virus checking</li> </ul>  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityvlanInfo
+  Description: Information about VLAN IDs.  
+#>
+Class UnityvlanInfo {
+
+  #Properties
+
+  [String]$id #Unique identifier of the vlanInfo instance.  
+  [Object]$vlanId #VLAN ID.  
+  [Object[]]$interfaces #List of IP interfaces created on this VLAN.  
+  [Object]$tenant #Tenant to which the VLAN belongs.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unityvm
+  Description: Represents a virtual machine.  
+#>
+Class Unityvm {
+
+  #Properties
+
+  [String]$id #Unique instance id.  
+  [Object]$datastore #The storageResource that hosts configuration data of the VM.  
+  [String]$name #Friendly name of VM displayed on vCenter.  
+  [Object[]]$guestAddresses #The guest addresses of VM. Can be IPv4, IPv6, or both.  
+  [String]$guestHostName #The host name of VM guest host.  
+  [String]$notes #Notes for VM.  
+  [String]$osType #The OS type of VM.  
+  [Object]$host #ESXi host that hosts VM.  
+  [VMPowerStateEnum]$state #The state of VM.  
+  [Object[]]$virtualVolumes #The virtualVolumes associated with the current vm
+  [Object[]]$vmDisks #The vmDisks associated with the current vm
+
+  #Methods
+
+}
+
+<#
+  Name: UnityvmDisk
+  Description: Virtual Machine disk object.  
+#>
+Class UnityvmDisk {
+
+  #Properties
+
+  [Object]$datastore #The datastore that hosts the VM disk.  
+  [String]$id #Unique instance ID.  
+  [Object]$vm #The associated VM.  
+  [String]$name #Friendly name of VM disk displayed on vCenter.  
+  [Object]$spaceTotal #Size of the VM disk.  
+  [VMDiskTypeEnum]$type #Type of the VM disk.  
+  [Object]$virtualVolumes #The virtualVolume associated with the current vmDisk
+
+  #Methods
+
+}
+
+<#
+  Name: UnityvmwareIscsiParameters
+  Description: Settings for an iSCSI LUN used as a VMWare VMFS datastore. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnityvmwareIscsiParameters {
+
+  #Properties
+
+  [ESXFilesystemMajorVersionEnum]$majorVersion #VMFS major version.  
+  [ESXFilesystemBlockSizeEnum]$blockSize #VMFS block size.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityvmwareNasPEServer
+  Description: A resource representing NAS VMware Protocol Endpoint Server. Only one instance per NAS Server can be created.  
+#>
+Class UnityvmwareNasPEServer {
+
+  #Properties
+
+  [String]$id #Unique identifier of NAS VMware Protocol Endpoint Server.  
+  [Object]$nasServer #NAS server for this protocol endpoint.  
+  [Object[]]$fileInterfaces #A list of file IP interfaces to be used by NAS VMware Protocol Endpoint Server.  
+  [Object]$boundVVolCount #The number of bound VVols associated with NAS VMware Protocol Endpoint Server.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityvmwarePE
+  Description: A resource representing VMware protocol endpoint of both possible types: NAS protocol endpoint and SCSI protocol endpoint. An instance of this class is created automatically as part of VVol datastore (storage resource) host access configuration.  
+#>
+Class UnityvmwarePE {
+
+  #Properties
+
+  [String]$id #Unique identifier of VMware protocol endpoint.  
+  [Object]$vmwareNasPEServer #For NAS VMware protocol endpoints, the associated NAS VMware protocol endpoint server.  
+  [String]$name #VMware protocol endpoint name.  
+  [VmwarePETypeEnum]$type #Protocol Endpoint type.  
+  [String]$vmwareUUID #VMware UUID for this protocol endpoint.  
+  [String]$exportPath #For NAS VMware protocol endpoints, the export path.  
+  [Object]$ipAddress #For NAS VMware protocol endpoints, the IP address.  
+  [IpProtocolVersionEnum]$ipProtocolVersion #For NAS VMware protocol endpoints, IP protocol version (IPv4 or IPv6).  
+  [NodeEnum]$defaultNode #For SCSI VMware protocol endpoints, the default owning SP.  
+  [NodeEnum]$currentNode #For SCSI VMware protocol endpoints, the current SP.  
+  [String]$wwn #WWN for SCSI VMware protocol endpoints.  
+  [String]$naa #For SCSI VMware protocol endpoints, the VMware protocol endpoint SCSI identifier in naa format.  
+  [Object]$vvolds #For NAS protocol endpoints, the associated datastore type storage resource.  
+  [Object]$host #For SCSI VMware protocol endpoints, the unique identifier of associated host.  
+  [Object]$lunId #For SCSI VMware protocol endpoints, the identifier of assiciated LUN.  
+  [Object]$boundVVolCount #The number of bound VVols associated with NAS VMware Protocol Endpoint.  
+  [UnityHealth]$health #Health information for the VMware Protocol Endpoint.  
+
+  #Methods
+
+}
+
+<#
+  Name: UnityvvolDatastoreCapabilityProfilesParameters
+  Description: Capability profile parameters used for creation/modification of a VVol Datastore. <br/> <br/> This resource type is embedded in the storageResource resource type.  
+#>
+Class UnityvvolDatastoreCapabilityProfilesParameters {
+
+  #Properties
+
+  [Object[]]$addCapabilityProfile #CapabilityProfiles to add to the VVol datastore, as defined by the VVol Datastore resource type.  
+  [Object[]]$modifyCapabilityProfile #CapabilityProfiles, used by the VVol Datastore, support of that should be modified.  
+  [Object[]]$removeCapabilityProfile #CapabilityProfiles to remove from the VVol datastore, as defined by the VVol Datastore resource type.  
+
+  #Methods
+
+}
+
+<#
+  Name: Unityx509Certificate
+  Description: Information about the X.509 certificates installed on the storage system. The X.509 certificate format is described in RFC 5280.  
+#>
+Class Unityx509Certificate {
+
+  #Properties
+
+  [String]$id #Unique identifier of the x509Certificate instance.  
+  [CertificateTypeEnum]$type #Certificate type.  
+  [ServiceTypeEnum]$service #Service with which the certificate is associated.  
+  [Object]$scope #Scope of the certificate.  
+  [Bool]$isTrustAnchor #Indicates whether the certificate is trusted as end-of-chain for peer certificate verification. This applies to certificates with a type of CA only. Values are: <ul> <li>true - Certificate is trusted. It is either permanent, or the expiration date has not yet passed.</li> <li>false - Certificate is not trusted.</li> </ul>  
+  [Object]$version #Certificate version.  
+  [String]$serialNumber #Certificate serial number.  
+  [SignatureAlgoTypeEnum]$signatureAlgorithm #Certificate signature algorithm.  
+  [String]$issuer #Name of the certificate issuer.  
+  [DateTime]$validFrom #Date and time when the certificate became valid.  
+  [DateTime]$validTo #Date and time when the certificate will expire.  
+  [String]$subject #Certificate subject.  
+  [String]$subjectAlternativeName #Certificate subject alternative name.  
+  [PublicKeyAlgoTypeEnum]$publicKeyAlgorithm #Certificate public key algorithm.  
+  [Object]$keyLength #Certificate key length.  
+  [ThumbprintAlgoTypeEnum]$thumbprintAlgorithm #Certificate thumbprint algorithm.  
+  [String]$thumbprint #Certificate thumbprint.  
+  [Bool]$hasPrivateKey #Indicates whether the certificate has an associated private key. Values are: <ul> <li>true - Certificate has an associated private key. </li> <li>false - Certificate does not have an associated private key. </li> </ul>  
+
+  #Methods
+
 }
 
 
