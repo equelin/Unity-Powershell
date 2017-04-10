@@ -1,9 +1,3 @@
----
-external help file: Unity-Powershell-help.xml
-online version: https://github.com/equelin/Unity-Powershell
-schema: 2.0.0
----
-
 # Connect-Unity
 
 ## SYNOPSIS
@@ -14,13 +8,13 @@ Connects to an EMC Unity Array
 ### ByServer (Default)
 ```
 Connect-Unity [-Server] <String[]> [-Username <String>] [-Password <SecureString>]
- [-Credentials <PSCredential>] [-TrustAllCerts <Boolean>] [<CommonParameters>]
+ [-Credentials <PSCredential>] [-TrustAllCerts <Boolean>]
 ```
 
 ### BySession
 ```
 Connect-Unity -Session <Object> [-Username <String>] [-Password <SecureString>] [-Credentials <PSCredential>]
- [-TrustAllCerts <Boolean>] [<CommonParameters>]
+ [-TrustAllCerts <Boolean>]
 ```
 
 ## DESCRIPTION
@@ -161,9 +155,6 @@ Default value: True
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

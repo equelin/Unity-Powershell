@@ -1,9 +1,3 @@
----
-external help file: Unity-Powershell-help.xml
-online version: https://github.com/equelin/Unity-Powershell
-schema: 2.0.0
----
-
 # New-UnityMetricRealTimeQuery
 
 ## SYNOPSIS
@@ -13,7 +7,6 @@ Creates a new metrics real-time query.
 
 ```
 New-UnityMetricRealTimeQuery [[-session] <Object>] [-paths] <Object> [-interval] <UInt64> [-WhatIf] [-Confirm]
- [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -106,9 +99,6 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

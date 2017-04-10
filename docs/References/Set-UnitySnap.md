@@ -1,9 +1,3 @@
----
-external help file: Unity-Powershell-help.xml
-online version: https://github.com/equelin/Unity-Powershell
-schema: 2.0.0
----
-
 # Set-UnitySnap
 
 ## SYNOPSIS
@@ -15,30 +9,32 @@ Modifies snapshot parameters.
 ```
 Set-UnitySnap [-session <Object>] [-ID] <String[]> [-name <String[]>] [-Description <String>]
  [-isAutoDelete <Boolean>] [-retentionDuration <UInt64>] [-ioLimitParameters <String>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+```
+
+### Refresh
+```
+Set-UnitySnap [-session <Object>] [-ID] <String[]> [-refresh] [-copyName <String>] [-WhatIf] [-Confirm]
 ```
 
 ### Detach
 ```
-Set-UnitySnap [-session <Object>] [-ID] <String[]> [-detach] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-UnitySnap [-session <Object>] [-ID] <String[]> [-detach] [-WhatIf] [-Confirm]
 ```
 
 ### Attach
 ```
 Set-UnitySnap [-session <Object>] [-ID] <String[]> [-attach] [-copyName <String>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
 ```
 
 ### Restore
 ```
 Set-UnitySnap [-session <Object>] [-ID] <String[]> [-restore] [-copyName <String>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
 ```
 
 ### Copy
 ```
 Set-UnitySnap [-session <Object>] [-ID] <String[]> [-copy] [-numCopies <UInt32>] [-copyStartNum <UInt32>]
- [-copyName <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-copyName <String>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -77,10 +73,17 @@ Attach the snapshot with ID '171798691854' so hosts can access it.'
 
 ### -------------------------- EXEMPLE 5 --------------------------
 ```
-Set-UnitySnap -ID '171798691854' -Dettach
+Set-UnitySnap -ID '171798691854' -Detach
 ```
 
 Detach the snapshot with ID '171798691854' so hosts can no longer access it.
+
+### -------------------------- EXEMPLE 6 --------------------------
+```
+Set-UnitySnap -ID '171798691854' -Refresh
+```
+
+Refreshes snapshot with ID '171798691854' with the latest data from the parent LUN.
 
 ## PARAMETERS
 
@@ -284,12 +287,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -refresh
+Refresh the snapshot to the associated storage resource.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Refresh
+Aliases: 
+
+Required: True
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -copyName
 Base name for the new snapshot copies or Name of the backup snapshot created before the restore/attach operation occurs.
 
 ```yaml
 Type: String
-Parameter Sets: Attach, Restore, Copy
+Parameter Sets: Refresh, Attach, Restore, Copy
 Aliases: 
 
 Required: False
@@ -329,9 +347,6 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

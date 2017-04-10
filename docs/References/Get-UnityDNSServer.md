@@ -1,9 +1,3 @@
----
-external help file: Unity-Powershell-help.xml
-online version: https://github.com/equelin/Unity-Powershell
-schema: 2.0.0
----
-
 # Get-UnityDNSServer
 
 ## SYNOPSIS
@@ -12,7 +6,7 @@ Information about DNS Servers.
 ## SYNTAX
 
 ```
-Get-UnityDNSServer [-session <Object>] [-ID <String[]>] [<CommonParameters>]
+Get-UnityDNSServer [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -46,7 +40,9 @@ Accept wildcard characters: False
 ```
 
 ### -ID
-Specifies the object ID.```yaml
+Specifies the object ID.
+
+```yaml
 Type: String[]
 Parameter Sets: (All)
 Aliases: 
@@ -57,9 +53,6 @@ Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

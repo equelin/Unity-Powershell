@@ -1,9 +1,3 @@
----
-external help file: Unity-Powershell-help.xml
-online version: https://github.com/equelin/Unity-Powershell
-schema: 2.0.0
----
-
 # Get-UnitystorageResource
 
 ## SYNOPSIS
@@ -13,12 +7,12 @@ Queries the EMC Unity array to retrieve informations about UnitystorageResource.
 
 ### Name (Default)
 ```
-Get-UnitystorageResource [-session <Object>] [-Name <String[]>] [-Type <String>] [<CommonParameters>]
+Get-UnitystorageResource [-session <Object>] [-Name <String[]>] [-Type <String>]
 ```
 
 ### ID
 ```
-Get-UnitystorageResource [-session <Object>] [-ID <String[]>] [-Type <String>] [<CommonParameters>]
+Get-UnitystorageResource [-session <Object>] [-ID <String[]>] [-Type <String>]
 ```
 
 ## DESCRIPTION
@@ -68,7 +62,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: *
+Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
@@ -83,7 +77,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: *
+Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
@@ -106,9 +100,6 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
