@@ -103,20 +103,33 @@ Class UnitySession {
   }
 }
 
-Class UnitySystem {
-  [string]$id
-  [UnityHealth]$health
-  [string]$name
-  [string]$model
-  [string]$serialNumber
-  [string]$systemUUID
-  [string]$licenseActivationKey
-  [string]$internalModel
-  [string]$platform
-  [string]$macAddress
-  [bool]$isEULAAccepted
-  [bool]$isUpgradeComplete
-  [SPModelNameEnum[]]$supportedUpgradeModels
+<#
+  Name: Unitysystem
+  Description: Information about general settings for the storage system.  
+#>
+Class Unitysystem {
+
+  #Properties
+
+  [String]$id #Unique identifier of the system instance.  
+  [UnityHealth]$health #Health information for the system, as defined by the health resource type.  
+  [String]$name #System name.  
+  [String]$model #System model name.  
+  [String]$serialNumber #System product serial number.  
+  [String]$systemUUID #(Applies to virtual deployments only.) Unique system identifier required to obtain a license file for the storage system.  
+  [String]$licenseActivationKey #(Applies to virtual deployments only.) Key certifies that the system is licensed and the software copy is obtained in a legal way.  
+  [String]$internalModel #Internal model name for the system.  
+  [String]$platform #Hardware platform for the system.  
+  [String]$macAddress #MAC address of the management interface.  
+  [Bool]$isEULAAccepted #Indicates whether the End User License Agreement (EULA) was accepted for an upgrade. Once the EULA is accepted, users can upload product licenses and configure the system, or both. Values are: <ul> <li>true - EULA was accepted on the system. Once you set this value, you cannot set it to false later on.</li> <li>false - EULA was not accepted on the system.</li> </ul>  
+  [Bool]$isUpgradeComplete #Indicates whether an upgrade completed. Operations that change the configuration of the system are not allowed while an upgrade is in progress. <p/> Values are: <ul> <li>true - Upgrade completed.</li> <li>false - Upgrade did not complete.</li> </ul> </p> <p/>  
+  [SPModelNameEnum[]]$supportedUpgradeModels #List of all supported models for hardware upgrade.
+  [Int]$currentPower
+  [Int]$avgPower
+  [Bool]$isAutoFailbackEnabled  
+
+  #Methods
+
 }
 
 Class UnityUser {
