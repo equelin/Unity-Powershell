@@ -4154,7 +4154,14 @@ Class UnityesrsParam {
   [Bool]$enabled #Indicates whether Remote Support is enabled<br/> <br/> Values are:<br/> <ul> <li>true - Remote Support is enabled.</li> <li>false - Remote Support is disabled.</li> </ul> <br/> See <i>isCentralized</i> to view the type of Remote Support.  
   [Bool]$isCentralized #Indicates the type of Remote Support that is configured<br/> <br/> Values are:<br/> <ul> <li>true - Centralized Remote Support is configured</li> <li>false - Integrated Remote Support is configured</li> </ul> <br/> This attribute is not valid if <i>enabled</i> is <i>false</i>.  
   [EsrsStatusEnum]$status #Remote Support status  
-  [Object]$esrsVeAddress #Centralized Remote Support ESRS VE appliance.  
+  [Object]$esrsVeAddress #Centralized Remote Support ESRS VE appliance.
+  [Bool]$proxyIsEnabled
+  [ipaddress]$proxyAddress
+  [Bool]$proxyIsHTTP
+  [String]$proxyUserName
+  [String]$siteId
+  [EsrsConfigStatusEnum]$esrsConfigStatus
+  [Bool]$isEsrsVeEulaAccepted 
 
   #Methods
 
@@ -4545,6 +4552,7 @@ Class UnityhostInitiatorPath {
   [String[]]$sessionIds #(Applies to iSCSI paths only.) Session identifiers in the host initiator path.  
   [Object]$initiator #Host initiator associated with the host initiator path, as defined by the hostInitiator resource type.  
   [Object]$iscsiPortal #(Applies to iSCSI paths only.) iSCSI portal, as defined by the iscsiPortal resource type.  
+  $fcPort
 
   #Methods
 
@@ -5971,7 +5979,8 @@ Class UnitystorageProcessor {
   [String]$biosFirmwareRevision #Version number of the SP BIOS.  
   [String]$postFirmwareRevision #Version number of the SP Power-On Self-Test software.  
   [Object]$memorySize #SP RAM size.  
-  [Object]$parentDpe #Parent Disk Processor Enclosure (DPE) of the storage processor.  
+  [Object]$parentDpe #Parent Disk Processor Enclosure (DPE) of the storage processor.
+  [SPModelNameEnum]$modelName #The physical model name of storageProcessor  
   [String]$uuid #(Applies to virtual deployments only.) SP UUID.  
 
   #Methods
@@ -6046,7 +6055,11 @@ Class UnitystorageTierConfiguration {
   #Properties
 
   [Object]$storageTier #Storage tier for which you want to obtain proposed configurations as defined by the storageCapability resource type.  
+  [RaidTypeEnum]$raidType
+  [RaidStripeWidthEnum]$stripeWidth
+  [Int64]$disksTotal
   [Object]$sizeTotal #Maximum usable capacity for the specified storage configuration if all available disks are used for the configuration.  
+  [Object[]]$diskGroupConfigurations
   [Object[]]$poolUnitConfigurations #(Applies to virtual deployments only.) List of pool units to use in the storage tier configuration.  
 
   #Methods
