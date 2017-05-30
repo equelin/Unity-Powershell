@@ -153,6 +153,7 @@ Days of the week for which the snapshot schedule rule applies.
 Type: DayOfWeekEnum[]
 Parameter Sets: addRules
 Aliases: 
+Accepted values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
 Required: False
 Position: Named

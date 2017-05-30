@@ -9,5 +9,6 @@ $Data.Class = @(
     @{TypeName='UnitySsc'; TableHeaderList=@('id','name','parentDae','slotNumber','model')}
     @{TypeName='UnitySsd'; TableHeaderList=@('id','name','parent','slotNumber','model')}
     @{TypeName='UnityStorageProcessor'; TableHeaderList=@('id','name','parentDpe','slotNumber','model')}
+    @{TypeName='Unityvm'; TableHeaderList=@('id','name','datastore','guestHostName','osType','state')}
 )
 

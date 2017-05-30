@@ -48,7 +48,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-SSD Name
+Specifies the object name.
 
 ```yaml
 Type: String[]

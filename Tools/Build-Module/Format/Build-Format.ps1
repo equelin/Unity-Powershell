@@ -1,11 +1,9 @@
 [CmdletBinding()]
-Param ()
+Param (
+    $Classes
+)
 
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-
-. $here\Data.ps1
-
-Foreach ($Class in ($Data.Class)) {
+Foreach ($Classes in ($cfg.classes)) {
     Write-Verbose "Processing class $Class.TypeName"
     .\Convert-ClassToPS1xml.ps1 -TypeName $Class.TypeName -TableHeaderList $Class.TableHeaderList -OutputPath F:\Code\GitHub\Unity-Powershell\Unity-Powershell\Format\ 
 }
