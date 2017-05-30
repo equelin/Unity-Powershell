@@ -36,7 +36,7 @@ Function Set-UnityFileInterface {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Set-UnityFileInterface -ID 'if_1' -ipAddress '192.168.0.1'
+      Set-UnityFileInterface -ID 'if_1' -ipAddress '192.0.2.1'
 
       Change ip of the file interface with ID 'if_1'
   #>

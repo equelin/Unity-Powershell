@@ -30,29 +30,29 @@ Every new connection is stored in the $global:DefaultUnitySession array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Connect-Unity -Server 192.168.0.1
+Connect-Unity -Server 192.0.2.1
 ```
 
-Connects to the array with the IP 192.168.0.1
+Connects to the array with the IP 192.0.2.1
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Connect-Unity -Server 192.168.0.1 -TrustAllCerts $false
+Connect-Unity -Server 192.0.2.1 -TrustAllCerts $false
 ```
 
-Connects to the array with the IP 192.168.0.1 and don't accept unknown certificates.
+Connects to the array with the IP 192.0.2.1 and don't accept unknown certificates.
 
 ### -------------------------- EXEMPLE 3 --------------------------
 ```
-Connect-Unity -Server 192.168.0.1,192.168.0.2
+Connect-Unity -Server 192.0.2.1,192.0.2.2
 ```
 
-Connects to the arrays with the IP 192.168.0.1 and 192.168.0.2.
+Connects to the arrays with the IP 192.0.2.1 and 192.0.2.2.
 The same user and password is used.
 
 ### -------------------------- EXEMPLE 4 --------------------------
 ```
-$IP = '192.168.0.1'
+$IP = '192.0.2.1'
 ```
 
 $Username = 'admin'
@@ -61,7 +61,7 @@ $Secpasswd = ConvertTo-SecureString $Password -AsPlainText -Force
 $Credentials = New-Object System.Management.Automation.PSCredential($Username,$secpasswd)
 Connect-Unity -Server $IP -Credentials $Credentials
 
-Connects to the arrays with the IP 192.168.0.1 and using powershell credentials
+Connects to the arrays with the IP 192.0.2.1 and using powershell credentials
 
 ## PARAMETERS
 

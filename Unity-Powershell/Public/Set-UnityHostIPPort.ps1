@@ -18,11 +18,11 @@ Function Set-UnityHostIPPort {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Set-UnityHostIPPort -ID 'HostNetworkAddress_47' -address '192.168.0.1'
+      Set-UnityHostIPPort -ID 'HostNetworkAddress_47' -address '192.0.2.1'
 
       Change the IP of the host.
       .EXAMPLE
-      Get-UnityHostIPPort -ID 'HostNetworkAddress_47' | Set-UnityHostIPPort -address '192.168.0.1'
+      Get-UnityHostIPPort -ID 'HostNetworkAddress_47' | Set-UnityHostIPPort -address '192.0.2.1'
 
       Gives the role 'operator' to the Host IP Port 'Host'. The Host's information are provided by the Get-UnityHostIPPort through the pipeline.
   #>

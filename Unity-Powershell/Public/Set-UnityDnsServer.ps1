@@ -15,7 +15,7 @@ Function Set-UnityDNSServer {
       .PARAMETER addresses
       New list of IP addresses to replace the exsting address list for this DNS server.
       .EXAMPLE
-      Set-UnityDnsServer -Addresses '192.168.0.1','192.168.0.2'
+      Set-UnityDnsServer -Addresses '192.0.2.1','192.0.2.2'
 
       replace the exsting address list for this DNS server with this new list.
   #>

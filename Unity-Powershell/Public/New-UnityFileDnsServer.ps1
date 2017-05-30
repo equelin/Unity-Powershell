@@ -24,7 +24,7 @@ Function New-UnityFileDNSServer {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      New-UnityFileDNSServer -nasServer 'nas_1' -domain 'example.com' -ip '192.168.0.1','192.168.0.2'
+      New-UnityFileDNSServer -nasServer 'nas_1' -domain 'example.com' -ip '192.0.2.1','192.0.2.2'
 
       Create a DNS file server associated to NAS server 'nas_1'
   #>

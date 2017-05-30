@@ -18,7 +18,7 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-New-UnityHostIPPort -host 'Host_1' - address 192.168.0.1 -netmask 255.255.255.0
+New-UnityHostIPPort -host 'Host_1' - address 192.0.2.1 -netmask 255.255.255.0
 ```
 
 Create Host IP Port for the host with ID 'Host_1'.
