@@ -18,7 +18,7 @@ Server       User  Name     Model    SerialNumber
 192.0.2.1   admin UnityDemo UnityVSA VIRT1919K58MXM
 ```
 
-Now that you are connected to an Unity, you can run commands to retrieve informations and configure your array.   
+Now that you are connected to an Unity, you can run commands to retrieve informations and configure your array.
 
 ### Get informations from the array
 
@@ -32,7 +32,7 @@ For example, if you want to list all the existing VMware LUN you can run this co
 Id   Name        Pool         IsThinEnabled TieringPolicy SizeTotal   SizeAllocated Type
 --   ----        ----         ------------- ------------- ---------   ------------- ----
 sv_2 DATASTORE01 @{id=pool_1} True          Autotier_High 10737418240 28221440      VMwareISCSI
-sv_3 DATASTORE02 @{id=pool_1} True          Autotier_High 10737418240 0             VMwareISCSI  
+sv_3 DATASTORE02 @{id=pool_1} True          Autotier_High 10737418240 0             VMwareISCSI
 ```
 
 You can filter your request if you know the ID or the name of the item you're looking for by adding the `-ID` or `-Name` parameters to your command:
@@ -117,10 +117,3 @@ Delete the VMware LUN with pipelining:
 ### Disconnection from the array
 
 You can close the connection by using the command `Disconnect-Unity`.
-
-
-
-
-
-
-
