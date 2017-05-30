@@ -27,7 +27,7 @@ Function Set-UnityMgmtInterface {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Set-UnityMgmtInterface -ID 'mgmt_ipv4' -gateway '192.168.0.254'
+      Set-UnityMgmtInterface -ID 'mgmt_ipv4' -gateway '192.0.2.254'
 
       Change gateway of the management interface with ID 'mgmt_ipv4'
   #>

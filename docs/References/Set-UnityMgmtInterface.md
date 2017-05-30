@@ -19,7 +19,7 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Set-UnityMgmtInterface -ID 'mgmt_ipv4' -gateway '192.168.0.254'
+Set-UnityMgmtInterface -ID 'mgmt_ipv4' -gateway '192.0.2.254'
 ```
 
 Change gateway of the management interface with ID 'mgmt_ipv4'

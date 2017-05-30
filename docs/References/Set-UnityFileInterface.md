@@ -19,7 +19,7 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Set-UnityFileInterface -ID 'if_1' -ipAddress '192.168.0.1'
+Set-UnityFileInterface -ID 'if_1' -ipAddress '192.0.2.1'
 ```
 
 Change ip of the file interface with ID 'if_1'

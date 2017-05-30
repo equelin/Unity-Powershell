@@ -23,7 +23,7 @@ Function Set-UnityNTPServer {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Set-UnityNTPServer -Addresses '192.168.0.1','192.168.0.2'
+      Set-UnityNTPServer -Addresses '192.0.2.1','192.0.2.2'
 
       replace the exsting address list for this NTP server with this new list.
   #>
