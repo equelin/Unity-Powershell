@@ -18,7 +18,7 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-New-UnityMgmtInterface -ipAddress '192.168.0.1' -netmask '255.255.255.0' -gateway '192.168.0.254'
+New-UnityMgmtInterface -ipAddress '192.0.2.1' -netmask '255.255.255.0' -gateway '192.0.2.254'
 ```
 
 Create a new network interface for managing the array.

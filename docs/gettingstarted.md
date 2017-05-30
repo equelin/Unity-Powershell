@@ -11,11 +11,11 @@ Before going further, please read the [Introduction](prerequisites.md) page and 
 Before being able to manage your Unity you will need to be connected to an array. The connection is handled by the command `Connect-Unity`
 
 ```PowerShell
-> Connect-Unity -Server 192.168.0.1
+> Connect-Unity -Server 192.0.2.1
 
 Server       User  Name     Model    SerialNumber
 ------       ----  ----     -----    ------------
-192.168.0.1 admin UnityDemo UnityVSA VIRT1919K58MXM
+192.0.2.1   admin UnityDemo UnityVSA VIRT1919K58MXM
 ```
 
 Now that you are connected to an Unity, you can run commands to retrieve informations and configure your array.   

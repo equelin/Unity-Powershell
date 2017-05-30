@@ -17,7 +17,7 @@ Function New-UnityHostIPPort {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      New-UnityHostIPPort -host 'Host_1' - address 192.168.0.1 -netmask 255.255.255.0
+      New-UnityHostIPPort -host 'Host_1' - address 192.0.2.1 -netmask 255.255.255.0
 
       Create Host IP Port for the host with ID 'Host_1'.
   #>

@@ -21,7 +21,7 @@ Function Set-UnityFileDnsServer {
       .PARAMETER replicationPolicy
       Status of the LDAP list in the NAS server operating as a replication destination.
       .EXAMPLE
-      Set-UnityFileDnsServer -ID 'dns_1' -ipAddress '192.168.0.1'
+      Set-UnityFileDnsServer -ID 'dns_1' -ipAddress '192.0.2.1'
 
       Change ip of the file DNS server with ID 'dns_1'
   #>

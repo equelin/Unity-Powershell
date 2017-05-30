@@ -18,14 +18,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Set-UnityHostIPPort -ID 'HostNetworkAddress_47' -address '192.168.0.1'
+Set-UnityHostIPPort -ID 'HostNetworkAddress_47' -address '192.0.2.1'
 ```
 
 Change the IP of the host.
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnityHostIPPort -ID 'HostNetworkAddress_47' | Set-UnityHostIPPort -address '192.168.0.1'
+Get-UnityHostIPPort -ID 'HostNetworkAddress_47' | Set-UnityHostIPPort -address '192.0.2.1'
 ```
 
 Gives the role 'operator' to the Host IP Port 'Host'.

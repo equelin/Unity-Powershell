@@ -17,7 +17,7 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Set-UnityDnsServer -Addresses '192.168.0.1','192.168.0.2'
+Set-UnityDnsServer -Addresses '192.0.2.1','192.0.2.2'
 ```
 
 replace the exsting address list for this DNS server with this new list.
