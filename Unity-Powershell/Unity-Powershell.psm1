@@ -60,35 +60,6 @@ write-host ""
 
 #Custom Classes
 
-# Based on Luc Deckens blog post http://www.lucd.info/2017/05/30/home-made-obn/
-
-class UnityOBN:System.Management.Automation.ArgumentTransformationAttribute
-{
-  [String]$Type
-
-  UnityOBN([string]$Type)
-  {
-    $this.Type = $Type
-  }
-  
-  # Methods
-
-  [object] Transform([System.Management.Automation.EngineIntrinsics]$engineIntrinsics, [object]$inputData) {
-    
-    if ($inputData -is [string]) {
-      if (-NOT [string]::IsNullOrWhiteSpace( $inputData )) {
-        return (Invoke-Expression -Command "Get-$($this.Type) -ID `$inputData")
-      }
-    } elseif($inputData.GetType().Name -match "$($this.Type)") {
-      return $inputData
-    }
-
-    throw [System.IO.FileNotFoundException]::New()
-
-  }
-}
-
-
 Class UnitySession {
   [bool]$IsConnected
   [string]$Server
