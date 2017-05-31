@@ -88,7 +88,7 @@ Function Set-UnitySnap {
     [Parameter(Mandatory = $true,Position = 0,ParameterSetName="Attach",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Snapshot ID or Object.')]
     [Parameter(Mandatory = $true,Position = 0,ParameterSetName="Detach",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Snapshot ID or Object.')]
     [Parameter(Mandatory = $true,Position = 0,ParameterSetName="Refresh",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Snapshot ID or Object.')]
-    [String[]]$ID,
+    [Object[]]$ID,
 
     # Set
     [Parameter(Mandatory = $false,ParameterSetName="Set",HelpMessage = 'Snapshot name (Applies to block type storage resource snaps only. Filesystem snapshot names cannot be modified).')]
@@ -185,29 +185,7 @@ Function Set-UnitySnap {
           }
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnitySnap -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnitySnap -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 

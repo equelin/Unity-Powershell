@@ -32,7 +32,7 @@ Function Update-UnityvCenter {
 
     #vCenter
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID or Object of a vCenter server')]
-    [String[]]$ID,
+    [Object[]]$ID,
     [Parameter(Mandatory = $true,ParameterSetName="Refresh",HelpMessage = 'Refresh all the hosts managed by the host container.')]
     [switch]$Refresh,
     [Parameter(Mandatory = $true,ParameterSetName="RefreshAll",HelpMessage = 'Refresh all known vCenters and ESX servers.')]

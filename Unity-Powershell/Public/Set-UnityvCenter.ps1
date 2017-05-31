@@ -51,7 +51,7 @@ Function Set-UnityvCenter {
 
     #vCenter
     [Parameter(Mandatory = $true,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'vCenter ID or Object')]
-    $ID,
+    [Object[]]$ID,
     [Parameter(Mandatory = $false,ParameterSetName="Set",HelpMessage = 'The new FQDN or IP address of the vCenter server')]
     [String]$NewAddress,
     [Parameter(Mandatory = $false,ParameterSetName="Set",HelpMessage = 'The new user name to access vCenter server')]

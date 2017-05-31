@@ -109,29 +109,8 @@ Function Set-UnityVMwareLUN {
 
         Foreach ($i in $ID) {
  
-          Switch -wildcard ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityVMwareLUN -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName*" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityVMwareLUN -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          # Determine input and convert to object if necessary
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Command 'UnityVMwareLUN' -Session $Sess
 
           If ($ObjectID) {
 

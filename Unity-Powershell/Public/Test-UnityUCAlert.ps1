@@ -27,7 +27,7 @@ Function Test-UnityUCAlert {
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
     [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID or Object of Alert Config')]
-    [String[]]$ID = '0'
+    [Object[]]$ID = '0'
   )
 
   Begin {
@@ -48,29 +48,8 @@ Function Test-UnityUCAlert {
 
       Foreach ($i in $ID) {
 
-        Switch ($i.GetType().Name)
-        {
-          "String" {
-            $Object = get-UnityAlertConfig -Session $Sess -ID $i
-            $ObjectID = $Object.id
-            If ($Object.Name) {
-              $ObjectName = $Object.Name
-            } else {
-              $ObjectName = $ObjectID
-            }
-          }
-          "$TypeName" {
-            Write-Verbose "Input object type is $($i.GetType().Name)"
-            $ObjectID = $i.id
-            If ($Object = Get-UnityAlertConfig -Session $Sess -ID $ObjectID) {
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }          
-            }
-          }
-        }
+          # Determine input and convert to object if necessary
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
         If ($ObjectID) {
 

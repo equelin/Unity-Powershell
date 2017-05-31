@@ -67,7 +67,7 @@ Function Set-UnitySnapSchedule {
     
     [Parameter(Mandatory = $true,ParameterSetName="addRules",Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID of the snapshot Schedule or snapshot Schedule Object.')]
     [Parameter(Mandatory = $true,ParameterSetName="removeRuleIds",Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID of the snapshot Schedule or snapshot Schedule Object.')]
-    [String[]]$ID,
+    [Object[]]$ID,
 
     # Add rules
     [Parameter(Mandatory = $true,ParameterSetName="addRules",HelpMessage = 'Unique identifiers of the rules to remove from the snapshot schedule.')]
@@ -117,29 +117,7 @@ Function Set-UnitySnapSchedule {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnitySnapSchedule -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnitySnapSchedule -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 
