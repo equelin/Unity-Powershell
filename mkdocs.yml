@@ -65,6 +65,7 @@ pages:
     - Get-UnitySystem: References/Get-UnitySystem.md
     - Get-UnityUser: References/Get-UnityUser.md
     - Get-UnityvCenter: References/Get-UnityvCenter.md
+    - Get-UnityVM: References/Get-UnityVM.md
     - Get-UnityVMwareLUN: References/Get-UnityVMwareLUN.md
     - Get-UnityVMwareNFS: References/Get-UnityVMwareNFS.md
     - New-UnityCIFSServer: References/New-UnityCIFSServer.md

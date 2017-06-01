@@ -8,14 +8,15 @@ Function Update-Doc {
 
         $ProjectRoot = $ENV:BHProjectPath
 
-        Import-Module $ENV:BHModulePath -Force
+        # Import module. platyPS + AppVeyor requires the module to be loaded in Global scope
+        Import-Module $ENV:BHModulePath -Force -Global
 
         #Build YAMLText starting with the header
         $YMLtext = (Get-Content "$ProjectRoot\header-mkdocs.yml") -join "`n"
         $YMLtext = "$YMLtext`n"
         $YMLText = "$YMLtext  - Functions References:`n"
 
-        # Drain the swamp
+        # Delete all existing files in $ProjectRoot\docs\References
         $parameters = @{
             Recurse = $true
             Force = $true
@@ -24,6 +25,7 @@ Function Update-Doc {
         }
         $null = Remove-Item @parameters
 
+        # Create directory for functions markdown help files
         $Params = @{
             Path = "$ProjectRoot\docs\References"
             type = 'directory'
@@ -31,6 +33,7 @@ Function Update-Doc {
         }
         $null = New-Item @Params
 
+        # Create all md help files and update 
         $Params = @{
             Module = $ENV:BHProjectName
             Force = $true
@@ -41,12 +44,12 @@ Function Update-Doc {
             $Function = $_.Name -replace '\.md', ''
             $Part = "    - {0}: References/{1}" -f $Function, $_.Name
             $YMLText = "{0}{1}`n" -f $YMLText, $Part
-            $Part
+            Write-Host $Part
         }
 
         $YMLtext | Set-Content -Path "$ProjectRoot\mkdocs.yml"
 
-        Remove-Module $ProjectName
+        Remove-Module $ENV:BHProjectName
 
     } # End Process
 } # End Function

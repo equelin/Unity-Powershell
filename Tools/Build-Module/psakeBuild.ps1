@@ -8,21 +8,22 @@ properties {
     Set-BuildEnvironment -Path $cfg.ProjectRoot -Force
 }
 
-task default -depends format,functions
+task default -depends docs,format,functions
 
+# Update mkdocs.yml with all function's reference help files
 task docs {
     Try {
         Update-Doc
     } Catch {
         # If unable to proceed, stop
-        #Write-Error -Message 'Error while updating the docs. Build cannot continue!' 
-        $_
+        Write-Error $_
     }
 }
 
+# Generate .ps1xml format files and Update the content of the module's metadata
 task format {
 
-    Remove-Module $ENV:BHProjectName
+    If (Get-Module $ENV:BHProjectName -ErrorAction SilentlyContinue) {Remove-Module $ENV:BHProjectName}
 
     $scriptBody = "using module $ENV:BHModulePath"
     $script = [ScriptBlock]::Create($scriptBody)
@@ -35,17 +36,17 @@ task format {
         }
     } Catch {
         # If unable to proceed, stop
-        #Write-Error -Message 'Error while updating the docs. Build cannot continue!' 
-        $_
+        Write-Error $_
     }
 
-    Write-Host "Update Module Manifest" -ForegroundColor Blue
+    Write-Host "Update Module Manifest with all .ps1xml format files" -ForegroundColor Blue
     Set-ModuleFormats -Name $ENV:BHModulePath -FormatsRelativePath '.\Format'
 }
 
+# Update the content of the module's metadata with all the public functions to export
 task functions {
 
-   # Remove-Module $ENV:BHProjectName -Force
+   If (Get-Module $ENV:BHProjectName -ErrorAction SilentlyContinue) {Remove-Module $ENV:BHProjectName}
 
     Try {
 
@@ -53,14 +54,13 @@ task functions {
         $File = "$ENV:BHProjectName.psd1"
         $ModulePSD1Path = Join-Path $Parent $File
 
-        Write-Host $ModulePSD1Path
+        Write-Host "Update module manifest with exported functions $($Class.TypeName)" -ForegroundColor Blue
 
         Update-MetaData -Path $ModulePSD1Path -PropertyName FunctionsToExport -Value "*"
 
-        #Remove-Module $ENV:BHProjectName
-
         Set-ModuleFunctions -Name $ENV:BHModulePath
     } Catch {
-        $_
+        # If unable to proceed, stop
+        Write-Error $_
     }
 }
