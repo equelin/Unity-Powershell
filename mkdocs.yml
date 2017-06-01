@@ -30,6 +30,7 @@ pages:
     - Get-UnityESXi: References/Get-UnityESXi.md
     - Get-UnityEthernetPort: References/Get-UnityEthernetPort.md
     - Get-UnityFastCache: References/Get-UnityFastCache.md
+    - Get-UnityfastVP: References/Get-UnityfastVP.md
     - Get-UnityFeature: References/Get-UnityFeature.md
     - Get-UnityFileDNSServer: References/Get-UnityFileDNSServer.md
     - Get-UnityFileInterface: References/Get-UnityFileInterface.md

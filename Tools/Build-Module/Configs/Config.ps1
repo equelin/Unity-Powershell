@@ -19,5 +19,6 @@ $cfg.Classes = @(
     @{TypeName='Unityvm'; TableHeaderList=@('id','name','datastore','guestHostName','osType','state')}
     @{TypeName='Unitydatastore'; TableHeaderList=@('id','name','host','sizeTotal','sizeUsed')}
     @{TypeName='UnityinstalledSoftwareVersion'; TableHeaderList=@('id','version','revision','releaseDate')}
+    @{TypeName='UnityfastVP'; TableHeaderList=@('id','status','relocationRate','isScheduleEnabled')}
 )
 

@@ -168,7 +168,7 @@ Foreach ($item in $Content) {
     $URI = "/api/types/$($item.name)/instances"
     $Object = $Typename
     $Synopsis = $item.DESCRIPTION
-    $Path = 'F:\Tests'
+    $Path = 'F:\Code\GitHub\Unity-Powershell\Tools\Functions\Result'
 
 
     If ($item.attributes | Where-Object {$_.Name -match 'name'}) {
