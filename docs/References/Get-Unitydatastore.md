@@ -1,31 +1,45 @@
-# Test-UnityUIAlert
+# Get-Unitydatastore
 
 ## SYNOPSIS
-Test GUI alert notification by sending a test alert to all open CEM GUIs.
+Represents a VMware Datastore.
 
 ## SYNTAX
 
+### Name (Default)
 ```
-Test-UnityUIAlert [-session <Object>] [[-ID] <Object[]>]
+Get-Unitydatastore [-session <Object>] [-Name <String[]>]
+```
+
+### ID
+```
+Get-Unitydatastore [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
-Test GUI alert notification by sending a test alert to all open CEM GUIs. 
+Represents a VMware Datastore.
+ 
 You need to have an active session with the array.
 
 ## EXAMPLES
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Test-UnityUIAlert
+Get-Unitydatastore
 ```
 
-Test GUI alert notification by sending a test alert to all open CEM GUIs.
+Retrieve information about all Unitydatastore
+
+### -------------------------- EXEMPLE 2 --------------------------
+```
+Get-Unitydatastore -ID 'id01'
+```
+
+Retrieves information about a specific Unitydatastore
 
 ## PARAMETERS
 
 ### -session
-Specify an UnitySession Object.
+Specifies an UnitySession Object.
 
 ```yaml
 Type: Object
@@ -39,17 +53,32 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ID
-ID or Object of a Alert Config..
+### -Name
+Specifies the object name.
 
 ```yaml
-Type: Object[]
-Parameter Sets: (All)
+Type: String[]
+Parameter Sets: Name
 Aliases: 
 
 Required: False
-Position: 1
-Default value: 0
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -ID
+Specifies the object ID.
+
+```yaml
+Type: String[]
+Parameter Sets: ID
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```

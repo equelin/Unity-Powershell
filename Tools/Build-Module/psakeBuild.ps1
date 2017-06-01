@@ -8,17 +8,7 @@ properties {
     Set-BuildEnvironment -Path $cfg.ProjectRoot -Force
 }
 
-task default -depends docs,format,functions
-
-# Update mkdocs.yml with all function's reference help files
-task docs {
-    Try {
-        Update-Doc
-    } Catch {
-        # If unable to proceed, stop
-        Write-Error $_
-    }
-}
+task default -depends format,functions,docs
 
 # Generate .ps1xml format files and Update the content of the module's metadata
 task format {
@@ -59,6 +49,16 @@ task functions {
         Update-MetaData -Path $ModulePSD1Path -PropertyName FunctionsToExport -Value "*"
 
         Set-ModuleFunctions -Name $ENV:BHModulePath
+    } Catch {
+        # If unable to proceed, stop
+        Write-Error $_
+    }
+}
+
+# Update mkdocs.yml with all function's reference help files
+task docs {
+    Try {
+        Update-Doc
     } Catch {
         # If unable to proceed, stop
         Write-Error $_

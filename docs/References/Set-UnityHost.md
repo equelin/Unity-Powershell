@@ -6,7 +6,7 @@ Modify a host configuration.
 ## SYNTAX
 
 ```
-Set-UnityHost [-session <Object>] [-ID] <String[]> [[-Name] <String>] [-Description <String>]
+Set-UnityHost [-session <Object>] [-ID] <Object[]> [[-Name] <String>] [-Description <String>]
  [-osType <String>] [-WhatIf] [-Confirm]
 ```
 
@@ -52,7 +52,7 @@ Accept wildcard characters: False
 Host ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

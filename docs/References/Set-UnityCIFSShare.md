@@ -6,7 +6,7 @@ Modifies CIFS share.
 ## SYNTAX
 
 ```
-Set-UnityCIFSShare [-session <Object>] [-ID] <String[]> [-description <String>] [-isReadOnly <Boolean>]
+Set-UnityCIFSShare [-session <Object>] [-ID] <Object[]> [-description <String>] [-isReadOnly <Boolean>]
  [-isEncryptionEnabled <Boolean>] [-isContinuousAvailabilityEnabled <Boolean>] [-isABEEnabled <Boolean>]
  [-isBranchCacheEnabled <Boolean>] [-offlineAvailability <CifsShareOfflineAvailabilityEnum>] [-umask <String>]
  [-WhatIf] [-Confirm]
@@ -46,7 +46,7 @@ Accept wildcard characters: False
 ID of the CIFS share.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

@@ -6,7 +6,7 @@ Modifies Unity storage system.
 ## SYNTAX
 
 ```
-Set-UnitySystem [-session <Object>] [[-ID] <String>] [-name <String>] [-isUpgradeCompleted <Boolean>]
+Set-UnitySystem [-session <Object>] [[-ID] <Object>] [-name <String>] [-isUpgradeCompleted <Boolean>]
  [-isEulaAccepted <Boolean>] [-isAutoFailbackEnabled <Boolean>] [-WhatIf] [-Confirm]
 ```
 
@@ -44,7 +44,7 @@ Accept wildcard characters: False
 ID or Object.
 
 ```yaml
-Type: String
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 

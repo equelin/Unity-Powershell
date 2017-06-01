@@ -21,6 +21,7 @@ pages:
     - Get-UnityCIFSServer: References/Get-UnityCIFSServer.md
     - Get-UnityCIFSShare: References/Get-UnityCIFSShare.md
     - Get-UnityDae: References/Get-UnityDae.md
+    - Get-Unitydatastore: References/Get-Unitydatastore.md
     - Get-UnityDisk: References/Get-UnityDisk.md
     - Get-UnityDiskGroup: References/Get-UnityDiskGroup.md
     - Get-UnityDNSServer: References/Get-UnityDNSServer.md
@@ -36,6 +37,7 @@ pages:
     - Get-UnityHost: References/Get-UnityHost.md
     - Get-UnityHostInitiator: References/Get-UnityHostInitiator.md
     - Get-UnityHostIPPort: References/Get-UnityHostIPPort.md
+    - Get-UnityinstalledSoftwareVersion: References/Get-UnityinstalledSoftwareVersion.md
     - Get-UnityIpInterface: References/Get-UnityIpInterface.md
     - Get-UnityIPPort: References/Get-UnityIPPort.md
     - Get-UnityIscsiPortal: References/Get-UnityIscsiPortal.md

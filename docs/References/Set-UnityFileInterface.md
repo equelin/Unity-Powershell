@@ -6,7 +6,7 @@ Modifies NAS Server parameters.
 ## SYNTAX
 
 ```
-Set-UnityFileInterface [-session <Object>] [[-ID] <Object>] [-ipPort <Object>] [-ipAddress <IPAddress>]
+Set-UnityFileInterface [-session <Object>] [[-ID] <Object[]>] [-ipPort <Object>] [-ipAddress <IPAddress>]
  [-netmask <IPAddress>] [-v6PrefixLength <String>] [-gateway <IPAddress>] [-vlanId <Int32>]
  [-isPreferred <Boolean>] [-replicationPolicy <ReplicationPolicyEnum>] [-WhatIf] [-Confirm]
 ```
@@ -45,7 +45,7 @@ Accept wildcard characters: False
 File interface ID or Object
 
 ```yaml
-Type: Object
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

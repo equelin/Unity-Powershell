@@ -6,7 +6,7 @@ Modifies Alert Config.
 ## SYNTAX
 
 ```
-Set-UnityAlertConfig [-session <Object>] [[-ID] <String[]>] [-alertLocale <LocaleEnum>]
+Set-UnityAlertConfig [-session <Object>] [[-ID] <Object[]>] [-alertLocale <LocaleEnum>]
  [-isThresholdAlertsEnabled <Boolean>] [-minEmailNotificationSeverity <SeverityEnum>]
  [-minSNMPTrapNotificationSeverity <SeverityEnum>] [-destinationEmails <String[]>] [-WhatIf] [-Confirm]
 ```
@@ -45,7 +45,7 @@ Accept wildcard characters: False
 Config ALert ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

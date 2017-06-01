@@ -7,7 +7,7 @@ Modifies snapshot schedule parameters.
 
 ### addRules (Default)
 ```
-Set-UnitySnapSchedule [-session <Object>] [-ID] <String[]> [-addRules] -type <ScheduleTypeEnum>
+Set-UnitySnapSchedule [-session <Object>] [-ID] <Object[]> [-addRules] -type <ScheduleTypeEnum>
  [-minute <UInt32>] [-hours <UInt32[]>] [-daysOfWeek <DayOfWeekEnum[]>] [-daysOfMonth <UInt32>]
  [-interval <UInt32>] [-isAutoDelete <Boolean>] [-retentionTime <UInt64>]
  [-accessType <FilesystemSnapAccessTypeEnum>] [-WhatIf] [-Confirm]
@@ -15,7 +15,7 @@ Set-UnitySnapSchedule [-session <Object>] [-ID] <String[]> [-addRules] -type <Sc
 
 ### removeRuleIds
 ```
-Set-UnitySnapSchedule [-session <Object>] [-ID] <String[]> -removeRuleIds <String[]> [-WhatIf] [-Confirm]
+Set-UnitySnapSchedule [-session <Object>] [-ID] <Object[]> -removeRuleIds <String[]> [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ID of the snapshot Schedule or snapshot Schedule Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

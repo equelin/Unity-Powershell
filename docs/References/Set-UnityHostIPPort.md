@@ -6,7 +6,7 @@ Modify a host IP Port configuration.
 ## SYNTAX
 
 ```
-Set-UnityHostIPPort [-session <Object>] [-ID] <Object> [-address <String>] [-netmask <String>]
+Set-UnityHostIPPort [-session <Object>] [-ID] <Object[]> [-address <String>] [-netmask <String>]
  [-v6PrefixLength <String>] [-isIgnored <Boolean>] [-WhatIf] [-Confirm]
 ```
 
@@ -52,7 +52,7 @@ Accept wildcard characters: False
 Host IP Port ID or Object
 
 ```yaml
-Type: Object
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

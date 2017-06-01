@@ -6,7 +6,7 @@ Modifies SMTP Server.
 ## SYNTAX
 
 ```
-Set-UnitySMTPServer [-session <Object>] [-ID] <String[]> -address <String> [-WhatIf] [-Confirm]
+Set-UnitySMTPServer [-session <Object>] [-ID] <Object[]> -address <String> [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -43,7 +43,7 @@ Accept wildcard characters: False
 SMTP Server ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

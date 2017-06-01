@@ -6,7 +6,7 @@ Modify an iSCSI network portal.
 ## SYNTAX
 
 ```
-Set-UnityIscsiPortal [-session <Object>] [-ID] <String[]> [-ipAddress <String>] [-netmask <String>]
+Set-UnityIscsiPortal [-session <Object>] [-ID] <Object[]> [-ipAddress <String>] [-netmask <String>]
  [-v6PrefixLength <String[]>] [-vlanId <String[]>] [-gateway <String>] [-WhatIf] [-Confirm]
 ```
 
@@ -44,7 +44,7 @@ Accept wildcard characters: False
 iSCSI Network Portal ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

@@ -6,7 +6,7 @@ Update the "ack" status of alert.
 ## SYNTAX
 
 ```
-Set-UnityAlert [-session <Object>] [-ID] <String[]> [-isAcknowledged <Boolean>] [-WhatIf] [-Confirm]
+Set-UnityAlert [-session <Object>] [-ID] <Object[]> [-isAcknowledged <Boolean>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -43,7 +43,7 @@ Accept wildcard characters: False
 Management interface ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

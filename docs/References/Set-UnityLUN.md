@@ -6,7 +6,7 @@ Modifies LUN parameters.
 ## SYNTAX
 
 ```
-Set-UnityLUN [-session <Object>] [-ID] <String[]> [-Name <String>] [-Description <String>] [-Size <UInt64>]
+Set-UnityLUN [-session <Object>] [-ID] <Object[]> [-Name <String>] [-Description <String>] [-Size <UInt64>]
  [-fastVPParameters <TieringPolicyEnum>] [-isCompressionEnabled <Boolean>] [-snapSchedule <String>]
  [-isSnapSchedulePaused <Boolean>] [-host <String[]>] [-append] [-accessMask <HostLUNAccessEnum>] [-WhatIf]
  [-Confirm]
@@ -46,7 +46,7 @@ Accept wildcard characters: False
 ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

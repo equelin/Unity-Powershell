@@ -7,13 +7,13 @@ Modifies an existing vCenter and optionally discovers any ESXi host managed by t
 
 ### Set (Default)
 ```
-Set-UnityvCenter [-session <Object>] -ID <Object> [-NewAddress <String>] [-NewUsername <String>]
+Set-UnityvCenter [-session <Object>] -ID <Object[]> [-NewAddress <String>] [-NewUsername <String>]
  [-NewPassword <String>] [-Description <String>] [-WhatIf] [-Confirm]
 ```
 
 ### ImportHosts
 ```
-Set-UnityvCenter [-session <Object>] -ID <Object> -Username <String> -Password <String> [-ImportHosts]
+Set-UnityvCenter [-session <Object>] -ID <Object[]> -Username <String> -Password <String> [-ImportHosts]
  [-WhatIf] [-Confirm]
 ```
 
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 vCenter ID or Object.
 
 ```yaml
-Type: Object
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

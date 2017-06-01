@@ -6,7 +6,7 @@ Modifies local user parameters.
 ## SYNTAX
 
 ```
-Set-UnityUser [-session <Object>] [-ID] <String[]> [-Role <String>] [-newPassword <String>]
+Set-UnityUser [-session <Object>] [-ID] <Object[]> [-Role <String>] [-newPassword <String>]
  [-oldPassword <String>] [-WhatIf] [-Confirm]
 ```
 
@@ -52,7 +52,7 @@ Accept wildcard characters: False
 User ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

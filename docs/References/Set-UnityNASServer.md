@@ -6,7 +6,7 @@ Modifies NAS Server parameters.
 ## SYNTAX
 
 ```
-Set-UnityNASServer [-session <Object>] [-ID] <String[]> [-Name <String>] [-homeSP <Object>]
+Set-UnityNASServer [-session <Object>] [-ID] <Object[]> [-Name <String>] [-homeSP <Object>]
  [-isReplicationDestination <Boolean>] [-UnixDirectoryService <NasServerUnixDirectoryServiceEnum>]
  [-isMultiProtocolEnabled <Boolean>] [-allowUnmappedUser <Boolean>] [-defaultUnixUser <Object>]
  [-defaultWindowsUser <Object>] [-WhatIf] [-Confirm]
@@ -46,7 +46,7 @@ Accept wildcard characters: False
 NAS Server ID or Object
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

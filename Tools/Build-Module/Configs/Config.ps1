@@ -17,5 +17,7 @@ $cfg.Classes = @(
     @{TypeName='UnitySsd'; TableHeaderList=@('id','name','parent','slotNumber','model')}
     @{TypeName='UnityStorageProcessor'; TableHeaderList=@('id','name','parentDpe','slotNumber','model')}
     @{TypeName='Unityvm'; TableHeaderList=@('id','name','datastore','guestHostName','osType','state')}
+    @{TypeName='Unitydatastore'; TableHeaderList=@('id','name','host','sizeTotal','sizeUsed')}
+    @{TypeName='UnityinstalledSoftwareVersion'; TableHeaderList=@('id','version','revision','releaseDate')}
 )
 

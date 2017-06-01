@@ -7,12 +7,12 @@ Queries the EMC Unity array to retrieve informations about filesystems.
 
 ### Name (Default)
 ```
-Get-UnityFilesystem [-session <Object>] [-Name <String[]>]
+Get-UnityFilesystem [-session <Object>] [-Name <String[]>] [-Typename <String>]
 ```
 
 ### ID
 ```
-Get-UnityFilesystem [-session <Object>] [-ID <String[]>]
+Get-UnityFilesystem [-session <Object>] [-ID <String[]>] [-Typename <String>]
 ```
 
 ## DESCRIPTION
@@ -79,6 +79,22 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -Typename
+Specifies the object type.
+Might be UnityFilesystem (default) or UnityVMwareNFS
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: UnityFilesystem
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

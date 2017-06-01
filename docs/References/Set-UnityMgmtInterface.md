@@ -6,7 +6,7 @@ Modify settings for an management interface.
 ## SYNTAX
 
 ```
-Set-UnityMgmtInterface [-session <Object>] [[-ID] <String[]>] [[-ipAddress] <String>] [-netmask <String>]
+Set-UnityMgmtInterface [-session <Object>] [[-ID] <Object[]>] [[-ipAddress] <String>] [-netmask <String>]
  [-v6PrefixLength <String[]>] [[-gateway] <String>] [-WhatIf] [-Confirm]
 ```
 
@@ -45,7 +45,7 @@ Accept wildcard characters: False
 Management interface ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 
