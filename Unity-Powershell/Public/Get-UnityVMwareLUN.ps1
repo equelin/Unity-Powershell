@@ -41,6 +41,7 @@ Function Get-UnityVMwareLUN {
 
     #Initialazing variables
     $ResultCollection = @()
+    $Typename = 'UnityVMwareLUN'
 
     Foreach ($sess in $session) {
 
@@ -51,7 +52,7 @@ Function Get-UnityVMwareLUN {
         $StorageResource = Get-UnitystorageResource -Session $Sess -Type 'vmwareiscsi'
 
         If ($StorageResource) {
-          $ResultCollection += Get-UnityLUNResource -Session $Sess -ID $StorageResource.luns.id
+          $ResultCollection += Get-UnityLUNResource -Session $Sess -ID $StorageResource.luns.id -Typename $Typename
         } 
 
       }

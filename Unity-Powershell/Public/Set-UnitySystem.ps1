@@ -39,7 +39,7 @@ Function Set-UnitySystem {
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
     [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID or Object')]
-    [Object[]]$ID = '0',
+    [Object]$ID = '0',
     [Parameter(Mandatory = $false,HelpMessage = 'New name of the Unity')]
     [String]$name,
     [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether to manually mark an upgrade process completed')]
@@ -69,7 +69,7 @@ Function Set-UnitySystem {
       If ($Sess.TestConnection()) {
 
           # Determine input and convert to object if necessary
-          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $ID -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 

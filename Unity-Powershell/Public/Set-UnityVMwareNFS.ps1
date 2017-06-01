@@ -95,7 +95,7 @@ Function Set-UnityVMwareNFS {
     # Variables
     $URI = '/api/instances/storageResource/<id>/action/modifyVmwareNfs'
     $Type = 'VMware NFS LUN'
-    $TypeName = 'UnityFilesystem'
+    $TypeName = 'UnityVMwareNFS'
     $StatusCode = 204
   }
 
@@ -110,7 +110,7 @@ Function Set-UnityVMwareNFS {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Command 'UnityVMwareNFS' -Session $Sess
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 

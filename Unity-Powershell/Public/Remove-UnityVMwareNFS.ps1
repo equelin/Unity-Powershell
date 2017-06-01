@@ -42,7 +42,7 @@ Function Remove-UnityVMwareNFS {
     # Variables
     $URI = '/api/instances/storageResource/<id>'
     $Type = 'VMware NFS LUN'
-    $TypeName = 'UnityFilesystem'
+    $TypeName = 'UnityVMwareNFS'
     $StatusCode = 204
   }
 

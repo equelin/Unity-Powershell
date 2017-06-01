@@ -95,7 +95,7 @@ Function Set-UnityVMwareLUN {
     # Variables
     $URI = '/api/instances/storageResource/<id>/action/modifyVmwareLun'
     $Type = 'VMware LUN'
-    $TypeName = 'UnityLUN'
+    $TypeName = 'UnityVMwareLUN'
     $StatusCode = 204
   }
 
@@ -110,7 +110,7 @@ Function Set-UnityVMwareLUN {
         Foreach ($i in $ID) {
  
           # Determine input and convert to object if necessary
-          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Command 'UnityVMwareLUN' -Session $Sess
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 

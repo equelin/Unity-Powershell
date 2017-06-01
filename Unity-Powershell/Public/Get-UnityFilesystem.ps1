@@ -16,6 +16,8 @@ Function Get-UnityFilesystem {
       Specifies the object name.
       .PARAMETER ID
       Specifies the object ID.
+      .PARAMETER Typename
+      Specifies the object type. Might be UnityFilesystem (default) or UnityVMwareNFS
       .EXAMPLE
       Get-UnityFilesystem
 
@@ -33,7 +35,10 @@ Function Get-UnityFilesystem {
     [Parameter(Mandatory = $false,ParameterSetName="Name",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem Name')]
     [String[]]$Name,
     [Parameter(Mandatory = $false,ParameterSetName="ID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem ID')]
-    [String[]]$ID
+    [String[]]$ID,
+    [Parameter(Mandatory = $false,HelpMessage = 'Object type')]
+    [ValidateSet('UnityFilesystem','UnityVMwareNFS')]
+    [String]$Typename = 'UnityFilesystem'
   )
 
   Begin {
@@ -41,7 +46,6 @@ Function Get-UnityFilesystem {
 
     #Initialazing variables
     $URI = '/api/types/filesystem/instances' #URI
-    $TypeName = 'UnityFilesystem'
   }
 
   Process {

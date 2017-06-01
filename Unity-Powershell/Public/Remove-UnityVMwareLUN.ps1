@@ -42,7 +42,7 @@ Function Remove-UnityVMwareLUN {
     # Variables
     $URI = '/api/instances/storageResource/<id>'
     $Type = 'VMware LUN'
-    $TypeName = 'UnityLUN'
+    $TypeName = 'UnityVMwareLUN'
     $StatusCode = 204
   }
 

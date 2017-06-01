@@ -41,6 +41,7 @@ Function Get-UnityVMwareNFS {
 
     #Initialazing variables
     $ResultCollection = @()
+    $Typename = 'UnityVMwareNFS'
 
     Foreach ($sess in $session) {
 
@@ -51,7 +52,7 @@ Function Get-UnityVMwareNFS {
         $StorageResource = Get-UnitystorageResource -Session $Sess -Type 'vmwarefs'
 
         If ($StorageResource) {
-          $ResultCollection += Get-UnityFilesystem -Session $Sess -ID $StorageResource.filesystem.id
+          $ResultCollection += Get-UnityFilesystem -Session $Sess -ID $StorageResource.filesystem.id -Typename $Typename
         } 
 
       }
