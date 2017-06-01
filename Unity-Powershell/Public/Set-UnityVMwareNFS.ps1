@@ -56,7 +56,7 @@ Function Set-UnityVMwareNFS {
     
     #SetFilesystem
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'VMware NFS LUN ID or Object')]
-    [String[]]$ID,
+    [Object[]]$ID,
     [Parameter(Mandatory = $false,HelpMessage = 'Filesystem Description')]
     [String]$Description,
     [Parameter(Mandatory = $false,HelpMessage = 'ID of a protection schedule to apply to the VMware NFS LUN')]
@@ -95,7 +95,7 @@ Function Set-UnityVMwareNFS {
     # Variables
     $URI = '/api/instances/storageResource/<id>/action/modifyVmwareNfs'
     $Type = 'VMware NFS LUN'
-    $TypeName = 'UnityFilesystem'
+    $TypeName = 'UnityVMwareNFS'
     $StatusCode = 204
   }
 
@@ -110,29 +110,7 @@ Function Set-UnityVMwareNFS {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityVMwareNFS -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityVMwareNFS -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 

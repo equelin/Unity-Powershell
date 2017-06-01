@@ -196,6 +196,10 @@ Class Unitylun {
   }
 }
 
+Class UnityVMwareLUN : UnityLUN {}
+
+
+
 Class UnityPool {
   [string]$id
   [UnityHealth]$health
@@ -561,6 +565,8 @@ Class Unityfilesystem {
   #Methods
 
 }
+
+Class UnityVMwareNFS : Unityfilesystem {}
 
 Class UnityCIFSShare {
   [string]$id

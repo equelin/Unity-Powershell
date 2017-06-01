@@ -42,7 +42,7 @@ Function Remove-UnityVMwareNFS {
     # Variables
     $URI = '/api/instances/storageResource/<id>'
     $Type = 'VMware NFS LUN'
-    $TypeName = 'UnityFilesystem'
+    $TypeName = 'UnityVMwareNFS'
     $StatusCode = 204
   }
 
@@ -57,33 +57,11 @@ Function Remove-UnityVMwareNFS {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityVMwareNFS -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityVMwareNFS -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          } # End Switch
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 
-            $UnityStorageResource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.filesystem.id -like $ObjectID)}
+            $UnityStorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.filesystem.id -like $ObjectID)}
 
             #Building the URL
             $FinalURI = $URI -replace '<id>',$UnityStorageResource.id

@@ -37,7 +37,7 @@ Function Set-UnityMgmtInterface {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Management interface ID or Object')]
-    [String[]]$ID,
+    [Object[]]$ID,
     [Parameter(Mandatory = $false,Position = 1,HelpMessage = 'IPv4 or IPv6 address for the interface.')]
     [string]$ipAddress,
     [Parameter(Mandatory = $false,HelpMessage = 'IPv4 netmask for the interface, if the interface uses an IPv4 address.')]
@@ -68,30 +68,8 @@ Function Set-UnityMgmtInterface {
 
         If ($Sess.TestConnection()) {
 
-            # Determine input and convert to object if necessary
-            Switch ($i.GetType().Name)
-            {
-              "String" {
-                $Object = get-UnityMgmtInterface -Session $Sess -ID $i
-                $ObjectID = $Object.id
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }
-              }
-              "$TypeName" {
-                Write-Verbose "Input object type is $($i.GetType().Name)"
-                $ObjectID = $i.id
-                If ($Object = Get-UnityMgmtInterface -Session $Sess -ID $ObjectID) {
-                  If ($Object.Name) {
-                    $ObjectName = $Object.Name
-                  } else {
-                    $ObjectName = $ObjectID
-                  }          
-                }
-              }
-            }
+          # Determine input and convert to object if necessary
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 
