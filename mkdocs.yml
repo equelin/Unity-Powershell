@@ -70,7 +70,10 @@ pages:
     - Get-UnityvCenter: References/Get-UnityvCenter.md
     - Get-UnityVM: References/Get-UnityVM.md
     - Get-UnityVMwareLUN: References/Get-UnityVMwareLUN.md
+    - Get-UnityvmwareNasPEServer: References/Get-UnityvmwareNasPEServer.md
     - Get-UnityVMwareNFS: References/Get-UnityVMwareNFS.md
+    - Get-UnityvmwarePE: References/Get-UnityvmwarePE.md
+    - Get-Unityx509Certificate: References/Get-Unityx509Certificate.md
     - New-UnityCIFSServer: References/New-UnityCIFSServer.md
     - New-UnityCIFSShare: References/New-UnityCIFSShare.md
     - New-UnityFileDNSServer: References/New-UnityFileDNSServer.md

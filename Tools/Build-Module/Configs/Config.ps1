@@ -20,5 +20,8 @@ $cfg.Classes = @(
     @{TypeName='Unitydatastore'; TableHeaderList=@('id','name','host','sizeTotal','sizeUsed')}
     @{TypeName='UnityinstalledSoftwareVersion'; TableHeaderList=@('id','version','revision','releaseDate')}
     @{TypeName='UnityfastVP'; TableHeaderList=@('id','status','relocationRate','isScheduleEnabled')}
+    @{TypeName='UnityvmwareNasPEServer'; TableHeaderList=@('id','nasServer','fileInterfaces','boundVVolCount')}
+    @{TypeName='UnityvmwarePE'; TableHeaderList=@('id','name','vmwareNasPEServer','type')}
+    @{TypeName='Unityx509Certificate'; TableHeaderList=@('id','type','service','scope','ValidTo')}
 )
 
