@@ -38,6 +38,8 @@ Function New-UnityPool {
       Specify the snapshot space used high watermark to trigger auto-delete on the storage pool.
       .PARAMETER snapSpaceHarvestLowThreshold
       Specify the snapshot space used low watermark to trigger auto-delete on the storage pool.
+      .PARAMETER type
+      Indicates whether to create traditional pool or dynamic pool. 
       .PARAMETER Confirm
       If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
       .PARAMETER WhatIf
@@ -84,7 +86,9 @@ Function New-UnityPool {
     [Parameter(Mandatory = $false,HelpMessage = 'Is FAST Cache Enabled?')]
     [Bool]$isFASTCacheEnabled,
     [Parameter(Mandatory = $false,HelpMessage = 'Is FAST Vp Schedule Enabled?')]
-    [Bool]$isFASTVpScheduleEnabled
+    [Bool]$isFASTVpScheduleEnabled,
+    [Parameter(Mandatory = $false,HelpMessage = 'Pool type')]
+    [StoragePoolTypeEnum]$Type
   )
 
   Begin {
@@ -211,6 +215,10 @@ Function New-UnityPool {
 
         If ($PSBoundParameters.ContainsKey('isFASTVpScheduleEnabled')) {
               $body["isFASTVpScheduleEnabled"] = $isFASTVpScheduleEnabled
+        }
+
+        If ($PSBoundParameters.ContainsKey('Type')) {
+              $body["type"] = $Type
         }
 
         ####### END BODY - Do not edit beyond this line

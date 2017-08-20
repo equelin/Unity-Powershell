@@ -23,5 +23,15 @@ $cfg.Classes = @(
     @{TypeName='UnityvmwareNasPEServer'; TableHeaderList=@('id','nasServer','fileInterfaces','boundVVolCount')}
     @{TypeName='UnityvmwarePE'; TableHeaderList=@('id','name','vmwareNasPEServer','type')}
     @{TypeName='Unityx509Certificate'; TableHeaderList=@('id','type','service','scope','ValidTo')}
+    @{TypeName='UnityserviceInfo'; TableHeaderList=@('id','productName','productSerialNumber','isSSHEnabled','esrsStatus')}
+    @{TypeName='UnityserviceAction'; TableHeaderList=@('id','name','scope','isApplicable','applyCondition')}
+    @{TypeName='UnitylinkAggregation'; TableHeaderList=@('id','name','shortName','masterPort','isLinkUp')}
+    @{TypeName='UnitydataCollectionResult'; TableHeaderList=@('id','name','creationTime','profile')}
+    @{TypeName='UnityfcPort'; TableHeaderList=@('id','name','slotNumber','wwn','currentSpeed','portRepCapabilities')}
+    @{TypeName='Unitybattery'; TableHeaderList=@('id','name','slotNumber','emcSerialNumber','emcPartNumber','firmwareVersion')}
+    @{TypeName='UnityPool'; TableHeaderList=@('id','name','SizeFree','SizeTotal','SizeUsed','SizeSubscribed','IsFASTCacheEnabled','Type','RaidType')}
+    @{TypeName='UnitySystem'; TableHeaderList=@('id','name','Model','SerialNumber','Platform','MacAddress')}
 )
+
+
 

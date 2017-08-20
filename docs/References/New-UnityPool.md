@@ -11,7 +11,7 @@ New-UnityPool [-session <Object>] [-Name] <String[]> [-Description <String>] -ra
  [-alertThreshold <Int32>] [-poolSpaceHarvestHighThreshold <Int64>] [-poolSpaceHarvestLowThreshold <Int64>]
  [-snapSpaceHarvestHighThreshold <Int64>] [-snapSpaceHarvestLowThreshold <Int64>] [-isHarvestEnabled <Boolean>]
  [-isSnapHarvestEnabled <Boolean>] [-isFASTCacheEnabled <Boolean>] [-isFASTVpScheduleEnabled <Boolean>]
- [-WhatIf] [-Confirm]
+ [-Type <StoragePoolTypeEnum>] [-WhatIf] [-Confirm]
 ```
 
 ### VirtualDisk
@@ -20,7 +20,7 @@ New-UnityPool [-session <Object>] [-Name] <String[]> [-Description <String>] -vi
  [-alertThreshold <Int32>] [-poolSpaceHarvestHighThreshold <Int64>] [-poolSpaceHarvestLowThreshold <Int64>]
  [-snapSpaceHarvestHighThreshold <Int64>] [-snapSpaceHarvestLowThreshold <Int64>] [-isHarvestEnabled <Boolean>]
  [-isSnapHarvestEnabled <Boolean>] [-isFASTCacheEnabled <Boolean>] [-isFASTVpScheduleEnabled <Boolean>]
- [-WhatIf] [-Confirm]
+ [-Type <StoragePoolTypeEnum>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -257,6 +257,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Type
+Indicates whether to create traditional pool or dynamic pool.
+
+```yaml
+Type: StoragePoolTypeEnum
+Parameter Sets: (All)
+Aliases: 
+Accepted values: Traditional, Dynamic
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

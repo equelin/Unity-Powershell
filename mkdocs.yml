@@ -18,9 +18,11 @@ pages:
     - Get-UnityAlert: References/Get-UnityAlert.md
     - Get-UnityAlertConfig: References/Get-UnityAlertConfig.md
     - Get-UnityBasicSystemInfo: References/Get-UnityBasicSystemInfo.md
+    - Get-Unitybattery: References/Get-Unitybattery.md
     - Get-UnityCIFSServer: References/Get-UnityCIFSServer.md
     - Get-UnityCIFSShare: References/Get-UnityCIFSShare.md
     - Get-UnityDae: References/Get-UnityDae.md
+    - Get-UnitydataCollectionResult: References/Get-UnitydataCollectionResult.md
     - Get-Unitydatastore: References/Get-Unitydatastore.md
     - Get-UnityDisk: References/Get-UnityDisk.md
     - Get-UnityDiskGroup: References/Get-UnityDiskGroup.md
@@ -31,6 +33,7 @@ pages:
     - Get-UnityEthernetPort: References/Get-UnityEthernetPort.md
     - Get-UnityFastCache: References/Get-UnityFastCache.md
     - Get-UnityfastVP: References/Get-UnityfastVP.md
+    - Get-UnityfcPort: References/Get-UnityfcPort.md
     - Get-UnityFeature: References/Get-UnityFeature.md
     - Get-UnityFileDNSServer: References/Get-UnityFileDNSServer.md
     - Get-UnityFileInterface: References/Get-UnityFileInterface.md
@@ -44,6 +47,7 @@ pages:
     - Get-UnityIscsiPortal: References/Get-UnityIscsiPortal.md
     - Get-UnityItem: References/Get-UnityItem.md
     - Get-UnityLicense: References/Get-UnityLicense.md
+    - Get-UnitylinkAggregation: References/Get-UnitylinkAggregation.md
     - Get-UnityLUN: References/Get-UnityLUN.md
     - Get-UnityMetric: References/Get-UnityMetric.md
     - Get-UnityMetricQueryResult: References/Get-UnityMetricQueryResult.md
@@ -57,6 +61,8 @@ pages:
     - Get-UnityNTPServer: References/Get-UnityNTPServer.md
     - Get-UnityPool: References/Get-UnityPool.md
     - Get-UnityPoolUnit: References/Get-UnityPoolUnit.md
+    - Get-UnityserviceAction: References/Get-UnityserviceAction.md
+    - Get-UnityserviceInfo: References/Get-UnityserviceInfo.md
     - Get-UnitySession: References/Get-UnitySession.md
     - Get-UnitySMTPServer: References/Get-UnitySMTPServer.md
     - Get-UnitySnap: References/Get-UnitySnap.md
@@ -136,6 +142,7 @@ pages:
     - Set-UnityNFSShare: References/Set-UnityNFSShare.md
     - Set-UnityNTPServer: References/Set-UnityNTPServer.md
     - Set-UnityPool: References/Set-UnityPool.md
+    - Set-UnityserviceAction: References/Set-UnityserviceAction.md
     - Set-UnitySMTPServer: References/Set-UnitySMTPServer.md
     - Set-UnitySnap: References/Set-UnitySnap.md
     - Set-UnitySnapSchedule: References/Set-UnitySnapSchedule.md

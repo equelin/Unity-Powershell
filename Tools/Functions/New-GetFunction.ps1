@@ -158,7 +158,7 @@ Set-Content -Path $FunctionPath -Force -Value $FunctionIDName
 
 ##############################################
 
-$JSON = Get-Content -Path F:\Code\GitHub\Unity-Powershell\Tests\Class\Data\Unity300-4_1.json | ConvertFrom-Json
+$JSON = Get-Content -Path F:\Code\GitHub\Unity-Powershell\Tests\Class\Data\Unity400F-4_1.json | ConvertFrom-Json
 
 $Content = $JSON.entries.content  | Where-Object {$_.Name -notlike "*Enum*"}
 
