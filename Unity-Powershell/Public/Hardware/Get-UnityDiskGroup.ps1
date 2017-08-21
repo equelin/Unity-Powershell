@@ -53,7 +53,7 @@ Function Get-UnityDiskGroup {
       # Test if the Unity is a virtual appliance
       If ($Sess.isUnityVSA()) {
 
-        Write-Warning -Message "This functionnality is not supported on the Unity VSA ($($Sess.Name))"
+        Write-Error -Message "This functionnality is not supported on the Unity VSA ($($Sess.Name))" -Category "DeviceError"
         
       } else {
 

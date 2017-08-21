@@ -43,10 +43,18 @@ Function Get-UnityDisk {
   Process {
     Foreach ($sess in $session) {
 
-      Write-Debug -Message "[$($MyInvocation.MyCommand)] Processing Session: $($Session.Server) with SessionId: $($Session.SessionId)"
+      Write-Debug -Message "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
-      Get-UnityItemByKey -Session $Sess -URI $URI -Typename $Typename -Key $PsCmdlet.ParameterSetName -Value $PSBoundParameters[$PsCmdlet.ParameterSetName]
+      # Test if the Unity is a virtual appliance
+      If ($Sess.isUnityVSA()) {
 
+        Write-Error -Message "This functionnality is not supported on the Unity VSA ($($Sess.Name))" -Category "DeviceError"
+        
+      } else {
+
+        Get-UnityItemByKey -Session $Sess -URI $URI -Typename $Typename -Key $PsCmdlet.ParameterSetName -Value $PSBoundParameters[$PsCmdlet.ParameterSetName]
+
+      } # End If ($Sess.isUnityVSA())
     } # End Foreach ($sess in $session)
   } # End Process
 } # End Function

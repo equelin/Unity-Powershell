@@ -49,12 +49,11 @@ Function Get-UnityVMwareLUN {
 
       If ($Sess.TestConnection()) {
 
-        $StorageResource = Get-UnitystorageResource -Session $Sess -Type 'vmwareiscsi'
+        $StorageResource = Get-UnitystorageResource -Session $Sess -Type 'vmwareiscsi' -ErrorAction SilentlyContinue
 
         If ($StorageResource) {
-          $ResultCollection += Get-UnityLUNResource -Session $Sess -ID $StorageResource.luns.id -Typename $Typename
+          $ResultCollection += Get-UnityLUNResource -Session $Sess -ID $StorageResource.luns.id -Typename $Typename -ErrorAction SilentlyContinue
         } 
-
       }
     }
   }
@@ -66,18 +65,26 @@ Function Get-UnityVMwareLUN {
         'Name' {
           Foreach ($N in $Name) {
             Write-Debug -Message "[$($MyInvocation.MyCommand)] Return result(s) with the filter: $($N)"
-            Write-Output $ResultCollection | Where-Object {$_.Name -like $N}
+            $Result = $ResultCollection | Where-Object {$_.Name -like $N}
             Write-Debug -Message "[$($MyInvocation.MyCommand)] Found $($ResultCollection.Count) item(s)"
           }
         }
         'ID' {
           Foreach ($I in $ID) {
             Write-Debug -Message "[$($MyInvocation.MyCommand)] Return result(s) with the filter: $($I)"
-            Write-Output $ResultCollection | Where-Object {$_.Id -like $I}
+            $Result = $ResultCollection | Where-Object {$_.Id -like $I}
             Write-Debug -Message "[$($MyInvocation.MyCommand)] Found $($ResultCollection.Count) item(s)"            
           }
         }
       } #End Switch
+
+      If ($Result) {
+        $Result
+      } else {
+        Write-Error -Message "Object not found with the specified filter(s)" -Category "ObjectNotFound"
+      } # End If ($Result)
+    } else {
+      Write-Error -Message "Object(s) not found" -Category "ObjectNotFound"
     } # End If ($ResultCollection)
   } # End Process
 } # End Function

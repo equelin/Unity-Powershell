@@ -65,6 +65,8 @@ Function Get-UnityItemByKey {
 
                 } # End Foreach ($Result in $ResultCollection)
             } # End If ($ResultsFiltered) 
+        } else {
+            Write-Error -Message "Object(s) not found" -Category ObjectNotFound
         } # End If ($Results)
     } # End If ($Sess.TestConnection())
 
