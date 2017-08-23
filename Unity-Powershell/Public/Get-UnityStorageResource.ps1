@@ -45,7 +45,9 @@ Function Get-UnitystorageResource {
   )
 
   Begin {
-    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Executing function"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] ParameterSetName: $($PsCmdlet.ParameterSetName)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
 
     #Initialazing variables
     $URI = '/api/types/storageResource/instances' #URI for the ressource (example: /api/types/lun/instances)

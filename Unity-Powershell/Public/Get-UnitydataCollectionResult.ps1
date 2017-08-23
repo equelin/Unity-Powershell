@@ -73,14 +73,16 @@ Function Get-UnitydataCollectionResult {
           Write-Verbose "URI: $DownloadURI"
           Write-Verbose "OutFile: $OutFile"
           
-          $Sess.SendGetRequest($DownloadURI,$OutFile)
+          $Response = $Sess.SendGetRequest($DownloadURI,$OutFile)
+
+          If ($Response.StatusCode -eq 200) {
+            Get-Item $OutFile 
+          }
 
         } else {
           $Result
         }
-        
       }
-
     } # End Foreach ($sess in $session)
   } # End Process
 } # End Function

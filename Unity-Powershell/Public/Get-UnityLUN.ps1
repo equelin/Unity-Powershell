@@ -4,7 +4,7 @@ Function Get-UnityLUN {
       .SYNOPSIS
       Queries the EMC Unity array to retrieve informations about block LUN.
       .DESCRIPTION
-      Querries the EMC Unity array to retrieve informations about block LUN.
+      Queries the EMC Unity array to retrieve informations about block LUN.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -37,20 +37,28 @@ Function Get-UnityLUN {
   )
 
   Begin {
-    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Executing function"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] ParameterSetName: $($PsCmdlet.ParameterSetName)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
 
     #Initialazing variables
     $ResultCollection = @()
+    $StorageResourceURI = '/api/types/storageResource/instances?fields=id,luns&filter=type eq 8'
 
-    Foreach ($sess in $session) {
+    #Loop through each sessions
+    Foreach ($Sess in $session) {
 
-      Write-Debug -Message "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "[$($MyInvocation.MyCommand)] Processing Session: $($Sess.Server) with SessionId: $($Sess.SessionId)"
 
+      #Test if session is alive
       If ($Sess.TestConnection()) {
 
-        $StorageResource = Get-UnityStorageResource -Session $Sess -Type 'lun' -ErrorAction SilentlyContinue
+        Write-Debug -Message "[$($MyInvocation.MyCommand)] Retrieve lun storage resources"
+        $StorageResource = (($Sess.SendGetRequest($StorageResourceURI)).content | ConvertFrom-Json ).entries.content
 
         If ($StorageResource) {
+          #Retrieve LUN associated to storage resources
+          Write-Debug -Message "[$($MyInvocation.MyCommand)] Retrieve LUN associated to storage resources"
           $ResultCollection += Get-UnityLUNResource -Session $Sess -ID $StorageResource.luns.id -ErrorAction SilentlyContinue
         }
       }

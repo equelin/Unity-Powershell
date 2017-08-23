@@ -102,17 +102,51 @@ Class UnitySession {
     }
   }
 
-  #Send Get Request with OutFile parameter
-  [Object] SendGetRequest ([String]$URI, [String]$OutFile) {
-    Try
-    {
-      $Method = 'Get'
-      $URL = "https://$($this.Server)/$URI"
-      $data = Invoke-WebRequest -Uri $URL -ContentType "application/json" -Websession $this.Websession -Headers $this.headers -Method $Method -OutFile $OutFile -TimeoutSec 6000
+  #Send Get Request
+  [Object] SendGetRequest ([String]$URI) {
+    Try {
+
+      $Parameters = @{
+        Uri = "https://$($this.Server)/$URI"
+        Method = 'Get'
+        ContentType = "application/json"
+        Websession = $this.Websession
+        Headers = $this.headers
+        TimeoutSec = 6000
+      }
+
+      Write-Debug -Message "Request Parameters: $($Parameters | Out-String)"
+
+      $data = Invoke-WebRequest @Parameters
       return $data
     }
-    Catch
-    {
+    Catch {
+      Show-RequestException -Exception $_
+      throw
+    }
+  }
+
+  #Send Get Request with OutFile parameter
+  [Object] SendGetRequest ([String]$URI, [String]$OutFile) {
+    Try {
+
+      $Parameters = @{
+        Uri = "https://$($this.Server)/$URI"
+        Method = 'Get'
+        ContentType = "application/json"
+        Websession = $this.Websession
+        Headers = $this.headers
+        TimeoutSec = 6000
+        OutFile = $OutFile
+        PassThru = $True
+      }
+
+      Write-Debug -Message "Request Parameters: $($Parameters | Out-String)"
+
+      $data = Invoke-WebRequest @Parameters
+      return $data
+    }
+    Catch {
       Show-RequestException -Exception $_
       throw
     }
