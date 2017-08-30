@@ -1,4 +1,4 @@
-Function Get-UnityvmwarePE {
+Function Get-UnityVMwarePE {
 
   <#
       .SYNOPSIS
@@ -17,11 +17,11 @@ Function Get-UnityvmwarePE {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityvmwarePE
+      Get-UnityVMwarePE
 
       Retrieve information about all UnityvmwarePE
       .EXAMPLE
-      Get-UnityvmwarePE -ID 'id01'
+      Get-UnityVMwarePE -ID 'id01'
 
       Retrieves information about a specific UnityvmwarePE
   #>

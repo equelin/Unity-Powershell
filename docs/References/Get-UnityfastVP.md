@@ -1,4 +1,4 @@
-# Get-UnityfastVP
+# Get-UnityFastVP
 
 ## SYNOPSIS
 System FAST VP settings.
@@ -14,12 +14,12 @@ It also provides a means to pause or resume all the FAST VP relocation and rebal
 
 ### Name (Default)
 ```
-Get-UnityfastVP [-session <Object>]
+Get-UnityFastVP [-session <Object>]
 ```
 
 ### ID
 ```
-Get-UnityfastVP [-session <Object>] [-ID <String[]>]
+Get-UnityFastVP [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -38,14 +38,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityfastVP
+Get-UnityFastVP
 ```
 
 Retrieve information about all UnityfastVP
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnityfastVP -ID 'id01'
+Get-UnityFastVP -ID 'id01'
 ```
 
 Retrieves information about a specific UnityfastVP

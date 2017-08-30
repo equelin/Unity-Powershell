@@ -1,4 +1,4 @@
-# Get-UnityvmwarePE
+# Get-UnityVMwarePE
 
 ## SYNOPSIS
 A resource representing VMware protocol endpoint of both possible types: NAS protocol endpoint and SCSI protocol endpoint.
@@ -8,12 +8,12 @@ An instance of this class is created automatically as part of VVol datastore (st
 
 ### Name (Default)
 ```
-Get-UnityvmwarePE [-session <Object>] [-Name <String[]>]
+Get-UnityVMwarePE [-session <Object>] [-Name <String[]>]
 ```
 
 ### ID
 ```
-Get-UnityvmwarePE [-session <Object>] [-ID <String[]>]
+Get-UnityVMwarePE [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -26,14 +26,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityvmwarePE
+Get-UnityVMwarePE
 ```
 
 Retrieve information about all UnityvmwarePE
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnityvmwarePE -ID 'id01'
+Get-UnityVMwarePE -ID 'id01'
 ```
 
 Retrieves information about a specific UnityvmwarePE

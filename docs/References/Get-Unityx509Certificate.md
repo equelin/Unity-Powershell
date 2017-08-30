@@ -1,4 +1,4 @@
-# Get-Unityx509Certificate
+# Get-UnityX509Certificate
 
 ## SYNOPSIS
 Information about the X.509 certificates installed on the storage system.
@@ -7,7 +7,7 @@ The X.509 certificate format is described in RFC 5280.
 ## SYNTAX
 
 ```
-Get-Unityx509Certificate [-session <Object>] [-ID <String[]>]
+Get-UnityX509Certificate [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -20,14 +20,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-Unityx509Certificate
+Get-UnityX509Certificate
 ```
 
 Retrieve information about all Unityx509Certificate
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-Unityx509Certificate -ID 'id01'
+Get-UnityX509Certificate -ID 'id01'
 ```
 
 Retrieves information about a specific Unityx509Certificate

@@ -1,4 +1,4 @@
-Function Get-UnitylinkAggregation {
+Function Get-UnityLinkAggregation {
 
   <#
       .SYNOPSIS
@@ -17,11 +17,11 @@ Function Get-UnitylinkAggregation {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnitylinkAggregation
+      Get-UnityLinkAggregation
 
       Retrieve information about all UnitylinkAggregation
       .EXAMPLE
-      Get-UnitylinkAggregation -ID 'id01'
+      Get-UnityLinkAggregation -ID 'id01'
 
       Retrieves information about a specific UnitylinkAggregation
   #>

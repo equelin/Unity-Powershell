@@ -114,7 +114,7 @@ Function Set-UnityVMwareNFS {
 
           If ($ObjectID) {
 
-            $UnitystorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.filesystem.id -like $ObjectID)}
+            $UnitystorageResource = Get-UnityStorageResource -Session $sess | Where-Object {($_.filesystem.id -like $ObjectID)}
 
             $NFSShare = Get-UnityNFSShare -Session $Sess -ID $Object.NfsShare.id
 

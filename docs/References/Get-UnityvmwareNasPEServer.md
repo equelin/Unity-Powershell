@@ -1,4 +1,4 @@
-# Get-UnityvmwareNasPEServer
+# Get-UnityVMwareNasPEServer
 
 ## SYNOPSIS
 A resource representing NAS VMware Protocol Endpoint Server.
@@ -8,12 +8,12 @@ Only one instance per NAS Server can be created.
 
 ### Name (Default)
 ```
-Get-UnityvmwareNasPEServer [-session <Object>]
+Get-UnityVMwareNasPEServer [-session <Object>]
 ```
 
 ### ID
 ```
-Get-UnityvmwareNasPEServer [-session <Object>] [-ID <String[]>]
+Get-UnityVMwareNasPEServer [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -26,14 +26,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityvmwareNasPEServer
+Get-UnityVMwareNasPEServer
 ```
 
 Retrieve information about all UnityvmwareNasPEServer
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnityvmwareNasPEServer -ID 'id01'
+Get-UnityVMwareNasPEServer -ID 'id01'
 ```
 
 Retrieves information about a specific UnityvmwareNasPEServer

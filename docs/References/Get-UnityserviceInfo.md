@@ -1,4 +1,4 @@
-# Get-UnityserviceInfo
+# Get-UnityServiceInfo
 
 ## SYNOPSIS
 Service-related storage system information.
@@ -7,7 +7,7 @@ You can use this information for servicing the storage system.
 ## SYNTAX
 
 ```
-Get-UnityserviceInfo [-session <Object>] [-ID <String[]>]
+Get-UnityServiceInfo [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -19,14 +19,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityserviceInfo
+Get-UnityServiceInfo
 ```
 
 Retrieve information about all UnityserviceInfo
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnityserviceInfo -ID 'id01'
+Get-UnityServiceInfo -ID 'id01'
 ```
 
 Retrieves information about a specific UnityserviceInfo

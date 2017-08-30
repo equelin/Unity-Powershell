@@ -1,4 +1,4 @@
-Function Get-UnityserviceInfo {
+Function Get-UnityServiceInfo {
 
   <#
       .SYNOPSIS
@@ -15,11 +15,11 @@ Function Get-UnityserviceInfo {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityserviceInfo
+      Get-UnityServiceInfo
 
       Retrieve information about all UnityserviceInfo
       .EXAMPLE
-      Get-UnityserviceInfo -ID 'id01'
+      Get-UnityServiceInfo -ID 'id01'
 
       Retrieves information about a specific UnityserviceInfo
   #>

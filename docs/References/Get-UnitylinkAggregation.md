@@ -1,4 +1,4 @@
-# Get-UnitylinkAggregation
+# Get-UnityLinkAggregation
 
 ## SYNOPSIS
 (Applies if link aggregation is supported.) Ethernet port link aggregation settings.
@@ -17,12 +17,12 @@ The documentation that came with your switch should provide more information abo
 
 ### Name (Default)
 ```
-Get-UnitylinkAggregation [-session <Object>] [-Name <String[]>]
+Get-UnityLinkAggregation [-session <Object>] [-Name <String[]>]
 ```
 
 ### ID
 ```
-Get-UnitylinkAggregation [-session <Object>] [-ID <String[]>]
+Get-UnityLinkAggregation [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -44,14 +44,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnitylinkAggregation
+Get-UnityLinkAggregation
 ```
 
 Retrieve information about all UnitylinkAggregation
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnitylinkAggregation -ID 'id01'
+Get-UnityLinkAggregation -ID 'id01'
 ```
 
 Retrieves information about a specific UnitylinkAggregation

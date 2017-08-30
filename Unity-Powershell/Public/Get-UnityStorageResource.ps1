@@ -1,4 +1,4 @@
-Function Get-UnitystorageResource {
+Function Get-UnityStorageResource {
 
   <#
       .SYNOPSIS
@@ -22,11 +22,11 @@ Function Get-UnitystorageResource {
       - vmwareiscsi
       - vmwarefs
       .EXAMPLE
-      Get-UnitystorageResource
+      Get-UnityStorageResource
 
       Retrieve informations about all the storage ressources
       .EXAMPLE
-      Get-UnitystorageResource -Name 'DATASTORE01'
+      Get-UnityStorageResource -Name 'DATASTORE01'
 
       Retrieves informations about storage ressource named DATASTORE01
   #>

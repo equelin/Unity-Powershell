@@ -1,4 +1,4 @@
-# Get-UnitystorageResource
+# Get-UnityStorageResource
 
 ## SYNOPSIS
 Queries the EMC Unity array to retrieve informations about UnitystorageResource.
@@ -7,12 +7,12 @@ Queries the EMC Unity array to retrieve informations about UnitystorageResource.
 
 ### Name (Default)
 ```
-Get-UnitystorageResource [-session <Object>] [-Name <String[]>] [-Type <String>]
+Get-UnityStorageResource [-session <Object>] [-Name <String[]>] [-Type <String>]
 ```
 
 ### ID
 ```
-Get-UnitystorageResource [-session <Object>] [-ID <String[]>] [-Type <String>]
+Get-UnityStorageResource [-session <Object>] [-ID <String[]>] [-Type <String>]
 ```
 
 ## DESCRIPTION
@@ -23,14 +23,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnitystorageResource
+Get-UnityStorageResource
 ```
 
 Retrieve informations about all the storage ressources
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnitystorageResource -Name 'DATASTORE01'
+Get-UnityStorageResource -Name 'DATASTORE01'
 ```
 
 Retrieves informations about storage ressource named DATASTORE01

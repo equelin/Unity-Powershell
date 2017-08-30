@@ -128,7 +128,7 @@ Function Set-UnityFilesystem {
 
           If ($ObjectID) {
 
-            $UnitystorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.filesystem.id -like $ObjectID)}
+            $UnitystorageResource = Get-UnityStorageResource -Session $sess | Where-Object {($_.filesystem.id -like $ObjectID)}
 
             #### REQUEST BODY
 

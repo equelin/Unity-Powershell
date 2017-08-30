@@ -58,7 +58,7 @@ Function Remove-UnityNFSShare {
 
           If ($ObjectID) {
 
-            $UnityStorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.filesystem.id -like $Object.filesystem.id)}
+            $UnityStorageResource = Get-UnityStorageResource -Session $sess | Where-Object {($_.filesystem.id -like $Object.filesystem.id)}
 
             #### REQUEST BODY
 

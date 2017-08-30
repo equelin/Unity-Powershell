@@ -1,4 +1,4 @@
-# Get-UnityinstalledSoftwareVersion
+# Get-UnityInstalledSoftwareVersion
 
 ## SYNOPSIS
 Information about installed system software and language packs in the VNXe system.
@@ -7,12 +7,12 @@ Information about installed system software and language packs in the VNXe syste
 
 ### Name (Default)
 ```
-Get-UnityinstalledSoftwareVersion [-session <Object>]
+Get-UnityInstalledSoftwareVersion [-session <Object>]
 ```
 
 ### ID
 ```
-Get-UnityinstalledSoftwareVersion [-session <Object>] [-ID <String[]>]
+Get-UnityInstalledSoftwareVersion [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -24,14 +24,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityinstalledSoftwareVersion
+Get-UnityInstalledSoftwareVersion
 ```
 
 Retrieve information about all UnityinstalledSoftwareVersion
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnityinstalledSoftwareVersion -ID 'id01'
+Get-UnityInstalledSoftwareVersion -ID 'id01'
 ```
 
 Retrieves information about a specific UnityinstalledSoftwareVersion

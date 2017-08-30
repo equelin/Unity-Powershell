@@ -61,7 +61,7 @@ Function Remove-UnityVMwareLUN {
 
           If ($ObjectID) {
 
-            $UnityStorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
+            $UnityStorageResource = Get-UnityStorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
 
             #Building the URL
             $FinalURI = $URI -replace '<id>',$UnityStorageResource.id

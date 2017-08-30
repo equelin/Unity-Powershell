@@ -1,4 +1,4 @@
-Function Get-UnityfcPort {
+Function  Get-UnityFCPort {
 
   <#
       .SYNOPSIS
@@ -17,11 +17,11 @@ Function Get-UnityfcPort {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityfcPort
+       Get-UnityFCPort
 
       Retrieve information about all UnityfcPort
       .EXAMPLE
-      Get-UnityfcPort -ID 'id01'
+       Get-UnityFCPort -ID 'id01'
 
       Retrieves information about a specific UnityfcPort
   #>

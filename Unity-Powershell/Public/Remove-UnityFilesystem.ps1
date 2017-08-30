@@ -61,7 +61,7 @@ Function Remove-UnityFilesystem {
 
           If ($ObjectID) {
 
-            $UnityStorageResource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.filesystem.id -like $ObjectID)}
+            $UnityStorageResource = Get-UnityStorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.filesystem.id -like $ObjectID)}
 
             #Building the URL
             $FinalURI = $URI -replace '<id>',$UnityStorageResource.id

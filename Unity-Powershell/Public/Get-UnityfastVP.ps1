@@ -1,4 +1,4 @@
-Function Get-UnityfastVP {
+Function Get-UnityFastVP {
 
   <#
       .SYNOPSIS
@@ -15,11 +15,11 @@ Function Get-UnityfastVP {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityfastVP
+      Get-UnityFastVP
 
       Retrieve information about all UnityfastVP
       .EXAMPLE
-      Get-UnityfastVP -ID 'id01'
+      Get-UnityFastVP -ID 'id01'
 
       Retrieves information about a specific UnityfastVP
   #>

@@ -1,4 +1,4 @@
-# Get-Unitybattery
+# Get-UnityBattery
 
 ## SYNOPSIS
 (Applies to physical deployments only.) Information about batteries in the storage system.
@@ -7,12 +7,12 @@
 
 ### Name (Default)
 ```
-Get-Unitybattery [-session <Object>] [-Name <String[]>]
+Get-UnityBattery [-session <Object>] [-Name <String[]>]
 ```
 
 ### ID
 ```
-Get-Unitybattery [-session <Object>] [-ID <String[]>]
+Get-UnityBattery [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -24,14 +24,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-Unitybattery
+Get-UnityBattery
 ```
 
 Retrieve information about all Unitybattery
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-Unitybattery -ID 'id01'
+Get-UnityBattery -ID 'id01'
 ```
 
 Retrieves information about a specific Unitybattery

@@ -265,7 +265,7 @@ Function New-UnityVMwareNFS {
             #Formating the result. Converting it from JSON to a Powershell object
             $results = ($request.content | ConvertFrom-Json).content
 
-            $Storageresource = Get-UnitystorageResource -session $Sess -ID $results.storageResource.id
+            $Storageresource = Get-UnityStorageResource -session $Sess -ID $results.storageResource.id
 
             Write-Verbose "$Type with the ID $($Storageresource.filesystem.id) has been created"
 

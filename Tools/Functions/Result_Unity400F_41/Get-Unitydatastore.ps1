@@ -1,4 +1,4 @@
-Function Get-Unitydatastore {
+Function Get-UnityDatastore {
 
   <#
       .SYNOPSIS
@@ -17,11 +17,11 @@ Function Get-Unitydatastore {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-Unitydatastore
+      Get-UnityDatastore
 
       Retrieve information about all Unitydatastore
       .EXAMPLE
-      Get-Unitydatastore -ID 'id01'
+      Get-UnityDatastore -ID 'id01'
 
       Retrieves information about a specific Unitydatastore
   #>

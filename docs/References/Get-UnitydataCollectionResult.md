@@ -1,4 +1,4 @@
-# Get-UnitydataCollectionResult
+# Get-UnityDataCollectionResult
 
 ## SYNOPSIS
 Information about Data Collection results in the storage system.
@@ -8,12 +8,12 @@ Data Collection is a service feature used for gathering system logs, customer co
 
 ### Name (Default)
 ```
-Get-UnitydataCollectionResult [-session <Object>] [-Name <String[]>] [-Download] [-Path <String>]
+Get-UnityDataCollectionResult [-session <Object>] [-Name <String[]>] [-Download] [-Path <String>]
 ```
 
 ### ID
 ```
-Get-UnitydataCollectionResult [-session <Object>] [-ID <String[]>] [-Download] [-Path <String>]
+Get-UnityDataCollectionResult [-session <Object>] [-ID <String[]>] [-Download] [-Path <String>]
 ```
 
 ## DESCRIPTION
@@ -26,21 +26,21 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnitydataCollectionResultList
+Get-UnityDataCollectionResultList
 ```
 
 Retrieve information about all UnitydataCollectionResult
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnitydataCollectionResultList -ID 'id01'
+Get-UnityDataCollectionResultList -ID 'id01'
 ```
 
 Retrieves information about a specific UnitydataCollectionResult
 
 ### -------------------------- EXEMPLE 3 --------------------------
 ```
-Get-UnitydataCollectionResultList -ID 'id01' -Download -Path C:\Temp
+Get-UnityDataCollectionResultList -ID 'id01' -Download -Path C:\Temp
 ```
 
 Download Data Collection Result in C:\Temp

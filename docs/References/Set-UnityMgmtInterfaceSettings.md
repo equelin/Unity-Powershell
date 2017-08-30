@@ -1,4 +1,4 @@
-# Set-UnityMgmtInterfaceSettings
+# Set-UnityMgmtInterfaceSetting
 
 ## SYNOPSIS
 Modifies global management interfaces settings.
@@ -6,7 +6,7 @@ Modifies global management interfaces settings.
 ## SYNTAX
 
 ```
-Set-UnityMgmtInterfaceSettings [[-session] <Object>] [[-v4ConfigMode] <InterfaceConfigModeEnum>]
+Set-UnityMgmtInterfaceSetting [[-session] <Object>] [[-v4ConfigMode] <InterfaceConfigModeEnum>]
  [[-v6ConfigMode] <InterfaceConfigModeEnum>] [-WhatIf] [-Confirm]
 ```
 
@@ -22,7 +22,7 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Set-UnityMgmtInterfaceSettings -Addresses '192.0.2.1','192.0.2.2'
+Set-UnityMgmtInterfaceSetting -Addresses '192.0.2.1','192.0.2.2'
 ```
 
 replace the exsting address list for this DNS server with this new list.

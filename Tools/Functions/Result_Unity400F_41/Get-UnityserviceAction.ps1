@@ -1,4 +1,4 @@
-Function Get-UnityserviceAction {
+Function  Get-UnityServiceAction {
 
   <#
       .SYNOPSIS
@@ -17,11 +17,11 @@ Function Get-UnityserviceAction {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityserviceAction
+       Get-UnityServiceAction
 
       Retrieve information about all UnityserviceAction
       .EXAMPLE
-      Get-UnityserviceAction -ID 'id01'
+       Get-UnityServiceAction -ID 'id01'
 
       Retrieves information about a specific UnityserviceAction
   #>

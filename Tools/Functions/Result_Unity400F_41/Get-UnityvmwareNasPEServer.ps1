@@ -1,4 +1,4 @@
-Function Get-UnityvmwareNasPEServer {
+Function Get-UnityVMwareNasPEServer {
 
   <#
       .SYNOPSIS
@@ -15,11 +15,11 @@ Function Get-UnityvmwareNasPEServer {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityvmwareNasPEServer
+      Get-UnityVMwareNasPEServer
 
       Retrieve information about all UnityvmwareNasPEServer
       .EXAMPLE
-      Get-UnityvmwareNasPEServer -ID 'id01'
+      Get-UnityVMwareNasPEServer -ID 'id01'
 
       Retrieves information about a specific UnityvmwareNasPEServer
   #>

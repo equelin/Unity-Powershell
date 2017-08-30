@@ -1,4 +1,4 @@
-Function Get-Unityx509Certificate {
+Function Get-UnityX509Certificate {
 
   <#
       .SYNOPSIS
@@ -17,11 +17,11 @@ Function Get-Unityx509Certificate {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-Unityx509Certificate
+      Get-UnityX509Certificate
 
       Retrieve information about all Unityx509Certificate
       .EXAMPLE
-      Get-Unityx509Certificate -ID 'id01'
+      Get-UnityX509Certificate -ID 'id01'
 
       Retrieves information about a specific Unityx509Certificate
   #>

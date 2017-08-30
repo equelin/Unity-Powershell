@@ -97,7 +97,7 @@ Function New-UnitySnap {
           }
 
           "String" {
-            If ($Object = Get-UnitystorageResource -Session $Sess -ID $sr -ErrorAction SilentlyContinue) {
+            If ($Object = Get-UnityStorageResource -Session $Sess -ID $sr -ErrorAction SilentlyContinue) {
               $ObjectID = $Object.id
             } else {
               Throw "This Storage Resource does not exist"

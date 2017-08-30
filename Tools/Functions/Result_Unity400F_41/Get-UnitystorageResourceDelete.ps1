@@ -1,4 +1,4 @@
-Function Get-UnitystorageResourceDelete {
+Function Get-UnityStorageResourceDelete {
 
   <#
       .SYNOPSIS
@@ -15,11 +15,11 @@ Function Get-UnitystorageResourceDelete {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnitystorageResourceDelete
+      Get-UnityStorageResourceDelete
 
       Retrieve information about all UnitystorageResourceDelete
       .EXAMPLE
-      Get-UnitystorageResourceDelete -ID 'id01'
+      Get-UnityStorageResourceDelete -ID 'id01'
 
       Retrieves information about a specific UnitystorageResourceDelete
   #>

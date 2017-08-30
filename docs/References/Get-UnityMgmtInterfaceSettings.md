@@ -1,4 +1,4 @@
-# Get-UnityMgmtInterfaceSettings
+# Get-UnityMgmtInterfaceSetting
 
 ## SYNOPSIS
 Informations about global settings for the management interfaces.
@@ -6,7 +6,7 @@ Informations about global settings for the management interfaces.
 ## SYNTAX
 
 ```
-Get-UnityMgmtInterfaceSettings [[-session] <Object>]
+Get-UnityMgmtInterfaceSetting [[-session] <Object>]
 ```
 
 ## DESCRIPTION
@@ -18,7 +18,7 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-UnityMgmtInterfaceSettings
+Get-UnityMgmtInterfaceSetting
 ```
 
 Retrieve informations about global settings for the management interfaces.

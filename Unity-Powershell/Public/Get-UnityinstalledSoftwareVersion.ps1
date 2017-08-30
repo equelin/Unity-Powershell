@@ -1,4 +1,4 @@
-Function Get-UnityinstalledSoftwareVersion {
+Function Get-UnityInstalledSoftwareVersion {
 
   <#
       .SYNOPSIS
@@ -15,11 +15,11 @@ Function Get-UnityinstalledSoftwareVersion {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityinstalledSoftwareVersion
+      Get-UnityInstalledSoftwareVersion
 
       Retrieve information about all UnityinstalledSoftwareVersion
       .EXAMPLE
-      Get-UnityinstalledSoftwareVersion -ID 'id01'
+      Get-UnityInstalledSoftwareVersion -ID 'id01'
 
       Retrieves information about a specific UnityinstalledSoftwareVersion
   #>

@@ -1,4 +1,4 @@
-Function Get-UnitymgmtInterfaceSettings {
+Function Get-UnityMgmtInterfaceSetting {
 
   <#
       .SYNOPSIS
@@ -15,11 +15,11 @@ Function Get-UnitymgmtInterfaceSettings {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnitymgmtInterfaceSettings
+      Get-UnityMgmtInterfaceSetting
 
       Retrieve information about all UnitymgmtInterfaceSettings
       .EXAMPLE
-      Get-UnitymgmtInterfaceSettings -ID 'id01'
+      Get-UnityMgmtInterfaceSetting -ID 'id01'
 
       Retrieves information about a specific UnitymgmtInterfaceSettings
   #>

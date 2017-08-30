@@ -1,4 +1,4 @@
-Function Get-UnitystorageResource {
+Function Get-UnityStorageResource {
 
   <#
       .SYNOPSIS
@@ -17,11 +17,11 @@ Function Get-UnitystorageResource {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnitystorageResource
+      Get-UnityStorageResource
 
       Retrieve information about all UnitystorageResource
       .EXAMPLE
-      Get-UnitystorageResource -ID 'id01'
+      Get-UnityStorageResource -ID 'id01'
 
       Retrieves information about a specific UnitystorageResource
   #>

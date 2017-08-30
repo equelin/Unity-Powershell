@@ -1,4 +1,4 @@
-Function Get-UnitydataCollectionResult {
+Function Get-UnityDataCollectionResult {
 
   <#
       .SYNOPSIS
@@ -21,15 +21,15 @@ Function Get-UnitydataCollectionResult {
       .PARAMETER Path
       Specifies where to store downloaded Data Collection Results
       .EXAMPLE
-      Get-UnitydataCollectionResultList
+      Get-UnityDataCollectionResultList
 
       Retrieve information about all UnitydataCollectionResult
       .EXAMPLE
-      Get-UnitydataCollectionResultList -ID 'id01'
+      Get-UnityDataCollectionResultList -ID 'id01'
 
       Retrieves information about a specific UnitydataCollectionResult
       .EXAMPLE
-      Get-UnitydataCollectionResultList -ID 'id01' -Download -Path C:\Temp
+      Get-UnityDataCollectionResultList -ID 'id01' -Download -Path C:\Temp
 
       Download Data Collection Result in C:\Temp
   #>

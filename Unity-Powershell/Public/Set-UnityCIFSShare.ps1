@@ -96,7 +96,7 @@ Function Set-UnityCIFSShare {
 
           If ($ObjectID) {
 
-            $UnitystorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.filesystem.id -like $Object.Filesystem.id)}
+            $UnitystorageResource = Get-UnityStorageResource -Session $sess | Where-Object {($_.filesystem.id -like $Object.Filesystem.id)}
 
             #### REQUEST BODY 
 

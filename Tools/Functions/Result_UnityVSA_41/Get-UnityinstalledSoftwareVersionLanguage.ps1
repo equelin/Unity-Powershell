@@ -1,4 +1,4 @@
-Function Get-UnityinstalledSoftwareVersionLanguage {
+Function Get-UnityInstalledSoftwareVersionLanguage {
 
   <#
       .SYNOPSIS
@@ -17,11 +17,11 @@ Function Get-UnityinstalledSoftwareVersionLanguage {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnityinstalledSoftwareVersionLanguage
+      Get-UnityInstalledSoftwareVersionLanguage
 
       Retrieve information about all UnityinstalledSoftwareVersionLanguage
       .EXAMPLE
-      Get-UnityinstalledSoftwareVersionLanguage -ID 'id01'
+      Get-UnityInstalledSoftwareVersionLanguage -ID 'id01'
 
       Retrieves information about a specific UnityinstalledSoftwareVersionLanguage
   #>

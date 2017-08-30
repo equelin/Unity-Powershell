@@ -1,4 +1,4 @@
-Function Get-UnityMgmtInterfaceSettings {
+Function Get-UnityMgmtInterfaceSetting {
 
   <#
       .SYNOPSIS
@@ -13,7 +13,7 @@ Function Get-UnityMgmtInterfaceSettings {
       .PARAMETER Session
       Specifies an UnitySession Object.
       .EXAMPLE
-      Get-UnityMgmtInterfaceSettings
+      Get-UnityMgmtInterfaceSetting
 
       Retrieve informations about global settings for the management interfaces.
   #>

@@ -114,7 +114,7 @@ Function Set-UnityVMwareLUN {
 
           If ($ObjectID) {
 
-            $UnitystorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
+            $UnitystorageResource = Get-UnityStorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
 
             # Creation of the body hash
             $body = @{}

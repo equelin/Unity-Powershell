@@ -142,7 +142,7 @@ Function Set-UnityserviceAction {
 
         If (($request.StatusCode -eq '200') -or ($request.StatusCode -eq '204')) {
           #Output result
-          Get-UnityserviceAction -Session $Sess -ID $ID
+           Get-UnityServiceAction -Session $Sess -ID $ID
         } # End If (($request.StatusCode -eq '200') -or ($request.StatusCode -eq '204'))
 
         If ($request.StatusCode -eq '202'){

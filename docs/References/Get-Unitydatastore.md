@@ -1,4 +1,4 @@
-# Get-Unitydatastore
+# Get-UnityDatastore
 
 ## SYNOPSIS
 Represents a VMware Datastore.
@@ -7,12 +7,12 @@ Represents a VMware Datastore.
 
 ### Name (Default)
 ```
-Get-Unitydatastore [-session <Object>] [-Name <String[]>]
+Get-UnityDatastore [-session <Object>] [-Name <String[]>]
 ```
 
 ### ID
 ```
-Get-Unitydatastore [-session <Object>] [-ID <String[]>]
+Get-UnityDatastore [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -24,14 +24,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Get-Unitydatastore
+Get-UnityDatastore
 ```
 
 Retrieve information about all Unitydatastore
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-Unitydatastore -ID 'id01'
+Get-UnityDatastore -ID 'id01'
 ```
 
 Retrieves information about a specific Unitydatastore

@@ -1,4 +1,4 @@
-Function Get-UnitydataCollectionResult {
+Function Get-UnityDataCollectionResult {
 
   <#
       .SYNOPSIS
@@ -17,11 +17,11 @@ Function Get-UnitydataCollectionResult {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnitydataCollectionResult
+      Get-UnityDataCollectionResult
 
       Retrieve information about all UnitydataCollectionResult
       .EXAMPLE
-      Get-UnitydataCollectionResult -ID 'id01'
+      Get-UnityDataCollectionResult -ID 'id01'
 
       Retrieves information about a specific UnitydataCollectionResult
   #>

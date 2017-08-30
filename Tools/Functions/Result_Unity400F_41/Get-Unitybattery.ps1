@@ -1,4 +1,4 @@
-Function Get-Unitybattery {
+Function Get-UnityBattery {
 
   <#
       .SYNOPSIS
@@ -17,11 +17,11 @@ Function Get-Unitybattery {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-Unitybattery
+      Get-UnityBattery
 
       Retrieve information about all Unitybattery
       .EXAMPLE
-      Get-Unitybattery -ID 'id01'
+      Get-UnityBattery -ID 'id01'
 
       Retrieves information about a specific Unitybattery
   #>

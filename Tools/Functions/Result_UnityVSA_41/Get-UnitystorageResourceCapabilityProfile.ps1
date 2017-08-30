@@ -1,4 +1,4 @@
-Function Get-UnitystorageResourceCapabilityProfile {
+Function Get-UnityStorageResourceCapabilityProfile {
 
   <#
       .SYNOPSIS
@@ -15,11 +15,11 @@ Function Get-UnitystorageResourceCapabilityProfile {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-UnitystorageResourceCapabilityProfile
+      Get-UnityStorageResourceCapabilityProfile
 
       Retrieve information about all UnitystorageResourceCapabilityProfile
       .EXAMPLE
-      Get-UnitystorageResourceCapabilityProfile -ID 'id01'
+      Get-UnityStorageResourceCapabilityProfile -ID 'id01'
 
       Retrieves information about a specific UnitystorageResourceCapabilityProfile
   #>
