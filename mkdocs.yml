@@ -46,6 +46,7 @@ pages:
     - Get-UnityIPPort: References/Get-UnityIPPort.md
     - Get-UnityIscsiPortal: References/Get-UnityIscsiPortal.md
     - Get-UnityItem: References/Get-UnityItem.md
+    - Get-Unityjob: References/Get-Unityjob.md
     - Get-UnityLicense: References/Get-UnityLicense.md
     - Get-UnitylinkAggregation: References/Get-UnitylinkAggregation.md
     - Get-UnityLUN: References/Get-UnityLUN.md

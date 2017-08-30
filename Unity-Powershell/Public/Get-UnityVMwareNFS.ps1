@@ -4,7 +4,7 @@ Function Get-UnityVMwareNFS {
       .SYNOPSIS
       Queries the EMC Unity array to retrieve informations about VMware NFS LUN.
       .DESCRIPTION
-      Queries the EMC Unity array to retrieve informations about VMware NFS LUN.
+git       Queries the EMC Unity array to retrieve informations about VMware NFS LUN.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE

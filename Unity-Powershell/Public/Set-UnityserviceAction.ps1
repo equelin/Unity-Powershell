@@ -147,7 +147,7 @@ Function Set-UnityserviceAction {
 
         If ($request.StatusCode -eq '202'){
           #Output result
-          $request
+          $request.Content | ConvertFrom-Json
         }
 
       } # End Switch ($PsCmdlet.ParameterSetName)

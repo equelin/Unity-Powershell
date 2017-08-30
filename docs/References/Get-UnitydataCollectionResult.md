@@ -2,8 +2,7 @@
 
 ## SYNOPSIS
 Information about Data Collection results in the storage system.
-\<br/\> \<br/\> Data Collection is a service feature used for gathering system logs, customer configurations, system statistics and runtime data from storage system.
-\<br/\> \<br/\>
+Data Collection is a service feature used for gathering system logs, customer configurations, system statistics and runtime data from storage system.
 
 ## SYNTAX
 
@@ -19,8 +18,8 @@ Get-UnitydataCollectionResult [-session <Object>] [-ID <String[]>] [-Download] [
 
 ## DESCRIPTION
 Information about Data Collection results in the storage system.
-\<br/\> \<br/\> Data Collection is a service feature used for gathering system logs, customer configurations, system statistics and runtime data from storage system.
-\<br/\> \<br/\>  
+Data Collection is a service feature used for gathering system logs, customer configurations, system statistics and runtime data from storage system.
+ 
 You need to have an active session with the array.
 
 ## EXAMPLES
@@ -38,6 +37,13 @@ Get-UnitydataCollectionResultList -ID 'id01'
 ```
 
 Retrieves information about a specific UnitydataCollectionResult
+
+### -------------------------- EXEMPLE 3 --------------------------
+```
+Get-UnitydataCollectionResultList -ID 'id01' -Download -Path C:\Temp
+```
+
+Download Data Collection Result in C:\Temp
 
 ## PARAMETERS
 
@@ -87,7 +93,7 @@ Accept wildcard characters: False
 ```
 
 ### -Download
-Download the file(s)
+Specifies if you want to download Data Collection Results
 
 ```yaml
 Type: SwitchParameter
@@ -102,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -Path
-Download path
+Specifies where to store downloaded Data Collection Results
 
 ```yaml
 Type: String

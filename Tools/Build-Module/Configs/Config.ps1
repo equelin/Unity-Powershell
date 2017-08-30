@@ -31,6 +31,7 @@ $cfg.Classes = @(
     @{TypeName='Unitybattery'; TableHeaderList=@('id','name','slotNumber','emcSerialNumber','emcPartNumber','firmwareVersion')}
     @{TypeName='UnityPool'; TableHeaderList=@('id','name','SizeFree','SizeTotal','SizeUsed','SizeSubscribed','IsFASTCacheEnabled','Type','RaidType')}
     @{TypeName='UnitySystem'; TableHeaderList=@('id','name','Model','SerialNumber','Platform','MacAddress')}
+    @{TypeName='UnityJob'; TableHeaderList=@('id','state','endTime','elapsedTime','progressPct')}
 )
 
 
