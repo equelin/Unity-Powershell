@@ -33,7 +33,7 @@ pages:
     - Get-UnityEthernetPort: References/Get-UnityEthernetPort.md
     - Get-UnityFastCache: References/Get-UnityFastCache.md
     - Get-UnityFastVP: References/Get-UnityFastVP.md
-    -  Get-UnityFCPort: References/ Get-UnityFCPort.md
+    - Get-UnityFCPort: References/Get-UnityFCPort.md
     - Get-UnityFeature: References/Get-UnityFeature.md
     - Get-UnityFileDNSServer: References/Get-UnityFileDNSServer.md
     - Get-UnityFileInterface: References/Get-UnityFileInterface.md
@@ -62,7 +62,7 @@ pages:
     - Get-UnityNTPServer: References/Get-UnityNTPServer.md
     - Get-UnityPool: References/Get-UnityPool.md
     - Get-UnityPoolUnit: References/Get-UnityPoolUnit.md
-    -  Get-UnityServiceAction: References/ Get-UnityServiceAction.md
+    - Get-UnityServiceAction: References/Get-UnityServiceAction.md
     - Get-UnityServiceInfo: References/Get-UnityServiceInfo.md
     - Get-UnitySession: References/Get-UnitySession.md
     - Get-UnitySMTPServer: References/Get-UnitySMTPServer.md

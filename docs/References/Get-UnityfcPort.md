@@ -1,4 +1,4 @@
-#  Get-UnityFCPort
+# Get-UnityFCPort
 
 ## SYNOPSIS
 Fibre Channel (FC) front end port settings.
@@ -8,12 +8,12 @@ Applies if the FC protocol is supported on the system and the corresponding lice
 
 ### Name (Default)
 ```
- Get-UnityFCPort [-session <Object>] [-Name <String[]>]
+Get-UnityFCPort [-session <Object>] [-Name <String[]>]
 ```
 
 ### ID
 ```
- Get-UnityFCPort [-session <Object>] [-ID <String[]>]
+Get-UnityFCPort [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -26,14 +26,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
- Get-UnityFCPort
+Get-UnityFCPort
 ```
 
 Retrieve information about all UnityfcPort
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
- Get-UnityFCPort -ID 'id01'
+Get-UnityFCPort -ID 'id01'
 ```
 
 Retrieves information about a specific UnityfcPort

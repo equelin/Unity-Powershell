@@ -1,4 +1,4 @@
-#  Get-UnityServiceAction
+# Get-UnityServiceAction
 
 ## SYNOPSIS
 Information about storage system service actions.
@@ -7,12 +7,12 @@ Information about storage system service actions.
 
 ### Name (Default)
 ```
- Get-UnityServiceAction [-session <Object>] [-Name <String[]>]
+Get-UnityServiceAction [-session <Object>] [-Name <String[]>]
 ```
 
 ### ID
 ```
- Get-UnityServiceAction [-session <Object>] [-ID <String[]>]
+Get-UnityServiceAction [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -23,14 +23,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
- Get-UnityServiceAction
+Get-UnityServiceAction
 ```
 
 Retrieve information about all UnityserviceAction
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
- Get-UnityServiceAction -ID 'id01'
+Get-UnityServiceAction -ID 'id01'
 ```
 
 Retrieves information about a specific UnityserviceAction

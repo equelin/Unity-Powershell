@@ -2,9 +2,9 @@ function New-UnityObject {
     [CmdletBinding()]
     Param (
       [parameter(Mandatory = $true)]
-      $Data,
+      [Object[]]$Data,
       [parameter(Mandatory = $true)]
-      $TypeName
+      [String]$TypeName
     )
   
     Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Executing function"
@@ -15,8 +15,13 @@ function New-UnityObject {
     Foreach ($D in $Data) {
 
         # Create a new empty object of type $Typename
-        $Object = New-Object -TypeName $TypeName
-
+        Try {
+            $Object = New-Object -TypeName $TypeName
+        }
+        Catch {
+            Throw "$TypeName is an invalid object"
+        }
+        
         # Loop through all the object properties and add to it the data
         $Object | Get-Member -MemberType Property | ForEach-Object {
             If ($D."$($_.name)" -notlike $null) {
