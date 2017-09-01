@@ -23,6 +23,8 @@ Function Set-UnityserviceAction {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specify an UnitySession Object.
+      .PARAMETER Async
+      Specifies if you want to run this command asynchronously.
       .PARAMETER dataCollection
       Collect information about the storage system and save it to a file.
       .PARAMETER dataCollectionProfile
@@ -74,6 +76,8 @@ Function Set-UnityserviceAction {
     #Default Parameters
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
+    [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
+    [Switch]$Async,
 
     #dataCollection
     [Parameter(Mandatory = $true,ParameterSetName="dataCollection",HelpMessage = 'Collect information about the storage system and save it to a file.')]
@@ -91,13 +95,15 @@ Function Set-UnityserviceAction {
   )
 
   Begin {
-    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Executing function"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] ParameterSetName: $($PsCmdlet.ParameterSetName)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
   }
 
   Process {
     Foreach ($sess in $session) {
 
-      Write-Debug -Message "Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
+      Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Processing Session: $($sess.Server) with SessionId: $($sess.SessionId)"
 
       If ($Sess.TestConnection()) {
 
@@ -105,8 +111,15 @@ Function Set-UnityserviceAction {
 
         #Building the URI
         $URI = 'https://'+$sess.Server+'/api/instances/serviceAction/'+$ID+'/action/execute'
-        Write-Verbose "URI: $URI"
+        
 
+        If ($PSBoundParameters.ContainsKey('Async')) {
+          $URI = $URI + "?timeout=0" #run async
+        }
+
+        Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] URI: $URI"
+
+        #Building request body
         If ($pscmdlet.ShouldProcess($ID,"Service Action")) {
           Switch ($ID) {
             'dataCollection' {
@@ -121,8 +134,6 @@ Function Set-UnityserviceAction {
                 $body['dataCollectionProfile'] = $dataCollectionProfile
               }
 
-              $URI = $URI + "?timeout=0" #run async
-
               $request = Send-UnityRequest -uri $URI -Session $Sess -Method 'POST' -Body $Body 
 
             }
@@ -136,20 +147,25 @@ Function Set-UnityserviceAction {
           }
         }
 
-        Write-Verbose $Request
-
-        Write-Verbose "Request status code: $($request.StatusCode)"
+        Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Request status code: $($request.StatusCode)"
 
         If (($request.StatusCode -eq '200') -or ($request.StatusCode -eq '204')) {
-          #Output result
-           Get-UnityServiceAction -Session $Sess -ID $ID
+
+          If ($ID -eq 'dataCollection') {
+
+            # Return the last data collection result object available. This ugly woraround is needed because the request does not send back the id of the created data collection. 
+            Get-UnityDataCollectionResult -Session $Sess | Sort-Object -Property CreationTime | Select-Object -Last 1
+
+          } else {
+            #Output result
+            Get-UnityServiceAction -Session $Sess -ID $ID
+          }
         } # End If (($request.StatusCode -eq '200') -or ($request.StatusCode -eq '204'))
 
         If ($request.StatusCode -eq '202'){
           #Output result
           $request.Content | ConvertFrom-Json
         }
-
       } # End Switch ($PsCmdlet.ParameterSetName)
     } # End Foreach ($sess in $session) {
   } # End Process

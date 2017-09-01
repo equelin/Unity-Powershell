@@ -125,6 +125,7 @@ pages:
     - Remove-UnityvCenter: References/Remove-UnityvCenter.md
     - Remove-UnityVMwareLUN: References/Remove-UnityVMwareLUN.md
     - Remove-UnityVMwareNFS: References/Remove-UnityVMwareNFS.md
+    - Save-UnityDataCollectionResult: References/Save-UnityDataCollectionResult.md
     - Set-UnityAlert: References/Set-UnityAlert.md
     - Set-UnityAlertConfig: References/Set-UnityAlertConfig.md
     - Set-UnityCIFSShare: References/Set-UnityCIFSShare.md

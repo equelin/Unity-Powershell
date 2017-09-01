@@ -7,12 +7,13 @@ Services the system.
 
 ### changeSSHStatus (Default)
 ```
-Set-UnityserviceAction [-session <Object>] [-changeSSHStatus] -currentPassword <String> [-WhatIf] [-Confirm]
+Set-UnityserviceAction [-session <Object>] [-Async] [-changeSSHStatus] -currentPassword <String> [-WhatIf]
+ [-Confirm]
 ```
 
 ### dataCollection
 ```
-Set-UnityserviceAction [-session <Object>] [-dataCollection] [-includePrivateData]
+Set-UnityserviceAction [-session <Object>] [-Async] [-dataCollection] [-includePrivateData]
  [-dataCollectionProfile <DataCollectionProfileEnum>] [-WhatIf] [-Confirm]
 ```
 
@@ -60,6 +61,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Async
+EMC Unity Session
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

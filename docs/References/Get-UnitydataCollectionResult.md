@@ -1,19 +1,18 @@
 # Get-UnityDataCollectionResult
 
 ## SYNOPSIS
-Information about Data Collection results in the storage system.
-Data Collection is a service feature used for gathering system logs, customer configurations, system statistics and runtime data from storage system.
+Get or download informations about Data Collection results
 
 ## SYNTAX
 
-### Name (Default)
+### ID (Default)
 ```
-Get-UnityDataCollectionResult [-session <Object>] [-Name <String[]>] [-Download] [-Path <String>]
+Get-UnityDataCollectionResult [-session <Object>] [-ID <String[]>] [-Download] [-Compress] [-Path <String>]
 ```
 
-### ID
+### Name
 ```
-Get-UnityDataCollectionResult [-session <Object>] [-ID <String[]>] [-Download] [-Path <String>]
+Get-UnityDataCollectionResult [-session <Object>] [-Name <String[]>] [-Download] [-Compress] [-Path <String>]
 ```
 
 ## DESCRIPTION
@@ -103,7 +102,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
-Accept pipeline input: True (ByPropertyName, ByValue)
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Compress
+Specifies if you want to compress the downloaded file
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -118,7 +132,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: .
-Accept pipeline input: True (ByPropertyName, ByValue)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
