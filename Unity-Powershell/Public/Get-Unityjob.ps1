@@ -1,4 +1,4 @@
-Function Get-Unityjob {
+Function Get-UnityJob {
 
   <#
       .SYNOPSIS
@@ -15,20 +15,20 @@ Function Get-Unityjob {
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
-      Get-Unityjob
+      Get-UnityJob
 
-      Retrieve information about all Unityjob
+      Retrieve information about all UnityJob
       .EXAMPLE
-      Get-Unityjob -ID 'id01'
+      Get-UnityJob -ID 'id01'
 
-      Retrieves information about a specific Unityjob
+      Retrieves information about a specific UnityJob
   #>
 
   [CmdletBinding(DefaultParameterSetName='Name')]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName='ID',ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Unityjob ID')]
+    [Parameter(Mandatory = $false,ParameterSetName='ID',ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'UnityJob ID')]
     [String[]]$ID
   )
 
@@ -37,7 +37,7 @@ Function Get-Unityjob {
 
     #Initialazing variables
     $URI = '/api/types/job/instances' #URI
-    $TypeName = 'Unityjob'
+    $TypeName = 'UnityJob'
   }
 
   Process {

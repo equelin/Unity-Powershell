@@ -732,7 +732,7 @@ Class Unitydisk {
   [Bool]$needsReplacement #Indicates whether disk replacement is needed. Values are: <ul> <li> true - Disk replacment is needed.</li> <li>false - No disk replacement is needed.</li> </ul>  
   [Object]$parent #Resource type and unique identifier for the disk's parent enclosure.  
   [Int]$slotNumber #Slot where the disk is located in the parent enclosure.  
-  [DateTime]$estimatedEOL #Estimated remaning life of disk, based on past use. Applies only to flash disks.  
+  [Object]$estimatedEOL #Estimated remaning life of disk, based on past use. Applies only to flash disks.  
   [Int]$busId #Identifier of the bus used by the disk.  
   [String]$name #Disk name. Modifiable for virtual disks only.  
   [String]$manufacturer #Disk manufacturer.  
@@ -896,7 +896,7 @@ Class UnityEthernetPort {
   [UInt64[]]$supportedMtus
   $parent
   [SFPSpeedValuesEnum[]]$sfpSupportedSpeeds
-  [SFPSpeedValuesEnum[]]$sfpSupportedProtocols
+  [SFPProtocolValuesEnum[]]$sfpSupportedProtocols
 }
 
 Class UnityIscsiPortal {
