@@ -21,7 +21,7 @@ Function Set-UnityFileDnsServer {
       .PARAMETER replicationPolicy
       Status of the LDAP list in the NAS server operating as a replication destination.
       .EXAMPLE
-      Set-UnityFileDnsServer -ID 'dns_1' -ipAddress '192.168.0.1'
+      Set-UnityFileDnsServer -ID 'dns_1' -ipAddress '192.0.2.1'
 
       Change ip of the file DNS server with ID 'dns_1'
   #>
@@ -31,7 +31,7 @@ Function Set-UnityFileDnsServer {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'File DNS Server ID or Object')]
-    $ID,
+    [Object[]]$ID,
     [Parameter(Mandatory = $false,HelpMessage = 'DNS domain name')]
     [string]$domain,
     [Parameter(Mandatory = $false,HelpMessage = 'The list of DNS server IP addresses')]
@@ -62,29 +62,7 @@ Function Set-UnityFileDnsServer {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityFileDnsServer -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityFileDnsServer -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 

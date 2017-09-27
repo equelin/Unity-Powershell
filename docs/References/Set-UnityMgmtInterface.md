@@ -6,7 +6,7 @@ Modify settings for an management interface.
 ## SYNTAX
 
 ```
-Set-UnityMgmtInterface [-session <Object>] [[-ID] <String[]>] [[-ipAddress] <String>] [-netmask <String>]
+Set-UnityMgmtInterface [-session <Object>] [[-ID] <Object[]>] [[-ipAddress] <String>] [-netmask <String>]
  [-v6PrefixLength <String[]>] [[-gateway] <String>] [-WhatIf] [-Confirm]
 ```
 
@@ -19,7 +19,7 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Set-UnityMgmtInterface -ID 'mgmt_ipv4' -gateway '192.168.0.254'
+Set-UnityMgmtInterface -ID 'mgmt_ipv4' -gateway '192.0.2.254'
 ```
 
 Change gateway of the management interface with ID 'mgmt_ipv4'
@@ -45,7 +45,7 @@ Accept wildcard characters: False
 Management interface ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

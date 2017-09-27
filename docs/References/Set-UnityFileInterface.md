@@ -6,7 +6,7 @@ Modifies NAS Server parameters.
 ## SYNTAX
 
 ```
-Set-UnityFileInterface [-session <Object>] [[-ID] <Object>] [-ipPort <Object>] [-ipAddress <IPAddress>]
+Set-UnityFileInterface [-session <Object>] [[-ID] <Object[]>] [-ipPort <Object>] [-ipAddress <IPAddress>]
  [-netmask <IPAddress>] [-v6PrefixLength <String>] [-gateway <IPAddress>] [-vlanId <Int32>]
  [-isPreferred <Boolean>] [-replicationPolicy <ReplicationPolicyEnum>] [-WhatIf] [-Confirm]
 ```
@@ -19,7 +19,7 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Set-UnityFileInterface -ID 'if_1' -ipAddress '192.168.0.1'
+Set-UnityFileInterface -ID 'if_1' -ipAddress '192.0.2.1'
 ```
 
 Change ip of the file interface with ID 'if_1'
@@ -45,7 +45,7 @@ Accept wildcard characters: False
 File interface ID or Object
 
 ```yaml
-Type: Object
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

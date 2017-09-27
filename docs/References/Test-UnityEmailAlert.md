@@ -6,7 +6,7 @@ Test email alert notification by sending a test alert to all configured email de
 ## SYNTAX
 
 ```
-Test-UnityEmailAlert [-session <Object>] [[-ID] <String[]>]
+Test-UnityEmailAlert [-session <Object>] [[-ID] <Object[]>]
 ```
 
 ## DESCRIPTION
@@ -43,7 +43,7 @@ Accept wildcard characters: False
 ID or Object of a Alert Config..
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

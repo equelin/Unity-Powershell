@@ -26,9 +26,6 @@ Function Get-UnityHostContainerReco {
 
   Begin {
     Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
-
-    #Initialazing arrays
-    $
   }
 
   Process {

@@ -16,7 +16,7 @@ Get-UnityLUN [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
-Querries the EMC Unity array to retrieve informations about block LUN.
+Queries the EMC Unity array to retrieve informations about block LUN.
 You need to have an active session with the array.
 
 ## EXAMPLES

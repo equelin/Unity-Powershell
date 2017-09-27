@@ -7,33 +7,33 @@ Modifies snapshot parameters.
 
 ### Set (Default)
 ```
-Set-UnitySnap [-session <Object>] [-ID] <String[]> [-name <String[]>] [-Description <String>]
+Set-UnitySnap [-session <Object>] [-ID] <Object[]> [-name <String[]>] [-Description <String>]
  [-isAutoDelete <Boolean>] [-retentionDuration <UInt64>] [-ioLimitParameters <String>] [-WhatIf] [-Confirm]
 ```
 
 ### Refresh
 ```
-Set-UnitySnap [-session <Object>] [-ID] <String[]> [-refresh] [-copyName <String>] [-WhatIf] [-Confirm]
+Set-UnitySnap [-session <Object>] [-ID] <Object[]> [-refresh] [-copyName <String>] [-WhatIf] [-Confirm]
 ```
 
 ### Detach
 ```
-Set-UnitySnap [-session <Object>] [-ID] <String[]> [-detach] [-WhatIf] [-Confirm]
+Set-UnitySnap [-session <Object>] [-ID] <Object[]> [-detach] [-WhatIf] [-Confirm]
 ```
 
 ### Attach
 ```
-Set-UnitySnap [-session <Object>] [-ID] <String[]> [-attach] [-copyName <String>] [-WhatIf] [-Confirm]
+Set-UnitySnap [-session <Object>] [-ID] <Object[]> [-attach] [-copyName <String>] [-WhatIf] [-Confirm]
 ```
 
 ### Restore
 ```
-Set-UnitySnap [-session <Object>] [-ID] <String[]> [-restore] [-copyName <String>] [-WhatIf] [-Confirm]
+Set-UnitySnap [-session <Object>] [-ID] <Object[]> [-restore] [-copyName <String>] [-WhatIf] [-Confirm]
 ```
 
 ### Copy
 ```
-Set-UnitySnap [-session <Object>] [-ID] <String[]> [-copy] [-numCopies <UInt32>] [-copyStartNum <UInt32>]
+Set-UnitySnap [-session <Object>] [-ID] <Object[]> [-copy] [-numCopies <UInt32>] [-copyStartNum <UInt32>]
  [-copyName <String>] [-WhatIf] [-Confirm]
 ```
 
@@ -106,7 +106,7 @@ Accept wildcard characters: False
 Snapshot ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

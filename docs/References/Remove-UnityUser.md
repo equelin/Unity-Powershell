@@ -6,7 +6,7 @@ Delete a local user.
 ## SYNTAX
 
 ```
-Remove-UnityUser [-session <Object>] [[-ID] <Object>] [-WhatIf] [-Confirm]
+Remove-UnityUser [-session <Object>] [[-ID] <Object[]>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -51,7 +51,7 @@ Accept wildcard characters: False
 User ID or Object.
 
 ```yaml
-Type: Object
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

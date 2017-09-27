@@ -39,7 +39,7 @@ $Data.function1000 = @{
     Name = 'Update-UnityvCenter'
     Parameters = @(
         @{'Name' = 'Session'; 'type' = 'object'}
-        @{'Name' = 'ID'; 'type' = 'String[]'}
+        @{'Name' = 'ID'; 'type' = 'Object[]'}
         @{'Name' = 'Refresh'; 'type' = 'SwitchParameter'}
         @{'Name' = 'RefreshAll'; 'type' = 'SwitchParameter'}
     )

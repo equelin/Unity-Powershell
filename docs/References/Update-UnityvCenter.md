@@ -7,12 +7,12 @@ Refresh vCenter hosts.
 
 ### Refresh (Default)
 ```
-Update-UnityvCenter [-session <Object>] [-ID] <String[]> [-Refresh]
+Update-UnityvCenter [-session <Object>] [-ID] <Object[]> [-Refresh]
 ```
 
 ### RefreshAll
 ```
-Update-UnityvCenter [-session <Object>] [-ID] <String[]> [-RefreshAll]
+Update-UnityvCenter [-session <Object>] [-ID] <Object[]> [-RefreshAll]
 ```
 
 ## DESCRIPTION
@@ -49,7 +49,7 @@ Accept wildcard characters: False
 ID or Object of a vCenter server
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

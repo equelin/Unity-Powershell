@@ -6,7 +6,7 @@ Modifies NFS share.
 ## SYNTAX
 
 ```
-Set-UnityNFSShare [-session <Object>] [-ID] <String[]> [-description <String>] [-isReadOnly <Boolean>]
+Set-UnityNFSShare [-session <Object>] [-ID] <Object[]> [-description <String>] [-isReadOnly <Boolean>]
  [-defaultAccess <NFSShareDefaultAccessEnum>] [-minSecurity <NFSShareSecurityEnum>] [-noAccessHosts <String[]>]
  [-readOnlyHosts <String[]>] [-readWriteHosts <String[]>] [-rootAccessHosts <String[]>] [-append] [-WhatIf]
  [-Confirm]
@@ -46,7 +46,7 @@ Accept wildcard characters: False
 ID of the NFS share.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

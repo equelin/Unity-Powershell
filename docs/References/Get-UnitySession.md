@@ -23,10 +23,10 @@ List all the existing sessions.
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnitySession -Server 192.168.0.1'
+Get-UnitySession -Server 192.0.2.1'
 ```
 
-Lists sessions connected the the array '192.168.0.1'
+Lists sessions connected the the array '192.0.2.1'
 
 ## PARAMETERS
 

@@ -26,12 +26,12 @@ Disconnects all the sessions
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-$Session = Get-UnitySession -Server 192.168.0.1
+$Session = Get-UnitySession -Server 192.0.2.1
 ```
 
 Disconnect-Unity -Session $Session
 
-Disconnects all the sessions matching the IP of the array 192.168.0.1
+Disconnects all the sessions matching the IP of the array 192.0.2.1
 
 ## PARAMETERS
 

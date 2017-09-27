@@ -41,7 +41,7 @@ Function Set-UnityIscsiPortal {
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'iSCSI Network Portal ID or Oject')]
-    [String[]]$ID,
+    [Object[]]$ID,
     [Parameter(Mandatory = $false,HelpMessage = 'IPv4 or IPv6 address for the interface.')]
     [string]$ipAddress,
     [Parameter(Mandatory = $false,HelpMessage = 'IPv4 netmask for the interface, if the interface uses an IPv4 address.')]
@@ -75,29 +75,7 @@ Function Set-UnityIscsiPortal {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityIscsiPortal -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityIscsiPortal -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 

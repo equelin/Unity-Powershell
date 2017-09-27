@@ -30,7 +30,7 @@ Function Set-UnityNFSServer {
 
     #NFS Server ID or Object.
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'NFS Server ID or Object.')] 
-    [String[]]$ID, 
+    [Object[]]$ID, 
 
     #Host name of the NFS server. If host name is not specified then SMB server name or NAS server name will be used to auto generate the host name.
     [Parameter(Mandatory = $false,HelpMessage = 'Host name of the NFS server. If host name is not specified then SMB server name or NAS server name will be used to auto generate the host name.')]
@@ -92,29 +92,7 @@ Function Set-UnityNFSServer {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityNFSServer -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityNFSServer -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 

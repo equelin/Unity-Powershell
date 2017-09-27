@@ -12,7 +12,7 @@ Unity-Powershell is a member of the DevHigh5 program from [{code} by Dell EMC(tm
 
 ![](./Medias/Unity-Powershell-Demo-01.gif)
 
-With this module (version 0.13.0) you can manage:
+With this module (version 0.15.0) you can manage:
 
 - System (DNS,NTP...),
 - Pools (Virtual and physical deployment),
@@ -79,22 +79,22 @@ The first thing to do is to connect to an EMC Unity array with the command `Conn
 
 ```PowerShell
 # Connect to the Unity array
-    Connect-Unity -Server 192.168.0.1
+    Connect-Unity -Server 192.0.2.1
 
     Server       User  Name     Model    SerialNumber
     ------       ----  ----     -----    ------------
-    192.168.0.1 admin UnityDemo UnityVSA VIRT1919K58MXM
+    192.0.2.1 admin UnityDemo UnityVSA VIRT1919K58MXM
 ```
 
 The parameter `-TrustAllCerts` allow to accept or not untrusted certificates. It is set to `$True` by default.
 
 ```PowerShell
 # Connect to the Unity array without allowing untrusted certificates
-    Connect-Unity -Server 192.168.0.1 -TrustAllCerts $false
+    Connect-Unity -Server 192.0.2.1 -TrustAllCerts $false
 
     Server       User  Name     Model    SerialNumber
     ------       ----  ----     -----    ------------
-    192.168.0.1 admin UnityDemo UnityVSA VIRT1919K58MXM
+    192.0.2.1 admin UnityDemo UnityVSA VIRT1919K58MXM
 ```
 
 ### LUN Management

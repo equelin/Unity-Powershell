@@ -6,7 +6,7 @@ Test GUI alert notification by sending a test alert to all open CEM GUIs.
 ## SYNTAX
 
 ```
-Test-UnityUIAlert [-session <Object>] [[-ID] <String[]>]
+Test-UnityUIAlert [-session <Object>] [[-ID] <Object[]>]
 ```
 
 ## DESCRIPTION
@@ -43,7 +43,7 @@ Accept wildcard characters: False
 ID or Object of a Alert Config..
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

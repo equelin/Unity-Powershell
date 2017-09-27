@@ -101,6 +101,56 @@ Class UnitySession {
       return $False
     }
   }
+
+  #Send Get Request
+  [Object] SendGetRequest ([String]$URI) {
+    Try {
+
+      $Parameters = @{
+        Uri = "https://$($this.Server)/$URI"
+        Method = 'Get'
+        ContentType = "application/json"
+        Websession = $this.Websession
+        Headers = $this.headers
+        TimeoutSec = 6000
+      }
+
+      Write-Debug -Message "Request Parameters: $($Parameters | Out-String)"
+
+      $data = Invoke-WebRequest @Parameters
+      return $data
+    }
+    Catch {
+      Show-RequestException -Exception $_
+      throw
+    }
+  }
+
+  #Send Get Request with OutFile parameter
+  [Object] SendGetRequest ([String]$URI, [String]$OutFile) {
+    Try {
+
+      $Parameters = @{
+        Uri = "https://$($this.Server)/$URI"
+        Method = 'Get'
+        ContentType = "application/json"
+        Websession = $this.Websession
+        Headers = $this.headers
+        TimeoutSec = 6000
+        OutFile = $OutFile
+        PassThru = $True
+      }
+
+      Write-Debug -Message "Request Parameters: $($Parameters | Out-String)"
+
+      $data = Invoke-WebRequest @Parameters
+      return $data
+    }
+    Catch {
+      Show-RequestException -Exception $_
+      throw
+    }
+  }
 }
 
 <#
@@ -124,9 +174,10 @@ Class Unitysystem {
   [Bool]$isEULAAccepted #Indicates whether the End User License Agreement (EULA) was accepted for an upgrade. Once the EULA is accepted, users can upload product licenses and configure the system, or both. Values are: <ul> <li>true - EULA was accepted on the system. Once you set this value, you cannot set it to false later on.</li> <li>false - EULA was not accepted on the system.</li> </ul>  
   [Bool]$isUpgradeComplete #Indicates whether an upgrade completed. Operations that change the configuration of the system are not allowed while an upgrade is in progress. <p/> Values are: <ul> <li>true - Upgrade completed.</li> <li>false - Upgrade did not complete.</li> </ul> </p> <p/>  
   [SPModelNameEnum[]]$supportedUpgradeModels #List of all supported models for hardware upgrade.
-  [Int]$currentPower
-  [Int]$avgPower
-  [Bool]$isAutoFailbackEnabled  
+  [Int]$currentPower #Current amount of power used by the system.  
+  [Int]$avgPower #Average amount of power used by the system. The system uses a one hour window of 30-second samples to determine this value.  
+  [Bool]$isAutoFailbackEnabled #Indicates whether the automatic failback of NAS servers is enabled for the system. Values are: <ul> <li>true - Automatic failback for NAS servers is enabled.</li> <li>false - Automatic failback for NAS servers is disabled.</li> </ul>  
+  [Bool]$isAllFlash #Indicates whether sytem is all flash.  
 
   #Methods
 
@@ -178,6 +229,15 @@ Class Unitylun {
   [Object[]]$hostAccess #Host access permissions for the LUN.  
   [Int]$snapCount #Number of snapshots of the LUN.  
   [Object]$moveSession #The moveSession associated with the current lun
+  [Object]$familyCloneCount #Total number of thin clones created in the LUN Family, including all derivative thin clones objects.  This attribute is not applicable for a Thin Clone
+  [Object]$nonBaseSize #Thin Clones and Snapshots subscribed space for the LUN.  This attribute is not applicable for a Thin Clone
+  [Bool]$isThinClone #Indicates whether LUN is a thin clone on not.  <ul>  <li>true - The LUN is a thin clone.</li>  <li>false - The LUN is not a thin clone.
+  [Object]$familySizeAllocatedTotal #Total amount of pool space reserved for the LUN.  It is sum of sizeAllocated, nonBaseSizeAllocated and metadataSizeAllocated.  This attribute is not applicable for a Thin Clone
+  [Object]$parentSnap #For a Thin Clone of a Standalone LUN/LUN in a Consistency group, the unique identifier of the source Snapshot. Applies only for Thin Clones.
+  [Object]$familySnapCount #Total number of snapshots created in the LUN Family, including all derivative snapshot objects.  This attribute is not applicable for a Thin Clone.
+  [Object]$nonBaseSizeAllocated #Total amount of pool  space used by LUN snapshots and thin clones.  This attribute is not applicable for a Thin Clone
+  [Object]$familyBaseLun #For a Thin Clone of a Standalone LUN/ LUN in a Consistency group, the unique identifier of the Base Source LUN.  For a Base LUN, its unique identifier.
+  [Object]$originalParentLun #The Parent Lun. Applies only for Thin Clones.
 
   ## Methods
 
@@ -195,6 +255,10 @@ Class Unitylun {
     return $NAA  
   }
 }
+
+Class UnityVMwareLUN : UnityLUN {}
+
+
 
 Class UnityPool {
   [string]$id
@@ -228,7 +292,12 @@ Class UnityPool {
   [UInt64]$compressionSizeSaved
   [Uint16]$compressionPercent
   [Float]$compressionRatio
-  [bool]$hasCompressionEnabledLuns
+  [Bool]$hasCompressionEnabledLuns #(Applies if Inline Compression is supported on the system and the corresponding license is installed.)  Indicates whether the pool has any Lun that has inline compression ever turned on; Values are:  <ul>  <li>true -  Lun(s) in this pool have had or currently have inline compression enabled.</li>  <li>false - No lun(s) in this pool have ever had inline compression enabled.</li>  </ul>
+  [Bool]$hasCompressionEnabledFs #(Applies if Inline Compression is supported on the system and the corresponding license is installed.)  Indicates whether the pool has any File System that has inline compression ever turned on; Values are.  <ul>  <li>true -  File system(s) in this pool have had or currently have inline compression enabled.</li>  <li>false - No file system(s) in this pool have ever had inline compression enabled.</li>  </ul>
+  [Bool]$isAllFlash #Indicates whether this pool contains only Flash drives. Values are:  <ul>  <li>true - It is an all Flash pool.</li>  <li>false - This pool contains drives other than Flash drives.</li>  </ul>
+  [UInt64]$nonBaseSizeUsed #Size of pool space used for thin clones and snapshots
+  [UInt64]$nonBaseSizeSubscribed #Size of pool space subscribed for thin clones and snapshots
+  [StoragePoolTypeEnum]$type #Indicates type of this pool. Values are:  <ul>  <li>Dynamic - It is dynamic pool.</li>  <li>Traditional - It is traditional pool.</li>  </ul>
 
   ## Methods
 
@@ -370,6 +439,17 @@ Class UnitystorageResource {
   [Object[]]$luns #The luns associated with the current storageResource
   [Object[]]$moves #The moveSessions associated with the current storageResource
   [Object[]]$virtualVolumes #The virtualVolumes associated with the current storageResource
+  [Object]$nonBaseSizeAllocated #Total amount of pool  space used by resource snapshots and thin clones.  This attribute is not applicable for a Thin Clone
+  [Object]$familySnapCount #Total number of snapshots created in the resource Family, including all derivative snapshot objects.  This attribute is not applicable for a Thin Clone
+  [Object]$familyBaseStorageResource #The Base Source Storage Resource. Applies only for Thin Clones.
+  [Object]$nonBaseSize #Thin Clones and Snapshots space for the Storage Resource.  This attribute is not applicable for a Thin Clone
+  [Object]$familySizeAllocatedTotal #Total amount of pool  space reserved for the Storage Resource.  This attribute is not applicable for a Thin Clone
+  [Object]$familyCloneCount #Total number of thin clones created in the resource Family, including all derivative thin clones objects.  This attribute is not applicable for a Thin Clone
+  [Object]$parentSnap #Source Snapshot. Applies only for Thin Clones.
+  [Bool]$isThinClone #Indicates whether storage resource is a thin clone on not.  <ul>  <li>true - The storage resource is a thin clone.</li>  <li>false - The storage resource is not a thin clone.</li>  </ul>
+  [ESXMountProtocolEnum]$esxMountProtocol #(Applies to VMwareNFS storage resources only.) NFS protocol version to use on datastore registration on ESXi side.
+  [Object]$originalParentStorageResource #The Parent Source Storage Resource. Applies only for Thin Clones.
+
 
   ## Methods
 
@@ -442,6 +522,10 @@ Class UnitynasServer {
   [Object]$nfsServer #The nfsServer associated with the current nasServer
   [Object]$preferredInterfaceSettings #The preferredInterfaceSettings associated with the current nasServer
   [Object]$virusChecker #The virusChecker associated with the current nasServer
+  [Object[]]$filesystems #The filesystems associated with the current nasServer
+  [Float]$compressionRatio #compression ratio
+  [Object]$compressionPercent #Percent compression
+  [Object]$compressionSizeSaved #Storage element saved space by inline compression
 
   #Methods
 
@@ -557,10 +641,16 @@ Class Unityfilesystem {
   [Object]$fileEventSettings #Indicates whether File Event Service is enabled for some protocols on the filesystem.  
   [Object[]]$cifsShare #The cifsShares associated with the current filesystem
   [Object[]]$nfsShare #The nfsShares associated with the current filesystem
+  [Float]$compressionRatio #Compression ratio
+  [Bool]$isCompressionEnabled #True if compression is enabled, only applies when isThinEnabled is true.
+  [Object]$compressionSizeSaved #Storage element saved space by inline compression
+  [Object]$compressionPercent #Percent compression
 
   #Methods
 
 }
+
+Class UnityVMwareNFS : Unityfilesystem {}
 
 Class UnityCIFSShare {
   [string]$id
@@ -599,6 +689,14 @@ Class UnityDiskGroup {
   [int]$minHotSpareCandidates
   [HotSparePolicyStatusEnum]$hotSparePolicyStatus
   [int]$unconfiguredDisks
+  [Object]$disksPastEOL #The number of drives past EOL (end of life).
+  [Object]$disksWithEOLLess30Days #The number of drives in disk group with EOL (end of life) less than 30 days.
+  [Object]$disksWithEOLLess60Days #The number of drives in disk group with EOL (end of life) less than 60 days.
+  [Object]$disksWithEOLLess90Days #The number of drives in disk group with EOL (end of life) less than 90 days.
+  [Object]$disksWithEOLLess180Days #The number of drives in disk group with EOL (end of life) less than 180 days.
+  [Object]$configuredFastCacheDisks #The number of configured drives used by FAST Cache.
+  [Object]$configuredTraditionalPoolDisks #The number of configured drives used by traditional pools.
+  [Object]$configuredDynamicPoolDisks #The number of configured drives used by dynamic pools.
 }
 
 Class UnityFastCache {
@@ -634,7 +732,7 @@ Class Unitydisk {
   [Bool]$needsReplacement #Indicates whether disk replacement is needed. Values are: <ul> <li> true - Disk replacment is needed.</li> <li>false - No disk replacement is needed.</li> </ul>  
   [Object]$parent #Resource type and unique identifier for the disk's parent enclosure.  
   [Int]$slotNumber #Slot where the disk is located in the parent enclosure.  
-  [DateTime]$estimatedEOL #Estimated remaning life of disk, based on past use. Applies only to flash disks.  
+  [Object]$estimatedEOL #Estimated remaning life of disk, based on past use. Applies only to flash disks.  
   [Int]$busId #Identifier of the bus used by the disk.  
   [String]$name #Disk name. Modifiable for virtual disks only.  
   [String]$manufacturer #Disk manufacturer.  
@@ -704,6 +802,8 @@ Class Unityhost {
   [Object[]]$datastores #The datastores associated with the current host
   [Object[]]$hostVVolDatastore #The hostVVolDatastores associated with the current host
   [Object[]]$vms #The vms associated with the current host
+  [String]$nfsUsername #(Applies to VCenter server and ESX host configurations only.) NFS user authentication information configured on the ESX host. The same username should be configured on the VMware NAS datastore to enable secure NFS access with Kerberos.
+  [Bool]$isNfsv4Supported #(Applies to VCenter server and ESX host configurations only.) Flag indicating whether ESXi host supports NFSv4.  
 
   #Methods
 
@@ -721,6 +821,7 @@ Class UnityHostContainer {
   [string]$productVersion
   [UnityHealth]$health
   [array]$hosts
+  [VasaProviderStateEnum]$vasaProviderState #Indicates storage system's VASA vendor provider state on the vCenter.
 }
 
 Class UnityMgmtInterface {
@@ -795,7 +896,7 @@ Class UnityEthernetPort {
   [UInt64[]]$supportedMtus
   $parent
   [SFPSpeedValuesEnum[]]$sfpSupportedSpeeds
-  [SFPSpeedValuesEnum[]]$sfpSupportedProtocols
+  [SFPProtocolValuesEnum[]]$sfpSupportedProtocols
 }
 
 Class UnityIscsiPortal {
@@ -859,6 +960,7 @@ Class UnityNFSShare {
   $readWriteHosts
   $rootAccessHosts
   $hostAccesses
+  [String]$nfsOwnerUsername #(Applies to NFS shares of VMware NFS storage resources.) Default owner of the NFS share associated with the datastore. Required if secure NFS enabled.  For NFSv3 or NFSv4 without Kerberos, the default owner is root.
 }
 
 Class UnityHostIPPort {
@@ -905,6 +1007,12 @@ Class Unitysnap {
   [Uint64]$size #Size of the storage resource when the snapshot was created (LUN snapshots only).  
   [Object]$ioLimitPolicy #IO limit policy that applies to the snapshot, as defined by the ioLimitPolicy resource type.  
   [Object[]]$hostAccess #(LUN, LUN Group and VMware VMFS datastore snapshots only). Host access permissions for snapshot, as defined by the snapHostAccess resource type. Value is set only if snapshot is attached to dynamic Snapshot Mount Point.  
+  [Bool]$isRemoteAutoDelete #(Applies if replicating a snap and isRemoteRetentionSameAsSource attributes is false.) Indicates if this snapshot can be automatically deleted by the system per threshold settings on the destination. Values are: <ul> <li>true - Snapshot can be automatically deleted by the system per threshold settings on the destination.</li> <li>false - Snapshot cannot be deleted automatically on the destination.</li> </ul>
+  [SnapReplicationStatusEnum]$replicationStatus #Indicates the replication status of this snap  Values are: <ul> <li> 0 - Not marked for replication</li>  <li> 1 - Marked for replication</li>  <li> 2 - Replicated to destination</li>  <li> 3 - Failed to replicate, check ____</li> </ul>
+  [Object]$familyBaseStorageResource #The unique identifier of the Base Source Storage Resource.
+  [DateTime]$remoteExpirationTime #(Applies if replicating a snap and the values of the isRemoteRetentionSameAsSource & isRemoteAutoDelete attributes are false.) Date and time after which the snapshot will expire on the destination.
+  [Object]$familyBaseLun #For a snapshot of a LUN in a Consistency group, the unique identifier of  the Base Source LUN.
+
 
   #Methods
 
@@ -3220,13 +3328,17 @@ Enum SnapStateEnum {
 
 <#
   Name: SPModelNameEnum
-  Description: All possible storageprocessor model names  
+  Description: All possible storageprocessor model names
 #>
 Enum SPModelNameEnum {
-  SP300 = 1 #Unity 300 or Unity 300F  
-  SP400 = 2 #Unity 400 or Unity 400F  
-  SP500 = 3 #Unity 500 or Unity 500F  
-  SP600 = 4 #Unity 600 or Unity 600F  
+  SP300 = 1 #Unity 300 or Unity 300F
+  SP400 = 2 #Unity 400 or Unity 400F
+  SP500 = 3 #Unity 500 or Unity 500F
+  SP600 = 4 #Unity 600 or Unity 600F
+  SP350 = 5 #Unity 350F
+  SP450 = 6 #Unity 450F
+  SP550 = 7 #Unity 550F
+  SP650 = 8 #Unity 650F
 }
 
 <#
@@ -3583,6 +3695,14 @@ Enum VVolTypeEnum {
   Other = 99 #Other VVol type.  
 }
 
+<#
+  Name: StoragePoolTypeEnum
+  Description: Storage Pool types.
+#>
+Enum StoragePoolTypeEnum {
+  Traditional = 1 #Traditional pool. Traditional pools use traditional fixed size RAID groups of entire disks.
+  Dynamic = 2 #Dynamic pool. Dynamic pools utilize advanced RAID technology to support larger drives,   faster rebuild times, and improved storage utilization.
+}
 
 
 ###Classes added automatically
@@ -3909,7 +4029,8 @@ Class UnityconfigCaptureResult {
 
   [String]$id #Unique identifier of the configCaptureResult instance.  
   [String]$name #File name of the configCaptureResult instance.  
-  [DateTime]$creationTime #Date and time when the configCaptureResult file was created.  
+  [DateTime]$creationTime #Date and time when the configCaptureResult file was created.
+  [Object]$size #Size of the configCaptureResult file. 
 
   #Methods
 
@@ -3978,15 +4099,17 @@ Class Unitydae {
 
 <#
   Name: UnitydataCollectionResult
-  Description: Information about Data Collection results in the storage system. <br/> <br/> Data Collection is a service feature used for gathering system logs, customer configurations, system statistics and runtime data from storage system. <br/> <br/>  
+  Description: Information about Data Collection results in the storage system.  <br/>  <br/>  Data Collection is a service feature used for gathering system logs,  customer configurations, system statistics and runtime data from storage system.  <br/>  <br/>  @engdocs This object is supported under service mode too. User needs to login the system by sending POST request http://service:<service_password>@<ip_address>/api/types/loginSessionInfo/action/login first.
 #>
 Class UnitydataCollectionResult {
 
   #Properties
 
-  [String]$id #Unique identifier of the dataCollectionResult instance.  
-  [String]$name #File name of the dataCollectionResult instance.  
-  [DateTime]$creationTime #Date and time when the dataCollectionResult file was created.  
+  [String]$id #Unique identifier of the dataCollectionResult instance.
+  [String]$name #File name of the dataCollectionResult instance.
+  [DateTime]$creationTime #Date and time when the dataCollectionResult file was created.
+  [DataCollectionProfileEnum]$profile #Profile of the dataCollectionResult file.
+  [Object]$size #Size of the dataCollectionResult file.
 
   #Methods
 
@@ -4136,7 +4259,8 @@ Class Unityencryption {
   [EncryptionModeEnum]$encryptionMode #Encryption mode of the array. At present only Controller Based Encryption (CBE) mode is supported.  
   [EncryptionStatusEnum]$encryptionStatus #Encryption status.  
   [Float]$encryptionPercentage #Percentage of storage (in-place data) encrypted on the array. The percentage value will range from 0.00 to 100. Once the encryption is activated on the array, encryption percentage will not dip as the new data is written because the new data will be encrypted on the fly.  
-  [KeyManagerBackupKeysStatusEnum]$keyManagerBackupKeyStatus #Key store back up status.  
+  [KeyManagerBackupKeysStatusEnum]$keyManagerBackupKeyStatus #Key store back up status. 
+  [KmipStatusEnum]$kmipStatus #Key Management Interoperability Protocol (KMIP) compliant external key management feature status. Once enabled, this feature enables the storage system to interact with  external key management servers that are KMIP compliant for key management associated with Data at Rest Encryption. 
 
   #Methods
 
@@ -4456,6 +4580,7 @@ Class UnityfilesystemImportParameters {
   [String]$sourceFilesystemId #Source file system id.  
   [Object]$targetPool #Target pool.  
   [Bool]$importAsVMwareDatastore #Indicates whether to import this file system as VMware datastore. Values are: <ul> <li>true - Import this file system as VMware datastore, which results in vmwarefs storage resource type.</li> <li>false - Do not import this file system as VMware datastore, which results in filesystem storage resource type.</li> </ul>  
+  [Bool]$isCompressionEnabled #Indicates whether inline compression should be enabled on the target file system.  Values are:  <ul>  <li>true - Enable inline compression on the target file system.</li>  <li>false - Do not enable inline compression on the target file system.</li>  </ul>
 
   #Methods
 
@@ -4486,6 +4611,7 @@ Class UnityfilesystemParameters {
   [FSLockingPolicyEnum]$lockingPolicy #Locking policy.  
   [ResourcePoolFullPolicyEnum]$poolFullPolicy #Behavior to follow when pool is full and a write to this filesystem is attempted. Values are: <ul> <li>Delete_All_Snaps - All snaps to the File System will be marked for deletion to free up space.</li> <li>Fail_Writes - Writes to the File System will fail.</li> </ul>  
   [Object]$fileEventSettings #Indicates whether File Event Service is enabled for some protocols on the filesystem.  
+  [Bool]$isCompressionEnabled #Indicates whether to enable inline compression for the file system. Values are:  <ul>  <li>true - Enable compression(default) </li>  <li>false - Disable compression </li>  </ul>
 
   #Methods
 
@@ -4876,7 +5002,8 @@ Class UnityjobTask {
   [Object]$parametersOut #Output parameters and their values of what the associated request action is calling if this jobTask belongs to a batch request job.  
   [DateTime]$submitTime #Date and time when the jobTask was submitted if this jobTask belongs to a batch request job.  
   [DateTime]$startTime #Date and time when the jobTask started if this jobTask belongs to a batch request job.  
-  [Object]$affectedResource #Primary resource affected by this task.  
+  [Object]$affectedResource #Primary resource affected by this task.
+  [Object[]]$steps #Task steps for this task.
 
   #Methods
 
@@ -5228,7 +5355,8 @@ Class UnitynfsShareParameters {
   [Object[]]$noAccessHosts #Hosts with no access to the NFS share or its snapshots, as defined by the host resource type.  
   [Object[]]$readOnlyHosts #Hosts with read-only access to the NFS share and its snapshots, as defined by the host resource type.  
   [Object[]]$readWriteHosts #Hosts with read-write access to the NFS share and its snapshots, as defined by the host resource type.  
-  [Object[]]$rootAccessHosts #Hosts with root access to the NFS share and its snapshots, as defined by the host resource type.  
+  [Object[]]$rootAccessHosts #Hosts with root access to the NFS share and its snapshots, as defined by the host resource type.
+  [String]$nfsOwnerUsername #(Applies to NFS shares of VMware NFS storage resources.) Default owner of the NFS share associated with the datastore. Required if secure NFS enabled. Attribute minSecurity should be set to Kerberos value.  For NFSv3 or NFSv4 without Kerberos, the default owner is root.  
 
   #Methods
 
@@ -5305,7 +5433,8 @@ Class UnitypoolConsumerAllocation {
   [String]$id #Unique ID of poolConsumerAllocation object.  
   [Object]$pool #Storage pool reference.  
   [Object]$consumer #The object allocated in the storage pool.  
-  [PoolConsumerTypeEnum]$consumerType #Type of pool consumer object.  
+  [PoolConsumerTypeEnum]$consumerType #Type of pool consumer object.
+  [Object]$nonBaseSizeAllocated #Storage element used non-base capacity
 
   #Methods
 
@@ -5594,7 +5723,9 @@ Class UnityreplicationSession {
   [Object]$dstSPBInterface #SP B interface used on the destination system for the replication, if the replication session is a remote session.  
   [Object[]]$members #Information about the replication of each member lun in the group.  
   [Object]$syncProgress #Synchronization completion percentage between source and destination resources of the replication session.  
-  [Object]$currentTransferEstRemainTime #Estimated time left for the replication synchronization to complete.  
+  [Object]$currentTransferEstRemainTime #Estimated time left for the replication synchronization to complete. 
+  [Object]$dailySnapReplicationPolicy #Daily Snap Replication Policy
+  [Object]$hourlySnapReplicationPolicy #Hourly Snap Replication Policy 
 
   #Methods
 
@@ -6061,6 +6192,7 @@ Class UnitystorageTierConfiguration {
   [Object]$sizeTotal #Maximum usable capacity for the specified storage configuration if all available disks are used for the configuration.  
   [Object[]]$diskGroupConfigurations
   [Object[]]$poolUnitConfigurations #(Applies to virtual deployments only.) List of pool units to use in the storage tier configuration.  
+  [Object[]]$driveSets #(Applies to dynamic pools of physical deployments only.) The list of disk group set: Each disk group in the disk group   set should be considered together to meet minimum number of disks to form the dynamic pool.
 
   #Methods
 
@@ -6094,6 +6226,7 @@ Class UnitystripeWidthConfiguration {
   [Object]$parityDisks #Number of parity disks.  
   [Object]$sizePotential #Maximum usable capacity. The system calculates this figure by summing up the capacities of all available disks that have the required disk type, RAID type, and stripe width.  
   [Bool]$isDefault #Indicates whether the stripe width is the default stripe width for the associated RAID type. Values are: <ul> <li>true - Stripe width is the default stripe width for the associated RAID type.</> <li>false - Stripe width is not the default stripe width for the associated RAID type.</> </ul>  
+  [StoragePoolTypeEnum]$type #Indicates type of storage pools this stripe width applies to.
 
   #Methods
 
@@ -6515,6 +6648,13 @@ Class UnityvirtualVolume {
   [String]$vmUUID #VMware UUID of the hosted virtual machine. Helps to identify virtual machine if VMware integration is not set.  
   [Object]$vm #Reference to the virtual machine hosted on the virtual volume. Always empty if VMware integration not configured.  
   [Object]$vmDisk #Reference to associated virual machine disk object. Always empty if VMware integration not configured.  
+  [Object]$maxIOPSDensity #Density-based IOPS limit. This is applicable only when the maximum IOPS limit is density based.
+  [DateTime]$burstTime #How long a storage object is allowed to process burst traffic.
+  [Object]$maxKBPSDensity #Density-based KBPS limit. This is applicable only when the maximum KBPS limit is density based.
+  [Object]$effectiveMaxIOPS #Effective Maximum IO/second depends on the type of the policy. In case of Density based policy,    will be the product of maxIOPSDensity and Size of the attached resource.
+  [Object]$effectiveMaxKBPS #Effective Maximum KBPS depends on the type of the policy. In case of Density based policy,    will be the product of maxKBPSDensity and Size of the attached resource.
+  [DateTime]$burstFrequency #How often a storage object is allowed to process burst traffic for the duration of burst time
+  [Object]$burstRate #The percentage of read/write IOPS and Bandwidth over the limits a storage object is allowed to process during a spike in demand.
 
   #Methods
 
@@ -6721,8 +6861,147 @@ Class Unityx509Certificate {
 
 }
 
+<#
+  Name: UnitylinkAggregation
+  Description: (Applies if link aggregation is supported.) Ethernet port link aggregation settings. <p/> Link aggregation lets you link Ethernet ports (for example, port 0 and port 1) on a Storage Processor (SP) to a single logical port, and therefore lets you use up to four Ethernet ports on the SP. If your system has two SPs, and you link two physical ports, the same ports on both SPs are linked for redundancy. For example, if you link port 0 to port 1, the system creates one link aggregation for these ports on SPA and another link aggregation on SPB. <p/> <b>Note: </b>You can aggregate only Ethernet ports belonging to the same I/O module or on-board Ethernet ports. Aggregation of ports from different I/O modules is not allowed. <p/> <b>Note: </b>You can aggregate only Ethernet ports with the same MTU size. <p/> <b>Note: </b>You can not add an Ethernet port to aggregation if there are iSCSI portals on it. <p/> Link aggregation provides the following advantages: <ul> <li>Increases overall throughput, since two physical ports are linked into one logical port.</li> <li>Provides basic load balancing across linked ports, since the network traffic is distributed across multiple physical ports.</li> <li>Provides redundant ports so that if one port in a linked pair fails, the system does not lose connectivity.</li> </ul> <b>Note: </b>With link aggregation, both linked ports must be connected to the same switch, and the switch must be configured to use the link aggregation that uses the Link Aggregation Control Protocol (LACP). The documentation that came with your switch should provide more information about using LACP. <p/> The Unisphere online Help provides more details on cabling the SPs to the Disk-Array Enclosures (DAEs).  
+#>
+Class UnitylinkAggregation {
 
+  #Properties
 
+  [String]$id #Unique identifier of the linkAggregation instance.  
+  [String]$name #Link aggregation name.  
+  [String]$shortName #Short name for the link aggregation.  
+  [Object]$masterPort #Master port of the link aggregation.  
+  [Object[]]$ports #List of aggregated Ethernet ports, including the master port.  
+  [Object]$mtuSize #Maximum transmission unit (MTU) packet size for the linked ports, in bytes.  
+  [Object[]]$supportedMtus #List of MTU sizes supported by the link aggregation.  
+  [String]$macAddress #MAC address of the link aggregation.  
+  [Bool]$isLinkUp #Indicates whether the link aggregation has link.  
+  [Object]$parent #Parent Storage Processor of the link aggregation.  
+  [Object]$parentStorageProcessor #Parent SP of the link aggregation.  
 
+  #Methods
 
+}
 
+<#
+  Name: UnityfcPort
+  Description: Fibre Channel (FC) front end port settings. Applies if the FC protocol is supported on the system and the corresponding license is installed.  
+#>
+
+Class UnityfcPort {
+
+  #Properties
+
+  [String]$id #Unique identifier of the fcPort instance.  
+  [UnityHealth]$health #Health information for the FC port, as defined by the health resource type.  
+  [Object]$parent #Resource type and unique identifier of the FC port's enclosure, as defined by the resourceRef resource type.  
+  [Object]$slotNumber #Physical location of the FC port.  
+  [String]$wwn #World Wide Name (WWN) of the FC port.  
+  [FcSpeedEnum[]]$availableSpeeds #Available data transmission speed values for the FC port.  
+  [FcSpeedEnum]$currentSpeed #Current data transmission speed of the FC port.  
+  [FcSpeedEnum]$requestedSpeed #Data transmission speed requested by the user.  
+  [SFPSpeedValuesEnum[]]$sfpSupportedSpeeds #SFP (the small form-factor pluggable) supported speeds of the FC port.  
+  [SFPProtocolValuesEnum[]]$sfpSupportedProtocols #SFP (the small form-factor pluggable) supported protocols of the FC port.  
+  [ConnectorTypeEnum]$connectorType #Physical connector type.  
+  [Object]$storageProcessor #SP on which the FC port directly or indirectly resides, as defined by the storageProcessor resource type.  
+  [Bool]$needsReplacement #Indicates whether the FC port needs replacement. Values are: <ul> <li>true - FC port needs replacement.</li> <li>false - FC port does not need replacement.</li> </ul>  
+  [Object]$nPortId #Port on the node host or storage device used with FC point-to-point or FC switched fabric topologies.  
+  [String]$name #FC port name.  
+  [Object]$parentIOModule #(Applies if the FC port resides on an I/O module.) Parent I/O module of the FC port, as defined by the ioModule resource type.  
+  [Object]$parentStorageProcessor #(Applies if the FC port resides directly on an SP.) Parent SP of the FC port, as defined by the storageProcessor resource type.  
+  [PortRepCapabilityEnum[]]$portRepCapabilities #FC port replication capability.  
+  [SFPSupportedModeEnum]$sfpSupportedMode #SFP (the small form-factor pluggable) supported mode of the FC port.
+
+  #Methods
+
+}
+
+<#
+  Name: FcSpeedEnum
+  Description: Supported FC port speeds.  
+#>
+Enum FcSpeedEnum {
+  _2Gbps = 2 #2 Gbps FC port transmission speed.  
+  Auto = 0 #Auto detected FC port transmission speed.  
+  _1Gbps = 1 #1 Gbps FC port transmission speed.  
+  _4Gbps = 4 #4 Gbps FC port transmission speed.  
+  _8Gbps = 8 #8 Gbps FC port transmission speed.  
+  _16Gbps = 16 #16 Gbps FC port transmission speed.  
+  _32Gbps = 32 #32 Gbps FC port transmission speed.  
+}
+
+Class Unitybattery {
+
+  #Properties
+
+  [String]$id #Unique identifier of the battery instance.  
+  [UnityHealth]$health #Health information for the battery, as defined by the health resource type.  
+  [Bool]$needsReplacement #Indicates whether the battery needs replacement. Values are: <ul> <li>true - Battery needs replacement.</li> <li>false - Battery does not need replacement.</li> </ul>  
+  [Object]$parent #Resource type and unique identifier of the battery's parent enclosure.  
+  [Object]$slotNumber #Slot number where the battery is located in the parent enclosure.  
+  [String]$name #Battery name.  
+  [String]$manufacturer #Manufacturer of the battery.  
+  [String]$model #Manufacturer's model number for the battery.  
+  [String]$firmwareVersion #Firmware version number for the battery.  
+  [String]$emcPartNumber #EMC part number for the battery.  
+  [String]$emcSerialNumber #EMC serial number for the battery.  
+  [String]$vendorPartNumber #Vendor part number for the battery.  
+  [String]$vendorSerialNumber #Vendor serial number for the battery.  
+  [Object]$parentStorageProcessor #Parent Storage Processor of the battery.  
+
+  #Methods
+
+}
+
+<#
+  Name: DataCollectionProfileEnum
+  Description: Profiles for collecting service information.
+#>
+Enum DataCollectionProfileEnum {
+  Default = 0 #Default profile.
+  Performance_Assessment = 1 #Profile for performance assessment collection.
+  Performance_Trace = 2 #Profile for performance analysis.
+  Other = 3 #Other profile used internally.
+}
+
+<#
+  Name: ESXMountProtocolEnum
+  Description: The protocol type used for remote share mount on ESXi server.
+#>
+Enum ESXMountProtocolEnum {
+  NFSv3 = 3 #NFSv3 mount.
+  NFSv4 = 4 #NFSv4 mount.
+}
+
+<#
+  Name: SnapReplicationStatusEnum
+  Description: These are the possible replication statuses for a snapshot.
+#>
+Enum SnapReplicationStatusEnum {
+  Not_Marked_For_Replication = 0 #Replication was not requested for this snap.
+  Marked_For_Replication = 1 #Replication was requested for this snap and it is waiting for a replication  sync.
+  Replicated_On_Destination = 2 #This snap was replicated to the destination successfully.
+  Failed_To_Replicate = 3 #This snap was marked for replication but failed to replicate successfully.
+}
+
+<#
+  Name: VasaProviderStateEnum
+  Description: VASA Provider state
+#>
+Enum VasaProviderStateEnum {
+  Not_Registered = 0 #
+  Registered = 1 #
+  Not_Supported = 99 #
+}
+
+<#
+  Name: SFPSupportedModeEnum
+  Description: Supported SFP (the small form-factor pluggable) mode.
+#>
+Enum SFPSupportedModeEnum {
+  Unknown = 0 #SFP mode is Unknown.
+  Single_Mode = 1 #SFP mode is SingleMode.
+  Multi_Mode = 2 #SFP mode is MultiMode.
+}

@@ -27,17 +27,18 @@ Function Get-UnityLUNResource {
     [Parameter(Mandatory = $false,ParameterSetName="Name",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN Name')]
     [String[]]$Name,
     [Parameter(Mandatory = $false,ParameterSetName="ID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID')]
-    [String[]]$ID
+    [String[]]$ID,
+    [Parameter(Mandatory = $false,HelpMessage = 'Object type')]
+    [ValidateSet('UnityLUN','UnityVMwareLUN')]
+    [String]$Typename = 'UnityLUN'
   )
 
   Begin {
     Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     #Initialazing variables
-    $ResultCollection = @()
-    $URI = '/api/types/lun/instances' #URI for the ressource (example: /api/types/lun/instances)
-    $TypeName = 'UnityLUN' 
-  }
+    $URI = '/api/types/lun/instances' #URI for the resource (example: /api/types/lun/instances)
+  } # End Begin
 
   Process {
     Foreach ($sess in $session) {

@@ -13,4 +13,4 @@ Please consider to upgrade to the latest version in order to avoid some bugs.
 ### EMC Unity array
 
 The module can manage all the EMC Unity portfolio (physical and virtual, hybrid and full-flash).
-You'll need to have a valid account to connect to the array.  
+You'll need to have a valid account to connect to the array.

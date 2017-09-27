@@ -6,7 +6,7 @@ Modifies NFS Server.
 ## SYNTAX
 
 ```
-Set-UnityNFSServer [-session <Object>] [-ID] <String[]> [-hostName <String>] [-nfsv4Enabled <Boolean>]
+Set-UnityNFSServer [-session <Object>] [-ID] <Object[]> [-hostName <String>] [-nfsv4Enabled <Boolean>]
  [-isSecureEnabled <Boolean>] [-kdcType <KdcTypeEnum>] [-skipUnjoin] [-kdcUsername <String>]
  [-kdcPassword <String>] [-isExtendedCredentialsEnabled <Boolean>] [-credentialsCacheTTL <DateTime>] [-WhatIf]
  [-Confirm]
@@ -46,7 +46,7 @@ Accept wildcard characters: False
 NFS Server ID or Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

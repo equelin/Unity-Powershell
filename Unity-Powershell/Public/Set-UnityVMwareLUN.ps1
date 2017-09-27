@@ -95,7 +95,7 @@ Function Set-UnityVMwareLUN {
     # Variables
     $URI = '/api/instances/storageResource/<id>/action/modifyVmwareLun'
     $Type = 'VMware LUN'
-    $TypeName = 'UnityLUN'
+    $TypeName = 'UnityVMwareLUN'
     $StatusCode = 204
   }
 
@@ -109,33 +109,12 @@ Function Set-UnityVMwareLUN {
 
         Foreach ($i in $ID) {
  
-          Switch -wildcard ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityVMwareLUN -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName*" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityVMwareLUN -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          # Determine input and convert to object if necessary
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 
-            $UnitystorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
+            $UnitystorageResource = Get-UnityStorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
 
             # Creation of the body hash
             $body = @{}

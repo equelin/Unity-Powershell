@@ -16,7 +16,7 @@ Get-UnityVMwareLUN [-session <Object>] [-Name <String[]>]
 ```
 
 ## DESCRIPTION
-Querries the EMC Unity array to retrieve informations about VMware block LUN.
+Queries the EMC Unity array to retrieve informations about VMware block LUN.
 You need to have an active session with the array.
 
 ## EXAMPLES

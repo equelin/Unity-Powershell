@@ -6,7 +6,7 @@ Modifies filesystem parameters.
 ## SYNTAX
 
 ```
-Set-UnityVMwareNFS [-session <Object>] [-ID] <String[]> [-Description <String>] [-snapSchedule <String>]
+Set-UnityVMwareNFS [-session <Object>] [-ID] <Object[]> [-Description <String>] [-snapSchedule <String>]
  [-isSnapSchedulePaused <Boolean>] [-Size <UInt64>] [-hostIOSize <HostIOSizeEnum>]
  [-tieringPolicy <TieringPolicyEnum>] [-defaultAccess <NFSShareDefaultAccessEnum>] [-noAccessHosts <String[]>]
  [-readOnlyHosts <String[]>] [-readWriteHosts <String[]>] [-rootAccessHosts <String[]>] [-append] [-WhatIf]
@@ -47,7 +47,7 @@ Accept wildcard characters: False
 SetFilesystem
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

@@ -32,7 +32,6 @@ Function Get-UnityMetricQueryResult {
     Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     #Initialazing variables
-    $ResultCollection = @()
     $URI = '/api/types/metricQueryResult/instances' #URI for the ressource (example: /api/types/lun/instances)
     $TypeName = 'UnityMetricQueryResult'
   }
@@ -79,16 +78,11 @@ Function Get-UnityMetricQueryResult {
 
             #Building the result collection (Add ressource type)
             If ($Results) {
-              
-              $ResultCollection = ConvertTo-Hashtable -Data $Results
 
-              Foreach ($Result in $ResultCollection) {
+              Foreach ($Result in $Results) {
 
-                # Instantiate object
-                $Object = New-Object -TypeName $TypeName -Property $Result
+                New-UnityObject -TypeName $TypeName -Data $Result
 
-                # Output results
-                $Object
               } # End Foreach ($Result in $ResultCollection)
             } # End If ($Results)
         } # End Foreach ($Query in $QueryID) {

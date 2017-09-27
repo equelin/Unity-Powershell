@@ -16,8 +16,8 @@ Get-UnityVMwareNFS [-session <Object>] [-Name <String[]>]
 ```
 
 ## DESCRIPTION
-Querries the EMC Unity array to retrieve informations about VMware NFS LUN.
-You need to have an active session with the array.
+git       Queries the EMC Unity array to retrieve informations about VMware NFS LUN.
+      You need to have an active session with the array.
 
 ## EXAMPLES
 

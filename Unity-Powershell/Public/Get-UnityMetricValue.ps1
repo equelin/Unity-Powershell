@@ -36,7 +36,6 @@ Function Get-UnityMetricValue {
     Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
 
     #Initialazing variables
-    $ResultCollection = @()
     $URI = '/api/types/metricValue/instances' #URI
     $TypeName = 'UnityMetricValue'
   }
@@ -86,16 +85,11 @@ Function Get-UnityMetricValue {
           If ($Results) {
 
             $Results = $Results | Select-Object -First $Count
-    
-            $ResultCollection = ConvertTo-Hashtable -Data $Results
 
-            Foreach ($Result in $ResultCollection) {
+            Foreach ($Result in $Results) {
 
               # Instantiate object
-              $Object = New-Object -TypeName $TypeName -Property $Result
-
-              # Output results
-              $Object 
+              New-UnityObject -TypeName $TypeName -Data $Result
 
             } # End Foreach ($Result in $ResultCollection)
           } # End If ($Results)

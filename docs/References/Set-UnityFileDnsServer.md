@@ -6,7 +6,7 @@ Modifies File DNS Server parameters.
 ## SYNTAX
 
 ```
-Set-UnityFileDnsServer [-session <Object>] [-ID] <Object> [-domain <String>] [-addresses <String[]>]
+Set-UnityFileDnsServer [-session <Object>] [-ID] <Object[]> [-domain <String>] [-addresses <String[]>]
  [-replicationPolicy <ReplicationPolicyEnum>] [-WhatIf] [-Confirm]
 ```
 
@@ -18,7 +18,7 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Set-UnityFileDnsServer -ID 'dns_1' -ipAddress '192.168.0.1'
+Set-UnityFileDnsServer -ID 'dns_1' -ipAddress '192.0.2.1'
 ```
 
 Change ip of the file DNS server with ID 'dns_1'
@@ -44,7 +44,7 @@ Accept wildcard characters: False
 File DNS Server ID or Object
 
 ```yaml
-Type: Object
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

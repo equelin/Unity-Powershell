@@ -126,7 +126,7 @@ Function New-UnityNFSShare {
 
             #### REQUEST BODY
 
-            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.filesystem.id -like $ObjectID)}
+            $UnityStorageRessource = Get-UnityStorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.filesystem.id -like $ObjectID)}
 
             # Creation of the body hash
             $body = @{}

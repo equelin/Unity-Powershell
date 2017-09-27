@@ -7,7 +7,7 @@ Modifies storage pool parameters.
 
 ### RaidGroup (Default)
 ```
-Set-UnityPool [-session <Object>] [-ID] <String[]> [-NewName <String>] [-Description <String>]
+Set-UnityPool [-session <Object>] [-ID] <Object[]> [-NewName <String>] [-Description <String>]
  [-AddraidGroup <Array>] [-alertThreshold <Int32>] [-poolSpaceHarvestHighThreshold <Int64>]
  [-poolSpaceHarvestLowThreshold <Int64>] [-snapSpaceHarvestHighThreshold <Int64>]
  [-snapSpaceHarvestLowThreshold <Int64>] [-isHarvestEnabled <Boolean>] [-isSnapHarvestEnabled <Boolean>]
@@ -16,7 +16,7 @@ Set-UnityPool [-session <Object>] [-ID] <String[]> [-NewName <String>] [-Descrip
 
 ### VirtualDisk
 ```
-Set-UnityPool [-session <Object>] [-ID] <String[]> [-NewName <String>] [-Description <String>]
+Set-UnityPool [-session <Object>] [-ID] <Object[]> [-NewName <String>] [-Description <String>]
  [-AddVirtualDisk <Array>] [-alertThreshold <Int32>] [-poolSpaceHarvestHighThreshold <Int64>]
  [-poolSpaceHarvestLowThreshold <Int64>] [-snapSpaceHarvestHighThreshold <Int64>]
  [-snapSpaceHarvestLowThreshold <Int64>] [-isHarvestEnabled <Boolean>] [-isSnapHarvestEnabled <Boolean>]
@@ -71,7 +71,7 @@ Accept wildcard characters: False
 ID of the pool or Pool Object.
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

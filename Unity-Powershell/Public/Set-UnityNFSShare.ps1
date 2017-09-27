@@ -48,7 +48,7 @@ Function Set-UnityNFSShare {
 
     #NFSShareModify
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID of the NFS share')]
-    [String[]]$ID,
+    [Object[]]$ID,
 
     #$nfsShareParameters
     [Parameter(Mandatory = $false,HelpMessage = 'NFS share description')]
@@ -92,33 +92,11 @@ Function Set-UnityNFSShare {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityNFSShare -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityNFSShare -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 
-            $UnitystorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.filesystem.id -like $Object.Filesystem.id)}
+            $UnitystorageResource = Get-UnityStorageResource -Session $sess | Where-Object {($_.filesystem.id -like $Object.Filesystem.id)}
 
             #### REQUEST BODY 
 

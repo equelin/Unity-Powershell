@@ -55,16 +55,16 @@ Function Get-UnityItemByKey {
             $ResultsFiltered += Find-FromFilter -Parameter $Key -Filter $Value -Data $Results
 
             If ($ResultsFiltered) {
-            
-                $ResultCollection = ConvertTo-Hashtable -Data $ResultsFiltered
 
-                Foreach ($Result in $ResultCollection) {
+                Foreach ($Result in $ResultsFiltered) {
 
                     # Instantiate and output object
-                    New-Object -TypeName $TypeName -Property $Result
+                    New-UnityObject -TypeName $TypeName -Data $Result
 
-                } # End Foreach ($Result in $ResultCollection)
+                } # End Foreach ($Result in $ResultsFiltered)
             } # End If ($ResultsFiltered) 
+        } else {
+            Write-Error -Message "Object(s) not found" -Category ObjectNotFound
         } # End If ($Results)
     } # End If ($Sess.TestConnection())
 

@@ -6,7 +6,7 @@ Modify a host IP Port configuration.
 ## SYNTAX
 
 ```
-Set-UnityHostIPPort [-session <Object>] [-ID] <Object> [-address <String>] [-netmask <String>]
+Set-UnityHostIPPort [-session <Object>] [-ID] <Object[]> [-address <String>] [-netmask <String>]
  [-v6PrefixLength <String>] [-isIgnored <Boolean>] [-WhatIf] [-Confirm]
 ```
 
@@ -18,14 +18,14 @@ You need to have an active session with the array.
 
 ### -------------------------- EXEMPLE 1 --------------------------
 ```
-Set-UnityHostIPPort -ID 'HostNetworkAddress_47' -address '192.168.0.1'
+Set-UnityHostIPPort -ID 'HostNetworkAddress_47' -address '192.0.2.1'
 ```
 
 Change the IP of the host.
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnityHostIPPort -ID 'HostNetworkAddress_47' | Set-UnityHostIPPort -address '192.168.0.1'
+Get-UnityHostIPPort -ID 'HostNetworkAddress_47' | Set-UnityHostIPPort -address '192.0.2.1'
 ```
 
 Gives the role 'operator' to the Host IP Port 'Host'.
@@ -52,7 +52,7 @@ Accept wildcard characters: False
 Host IP Port ID or Object
 
 ```yaml
-Type: Object
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

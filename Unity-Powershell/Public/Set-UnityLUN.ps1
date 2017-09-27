@@ -54,7 +54,7 @@ Function Set-UnityLUN {
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'LUN ID or Object')]
-    [String[]]$ID,
+    [Object[]]$ID,
     [Parameter(Mandatory = $false,HelpMessage = 'New Name of the LUN')]
     [String]$Name,
     [Parameter(Mandatory = $false,HelpMessage = 'New LUN Description')]
@@ -103,33 +103,12 @@ Function Set-UnityLUN {
 
         Foreach ($i in $ID) {
 
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityLUN -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityLUN -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          # Determine input and convert to object if necessary
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 
-            $UnitystorageResource = Get-UnitystorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
+            $UnitystorageResource = Get-UnityStorageResource -Session $sess | Where-Object {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
 
             # Creation of the body hash
             $body = @{}

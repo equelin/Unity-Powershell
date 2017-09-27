@@ -41,7 +41,7 @@ Function Set-UnityAlertConfig {
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
 
     [Parameter(Mandatory = $false,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'ID of the Alert Config')]
-    [String[]]$ID = '0',
+    [Object[]]$ID = '0',
     [Parameter(Mandatory = $false,HelpMessage = 'Language in which the system sends email alerts.')]
     [LocaleEnum]$alertLocale,
     [Parameter(Mandatory = $false,HelpMessage = 'Whether pool space usage related alerts will be sent.')]
@@ -75,29 +75,7 @@ Function Set-UnityAlertConfig {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityAlertConfig -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityAlertConfig -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 

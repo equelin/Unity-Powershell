@@ -6,7 +6,7 @@ Modifies filesystem parameters.
 ## SYNTAX
 
 ```
-Set-UnityFilesystem [-session <Object>] [-ID] <String[]> [-Name <String>] [-Description <String>]
+Set-UnityFilesystem [-session <Object>] [-ID] <Object[]> [-Name <String>] [-Description <String>]
  [-snapSchedule <String>] [-isSnapSchedulePaused <Boolean>] [-isThinEnabled <String>] [-Size <UInt64>]
  [-hostIOSize <HostIOSizeEnum>] [-isCacheDisabled <Boolean>] [-accessPolicy <AccessPolicyEnum>]
  [-poolFullPolicy <ResourcePoolFullPolicyEnum>] [-tieringPolicy <TieringPolicyEnum>]
@@ -48,7 +48,7 @@ Accept wildcard characters: False
 SetFilesystem
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

@@ -18,11 +18,11 @@ Function Set-UnityHostIPPort {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      Set-UnityHostIPPort -ID 'HostNetworkAddress_47' -address '192.168.0.1'
+      Set-UnityHostIPPort -ID 'HostNetworkAddress_47' -address '192.0.2.1'
 
       Change the IP of the host.
       .EXAMPLE
-      Get-UnityHostIPPort -ID 'HostNetworkAddress_47' | Set-UnityHostIPPort -address '192.168.0.1'
+      Get-UnityHostIPPort -ID 'HostNetworkAddress_47' | Set-UnityHostIPPort -address '192.0.2.1'
 
       Gives the role 'operator' to the Host IP Port 'Host'. The Host's information are provided by the Get-UnityHostIPPort through the pipeline.
   #>
@@ -34,7 +34,7 @@ Function Set-UnityHostIPPort {
     
     #Host IP Port ID or Object
     [Parameter(Mandatory = $true,Position = 0,ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Host IP Port ID or Object')]
-    $ID,
+    [Object[]]$ID,
 
     #IP address or network name of the port.
     [Parameter(Mandatory = $false,HelpMessage = 'IP address or network name of the port.')]
@@ -74,29 +74,7 @@ Function Set-UnityHostIPPort {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityHostIPPort -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityHostIPPort -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          }
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 

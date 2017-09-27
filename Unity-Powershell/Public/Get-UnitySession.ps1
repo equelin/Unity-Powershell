@@ -16,9 +16,9 @@ Function Get-UnitySession {
 
       List all the existing sessions.
       .EXAMPLE
-      Get-UnitySession -Server 192.168.0.1'
+      Get-UnitySession -Server 192.0.2.1'
 
-      Lists sessions connected the the array '192.168.0.1'
+      Lists sessions connected the the array '192.0.2.1'
   #>
 
   [CmdletBinding()]

@@ -6,7 +6,7 @@ Test Unisphere Central alert notification by sending a test alert to a Unisphere
 ## SYNTAX
 
 ```
-Test-UnityUCAlert [-session <Object>] [[-ID] <String[]>]
+Test-UnityUCAlert [-session <Object>] [[-ID] <Object[]>]
 ```
 
 ## DESCRIPTION
@@ -43,7 +43,7 @@ Accept wildcard characters: False
 ID or Object of a Alert Config..
 
 ```yaml
-Type: String[]
+Type: Object[]
 Parameter Sets: (All)
 Aliases: 
 

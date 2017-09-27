@@ -57,33 +57,11 @@ Function Remove-UnityLUN {
         Foreach ($i in $ID) {
 
           # Determine input and convert to object if necessary
-          Switch ($i.GetType().Name)
-          {
-            "String" {
-              $Object = get-UnityLUN -Session $Sess -ID $i
-              $ObjectID = $Object.id
-              If ($Object.Name) {
-                $ObjectName = $Object.Name
-              } else {
-                $ObjectName = $ObjectID
-              }
-            }
-            "$TypeName" {
-              Write-Verbose "Input object type is $($i.GetType().Name)"
-              $ObjectID = $i.id
-              If ($Object = Get-UnityLUN -Session $Sess -ID $ObjectID) {
-                If ($Object.Name) {
-                  $ObjectName = $Object.Name
-                } else {
-                  $ObjectName = $ObjectID
-                }          
-              }
-            }
-          } # End Switch
+          $Object,$ObjectID,$ObjectName = Get-UnityObject -Data $i -Typename $Typename -Session $Sess
 
           If ($ObjectID) {
 
-            $UnityStorageResource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
+            $UnityStorageResource = Get-UnityStorageResource -Session $sess | ? {($_.Name -like $ObjectName) -and ($_.luns.id -like $ObjectID)}
 
             #Building the URL
             $FinalURI = $URI -replace '<id>',$UnityStorageResource.id

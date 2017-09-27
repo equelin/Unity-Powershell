@@ -37,7 +37,7 @@ Function New-UnityFileInterface {
       .PARAMETER WhatIf
       Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
       .EXAMPLE
-      New-UnityFileInterface -ipPort spa_eth0 -nasServer nas_6 -ipAddress 192.168.0.1 -netmask 255.255.255.0 -gateway 192.168.0.254
+      New-UnityFileInterface -ipPort spa_eth0 -nasServer nas_6 -ipAddress 192.0.2.1 -netmask 255.255.255.0 -gateway 192.0.2.254
       
       Create interface on the ethernet port 'spa_eth0' associated to the NAS server 'nas_6' 
   #>

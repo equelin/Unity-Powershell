@@ -75,7 +75,7 @@ Function Remove-UnityLUNResource {
 
           If ($ObjectID) {
 
-            $UnityStorageRessource = Get-UnitystorageResource -Session $sess | ? {($_.Name -like $LUNName) -and ($_.luns.id -like $LUNID)}
+            $UnityStorageRessource = Get-UnityStorageResource -Session $sess | ? {($_.Name -like $LUNName) -and ($_.luns.id -like $LUNID)}
 
             #Building the URL
             $URI = $URI -replace '<id>',$UnityStorageRessource.id
