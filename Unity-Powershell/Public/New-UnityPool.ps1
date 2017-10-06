@@ -96,7 +96,7 @@ Function New-UnityPool {
 
     ## Variables
     $URI = '/api/types/pool/instances'
-    $Type = 'Pool'
+    $Obj = 'Pool'
     $StatusCode = 201
 
     $tier = @{
@@ -234,7 +234,7 @@ Function New-UnityPool {
           Write-Verbose "URL: $URL"
 
           #Sending the request
-          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type $n")) {
+          If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Obj $n")) {
             $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
           }
 
@@ -245,7 +245,7 @@ Function New-UnityPool {
             #Formating the result. Converting it from JSON to a Powershell object
             $results = ($request.content | ConvertFrom-Json).content
 
-            Write-Verbose "$Type with the ID $($results.id) has been created"
+            Write-Verbose "$Obj with the ID $($results.id) has been created"
 
             Get-UnityPool -Session $Sess -ID $results.id
           } # End If ($request.StatusCode -eq $StatusCode)
