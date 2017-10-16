@@ -26,14 +26,14 @@ You need to have an active session with the array.
 Get-UnityHostInitiator
 ```
 
-Retrieve information about all hosts
+Retrieve information about all hosts initiators 
 
 ### -------------------------- EXEMPLE 2 --------------------------
 ```
-Get-UnityHostInitiator -ID 'Host_67'
+Get-UnityHostInitiator -ID 'HostInitiator_67'
 ```
 
-Retrieves information about host initiator named 'Host_67'
+Retrieves information about host initiator named 'HostInitiator_67'
 
 ## PARAMETERS
 
