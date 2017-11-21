@@ -21,14 +21,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 New-UnitySnap -StorageResource 'res_41' -Name 'snap01'
 ```
 
 Create snap named 'snap01' from sorage resource ID 'res_41'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityVMwareNFS -Name 'VOLUME01' | New-UnitySnap
 ```

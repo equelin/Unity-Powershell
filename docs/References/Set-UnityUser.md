@@ -16,14 +16,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityUser -Name 'User' -Role 'operator'
 ```
 
 Gives the role 'operator' to the user 'User'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityUSer -Name 'User' | Set-UnityUser -Role 'operator'
 ```

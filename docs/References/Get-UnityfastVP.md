@@ -36,14 +36,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Get-UnityFastVP
 ```
 
 Retrieve information about all UnityfastVP
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityFastVP -ID 'id01'
 ```

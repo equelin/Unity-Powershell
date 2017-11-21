@@ -43,42 +43,42 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnitySnap -ID '171798691854' -Description 'Modified description'
 ```
 
 Change the description of the snapshot with ID '171798691854'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Set-UnitySnap -ID '171798691854' -Copy -numCopies 2
 ```
 
 Copy 2 times the snapshot with ID '171798691854'
 
-### -------------------------- EXEMPLE 3 --------------------------
+### -------------------------- EXAMPLE 3 --------------------------
 ```
 Set-UnitySnap -ID '171798691854' -Restore
 ```
 
 Restore the snapshot with ID '171798691854' to the associated storage resource.
 
-### -------------------------- EXEMPLE 4 --------------------------
+### -------------------------- EXAMPLE 4 --------------------------
 ```
 Set-UnitySnap -ID '171798691854' -Attach
 ```
 
 Attach the snapshot with ID '171798691854' so hosts can access it.'
 
-### -------------------------- EXEMPLE 5 --------------------------
+### -------------------------- EXAMPLE 5 --------------------------
 ```
 Set-UnitySnap -ID '171798691854' -Detach
 ```
 
 Detach the snapshot with ID '171798691854' so hosts can no longer access it.
 
-### -------------------------- EXEMPLE 6 --------------------------
+### -------------------------- EXAMPLE 6 --------------------------
 ```
 Set-UnitySnap -ID '171798691854' -Refresh
 ```

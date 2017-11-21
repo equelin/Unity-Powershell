@@ -29,21 +29,21 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityPool -ID 'pool_10' -Description 'Modified description'
 ```
 
 Change the description of the pool with ID 'pool_10'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Set-UnityPool -ID 'pool_10' -AddVirtualDisk @{'id'='vdisk_1';'tier'='Performance'}
 ```
 
 Add a virtual disk 'vdisk_1' to the pool with ID 'pool_10'
 
-### -------------------------- EXEMPLE 3 --------------------------
+### -------------------------- EXAMPLE 3 --------------------------
 ```
 Set-UnityPool -ID 'pool_10' -AddraidGroup @{"id"='dg_8';"numDisks"= 8; 'raidType'='RAID6'; 'stripeWidth'='8'}
 ```

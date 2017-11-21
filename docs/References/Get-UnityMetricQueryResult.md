@@ -15,12 +15,21 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Get-UnityMetricQueryResult -queryId 5
 ```
 
 Retrieve informations about query who's ID is 5.
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+$query = New-UnityMetricRealTimeQuery -paths 'sp.*.cpu.core.*.busyTicks' -interval 30
+```
+
+$query | Get-UnityMetricQueryResult
+
+Get query results using pipeline.
 
 ## PARAMETERS
 

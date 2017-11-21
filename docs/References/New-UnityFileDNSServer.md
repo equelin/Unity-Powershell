@@ -17,7 +17,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 New-UnityFileDNSServer -nasServer 'nas_1' -domain 'example.com' -ip '192.0.2.1','192.0.2.2'
 ```

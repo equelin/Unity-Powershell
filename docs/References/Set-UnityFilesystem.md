@@ -20,7 +20,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityFilesystem -Name 'FS01' -Description 'Modified description'
 ```

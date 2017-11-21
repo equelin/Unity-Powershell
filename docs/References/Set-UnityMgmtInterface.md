@@ -17,7 +17,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityMgmtInterface -ID 'mgmt_ipv4' -gateway '192.0.2.254'
 ```

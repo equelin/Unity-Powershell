@@ -21,14 +21,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Get-UnityFilesystem
 ```
 
 Retrieve information about filesystem
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityFilesystem -Name 'FS01'
 ```

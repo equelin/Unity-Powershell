@@ -18,7 +18,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityLUN -Name 'LUN01' -Description 'Modified description'
 ```

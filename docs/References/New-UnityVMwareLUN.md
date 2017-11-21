@@ -18,14 +18,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 New-UnityVMwareLUN -Name 'DATASTORE01' -Pool 'pool_1' -Size 10GB -host 'Host_12' -accessMask 'Production'
 ```
 
 Create LUN named 'DATASTORE01' on pool 'pool_1' and with a size of '10GB', grant production access to 'Host_12'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 for($i=1; $i -le 10; $i++){New-UnityVMwareLUN -Name "DATASTORE0$i" -Size 2TB -Pool 'pool_1' -host (Get-UnityHost).id}
 ```

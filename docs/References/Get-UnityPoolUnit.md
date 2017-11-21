@@ -21,14 +21,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Get-UnityPoolUnit
 ```
 
 Retrieve information about poolUnit
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityPoolUnit -Name 'POOL01'
 ```

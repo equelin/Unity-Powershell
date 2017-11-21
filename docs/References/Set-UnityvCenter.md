@@ -27,14 +27,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityvCenter -ID 'mss_1' -Description 'New description'
 ```
 
 Change the description of the vCenter.
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Set-UnityvCenter -ID 'mss_1' -Username 'administrator@vsphere.local' -Password 'Password#123' -ImportHosts
 ```

@@ -15,14 +15,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Remove-UnitySnap -ID '171798691854'
 ```
 
 Delete the snapshot with ID '171798691854'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnitySnap | Remove-UnitySnap
 ```

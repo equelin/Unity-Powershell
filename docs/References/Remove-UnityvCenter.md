@@ -15,14 +15,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Remove-UnityvCenter -ID 'default'
 ```
 
 Delete the vCenter server with ID 'default'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityvCenter -Name 'default' | Remove-UnityvCenter
 ```

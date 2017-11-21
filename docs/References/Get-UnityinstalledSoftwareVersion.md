@@ -22,14 +22,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Get-UnityInstalledSoftwareVersion
 ```
 
 Retrieve information about all UnityinstalledSoftwareVersion
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityInstalledSoftwareVersion -ID 'id01'
 ```

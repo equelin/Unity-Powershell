@@ -17,7 +17,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityFileInterface -ID 'if_1' -ipAddress '192.0.2.1'
 ```

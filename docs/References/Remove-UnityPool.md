@@ -15,14 +15,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Remove-UnityPool -ID 'pool_12'
 ```
 
 Delete the pool with ID 'pool_12'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityPool -ID 'pool_10' | Remove-UnityPool
 ```

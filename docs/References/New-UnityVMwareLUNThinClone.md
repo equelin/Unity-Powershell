@@ -1,27 +1,27 @@
-# New-UnityiSCSIPortal
+# New-UnityVMwareLUNThinClone
 
 ## SYNOPSIS
-Create a new iSCSI portal.
+Creates a VMware datastore thin clone.
 
 ## SYNTAX
 
 ```
-New-UnityiSCSIPortal [[-session] <Object>] [-ethernetPort] <String> [-ipAddress] <String> [[-netmask] <String>]
- [[-v6PrefixLength] <String[]>] [[-vlanId] <String[]>] [[-gateway] <String>] [-WhatIf] [-Confirm]
+New-UnityVMwareLUNThinClone [[-session] <Object>] [-VMwareLUN] <Object> [-snap] <Object> [-name] <String>
+ [[-Description] <String>] [[-ioLimitPolicy] <Object>] [[-host] <String[]>] [[-accessMask] <HostLUNAccessEnum>]
+ [[-snapSchedule] <String>] [[-isSnapSchedulePaused] <Boolean>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
-Create a new iSCSI portal.
-You need to have an active session with the array.
+Creates a VMware datastore thin clone.
 
 ## EXAMPLES
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-New-UnityiSCSIPortal -ethernetPort 'spa_eth0' -ipAddress '192.0.2.1' -netmask '255.255.255.0' -gateway '192.0.2.254'
+$Snap = Get-UnityVMwareLUN -Name 'Datastore01' | New-UnitySnap -isAutoDelete:$false
 ```
 
-Create a new iSCSI portal.
+New-UnityVMwareLUNThinClone -VMwareLUN sv_79 -snap $snap.id -name 'Datastore01-Thinclone' -snapSchedule 'snapSch_1' -host 'Host_36','Host_37'
 
 ## PARAMETERS
 
@@ -40,23 +40,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ethernetPort
-Ethernet port used by the iSCSI portal.
+### -VMwareLUN
+VMware LUN id
 
 ```yaml
-Type: String
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 
 Required: True
 Position: 2
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
-### -ipAddress
-IPv4 or IPv6 address for the iSCSI Network Portal.
+### -snap
+The reference to the source snapshot ID object.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: 3
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -name
+Name for the new Thin Clone, unique to the system.
 
 ```yaml
 Type: String
@@ -64,32 +79,17 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: True
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -netmask
-IPv4 netmask for the iSCSI Network Portal, if the iSCSI Network Portal uses an IPv4 address.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
 Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -v6PrefixLength
-Prefix length in bits for IPv6 address.
+### -Description
+Description of the Thin clone.
 
 ```yaml
-Type: String[]
+Type: String
 Parameter Sets: (All)
 Aliases: 
 
@@ -100,11 +100,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -vlanId
-Ethernet virtual LAN identifier used for tagging iSCSI portal outgoing packets and for filtering iSCSI portal incoming packets.
+### -ioLimitPolicy
+lunParameters
 
 ```yaml
-Type: String[]
+Type: Object
 Parameter Sets: (All)
 Aliases: 
 
@@ -115,8 +115,44 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -gateway
-IPv4 or IPv6 gateway address for the iSCSI Network Portal.
+### -host
+List of host to grant access to the thin clone.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 7
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -accessMask
+Host access mask.
+Might be:
+- NoAccess: No access. 
+- Production: Access to production LUNs only. 
+- Snapshot: Access to LUN snapshots only. 
+- Both: Access to both production LUNs and their snapshots.
+
+```yaml
+Type: HostLUNAccessEnum
+Parameter Sets: (All)
+Aliases: 
+Accepted values: NoAccess, Production, Snapshot, Both, Mixed
+
+Required: False
+Position: 8
+Default value: Production
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -snapSchedule
+Snapshot schedule assigned to the thin clone
 
 ```yaml
 Type: String
@@ -124,8 +160,23 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 7
+Position: 9
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -isSnapSchedulePaused
+Indicates whether the assigned snapshot schedule is paused.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 10
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

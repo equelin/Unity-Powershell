@@ -1,34 +1,27 @@
-# Remove-UnityLUN
+# Invoke-UnityRefreshVMwareLUNThinClone
 
 ## SYNOPSIS
-Delete a LUN.
+Refresh a VMwareLUN thin clone.
 
 ## SYNTAX
 
 ```
-Remove-UnityLUN [-session <Object>] [-ID] <Object> [-WhatIf] [-Confirm]
+Invoke-UnityRefreshVMwareLUNThinClone [[-session] <Object>] [-VMwareLUN] <Object> [-snap] <Object>
+ [-copyName] <String> [-force] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
-Delete a LUN.
-You need to have an active session with the array.
+Refresh a VMwareLUN thin clone.
 
 ## EXAMPLES
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-Remove-UnityLUN -Name 'LUN01'
+$Snap = Get-UnityVMwareLUN -Name 'VMwareLUN01' | New-UnitySnap -isAutoDelete:$false
 ```
 
-Delete the LUN named 'LUN01'
-
-### -------------------------- EXAMPLE 2 --------------------------
-```
-Get-UnityLUN -Name 'LUN01' | Remove-UnityLUN
-```
-
-Delete the LUN named 'LUN01'.
-The LUN's informations are provided by the Get-UnityLUN through the pipeline.
+$ThinClone = Get-UnityVMwareLUN -Name 'VMwareLUN01-ThinClone'
+Invoke-UnityRefreshVMwareLUNThinClone -VMwareLUN $ThinClone.id -snap $snap.id -copyName 'VMwareLUN01-Snapshot'
 
 ## PARAMETERS
 
@@ -41,14 +34,14 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: Named
+Position: 1
 Default value: ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true})
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ID
-LUN ID or Object.
+### -VMwareLUN
+VMwareLUN id or Object
 
 ```yaml
 Type: Object
@@ -56,9 +49,55 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: True
-Position: 1
+Position: 2
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -snap
+The reference to the new source snapshot object.
+The new source snapshot may be any snap of this Thin Clone's base storage resource, including the current one.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: 3
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -copyName
+Name of the snapshot copy created before the refresh operation occurs.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: 4
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -force
+When set, the refresh operation will proceed even if host access is configured on the storage resource.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
