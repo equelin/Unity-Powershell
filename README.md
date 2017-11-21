@@ -12,7 +12,7 @@ Unity-Powershell is a member of the DevHigh5 program from [{code} by Dell EMC(tm
 
 ![](./Medias/Unity-Powershell-Demo-01.gif)
 
-With this module (version 0.15.0) you can manage:
+With this module you can manage:
 
 - System (DNS, NTP...)
 - Pools (virtual and physical deployments)
@@ -34,6 +34,7 @@ More functionality will be added later.
 
 This module tries to mimic VMware PowerCLI usage. All resource management functions are available with the Powershell verbs GET, NEW, SET, REMOVE. 
 For example, you can manage Pools with the following commands:
+
 - `Get-UnityPool`
 - `New-UnityPool`
 - `Set-UnityPool`
@@ -51,7 +52,9 @@ Get-UnityLUN | Remove-UnityLUN
 - An EMC Unity array! (virtual or physical)
 
 # Instructions
+
 ### Install the module
+
 ```powershell
 # Automated installation (Powershell 5):
     Install-Module Unity-Powershell
@@ -73,6 +76,7 @@ Get-UnityLUN | Remove-UnityLUN
 ```
 
 # Examples
+
 ### Connecting to the Unity array
 
 The first thing to do is to connect to an EMC Unity array with the command `Connect-Unity`:
@@ -173,6 +177,7 @@ For testing purposes you can query all the resources of the array with the comma
 # Author
 
 **Erwan Quélin**
+
 - <https://github.com/equelin>
 - <https://twitter.com/erwanquelin>
 
