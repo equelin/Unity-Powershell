@@ -14,14 +14,14 @@ List the existing sessions.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Get-UnitySession
 ```
 
 List all the existing sessions.
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnitySession -Server 192.0.2.1'
 ```

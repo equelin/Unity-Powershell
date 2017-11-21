@@ -16,14 +16,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Remove-UnityCifsServer -ID 'cifs_1'
 ```
 
 Delete the Cifs Server with ID 'cifs_1'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityCifsServer -Name 'CIFS01' | Remove-UnityCifsServer
 ```

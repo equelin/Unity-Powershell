@@ -17,14 +17,14 @@ When a session is disconnected, it is removed form the default array list.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Disconnect-Unity
 ```
 
 Disconnects all the sessions
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 $Session = Get-UnitySession -Server 192.0.2.1
 ```

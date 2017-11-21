@@ -25,7 +25,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 New-UnityCIFSServer -Name CIFS01 -nasServer 'nas_6' -domain 'example.com' -domainUsername 'administrator' -domainPassword 'Password#123' -interfaces 'if_1'
 ```

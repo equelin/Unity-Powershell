@@ -30,7 +30,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 New-UnityPool -Name 'POOL01' -virtualDisk @{"id"='vdisk_1';"tier"='Extreme_Performance'},@{"id"='vdisk_2';"tier"='Capacity'}
 ```
@@ -39,7 +39,7 @@ Create pool named 'POOL01' with virtual disks 'vdisk_1' and 'vdisk_2'.
 Virtual disks are assigned to the Extreme Performance and Capacity tier.
 Apply to Unity VSA only.
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 New-UnityPool -Name 'POOL01' -raidGroup @{"id"='dg_11';"numDisks"= 15; 'raidType'='RAID5'; 'stripeWidth'='5'}
 ```

@@ -26,7 +26,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnitySnapSchedule -ID 'snapSch_6' -addRules -Type N_HOURS_AT_MM -Interval 12 -Minutes 30
 ```
@@ -34,7 +34,7 @@ Set-UnitySnapSchedule -ID 'snapSch_6' -addRules -Type N_HOURS_AT_MM -Interval 12
 Add rule to snapshot schedule with ID 'snapSch_6'.
 Snap every 12 hours, at 30 minutes past the hour.
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Set-UnitySnapSchedule -ID 'snapSch_6' -removeRuleIds 'SchedRule_11'
 ```

@@ -16,14 +16,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityHost -ID 'Host_21' -Name HOST01
 ```
 
 Change the name of the host with ID 'Host_21'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityHost -ID 'Host_21' | Set-UnityHost -Name HOST01
 ```

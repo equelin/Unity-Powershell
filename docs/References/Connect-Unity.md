@@ -28,21 +28,21 @@ Every new connection is stored in the $global:DefaultUnitySession array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Connect-Unity -Server 192.0.2.1
 ```
 
 Connects to the array with the IP 192.0.2.1
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Connect-Unity -Server 192.0.2.1 -TrustAllCerts $false
 ```
 
 Connects to the array with the IP 192.0.2.1 and don't accept unknown certificates.
 
-### -------------------------- EXEMPLE 3 --------------------------
+### -------------------------- EXAMPLE 3 --------------------------
 ```
 Connect-Unity -Server 192.0.2.1,192.0.2.2
 ```
@@ -50,7 +50,7 @@ Connect-Unity -Server 192.0.2.1,192.0.2.2
 Connects to the arrays with the IP 192.0.2.1 and 192.0.2.2.
 The same user and password is used.
 
-### -------------------------- EXEMPLE 4 --------------------------
+### -------------------------- EXAMPLE 4 --------------------------
 ```
 $IP = '192.0.2.1'
 ```

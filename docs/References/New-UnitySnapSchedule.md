@@ -18,7 +18,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 New-UnitySnapSchedule -Name 'SCHEDULE01' -Type N_HOURS_AT_MM -Interval 12 -Minute 30
 ```

@@ -2,9 +2,9 @@
 $cfg = @{}
 
 # Project root folder
-$cfg.ProjectRoot = 'F:\Code\GitHub\Unity-Powershell'
+$cfg.ProjectRoot = 'D:\Code\GitHub\Unity-Powershell'
 
-$Cfg.FormatOutputPath = 'F:\Code\GitHub\Unity-Powershell\Unity-Powershell\Format\'
+$Cfg.FormatOutputPath = 'D:\Code\GitHub\Unity-Powershell\Unity-Powershell\Format\'
 
 $cfg.Classes = @(
     @{TypeName='UnityAlert'; TableHeaderList=@('id','Severity','Timestamp','MessageId','Message','IsAcknowledged')}

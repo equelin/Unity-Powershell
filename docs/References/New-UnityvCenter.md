@@ -19,7 +19,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 New-UnityvCenter -Address 'vcenter.example.com' -Username 'admin' -Password 'Password123#' -ImportHosts
 ```

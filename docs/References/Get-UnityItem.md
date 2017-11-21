@@ -18,7 +18,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Get-UnityItem -URI '/api/types/pool/instances'
 ```
@@ -26,7 +26,7 @@ Get-UnityItem -URI '/api/types/pool/instances'
 Retrieve information about pools. 
 Return a powershell object
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityItem -URI '/api/types/pool/instances' -JSON
 ```

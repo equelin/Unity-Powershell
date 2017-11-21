@@ -15,14 +15,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Remove-UnitySnapSchedule -ID 'snapSch_11'
 ```
 
 Delete the snapshot schedule with ID 'snapSch_11'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnitySnapSchedule | Remove-UnitySnapSchedule
 ```

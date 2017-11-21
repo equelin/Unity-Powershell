@@ -16,7 +16,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 New-UnityiSCSIPortal -ethernetPort 'spa_eth0' -ipAddress '192.0.2.1' -netmask '255.255.255.0' -gateway '192.0.2.254'
 ```

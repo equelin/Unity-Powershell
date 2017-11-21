@@ -15,7 +15,7 @@ After you create this query, the results are available whith the command Get-Uni
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 New-UnityMetricRealTimeQuery -paths sp.*.cpu.uptime -interval 60
 ```
