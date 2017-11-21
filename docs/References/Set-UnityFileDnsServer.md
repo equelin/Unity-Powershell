@@ -1,4 +1,4 @@
-# Set-UnityFileDnsServer
+# Set-UnityFileDNSServer
 
 ## SYNOPSIS
 Modifies File DNS Server parameters.
@@ -6,7 +6,7 @@ Modifies File DNS Server parameters.
 ## SYNTAX
 
 ```
-Set-UnityFileDnsServer [-session <Object>] [-ID] <Object[]> [-domain <String>] [-addresses <String[]>]
+Set-UnityFileDNSServer [-session <Object>] [-ID] <Object[]> [-domain <String>] [-addresses <String[]>]
  [-replicationPolicy <ReplicationPolicyEnum>] [-WhatIf] [-Confirm]
 ```
 

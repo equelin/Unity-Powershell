@@ -1,4 +1,4 @@
-# Set-UnityserviceAction
+# Set-UnityServiceAction
 
 ## SYNOPSIS
 Services the system.
@@ -7,13 +7,13 @@ Services the system.
 
 ### changeSSHStatus (Default)
 ```
-Set-UnityserviceAction [-session <Object>] [-Async] [-changeSSHStatus] -currentPassword <String> [-WhatIf]
+Set-UnityServiceAction [-session <Object>] [-Async] [-changeSSHStatus] -currentPassword <String> [-WhatIf]
  [-Confirm]
 ```
 
 ### dataCollection
 ```
-Set-UnityserviceAction [-session <Object>] [-Async] [-dataCollection] [-includePrivateData]
+Set-UnityServiceAction [-session <Object>] [-Async] [-dataCollection] [-includePrivateData]
  [-dataCollectionProfile <DataCollectionProfileEnum>] [-WhatIf] [-Confirm]
 ```
 
