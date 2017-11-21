@@ -134,7 +134,7 @@ pages:
     - Set-UnityAlertConfig: References/Set-UnityAlertConfig.md
     - Set-UnityCIFSShare: References/Set-UnityCIFSShare.md
     - Set-UnityDNSServer: References/Set-UnityDNSServer.md
-    - Set-UnityFileDnsServer: References/Set-UnityFileDnsServer.md
+    - Set-UnityFileDNSServer: References/Set-UnityFileDNSServer.md
     - Set-UnityFileInterface: References/Set-UnityFileInterface.md
     - Set-UnityFilesystem: References/Set-UnityFilesystem.md
     - Set-UnityHost: References/Set-UnityHost.md
@@ -148,7 +148,7 @@ pages:
     - Set-UnityNFSShare: References/Set-UnityNFSShare.md
     - Set-UnityNTPServer: References/Set-UnityNTPServer.md
     - Set-UnityPool: References/Set-UnityPool.md
-    - Set-UnityserviceAction: References/Set-UnityserviceAction.md
+    - Set-UnityServiceAction: References/Set-UnityServiceAction.md
     - Set-UnitySMTPServer: References/Set-UnitySMTPServer.md
     - Set-UnitySnap: References/Set-UnitySnap.md
     - Set-UnitySnapSchedule: References/Set-UnitySnapSchedule.md
