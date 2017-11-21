@@ -1,4 +1,4 @@
-# Get-Unityjob
+# Get-UnityJob
 
 ## SYNOPSIS
 Information about the jobs in the storage system.
@@ -14,12 +14,12 @@ You can manually delete any resources that were created for the failed job.
 
 ### Name (Default)
 ```
-Get-Unityjob [-session <Object>]
+Get-UnityJob [-session <Object>]
 ```
 
 ### ID
 ```
-Get-Unityjob [-session <Object>] [-ID <String[]>]
+Get-UnityJob [-session <Object>] [-ID <String[]>]
 ```
 
 ## DESCRIPTION
@@ -35,19 +35,19 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
-Get-Unityjob
-```
-
-Retrieve information about all Unityjob
-
-### -------------------------- EXEMPLE 2 --------------------------
-```
-Get-Unityjob -ID 'id01'
+Get-UnityJob
 ```
 
-Retrieves information about a specific Unityjob
+Retrieve information about all UnityJob
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-UnityJob -ID 'id01'
+```
+
+Retrieves information about a specific UnityJob
 
 ## PARAMETERS
 

@@ -46,7 +46,7 @@ pages:
     - Get-UnityIPPort: References/Get-UnityIPPort.md
     - Get-UnityIscsiPortal: References/Get-UnityIscsiPortal.md
     - Get-UnityItem: References/Get-UnityItem.md
-    - Get-Unityjob: References/Get-Unityjob.md
+    - Get-UnityJob: References/Get-UnityJob.md
     - Get-UnityLicense: References/Get-UnityLicense.md
     - Get-UnityLinkAggregation: References/Get-UnityLinkAggregation.md
     - Get-UnityLUN: References/Get-UnityLUN.md
@@ -81,6 +81,8 @@ pages:
     - Get-UnityVMwareNFS: References/Get-UnityVMwareNFS.md
     - Get-UnityVMwarePE: References/Get-UnityVMwarePE.md
     - Get-UnityX509Certificate: References/Get-UnityX509Certificate.md
+    - Invoke-UnityRefreshLUNThinClone: References/Invoke-UnityRefreshLUNThinClone.md
+    - Invoke-UnityRefreshVMwareLUNThinClone: References/Invoke-UnityRefreshVMwareLUNThinClone.md
     - New-UnityCIFSServer: References/New-UnityCIFSServer.md
     - New-UnityCIFSShare: References/New-UnityCIFSShare.md
     - New-UnityFileDNSServer: References/New-UnityFileDNSServer.md
@@ -90,6 +92,7 @@ pages:
     - New-UnityHostIPPort: References/New-UnityHostIPPort.md
     - New-UnityiSCSIPortal: References/New-UnityiSCSIPortal.md
     - New-UnityLUN: References/New-UnityLUN.md
+    - New-UnityLUNThinClone: References/New-UnityLUNThinClone.md
     - New-UnityMetricRealTimeQuery: References/New-UnityMetricRealTimeQuery.md
     - New-UnityMgmtInterface: References/New-UnityMgmtInterface.md
     - New-UnityNASServer: References/New-UnityNASServer.md
@@ -102,6 +105,7 @@ pages:
     - New-UnityUser: References/New-UnityUser.md
     - New-UnityvCenter: References/New-UnityvCenter.md
     - New-UnityVMwareLUN: References/New-UnityVMwareLUN.md
+    - New-UnityVMwareLUNThinClone: References/New-UnityVMwareLUNThinClone.md
     - New-UnityVMwareNFS: References/New-UnityVMwareNFS.md
     - Remove-UnityAlert: References/Remove-UnityAlert.md
     - Remove-UnityCIFSServer: References/Remove-UnityCIFSServer.md

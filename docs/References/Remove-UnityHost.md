@@ -15,14 +15,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Remove-UnityHost -ID 'host_5'
 ```
 
 Delete the host with ID 'host_5'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityHost -ID 'host_5' | Remove-UnityHost
 ```

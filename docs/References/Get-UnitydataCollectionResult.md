@@ -23,21 +23,21 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Get-UnityDataCollectionResultList
 ```
 
 Retrieve information about all UnitydataCollectionResult
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityDataCollectionResultList -ID 'id01'
 ```
 
 Retrieves information about a specific UnitydataCollectionResult
 
-### -------------------------- EXEMPLE 3 --------------------------
+### -------------------------- EXAMPLE 3 --------------------------
 ```
 Get-UnityDataCollectionResultList -ID 'id01' -Download -Path C:\Temp
 ```

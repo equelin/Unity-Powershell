@@ -41,7 +41,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityserviceAction -changeSSHStatus
 ```
@@ -66,7 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -Async
-EMC Unity Session
+Specifies if you want to run this command asynchronously.
 
 ```yaml
 Type: SwitchParameter

@@ -15,7 +15,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityDnsServer -Addresses '192.0.2.1','192.0.2.2'
 ```

@@ -15,14 +15,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Remove-UnityMgmtInterface -ID 'mgmt_ipv4'
 ```
 
 Delete the management interface with ID 'mgmt_ipv4'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityMgmtInterface -Name 'mgmt_ipv4' | Remove-UnityMgmtInterface
 ```

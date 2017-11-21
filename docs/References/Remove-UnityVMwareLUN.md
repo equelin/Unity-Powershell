@@ -15,14 +15,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Remove-UnityVMwareLUN -ID 'sv_15'
 ```
 
 Delete the VMware block LUN ID 'sv_15'
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityVMwareLUN -ID 'sv_15' | Remove-UnityVMwareLUN
 ```

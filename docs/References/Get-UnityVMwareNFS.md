@@ -21,14 +21,14 @@ git       Queries the EMC Unity array to retrieve informations about VMware NFS 
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Get-UnityVMwareNFS
 ```
 
 Retrieve information about all VMware NFS LUN
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Get-UnityVMwareNFS -Name 'DATASTORE01'
 ```

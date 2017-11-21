@@ -40,7 +40,9 @@ Function New-UnityMetricRealTimeQuery {
   )
 
   Begin {
-    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Executing function"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] ParameterSetName: $($PsCmdlet.ParameterSetName)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
 
     ## Variables
     $URI = '/api/types/metricRealTimeQuery/instances'
@@ -79,7 +81,7 @@ Function New-UnityMetricRealTimeQuery {
         Write-Verbose "URL: $URL"
 
         #Sending the request
-        If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type on storage resource ID $ObjectID")) {
+        If ($pscmdlet.ShouldProcess($Sess.Name,"Create $Type on $paths")) {
           $request = Send-UnityRequest -uri $URL -Session $Sess -Method 'POST' -Body $Body
         }
 

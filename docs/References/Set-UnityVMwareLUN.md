@@ -18,14 +18,14 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 Set-UnityVMwareLUN -ID 'sv_78' -Description 'Modified description'
 ```
 
 Change the description of the VMware bock LUN with ID 'sv_78'.
 
-### -------------------------- EXEMPLE 2 --------------------------
+### -------------------------- EXAMPLE 2 --------------------------
 ```
 Set-UnityVMwareLUN -ID 'sv_78' -Pool 'pool_14' -host 'Host_12' -accessMask 'Production' -Append
 ```

@@ -18,7 +18,7 @@ You need to have an active session with the array.
 
 ## EXAMPLES
 
-### -------------------------- EXEMPLE 1 --------------------------
+### -------------------------- EXAMPLE 1 --------------------------
 ```
 New-UnityNFSServer -nasServer 'nas_15' -hostName 'NFS01'
 ```
