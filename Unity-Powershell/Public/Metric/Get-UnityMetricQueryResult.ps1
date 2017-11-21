@@ -18,6 +18,11 @@ Function Get-UnityMetricQueryResult {
       Get-UnityMetricQueryResult -queryId 5
 
       Retrieve informations about query who's ID is 5.
+      .EXAMPLE
+      $query = New-UnityMetricRealTimeQuery -paths 'sp.*.cpu.core.*.busyTicks' -interval 30
+      $query | Get-UnityMetricQueryResult
+
+      Get query results using pipeline.
   #>
 
   [CmdletBinding()]
@@ -29,7 +34,9 @@ Function Get-UnityMetricQueryResult {
   )
 
   Begin {
-    Write-Debug -Message "[$($MyInvocation.MyCommand)] Executing function"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] Executing function"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] ParameterSetName: $($PsCmdlet.ParameterSetName)"
+    Write-Debug -Message "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
 
     #Initialazing variables
     $URI = '/api/types/metricQueryResult/instances' #URI for the ressource (example: /api/types/lun/instances)
@@ -54,7 +61,7 @@ Function Get-UnityMetricQueryResult {
                 $ObjectID = $Query.id
               }
 
-              "Int*" {
+              "*Int*" {
                 If ($Object = Get-UnityMetricRealTimeQuery -Session $Sess -ID $Query -ErrorAction SilentlyContinue) {
                   $ObjectID = $Object.id
                 } else {
@@ -63,7 +70,7 @@ Function Get-UnityMetricQueryResult {
               }
             }
 
-            $Filter = 'queryId EQ '+$ObjectID
+            $Filter = "queryId EQ $ObjectID"
 
             #Building the URL from Object Type.
             $URL = Get-URLFromObjectType -Session $sess -URI $URI -TypeName $TypeName -Compact -Filter $Filter

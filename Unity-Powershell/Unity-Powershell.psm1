@@ -1065,7 +1065,7 @@ Class Unitymetric {
 }
 
 Class UnityMetricRealTimeQuery {
-  [string]$id
+  [uint32]$id
   [string[]]$paths
   [Uint32]$interval
   $maximumSamples
