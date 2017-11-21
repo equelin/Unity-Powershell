@@ -1,4 +1,4 @@
-Function Set-UnityFileDnsServer {
+Function Set-UnityFileDNSServer {
 
   <#
       .SYNOPSIS
