@@ -358,6 +358,7 @@ Class UnityPoolTier {
   [String]$name
   [Object[]]$poolUnits
   [Int]$diskCount
+  [Object[]]$raidStripeWidthInfo
 
   ## Methods
 
