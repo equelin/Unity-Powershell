@@ -51,9 +51,9 @@ Function Set-UnityNFSShare {
     [Object[]]$ID,
 
     #$nfsShareParameters
-    [Parameter(Mandatory = $false,HelpMessage = 'NFS share description')]
+    [Parameter(Mandatory = $false,HelpMessage = 'NFS share description.')]
     [String]$description,
-    [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether the NFS share is read-only')]
+    [Parameter(Mandatory = $false,HelpMessage = 'Indicates whether the NFS share is read-only.')]
     [bool]$isReadOnly = $false,
     [Parameter(Mandatory = $false,HelpMessage = 'Default access level for all hosts accessing the NFS share.')]
     [NFSShareDefaultAccessEnum]$defaultAccess,
@@ -103,7 +103,7 @@ Function Set-UnityNFSShare {
             # Creation of the body hash
             $body = @{}
 
-            $body["nfsShareModify"] = @{}
+            $body["nfsShareModify"] = @()
                 
               #$NFSShareParameters
               $nfsShareModifyParameters = @{}
@@ -211,7 +211,7 @@ Function Set-UnityNFSShare {
               $nfsShareModifyParameters["nfsShareParameters"] = $nfsShareParameters
 
 
-            $body["nfsShareModify"] = $nfsShareModifyParameters
+            $body["nfsShareModify"] += $nfsShareModifyParameters
 
             If (-not $append) {
               Write-Warning -Message 'The existing host access parameters will be overwritten by the new settings. It could result to data unavailibility. Use the -Append parameter to add the new settings to the existing configuration.'
