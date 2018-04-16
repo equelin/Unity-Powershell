@@ -1,4 +1,4 @@
-Function Set-UnityserviceAction {
+Function Set-UnityServiceAction {
 
   <#
       .SYNOPSIS
