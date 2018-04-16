@@ -1,3 +1,6 @@
+# Force TLS 1.2, mandatory for using GitHub API
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 <#
     .SYNOPSIS
         Retrieve GitHub release.
