@@ -2,9 +2,9 @@ Function Get-UnityTreeQuota {
 
   <#
       .SYNOPSIS
-      Queries the EMC Unity array to retrieve informations about treeQuotas.
+      Queries the EMC Unity array to retrieve informations about treequotas.
       .DESCRIPTION
-      Querries the EMC Unity array to retrieve informations about treeQuotas.
+      Querries the EMC Unity array to retrieve informations about treequotas.
       You need to have an active session with the array.
       .NOTES
       Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
@@ -12,24 +12,28 @@ Function Get-UnityTreeQuota {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specifies an UnitySession Object.
+      .PARAMETER Path
+      Specifies the treeQuota Path.
       .PARAMETER ID
       Specifies the object ID.
       .EXAMPLE
       Get-UnityTreeQuota
 
-      Retrieve information about treeQuotas
+      Retrieve information about treequota
       .EXAMPLE
-      Get-UnityTreeQuota -Id 'treeqouta_121212_1'
+      Get-UnityTreeQuota -Id 'treequota_123456_12'
 
-      Retrieves information about treeQuota treeqouta_121212_1
+      Retrieves information about treequota id treequota_123456_12
   #>
 
   [CmdletBinding(DefaultParameterSetName="ID")]
   Param (
     [Parameter(Mandatory = $false,HelpMessage = 'EMC Unity Session')]
     $session = ($global:DefaultUnitySession | where-object {$_.IsConnected -eq $true}),
-    [Parameter(Mandatory = $false,ParameterSetName="ID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'TreeQuota Id')]
-    [String[]]$Id
+    [Parameter(Mandatory = $false,ParameterSetName="Path",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem Name')]
+    [String[]]$Path,
+    [Parameter(Mandatory = $false,ParameterSetName="ID",ValueFromPipeline=$True,ValueFromPipelinebyPropertyName=$True,HelpMessage = 'Filesystem ID')]
+    [String[]]$ID
   )
 
   Begin {
@@ -37,7 +41,7 @@ Function Get-UnityTreeQuota {
 
     #Initialazing variables
     $URI = '/api/types/treeQuota/instances' #URI
-    $Typename = 'UnitytreeQuota'
+    $Typename = "UnitytreeQuota"
   }
 
   Process {
