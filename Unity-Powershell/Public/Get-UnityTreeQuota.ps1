@@ -7,7 +7,7 @@ Function Get-UnityTreeQuota {
       Querries the EMC Unity array to retrieve informations about treequotas.
       You need to have an active session with the array.
       .NOTES
-      Written by Erwan Quelin under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
+      Written by Albert Hugas under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session

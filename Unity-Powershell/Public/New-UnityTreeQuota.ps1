@@ -6,6 +6,8 @@ Function New-UnityTreeQuota {
       .DESCRIPTION
       Creates a Unity TreeQuota.
       You need to have an active session with the array.
+      .NOTES
+      Written by Albert Hugas under MIT licence - https://github.com/equelin/Unity-Powershell/blob/master/LICENSE
       .LINK
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
