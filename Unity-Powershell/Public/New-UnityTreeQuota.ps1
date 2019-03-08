@@ -10,55 +10,21 @@ Function New-UnityTreeQuota {
       https://github.com/equelin/Unity-Powershell
       .PARAMETER Session
       Specify an UnitySession Object.
+      .PARAMETER Fylesystem
+      Fylesystem Id where create the TreeQuota
       .PARAMETER Path
       TreeQuota Path
       .PARAMETER Description
-      Filesystem Description
-      .PARAMETER snapSchedule
-      ID of a protection schedule to apply to the filesystem
-      .PARAMETER isSnapSchedulePaused
-      Is assigned snapshot schedule is paused ? (Default is false)
-      .PARAMETER Pool
-      Filesystem Pool ID
-      .PARAMETER nasServer
-      Filesystem nasServer ID
-      .PARAMETER supportedProtocols
-      Filesystem supported protocols
-      .PARAMETER isFLREnabled
-      Indicates whether File Level Retention (FLR) is enabled for the file system
-      .PARAMETER isThinEnabled
-      Indicates whether to enable thin provisioning for file system. Default is $True
-      .PARAMETER Size
-      Filesystem Size
-      .PARAMETER hostIOSize
-      Typical write I/O size from the host to the file system
-      .PARAMETER isCacheDisabled
-      Indicates whether caching is disabled
-      .PARAMETER accessPolicy
-      Access policy
-      .PARAMETER poolFullPolicy
-      Behavior to follow when pool is full and a write to this filesystem is attempted
-      .PARAMETER tieringPolicy
-      Filesystem tiering policy
-      .PARAMETER isCIFSSyncWritesEnabled
-      Indicates whether the CIFS synchronous writes option is enabled for the file system
-      .PARAMETER isCIFSOpLocksEnabled
-      Indicates whether opportunistic file locks are enabled for the file system
-      .PARAMETER isCIFSNotifyOnWriteEnabled
-      Indicates whether the system generates a notification when the file system is written to
-      .PARAMETER isCIFSNotifyOnAccessEnabled
-      Indicates whether the system generates a notification when a user accesses the file system
-      .PARAMETER cifsNotifyOnChangeDirDepth
-      Indicates the lowest directory level to which the enabled notifications apply, if any
-      .PARAMETER Confirm
-      If the value is $true, indicates that the cmdlet asks for confirmation before running. If the value is $false, the cmdlet runs without asking for user confirmation.
-      .PARAMETER WhatIf
-      Indicate that the cmdlet is run only to display the changes that would be made and actually no objects are modified.
+      TreeQuota Description
+      .PARAMETER HardLimit
+      TreeQuota hard limit
+      .PARAMETER SoftLimit
+      TreeQuota soft limit
 
       .EXAMPLE
-      New-UnityFilesystem -Name 'FS01' -Pool 'pool_1' -Size 10GB -nasServer 'nas_1' -supportedProtocols 'CIFS'
+      New-UnityTreeQuota -Fylesystem 'fs_1' -Path '/Path' -Description 'First TreeQuota' -HardLimit 10GB -SoftLimit 5GB 
 
-      Create CIFS filesystem named 'FS01' on pool 'pool_1' and with a size of '10GB' bytes
+      Create a TreeQuota over the Path '/Path' on filesystem 'fs_1' with a soft limit of 5GB amd a hard limit of 10GB
   #>
 
   [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
