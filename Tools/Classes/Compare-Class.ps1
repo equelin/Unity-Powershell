@@ -1,6 +1,9 @@
 #importing the module with the using statement, classes will be available in the session 
 using module '..\..\Unity-Powershell'
 
+[CmdletBinding()]
+Param ()
+
 Function Format-Type {
     [CmdletBinding()]
     Param (
@@ -35,8 +38,7 @@ $Module = Get-Module -Name 'Unity-Powershell'
 
 # Get classes defined by the module
 $ActualClasses = $Module.ImplementingAssembly.DefinedTypes | where-Object IsPublic | Where-Object {$_.Name -notlike '*Enum'}
-
-$Datas  = @( Get-ChildItem -Path F:\Code\GitHub\Unity-Powershell\Tests\Class\Data\*.json -ErrorAction SilentlyContinue )
+$Datas  = @( Get-ChildItem -Path C:\Users\erwan\Documents\Code\Unity-Powershell\Tests\Class\Data\*.json -ErrorAction SilentlyContinue )
 
 Foreach($Data in $Datas) {
 
