@@ -24,12 +24,13 @@ Function New-UnityTreeQuota {
       TreeQuota soft limit
 
       .EXAMPLE
+      GEt-UnityFileSystem 
       New-UnityTreeQuota -Fylesystem 'fs_1' -Path '/Path' -Description 'First TreeQuota' -HardLimit 10GB -SoftLimit 5GB 
 
       Create a TreeQuota over the Path '/Path' on filesystem 'fs_1' with a soft limit of 5GB amd a hard limit of 10GB
   #>
 
-  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'High')]
+  [CmdletBinding(SupportsShouldProcess = $True,ConfirmImpact = 'Medium')]
   Param (
     
     #Default Parameters
