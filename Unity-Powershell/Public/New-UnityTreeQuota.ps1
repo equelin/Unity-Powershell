@@ -16,6 +16,8 @@ Function New-UnityTreeQuota {
       Fylesystem Id where create the TreeQuota
       .PARAMETER Path
       TreeQuota Path
+      .PARAMETER Filesystem
+      Filesystem where to create de TreeQuota
       .PARAMETER Description
       TreeQuota Description
       .PARAMETER HardLimit
@@ -24,7 +26,6 @@ Function New-UnityTreeQuota {
       TreeQuota soft limit
 
       .EXAMPLE
-      GEt-UnityFileSystem 
       New-UnityTreeQuota -Fylesystem 'fs_1' -Path '/Path' -Description 'First TreeQuota' -HardLimit 10GB -SoftLimit 5GB 
 
       Create a TreeQuota over the Path '/Path' on filesystem 'fs_1' with a soft limit of 5GB amd a hard limit of 10GB
