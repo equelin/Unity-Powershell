@@ -17,7 +17,7 @@ function Send-UnityRequest {
   If (($Method -eq 'GET') -or ($type -eq 'DELETE')) {
     Try
     {
-      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Session.Websession -Headers $session.headers -Method $Method
+      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Session.Websession -Headers $session.headers -Method $Method -UseBasicParsing
       return $data
     }
     Catch
@@ -30,7 +30,7 @@ function Send-UnityRequest {
     Try
     {
       $json = $body | ConvertTo-Json -Depth 10
-      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Session.Websession -Headers $session.headers -Method $Method -TimeoutSec 6000
+      $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Session.Websession -Headers $session.headers -Method $Method -TimeoutSec 6000 -UseBasicParsing
       return $data
     }
     Catch
@@ -44,9 +44,9 @@ function Send-UnityRequest {
     {
       If ($body) {
         $json = $body | ConvertTo-Json -Depth 10
-        $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Session.Websession -Headers $session.headers -Method $Method
+        $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Body $json -Websession $Session.Websession -Headers $session.headers -Method $Method -UseBasicParsing
       } else {
-        $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Session.Websession -Headers $session.headers -Method $Method
+        $data = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $Session.Websession -Headers $session.headers -Method $Method -UseBasicParsing
       }
       return $data
     }

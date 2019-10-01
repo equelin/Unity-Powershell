@@ -82,7 +82,7 @@ Class UnitySession {
     $URI = 'https://'+$This.Server+'/api/types/system/instances'
 
     Try {
-        Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $this.Websession -Headers $this.Headers -Method 'GET'
+        Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $this.Websession -Headers $this.Headers -Method 'GET' -UseBasicParsing
     }
     Catch {
         $this.IsConnected = $false
@@ -113,6 +113,7 @@ Class UnitySession {
         Websession = $this.Websession
         Headers = $this.headers
         TimeoutSec = 6000
+        UseBasicParsing = $True
       }
 
       Write-Debug -Message "Request Parameters: $($Parameters | Out-String)"
@@ -139,6 +140,7 @@ Class UnitySession {
         TimeoutSec = 6000
         OutFile = $OutFile
         PassThru = $True
+        UseBasicParsing = $True
       }
 
       Write-Debug -Message "Request Parameters: $($Parameters | Out-String)"
