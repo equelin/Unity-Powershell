@@ -18,7 +18,7 @@ Function Test-UnityConnection {
       Write-Verbose "URI: $URI"
 
       Try {
-        $request = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $sess.Websession -Headers $sess.headers -Method 'GET'
+        $request = Invoke-WebRequest -Uri $URI -ContentType "application/json" -Websession $sess.Websession -Headers $sess.headers -Method 'GET' -UseBasicParsing
       }
 
       Catch {
