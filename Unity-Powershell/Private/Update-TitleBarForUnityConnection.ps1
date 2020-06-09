@@ -14,5 +14,6 @@ function Update-TitleBarForUnityConnection {
 		} ## end if
 		#else {"Not Connected to Unity"}
 	) ## end -f call
-	$host.ui.RawUI.WindowTitle = $strNewWindowTitle
+	if ($host.ui.RawUI.WindowSize -ne $null) {$host.ui.RawUI.WindowTitle = $strNewWindowTitle}
+	#else {"Running non-interactive"}
 } ## end fn
