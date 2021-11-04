@@ -1,3 +1,5 @@
+# UNITY-POWERSHELL IS NO LONGER SUPPORTED AND WILL NOT BE UPDATED UNLESS SOMEONE IS WILLING TO BE A MAINTANER, THANKS FOR USING IT ! 
+
 | Branch | AppVeyor | Docs |
 | ------ | -------- | ---- |
 | master | [![Build status](https://ci.appveyor.com/api/projects/status/y6w9s01j9ddqnsbi/branch/master?svg=true)](https://ci.appveyor.com/project/equelin/unity-powershell) | [![Documentation Status](https://readthedocs.org/projects/unity-powershell/badge/?version=latest)](http://unity-powershell.readthedocs.io/en/latest/?badge=latest) |
